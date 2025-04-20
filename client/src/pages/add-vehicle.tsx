@@ -174,26 +174,57 @@ const AddVehicle = () => {
   };
 
   return (
-    <div className="container px-4 py-6 max-w-3xl mx-auto">
+    <div className="px-4 py-6 max-w-3xl mx-auto">
+      {/* Progress steps */}
+      <div className="flex items-center justify-between mb-8 px-2">
+        <div 
+          className={`h-3 w-3 rounded-full bg-primary transition-all ${process.step === 'type' ? 'scale-125' : ''}`}
+          style={{
+            boxShadow: process.step === 'type' ? '0 0 0 4px rgba(126, 255, 0, 0.2)' : 'none'
+          }}
+        />
+        <div className="h-px flex-1 bg-gray-700 mx-2"></div>
+        <div 
+          className={`h-3 w-3 rounded-full transition-all ${process.step === 'manufacturer' ? 'bg-primary scale-125' : process.step === 'type' ? 'bg-gray-600' : 'bg-primary'}`}
+          style={{
+            boxShadow: process.step === 'manufacturer' ? '0 0 0 4px rgba(126, 255, 0, 0.2)' : 'none'
+          }}
+        />
+        <div className="h-px flex-1 bg-gray-700 mx-2"></div>
+        <div 
+          className={`h-3 w-3 rounded-full transition-all ${process.step === 'model' ? 'bg-primary scale-125' : (process.step === 'type' || process.step === 'manufacturer') ? 'bg-gray-600' : 'bg-primary'}`}
+          style={{
+            boxShadow: process.step === 'model' ? '0 0 0 4px rgba(126, 255, 0, 0.2)' : 'none'
+          }}
+        />
+        <div className="h-px flex-1 bg-gray-700 mx-2"></div>
+        <div 
+          className={`h-3 w-3 rounded-full transition-all ${process.step === 'fuel' ? 'bg-primary scale-125' : (process.step === 'type' || process.step === 'manufacturer' || process.step === 'model') ? 'bg-gray-600' : 'bg-primary'}`}
+          style={{
+            boxShadow: process.step === 'fuel' ? '0 0 0 4px rgba(126, 255, 0, 0.2)' : 'none'
+          }}
+        />
+      </div>
+
       <div className="flex items-center mb-6">
         <Button 
           variant="ghost" 
           size="icon" 
           onClick={goBack}
-          className="mr-2"
+          className="mr-2 rounded-full hover:bg-gray-800"
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
-        <h1 className="text-2xl font-bold">{getStepTitle()}</h1>
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 text-transparent bg-clip-text">{getStepTitle()}</h1>
       </div>
 
       {/* Search bar for manufacturer, model and fuel type steps */}
       {(process.step === 'manufacturer' || process.step === 'model' || process.step === 'fuel') && (
-        <div className="relative mb-6">
+        <div className="relative mb-8">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
             placeholder={`Search ${process.step === 'manufacturer' ? 'Brands' : process.step === 'model' ? 'Models' : 'Fuel Type'}...`}
-            className="pl-10"
+            className="pl-10 bg-gray-800 border-gray-700 focus:border-primary focus:ring-primary/20"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -207,11 +238,14 @@ const AddVehicle = () => {
             <motion.div
               key={type.id}
               className="cursor-pointer"
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => selectVehicleType(type.id as any)}
             >
-              <Card className="flex flex-col items-center p-6 h-full hover:shadow-md transition-shadow">
-                <type.icon className="h-16 w-16 mb-4 text-primary" />
+              <Card className="flex flex-col items-center p-6 h-full border-none bg-gray-800 hover:bg-gray-700 transition-all">
+                <div className="p-5 rounded-full bg-gray-700 mb-4">
+                  <type.icon className="h-12 w-12 text-primary" />
+                </div>
                 <h3 className="text-lg font-medium">{type.name}</h3>
               </Card>
             </motion.div>
@@ -226,11 +260,14 @@ const AddVehicle = () => {
             <motion.div
               key={manufacturer.id}
               className="cursor-pointer"
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => selectManufacturer(manufacturer.id)}
             >
-              <Card className="flex flex-col items-center p-6 h-full hover:shadow-md transition-shadow">
-                <manufacturer.logo className="h-16 w-16 mb-4 text-neutral-dark" />
+              <Card className="flex flex-col items-center p-6 h-full border-none bg-gray-800 hover:bg-gray-700 transition-all">
+                <div className="p-4 rounded-full bg-gray-700 mb-4">
+                  <manufacturer.logo className="h-12 w-12 text-gray-300" />
+                </div>
                 <h3 className="text-lg font-medium text-center">{manufacturer.name}</h3>
               </Card>
             </motion.div>
@@ -245,12 +282,13 @@ const AddVehicle = () => {
             <motion.div
               key={model.id}
               className="cursor-pointer"
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => selectModel(model.id)}
             >
-              <Card className="overflow-hidden hover:shadow-md transition-shadow h-full">
-                <div className="h-36 bg-neutral-100 relative flex items-center justify-center">
-                  <CarIcon className="h-16 w-16 text-neutral-300" />
+              <Card className="overflow-hidden border-none bg-gray-800 hover:bg-gray-700 transition-all h-full">
+                <div className="h-36 bg-gray-700 relative flex items-center justify-center">
+                  <CarIcon className="h-16 w-16 text-primary" />
                 </div>
                 <CardContent className="p-4 text-center">
                   <h3 className="font-medium">{model.name}</h3>
@@ -268,16 +306,17 @@ const AddVehicle = () => {
             <motion.div
               key={fuelType.id}
               className="cursor-pointer"
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => selectFuelType(fuelType.id)}
             >
-              <Card className="flex flex-col items-center p-6 h-full hover:shadow-md transition-shadow">
+              <Card className="flex flex-col items-center p-6 h-full border-none bg-gray-800 hover:bg-gray-700 transition-all">
                 <div className={`h-16 w-16 mb-4 flex items-center justify-center text-2xl rounded-full
-                  ${fuelType.id === 'petrol' ? 'bg-red-100 text-red-500' : 
-                    fuelType.id === 'diesel' ? 'bg-amber-100 text-amber-600' : 
-                    fuelType.id === 'cng' ? 'bg-green-100 text-green-500' : 
-                    fuelType.id === 'electric' ? 'bg-blue-100 text-blue-500' : 
-                    'bg-purple-100 text-purple-500'}`}
+                  ${fuelType.id === 'petrol' ? 'bg-gray-700 text-red-400' : 
+                    fuelType.id === 'diesel' ? 'bg-gray-700 text-amber-400' : 
+                    fuelType.id === 'cng' ? 'bg-gray-700 text-green-400' : 
+                    fuelType.id === 'electric' ? 'bg-gray-700 text-blue-400' : 
+                    'bg-gray-700 text-purple-400'}`}
                 >
                   {fuelType.icon}
                 </div>
@@ -290,21 +329,21 @@ const AddVehicle = () => {
 
       {/* Summary - shown after fuel selection */}
       {process.step === 'details' && (
-        <Card className="p-6">
+        <Card className="p-6 border-none bg-gray-800">
           <div className="flex flex-col md:flex-row gap-6">
-            <div className="w-full md:w-1/3 h-48 bg-neutral-100 flex items-center justify-center rounded-md">
-              <CarIcon className="h-24 w-24 text-neutral-300" />
+            <div className="w-full md:w-1/3 h-48 bg-gray-700 flex items-center justify-center rounded-md">
+              <CarIcon className="h-24 w-24 text-primary" />
             </div>
             
             <div className="flex-1">
               <h2 className="text-xl font-bold mb-2">
                 {manufacturers.find(m => m.id === process.manufacturer)?.name} {process.model}
-                <span className="ml-2 text-neutral-light font-normal">{process.fuelType}</span>
+                <span className="ml-2 text-gray-400 font-normal">{process.fuelType}</span>
               </h2>
               
               <div className="mt-6">
                 <Button 
-                  className="w-full bg-primary text-white"
+                  className="w-full bg-primary hover:bg-primary/90 text-black font-semibold"
                   onClick={() => {
                     toast({
                       title: "Vehicle Added",
