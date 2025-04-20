@@ -10,6 +10,7 @@ import NotFound from "@/pages/not-found";
 
 // Pages
 import MyVehicles from "@/pages/my-vehicles";
+import AddVehicle from "@/pages/add-vehicle";
 import BookService from "@/pages/book-service";
 import Nearby from "@/pages/nearby";
 import Explore from "@/pages/explore";
@@ -56,6 +57,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <MyVehicles />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/vehicles/add">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <AddVehicle />
               </motion.div>
             )}
           </Route>
