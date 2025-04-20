@@ -34,7 +34,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Vehicle Routes
   apiRouter.get("/vehicles", async (req, res) => {
-    const userId = parseInt(req.query.userId as string);
+    // If userId is not provided, use 1 as the default (demo user)
+    const userIdParam = req.query.userId || '1';
+    const userId = parseInt(userIdParam as string);
+    
     if (isNaN(userId)) {
       return res.status(400).json({ message: "Invalid user ID" });
     }
@@ -109,11 +112,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Service Booking Routes
   apiRouter.get("/bookings", async (req, res) => {
-    const userId = req.query.userId ? parseInt(req.query.userId as string) : undefined;
+    const userIdParam = req.query.userId || '1'; // Default to demo user (ID: 1)
+    const userId = parseInt(userIdParam as string);
+    
     const vehicleId = req.query.vehicleId ? parseInt(req.query.vehicleId as string) : undefined;
     const providerId = req.query.providerId ? parseInt(req.query.providerId as string) : undefined;
     
-    if (userId) {
+    // If no specific filter provided, default to demo user
+    if (!req.query.userId && !req.query.vehicleId && !req.query.providerId) {
+      const bookings = await storage.getServiceBookingsByUserId(1);
+      return res.json(bookings);
+    }
+    
+    if (userId && !isNaN(userId)) {
       const bookings = await storage.getServiceBookingsByUserId(userId);
       return res.json(bookings);
     }
@@ -128,7 +139,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.json(bookings);
     }
     
-    res.status(400).json({ message: "Please provide userId, vehicleId, or providerId" });
+    res.status(400).json({ message: "Please provide valid userId, vehicleId, or providerId" });
   });
 
   apiRouter.get("/bookings/:id", async (req, res) => {
