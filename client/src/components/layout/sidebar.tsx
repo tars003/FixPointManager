@@ -18,7 +18,8 @@ import {
   Activity,
   GraduationCap,
   FileSearch,
-  AlertTriangle
+  AlertTriangle,
+  Truck
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -52,7 +53,14 @@ const navItems = [
     bgColor: 'bg-indigo-50',
   },
   {
-    title: 'Nearby',
+    title: 'Emergency Services',
+    icon: AlertTriangle,
+    href: '/emergency',
+    color: 'text-red-500',
+    bgColor: 'bg-red-50',
+  },
+  {
+    title: 'Nearby Services',
     icon: MapPin,
     href: '/nearby',
     color: 'text-green-500',
@@ -66,18 +74,18 @@ const navItems = [
     bgColor: 'bg-orange-50',
   },
   {
-    title: 'Driving',
-    icon: Activity,
-    href: '/learn-driving',
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
-  },
-  {
     title: 'Marketplace',
     icon: ShoppingBag,
     href: '/marketplace',
     color: 'text-purple-500',
     bgColor: 'bg-purple-50',
+  },
+  {
+    title: 'Find & Verify Parts',
+    icon: FileSearch,
+    href: '/parts',
+    color: 'text-cyan-500',
+    bgColor: 'bg-cyan-50',
   },
   {
     title: 'FixPoint Card',
@@ -94,18 +102,11 @@ const navItems = [
     bgColor: 'bg-amber-50',
   },
   {
-    title: 'Find & Verify Parts',
-    icon: FileSearch,
-    href: '/parts',
-    color: 'text-cyan-500',
-    bgColor: 'bg-cyan-50',
-  },
-  {
-    title: 'Emergency',
-    icon: AlertTriangle,
-    href: '/emergency',
-    color: 'text-red-500',
-    bgColor: 'bg-red-50',
+    title: 'Commercial Fleet',
+    icon: Truck,
+    href: '/fleet',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50',
   },
 ];
 
