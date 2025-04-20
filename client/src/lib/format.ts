@@ -1,160 +1,137 @@
-import { format, parseISO, isValid, formatDistance } from 'date-fns';
+/**
+ * Utility functions for formatting different data types consistently
+ */
 
-// Format a date string or Date object to a human-readable format
+// Formats date as "April 20, 2025"
 export const formatDate = (date: string | Date | null | undefined): string => {
   if (!date) return 'N/A';
   
-  try {
-    const parsedDate = typeof date === 'string' ? parseISO(date) : date;
-    
-    if (!isValid(parsedDate)) {
-      return 'Invalid date';
-    }
-    
-    return format(parsedDate, 'MMM d, yyyy');
-  } catch (error) {
-    console.error('Error formatting date:', error);
-    return 'Invalid date';
-  }
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const options: Intl.DateTimeFormatOptions = { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric'
+  };
+  
+  return dateObj.toLocaleDateString('en-US', options);
 };
 
-// Format a date string or Date object to include time
+// Formats date and time as "April 20, 2025, 2:30 PM"
 export const formatDateTime = (date: string | Date | null | undefined): string => {
   if (!date) return 'N/A';
   
-  try {
-    const parsedDate = typeof date === 'string' ? parseISO(date) : date;
-    
-    if (!isValid(parsedDate)) {
-      return 'Invalid date';
-    }
-    
-    return format(parsedDate, 'MMM d, yyyy h:mm a');
-  } catch (error) {
-    console.error('Error formatting date time:', error);
-    return 'Invalid date';
-  }
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const options: Intl.DateTimeFormatOptions = { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  };
+  
+  return dateObj.toLocaleDateString('en-US', options);
 };
 
-// Format a number as currency
+// Formats currency as "$123.45"
 export const formatCurrency = (amount: number | null | undefined): string => {
-  if (amount === null || amount === undefined) {
-    return '$0.00';
-  }
+  if (amount === null || amount === undefined) return 'N/A';
   
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 2
   }).format(amount);
 };
 
-// Format a number with commas for thousands
+// Formats number with commas: "1,234.56"
 export const formatNumber = (num: number | null | undefined): string => {
-  if (num === null || num === undefined) {
-    return '0';
-  }
+  if (num === null || num === undefined) return 'N/A';
   
   return new Intl.NumberFormat('en-US').format(num);
 };
 
-// Format a number as a percentage
+// Formats percent as "12.34%"
 export const formatPercent = (value: number | null | undefined): string => {
-  if (value === null || value === undefined) {
-    return '0%';
-  }
+  if (value === null || value === undefined) return 'N/A';
   
   return new Intl.NumberFormat('en-US', {
     style: 'percent',
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
   }).format(value / 100);
 };
 
-// Format a phone number
+// Formats phone as "(123) 456-7890"
 export const formatPhone = (phone: string | null | undefined): string => {
-  if (!phone) return '';
+  if (!phone) return 'N/A';
+  if (phone.length !== 10) return phone; // Return as is if not valid
   
-  // Strip non-numeric characters
-  const cleaned = phone.replace(/\D/g, '');
-  
-  // Format US phone number
-  if (cleaned.length === 10) {
-    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
-  }
-  
-  // Format with country code
-  if (cleaned.length === 11 && cleaned[0] === '1') {
-    return `+1 (${cleaned.slice(1, 4)}) ${cleaned.slice(4, 7)}-${cleaned.slice(7)}`;
-  }
-  
-  // Return original if we can't format
-  return phone;
+  return `(${phone.slice(0, 3)}) ${phone.slice(3, 6)}-${phone.slice(6)}`;
 };
 
-// Format a distance in miles
+// Formats distance as "1.23 km" or "12.3 mi"
 export const formatDistance = (meters: number | null | undefined): string => {
-  if (meters === null || meters === undefined) {
-    return '0 mi';
+  if (meters === null || meters === undefined) return 'N/A';
+  
+  if (meters < 1000) {
+    return `${meters} m`;
+  } else {
+    const kilometers = meters / 1000;
+    return `${kilometers.toFixed(1)} km`;
   }
-  
-  // Convert meters to miles
-  const miles = meters * 0.000621371;
-  
-  if (miles < 0.1) {
-    return '<0.1 mi';
-  }
-  
-  return `${miles.toFixed(1)} mi`;
 };
 
-// Format a file size
+// Formats file size as "1.23 MB"
 export const formatFileSize = (bytes: number | null | undefined): string => {
-  if (bytes === null || bytes === undefined || bytes === 0) {
-    return '0 Bytes';
+  if (bytes === null || bytes === undefined) return 'N/A';
+  
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  let size = bytes;
+  let unitIndex = 0;
+  
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex++;
   }
   
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  
-  return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
+  return `${size.toFixed(1)} ${units[unitIndex]}`;
 };
 
-// Format a duration in minutes to hours and minutes
+// Formats duration as "1h 23m" or "23m"
 export const formatDuration = (minutes: number | null | undefined): string => {
-  if (minutes === null || minutes === undefined) {
-    return '0m';
-  }
+  if (minutes === null || minutes === undefined) return 'N/A';
   
   if (minutes < 60) {
     return `${minutes}m`;
+  } else {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
   }
-  
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-  
-  if (remainingMinutes === 0) {
-    return `${hours}h`;
-  }
-  
-  return `${hours}h ${remainingMinutes}m`;
 };
 
-// Format a relative time (e.g., "2 days ago")
+// Formats relative time as "2 hours ago", "yesterday", etc.
 export const formatRelativeTime = (date: string | Date | null | undefined): string => {
   if (!date) return 'N/A';
   
-  try {
-    const parsedDate = typeof date === 'string' ? parseISO(date) : date;
-    
-    if (!isValid(parsedDate)) {
-      return 'Invalid date';
-    }
-    
-    return formatDistance(parsedDate, new Date(), { addSuffix: true });
-  } catch (error) {
-    console.error('Error formatting relative time:', error);
-    return 'Invalid date';
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const now = new Date();
+  const diffMs = now.getTime() - dateObj.getTime();
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  
+  if (diffSeconds < 60) {
+    return 'just now';
+  } else if (diffMinutes < 60) {
+    return `${diffMinutes} minute${diffMinutes !== 1 ? 's' : ''} ago`;
+  } else if (diffHours < 24) {
+    return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+  } else if (diffDays < 7) {
+    return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+  } else {
+    return formatDate(dateObj);
   }
 };

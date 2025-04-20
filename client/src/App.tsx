@@ -5,11 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import { AnimatePresence, motion } from "framer-motion";
-import Sidebar from "@/components/ui/sidebar";
-import MobileHeader from "@/components/ui/mobile-header";
-import MobileNav from "@/components/ui/mobile-nav";
+import Layout from "@/components/layout/layout";
 import NotFound from "@/pages/not-found";
-import { PageTransition } from "@/components/ui/animated-components";
 
 // Pages
 import MyVehicles from "@/pages/my-vehicles";
@@ -24,100 +21,166 @@ import Energy from "@/pages/energy";
 function Router() {
   const [location] = useLocation();
   
+  // Page transition animation
+  const pageVariants = {
+    initial: { opacity: 0, y: 10 },
+    enter: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -10 }
+  };
+  
   return (
-    <div className="flex flex-col min-h-screen">
-      <MobileHeader />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 p-4 lg:p-6 overflow-y-auto pb-16 lg:pb-6">
-          <AnimatePresence mode="wait">
-            <Switch location={location} key={location}>
-              <Route path="/">
-                {() => (
-                  <PageTransition>
-                    <MyVehicles />
-                  </PageTransition>
-                )}
-              </Route>
-              <Route path="/vehicles">
-                {() => (
-                  <PageTransition>
-                    <MyVehicles />
-                  </PageTransition>
-                )}
-              </Route>
-              <Route path="/book-service">
-                {() => (
-                  <PageTransition>
-                    <BookService />
-                  </PageTransition>
-                )}
-              </Route>
-              <Route path="/book-service/:vehicleId">
-                {(params) => (
-                  <PageTransition>
-                    <BookService />
-                  </PageTransition>
-                )}
-              </Route>
-              <Route path="/nearby">
-                {() => (
-                  <PageTransition>
-                    <Nearby />
-                  </PageTransition>
-                )}
-              </Route>
-              <Route path="/explore">
-                {() => (
-                  <PageTransition>
-                    <Explore />
-                  </PageTransition>
-                )}
-              </Route>
-              <Route path="/learn-driving">
-                {() => (
-                  <PageTransition>
-                    <LearnDriving />
-                  </PageTransition>
-                )}
-              </Route>
-              <Route path="/dashboard">
-                {() => (
-                  <PageTransition>
-                    <Dashboard />
-                  </PageTransition>
-                )}
-              </Route>
-              <Route path="/inspection/:id">
-                {(params) => (
-                  <PageTransition>
-                    <Inspection />
-                  </PageTransition>
-                )}
-              </Route>
-              <Route path="/energy">
-                {() => (
-                  <PageTransition>
-                    <Energy />
-                  </PageTransition>
-                )}
-              </Route>
-              <Route>
-                {() => (
-                  <PageTransition>
-                    <NotFound />
-                  </PageTransition>
-                )}
-              </Route>
-            </Switch>
-          </AnimatePresence>
-        </main>
-      </div>
-      <MobileNav />
+    <Layout>
+      <AnimatePresence mode="wait">
+        <Switch location={location} key={location}>
+          <Route path="/">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <Dashboard />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/vehicles">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <MyVehicles />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/book-service">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <BookService />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/book-service/:vehicleId">
+            {(params) => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <BookService />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/nearby">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <Nearby />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/explore">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <Explore />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/learn-driving">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <LearnDriving />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/dashboard">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <Dashboard />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/inspection/:id">
+            {(params) => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <Inspection />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/energy">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <Energy />
+              </motion.div>
+            )}
+          </Route>
+          <Route>
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <NotFound />
+              </motion.div>
+            )}
+          </Route>
+        </Switch>
+      </AnimatePresence>
       
       {/* Floating action button for quick actions */}
       <motion.div 
-        className="fixed bottom-20 right-6 lg:bottom-6 z-40"
+        className="fixed bottom-24 right-6 lg:bottom-6 z-40"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ 
@@ -136,7 +199,7 @@ function Router() {
           </svg>
         </button>
       </motion.div>
-    </div>
+    </Layout>
   );
 }
 

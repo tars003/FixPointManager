@@ -1,0 +1,191 @@
+import React from 'react';
+import { useLocation } from 'wouter';
+import { motion } from 'framer-motion';
+import { 
+  LayoutDashboard, 
+  Car, 
+  Wrench, 
+  Clock, 
+  MapPin, 
+  Wallet, 
+  ShoppingBag,
+  Building2,
+  User,
+  Settings,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+const navItems = [
+  {
+    title: 'Dashboard',
+    icon: LayoutDashboard,
+    href: '/',
+    color: 'text-blue-500',
+    bgColor: 'bg-blue-50',
+  },
+  {
+    title: 'My Vehicles',
+    icon: Car,
+    href: '/vehicles',
+    color: 'text-primary',
+    bgColor: 'bg-primary/10',
+  },
+  {
+    title: 'Service Booking',
+    icon: Wrench,
+    href: '/book-service',
+    color: 'text-accent',
+    bgColor: 'bg-accent/10',
+  },
+  {
+    title: 'Service History',
+    icon: Clock,
+    href: '/history',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50',
+  },
+  {
+    title: 'Nearby Services',
+    icon: MapPin,
+    href: '/nearby',
+    color: 'text-green-500',
+    bgColor: 'bg-green-50',
+  },
+  {
+    title: 'Wallet & Finance',
+    icon: Wallet,
+    href: '/wallet',
+    color: 'text-purple-500',
+    bgColor: 'bg-purple-50',
+  },
+  {
+    title: 'Marketplace',
+    icon: ShoppingBag,
+    href: '/marketplace',
+    color: 'text-orange-500',
+    bgColor: 'bg-orange-50',
+  },
+  {
+    title: 'Commercial Fleet',
+    icon: Building2,
+    href: '/fleet',
+    color: 'text-indigo-500',
+    bgColor: 'bg-indigo-50',
+  },
+];
+
+const accountItems = [
+  {
+    title: 'Profile',
+    icon: User,
+    href: '/profile',
+    color: 'text-neutral-500',
+    bgColor: 'bg-neutral-50',
+  },
+  {
+    title: 'Settings',
+    icon: Settings,
+    href: '/settings',
+    color: 'text-neutral-500',
+    bgColor: 'bg-neutral-50',
+  },
+];
+
+interface SidebarProps {
+  className?: string;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ className }) => {
+  const [location, navigate] = useLocation();
+  
+  const isActive = (href: string) => {
+    if (href === '/') {
+      return location === href;
+    }
+    return location.startsWith(href);
+  };
+  
+  return (
+    <aside className={cn("h-full w-64 border-r bg-white flex-shrink-0 hidden md:block", className)}>
+      <div className="p-4 flex items-center gap-2 border-b">
+        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+          <span className="text-white font-semibold">F</span>
+        </div>
+        <h2 className="font-bold text-lg">FixPoint</h2>
+      </div>
+      
+      <div className="py-4">
+        <nav className="space-y-1 px-3">
+          {navItems.map((item) => (
+            <motion.button
+              key={item.href}
+              className={cn(
+                "flex items-center w-full px-2 py-2 text-sm rounded-md group transition-colors",
+                isActive(item.href)
+                  ? "bg-primary/10 text-primary font-medium"
+                  : "text-neutral-600 hover:bg-neutral-50"
+              )}
+              onClick={() => navigate(item.href)}
+              whileHover={{ x: 4 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div
+                className={cn(
+                  "mr-3 flex-shrink-0 h-6 w-6 rounded-md flex items-center justify-center",
+                  isActive(item.href) ? item.bgColor : "text-neutral-400"
+                )}
+              >
+                <item.icon
+                  className={cn(
+                    "h-4 w-4",
+                    isActive(item.href) ? item.color : "text-neutral-500"
+                  )}
+                />
+              </div>
+              <span>{item.title}</span>
+            </motion.button>
+          ))}
+        </nav>
+      </div>
+      
+      <div className="mt-auto px-3 py-4 border-t">
+        <p className="px-3 text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">
+          Account
+        </p>
+        <nav className="space-y-1">
+          {accountItems.map((item) => (
+            <motion.button
+              key={item.href}
+              className={cn(
+                "flex items-center w-full px-2 py-2 text-sm rounded-md group transition-colors",
+                isActive(item.href)
+                  ? "bg-neutral-100 text-neutral-900 font-medium"
+                  : "text-neutral-600 hover:bg-neutral-50"
+              )}
+              onClick={() => navigate(item.href)}
+              whileHover={{ x: 4 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div
+                className={cn(
+                  "mr-3 flex-shrink-0 h-6 w-6 rounded-md flex items-center justify-center",
+                  isActive(item.href) ? item.bgColor : "text-neutral-400"
+                )}
+              >
+                <item.icon
+                  className={cn(
+                    "h-4 w-4",
+                    isActive(item.href) ? item.color : "text-neutral-500"
+                  )}
+                />
+              </div>
+              <span>{item.title}</span>
+            </motion.button>
+          ))}
+        </nav>
+      </div>
+    </aside>
+  );
+};
+
+export default Sidebar;
