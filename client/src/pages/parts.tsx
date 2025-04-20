@@ -44,6 +44,14 @@ interface Part {
   oem: boolean;
   image: string;
   supplier: string;
+  inStock?: boolean;
+  material?: string;
+  weight?: string;
+  manufacturer?: string;
+  warranty?: string;
+  condition?: string;
+  partNumber?: string;
+  estimatedDelivery?: string;
   alternatives?: {
     id: string;
     name: string;
@@ -62,6 +70,14 @@ const samplePart: Part = {
   oem: true,
   image: 'https://placehold.co/400x300/e2e8f0/64748b?text=Air+Filter',
   supplier: 'Honda Genuine Parts',
+  partNumber: 'HAF-10023-JP',
+  inStock: true,
+  material: 'Synthetic Fiber',
+  weight: '350g',
+  manufacturer: 'Honda Motor Co.',
+  warranty: '1 Year',
+  condition: 'New',
+  estimatedDelivery: '2-3 business days',
   alternatives: [
     {
       id: 'AF-12346',
@@ -96,6 +112,8 @@ const PartsPage: React.FC = () => {
   const [partNumber, setPartNumber] = useState('');
   const [isBulkUpload, setIsBulkUpload] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
+  const [pincode, setPincode] = useState('');
+  const [showDeliveryInfo, setShowDeliveryInfo] = useState(false);
 
   const handleSearch = () => {
     // In a real app, this would be an API call
