@@ -17,6 +17,7 @@ import LearnDriving from "@/pages/learn-driving";
 import Dashboard from "@/pages/dashboard";
 import Inspection from "@/pages/inspection";
 import Energy from "@/pages/energy";
+import PartsPage from "@/pages/parts";
 
 function Router() {
   const [location] = useLocation();

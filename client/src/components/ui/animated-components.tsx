@@ -1,101 +1,9 @@
 import React, { ReactNode } from 'react';
-import { motion, Variants, HTMLMotionProps } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
-// Animation variants with proper TypeScript typing
-export const fadeIn: Variants = {
-  hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1,
-    transition: { duration: 0.5 }
-  }
-};
-
-export const slideUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: { 
-      duration: 0.5,
-      ease: "easeOut"
-    }
-  }
-};
-
-export const slideInLeft: Variants = {
-  hidden: { opacity: 0, x: -50 },
-  visible: { 
-    opacity: 1, 
-    x: 0,
-    transition: { 
-      duration: 0.5,
-      ease: "easeOut"
-    }
-  }
-};
-
-export const slideInRight: Variants = {
-  hidden: { opacity: 0, x: 50 },
-  visible: { 
-    opacity: 1, 
-    x: 0,
-    transition: { 
-      duration: 0.5,
-      ease: "easeOut"
-    }
-  }
-};
-
-export const scaleUp: Variants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: { 
-    opacity: 1, 
-    scale: 1,
-    transition: { 
-      duration: 0.5,
-      ease: "easeOut"
-    }
-  }
-};
-
-export const popIn: Variants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: { 
-    opacity: 1,
-    scale: 1,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 20
-    }
-  }
-};
-
-export const staggerContainer: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1
-    }
-  }
-};
-
-export const menuItemVariants: Variants = {
-  closed: { opacity: 0, x: -10 },
-  open: { opacity: 1, x: 0 }
-};
-
-export const cardHoverVariants: Variants = {
-  hover: { y: -5, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }
-};
-
-// Animated components
-interface MotionProps extends Omit<HTMLMotionProps<"div">, "initial" | "animate" | "variants"> {
+interface AnimatedComponentProps {
   children: ReactNode;
-  className?: string;
   delay?: number;
   duration?: number;
   once?: boolean;
@@ -103,65 +11,10 @@ interface MotionProps extends Omit<HTMLMotionProps<"div">, "initial" | "animate"
   variants?: Variants;
 }
 
-export const FadeIn: React.FC<MotionProps> = ({
+export const FadeIn: React.FC<AnimatedComponentProps> = ({
   children,
-  className = "",
   delay = 0,
-  once = true,
-  threshold = 0.2,
-  variants = fadeIn,
-  ...props
-}) => {
-  const [ref, inView] = useInView({
-    triggerOnce: once,
-    threshold,
-  });
-
-  const transitionProps = typeof variants.visible === 'object' && 'transition' in variants.visible 
-    ? variants.visible.transition 
-    : { duration: 0.5 };
-
-  return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={inView ? "visible" : "hidden"}
-      variants={variants}
-      className={className}
-      transition={{
-        delay,
-        ...transitionProps,
-      }}
-      {...props}
-    >
-      {children}
-    </motion.div>
-  );
-};
-
-export const SlideUp: React.FC<MotionProps> = (props) => {
-  return <FadeIn variants={slideUp} {...props} />;
-};
-
-export const SlideInLeft: React.FC<MotionProps> = (props) => {
-  return <FadeIn variants={slideInLeft} {...props} />;
-};
-
-export const SlideInRight: React.FC<MotionProps> = (props) => {
-  return <FadeIn variants={slideInRight} {...props} />;
-};
-
-export const ScaleUp: React.FC<MotionProps> = (props) => {
-  return <FadeIn variants={scaleUp} {...props} />;
-};
-
-export const PopIn: React.FC<MotionProps> = (props) => {
-  return <FadeIn variants={popIn} {...props} />;
-};
-
-export const StaggerContainer: React.FC<MotionProps> = ({
-  children,
-  className = "",
+  duration = 0.5,
   once = true,
   threshold = 0.1,
   ...props
@@ -171,30 +24,18 @@ export const StaggerContainer: React.FC<MotionProps> = ({
     threshold,
   });
 
+  const variants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  };
+
   return (
     <motion.div
       ref={ref}
       initial="hidden"
-      animate={inView ? "visible" : "hidden"}
-      variants={staggerContainer}
-      className={className}
-      {...props}
-    >
-      {children}
-    </motion.div>
-  );
-};
-
-export const StaggerItem: React.FC<MotionProps> = ({
-  children,
-  className = "",
-  variants = fadeIn,
-  ...props
-}) => {
-  return (
-    <motion.div
+      animate={inView ? 'visible' : 'hidden'}
       variants={variants}
-      className={className}
+      transition={{ duration, delay }}
       {...props}
     >
       {children}
@@ -202,11 +43,12 @@ export const StaggerItem: React.FC<MotionProps> = ({
   );
 };
 
-export const AnimatedCard: React.FC<MotionProps> = ({
+export const SlideUp: React.FC<AnimatedComponentProps> = ({
   children,
-  className = "",
+  delay = 0,
+  duration = 0.5,
   once = true,
-  threshold = 0.2,
+  threshold = 0.1,
   ...props
 }) => {
   const [ref, inView] = useInView({
@@ -214,30 +56,18 @@ export const AnimatedCard: React.FC<MotionProps> = ({
     threshold,
   });
 
+  const variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
     <motion.div
       ref={ref}
       initial="hidden"
-      animate={inView ? "visible" : "hidden"}
-      whileHover="hover"
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: { 
-          opacity: 1, 
-          y: 0,
-          transition: { 
-            duration: 0.5,
-            ease: "easeOut"
-          }
-        },
-        hover: { 
-          y: -5, 
-          transition: { 
-            duration: 0.2 
-          } 
-        }
-      }}
-      className={`fx-card ${className}`}
+      animate={inView ? 'visible' : 'hidden'}
+      variants={variants}
+      transition={{ duration, delay }}
       {...props}
     >
       {children}
@@ -245,13 +75,104 @@ export const AnimatedCard: React.FC<MotionProps> = ({
   );
 };
 
-interface AnimatedButtonProps extends MotionProps {
-  onClick?: () => void;
-}
-
-export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
+export const SlideRight: React.FC<AnimatedComponentProps> = ({
   children,
-  className = "",
+  delay = 0,
+  duration = 0.5,
+  once = true,
+  threshold = 0.1,
+  ...props
+}) => {
+  const [ref, inView] = useInView({
+    triggerOnce: once,
+    threshold,
+  });
+
+  const variants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0 },
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+      variants={variants}
+      transition={{ duration, delay }}
+      {...props}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+export const SlideLeft: React.FC<AnimatedComponentProps> = ({
+  children,
+  delay = 0,
+  duration = 0.5,
+  once = true,
+  threshold = 0.1,
+  ...props
+}) => {
+  const [ref, inView] = useInView({
+    triggerOnce: once,
+    threshold,
+  });
+
+  const variants = {
+    hidden: { opacity: 0, x: 20 },
+    visible: { opacity: 1, x: 0 },
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+      variants={variants}
+      transition={{ duration, delay }}
+      {...props}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+export const Scale: React.FC<AnimatedComponentProps> = ({
+  children,
+  delay = 0,
+  duration = 0.5,
+  once = true,
+  threshold = 0.1,
+  ...props
+}) => {
+  const [ref, inView] = useInView({
+    triggerOnce: once,
+    threshold,
+  });
+
+  const variants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1 },
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+      variants={variants}
+      transition={{ duration, delay }}
+      {...props}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+export const AnimatedButton: React.FC<AnimatedComponentProps & { onClick?: () => void }> = ({
+  children,
   onClick,
   ...props
 }) => {
@@ -259,7 +180,6 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     <motion.button
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      className={className}
       onClick={onClick}
       {...props}
     >
@@ -268,15 +188,132 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   );
 };
 
-// Animated page transition component
-export const PageTransition: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const Stagger: React.FC<AnimatedComponentProps & { staggerChildren?: number }> = ({
+  children,
+  delay = 0,
+  duration = 0.5,
+  once = true,
+  threshold = 0.1,
+  staggerChildren = 0.1,
+  ...props
+}) => {
+  const [ref, inView] = useInView({
+    triggerOnce: once,
+    threshold,
+  });
+
+  const container = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: delay,
+        staggerChildren,
+      },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration },
+    },
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="w-full"
+      ref={ref}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+      variants={container}
+      {...props}
+    >
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          return (
+            <motion.div variants={item}>
+              {child}
+            </motion.div>
+          );
+        }
+        return child;
+      })}
+    </motion.div>
+  );
+};
+
+export const Pulse: React.FC<AnimatedComponentProps> = ({
+  children,
+  duration = 2,
+  ...props
+}) => {
+  return (
+    <motion.div
+      animate={{ scale: [1, 1.05, 1] }}
+      transition={{
+        duration,
+        repeat: Infinity,
+        repeatType: 'loop',
+      }}
+      {...props}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+export const Rotate: React.FC<AnimatedComponentProps> = ({
+  children,
+  duration = 20,
+  ...props
+}) => {
+  return (
+    <motion.div
+      animate={{ rotate: 360 }}
+      transition={{
+        duration,
+        repeat: Infinity,
+        repeatType: 'loop',
+        ease: 'linear',
+      }}
+      {...props}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+export const FadeInStaggered: React.FC<AnimatedComponentProps & { index?: number }> = ({
+  children,
+  delay = 0,
+  duration = 0.5,
+  once = true,
+  threshold = 0.1,
+  index = 0,
+  ...props
+}) => {
+  const [ref, inView] = useInView({
+    triggerOnce: once,
+    threshold,
+  });
+
+  const customDelay = delay + index * 0.1;
+
+  const variants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+      variants={variants}
+      transition={{ duration, delay: customDelay }}
+      {...props}
     >
       {children}
     </motion.div>
