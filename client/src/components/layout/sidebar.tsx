@@ -12,6 +12,7 @@ import {
   Building2,
   User,
   Settings,
+  Battery,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -43,6 +44,13 @@ const navItems = [
     href: '/history',
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
+  },
+  {
+    title: 'Energy Usage',
+    icon: Battery,
+    href: '/energy',
+    color: 'text-yellow-500',
+    bgColor: 'bg-yellow-50',
   },
   {
     title: 'Nearby Services',
