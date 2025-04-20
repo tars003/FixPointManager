@@ -1066,26 +1066,6 @@ const PartsPage: React.FC = () => {
           Identify Parts
         </Button>
       </motion.div>
-      
-      {/* Floating action button */}
-      <motion.div
-        className="fixed bottom-20 right-6 z-50"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ 
-          type: "spring", 
-          stiffness: 300, 
-          damping: 20,
-          delay: 0.6
-        }}
-      >
-        <Button
-          size="icon"
-          className="h-14 w-14 rounded-full bg-pink-500 hover:bg-pink-600 text-white shadow-lg"
-        >
-          <Plus className="h-6 w-6" />
-        </Button>
-      </motion.div>
     </motion.div>
   );
 };
