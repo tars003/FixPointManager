@@ -163,6 +163,19 @@ function Router() {
               </motion.div>
             )}
           </Route>
+          <Route path="/parts">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <PartsPage />
+              </motion.div>
+            )}
+          </Route>
           <Route>
             {() => (
               <motion.div
