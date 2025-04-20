@@ -563,9 +563,9 @@ const MyVehicles = () => {
                     variant="outline" 
                     onClick={() => {
                       setSearchTerm('');
-                      setActiveFilters({ 
-                        fuelTypes: [], 
-                        years: [], 
+                      setActiveFilters({
+                        fuelTypes: [],
+                        years: [],
                         makes: [],
                         vehicleTypes: [],
                         locations: []
