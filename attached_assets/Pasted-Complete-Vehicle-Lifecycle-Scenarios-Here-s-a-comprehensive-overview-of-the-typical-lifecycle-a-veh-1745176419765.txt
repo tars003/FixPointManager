@@ -1,0 +1,94 @@
+Complete Vehicle Lifecycle Scenarios
+Here's a comprehensive overview of the typical lifecycle a vehicle goes through from purchase to end-of-life:
+1. Purchase & Initial Ownership
+Showroom purchase with registration and documentation
+Break-in period (first 1,000-1,500 km) with careful driving
+First service (usually free at 1,000-2,000 km)
+Insurance activation and initial documentation setup
+Accessories installation and initial customization
+2. Regular Maintenance Cycle
+Scheduled servicing based on manufacturer recommendations:
+Minor services (oil changes, filters) every 5,000-10,000 km
+Major services (including transmission, brakes) every 20,000-40,000 km
+Consumable replacements:
+Tires (typically every 40,000-60,000 km)
+Battery (every 3-5 years)
+Brake pads/discs (every 30,000-70,000 km)
+Clutch (if manual, 60,000-100,000 km)
+Fluid replacements:
+Engine oil and filter (5,000-10,000 km)
+Transmission fluid (40,000-100,000 km)
+Brake fluid (every 2 years typically)
+Coolant (every 2-5 years)
+Regular inspections for roadworthiness and emissions
+3. Documentation Renewal Cycle
+Insurance renewal (annual)
+Registration renewal (varies by region, often annual)
+Pollution/emission certification (typically 6 months to annual)
+Fitness certificate (for commercial vehicles)
+Road tax payment (varies by region)
+4. Unexpected Events & Repairs
+Breakdown scenarios:
+Roadside breakdowns requiring towing
+Engine or transmission failures
+Electrical system failures
+Cooling system failures
+Starting/charging system issues
+Accident-related repairs:
+Minor body damage repairs
+Major structural repairs
+Insurance claim processing
+Post-accident safety inspections
+Weather-related damages:
+Flood damage
+Hail damage
+Heat/cold related failures
+Theft or vandalism:
+Complete theft
+Break-in damage
+Parts theft
+Vandalism repairs
+5. Mid-life Modifications & Updates
+Upgrades and enhancements:
+Entertainment/infotainment system updates
+Safety feature additions
+Comfort improvements
+Performance modifications
+Fuel system conversions (e.g., petrol to CNG/LPG)
+Major refurbishments:
+Engine rebuild/replacement
+Transmission rebuild
+Interior renovation
+Exterior repaint/restoration
+Retrofit of new technologies (dashcams, tracking systems, etc.)
+6. Ownership Transfers
+Sale to second owner:
+Pre-sale inspection and certification
+Documentation transfer
+History disclosure
+Gifting to family member with ownership transfer
+Trade-in at dealership for new vehicle
+7. Extended Use Scenarios
+Commercial repurposing (personal vehicle to taxi/delivery)
+Utility changes (e.g., passenger vehicle to cargo)
+Significant modification for specialized use
+Vintage/classic restoration for older vehicles
+Off-road conversion or specialized environment adaptation
+8. End of Life Scenarios
+Catastrophic damage beyond economical repair
+Age-related retirement when maintenance costs exceed value
+Scrapping and recycling:
+Dismantling for parts
+Metal recycling
+Fluid disposal
+Battery/hazardous materials handling
+Abandoned vehicle processing
+Vehicle export to markets with lower standards
+Conversion to non-road use (static display, educational purposes)
+Donation for training (fire departments, technical schools)
+9. Environmental Impact Phases
+Initial environmental footprint of manufacturing
+Operational emissions throughout usage
+Maintenance waste (oils, fluids, parts)
+End-of-life recycling efficiency or environmental impact
+This lifecycle view encompasses the major scenarios most vehicles experience, though individual vehicles may go through unique combinations of these events based on owner behavior, vehicle quality, regional factors, and chance events.
