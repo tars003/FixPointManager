@@ -16,7 +16,12 @@ import {
   Barcode,
   FileIcon,
   MessageSquare,
-  FileSearch
+  FileSearch,
+  ShoppingCart,
+  Truck,
+  ChevronUp,
+  ChevronDown,
+  Share
 } from 'lucide-react';
 import { FaWhatsapp, FaEnvelope, FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa';
 
@@ -621,6 +626,29 @@ const PartsPage: React.FC = () => {
                           </DialogContent>
                         </Dialog>
                       </div>
+
+                      {/* Product Specifications */}
+                      <div className="mt-4 border-t pt-4">
+                        <h3 className="font-medium mb-2 text-sm">Product Specifications</h3>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="p-2 bg-muted/50 rounded-md">
+                            <span className="text-muted-foreground">Part Number:</span>{' '}
+                            <span className="font-medium">{searchResult.partNumber}</span>
+                          </div>
+                          <div className="p-2 bg-muted/50 rounded-md">
+                            <span className="text-muted-foreground">Material:</span>{' '}
+                            <span className="font-medium">{searchResult.material}</span>
+                          </div>
+                          <div className="p-2 bg-muted/50 rounded-md">
+                            <span className="text-muted-foreground">Weight:</span>{' '}
+                            <span className="font-medium">{searchResult.weight}</span>
+                          </div>
+                          <div className="p-2 bg-muted/50 rounded-md">
+                            <span className="text-muted-foreground">Warranty:</span>{' '}
+                            <span className="font-medium">{searchResult.warranty}</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div className="md:col-span-3">
                       <h3 className="font-medium mb-2">Description</h3>
@@ -634,6 +662,101 @@ const PartsPage: React.FC = () => {
                             {vehicle}
                           </Badge>
                         ))}
+                      </div>
+
+                      {/* Delivery and Pricing Section */}
+                      <div className="mb-4 border-t pt-4">
+                        <h3 className="font-medium mb-2">Pricing & Delivery</h3>
+                        <div className="bg-muted/30 p-4 rounded-md space-y-4">
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <div className="flex items-center">
+                                <span className="text-lg font-semibold">{searchResult.price}</span>
+                                <Badge variant="outline" className="ml-2 bg-green-50 text-green-700 border-green-200">
+                                  {searchResult.condition}
+                                </Badge>
+                              </div>
+                              {searchResult.inStock ? (
+                                <span className="text-xs text-green-600">In Stock</span>
+                              ) : (
+                                <span className="text-xs text-amber-600">Limited Stock</span>
+                              )}
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-right">FixPoint Marketplace</p>
+                              <p className="text-xs text-muted-foreground text-right">Free shipping on orders above ₹999</p>
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <h4 className="text-sm font-medium">Delivery Options</h4>
+                            <div className="flex flex-col sm:flex-row gap-4">
+                              <div className="flex-1">
+                                <Label htmlFor="pincode" className="text-xs mb-1 block">Pincode</Label>
+                                <div className="flex">
+                                  <Input 
+                                    id="pincode" 
+                                    placeholder="Enter pincode" 
+                                    className="rounded-r-none"
+                                    value={pincode}
+                                    onChange={(e) => setPincode(e.target.value)}
+                                  />
+                                  <Button 
+                                    className="rounded-l-none" 
+                                    onClick={() => setShowDeliveryInfo(true)}
+                                    disabled={pincode.length !== 6}
+                                  >
+                                    Check
+                                  </Button>
+                                </div>
+                              </div>
+                              
+                              {showDeliveryInfo && (
+                                <motion.div 
+                                  className="flex-1 flex flex-col justify-center space-y-1 bg-green-50 p-3 rounded-md"
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ duration: 0.3 }}
+                                >
+                                  <div className="flex items-center gap-1">
+                                    <Truck className="h-4 w-4 text-green-600" />
+                                    <span className="text-sm font-medium">Estimated Delivery:</span>
+                                  </div>
+                                  <p className="text-sm pl-5">
+                                    <span className="font-medium">{searchResult.estimatedDelivery}</span>
+                                    <span className="text-xs text-muted-foreground ml-2">(Free Express Shipping)</span>
+                                  </p>
+                                </motion.div>
+                              )}
+                            </div>
+                          </div>
+
+                          {showDeliveryInfo && (
+                            <motion.div 
+                              className="grid grid-cols-2 gap-2 text-xs"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ delay: 0.2 }}
+                            >
+                              <div className="flex items-center gap-1">
+                                <CheckCircle className="h-3 w-3 text-green-500" />
+                                <span>Cash on Delivery available</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <CheckCircle className="h-3 w-3 text-green-500" />
+                                <span>7 days replacement policy</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <CheckCircle className="h-3 w-3 text-green-500" />
+                                <span>Genuine part guarantee</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <CheckCircle className="h-3 w-3 text-green-500" />
+                                <span>Installation support available</span>
+                              </div>
+                            </motion.div>
+                          )}
+                        </div>
                       </div>
                       
                       {searchResult.alternatives && searchResult.alternatives.length > 0 && (
@@ -658,14 +781,24 @@ const PartsPage: React.FC = () => {
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="flex justify-between bg-muted/30 border-t">
-                  <Button variant="outline">
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                    Verify Authenticity
-                  </Button>
-                  <div className="flex gap-2">
-                    <Button variant="default">
+                <CardFooter className="flex flex-col sm:flex-row justify-between bg-muted/30 border-t gap-3">
+                  <div className="flex gap-2 w-full sm:w-auto">
+                    <Button variant="outline" className="flex-1 sm:flex-auto">
                       <CheckCircle className="h-4 w-4 mr-2" />
+                      Verify Authenticity
+                    </Button>
+                    <Button variant="outline" className="flex-1 sm:flex-auto">
+                      <Share className="h-4 w-4 mr-2" />
+                      Share
+                    </Button>
+                  </div>
+                  <div className="flex gap-2 w-full sm:w-auto">
+                    <Button variant="secondary" className="flex-1 sm:flex-auto">
+                      <Truck className="h-4 w-4 mr-2" />
+                      Buy Now
+                    </Button>
+                    <Button variant="default" className="flex-1 sm:flex-auto">
+                      <ShoppingCart className="h-4 w-4 mr-2" />
                       Add to Cart
                     </Button>
                   </div>
