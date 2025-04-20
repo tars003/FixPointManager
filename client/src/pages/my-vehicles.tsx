@@ -105,16 +105,16 @@ const MyVehicles = () => {
   });
   
   // Get health status color
-  const getHealthStatusColor = (score?: number) => {
-    if (!score) return 'bg-gray-100 text-gray-500';
+  const getHealthStatusColor = (score?: number | null) => {
+    if (score === undefined || score === null) return 'bg-gray-100 text-gray-500';
     if (score >= 80) return 'bg-green-100 text-green-600';
     if (score >= 60) return 'bg-yellow-100 text-yellow-600';
     return 'bg-red-100 text-red-600';
   };
   
   // Get health status icon
-  const getHealthStatusIcon = (score?: number) => {
-    if (!score) return null;
+  const getHealthStatusIcon = (score?: number | null) => {
+    if (score === undefined || score === null) return null;
     if (score >= 80) return <CheckCircle className="h-4 w-4 text-green-500" />;
     if (score >= 60) return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
     return <AlertTriangle className="h-4 w-4 text-red-500" />;

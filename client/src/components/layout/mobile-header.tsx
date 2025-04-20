@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import NotificationPopover from '@/components/notification/notification-popover';
+import { NotificationPopover } from '@/components/notification/notification-popover';
 
 // Import the same nav items as sidebar
 import { 

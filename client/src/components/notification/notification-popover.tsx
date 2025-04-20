@@ -1,146 +1,154 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, X, Info, Calendar, Wrench, FileCheck } from 'lucide-react';
+import { Bell, Check, X, Info, AlertCircle, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { formatRelativeTime } from '@/lib/format';
 
+// Type for notifications
 interface Notification {
   id: string;
-  type: 'maintenance' | 'reminder' | 'document' | 'system';
   title: string;
   message: string;
-  time: string;
+  type: 'success' | 'warning' | 'info' | 'reminder';
   read: boolean;
+  date: Date;
 }
 
-const getMockNotifications = (): Notification[] => {
-  return [
-    {
-      id: '1',
-      type: 'maintenance',
-      title: 'Service Reminder',
-      message: 'Your Honda City is due for regular maintenance in 14 days',
-      time: '2h ago',
-      read: false
-    },
-    {
-      id: '2',
-      type: 'document',
-      title: 'Document Expiring',
-      message: 'Your vehicle insurance will expire in 30 days',
-      time: '1d ago',
-      read: false
-    },
-    {
-      id: '3',
-      type: 'system',
-      title: 'Welcome to FixPoint',
-      message: 'Thank you for joining our platform. Explore our services.',
-      time: '3d ago',
-      read: true
-    },
-    {
-      id: '4',
-      type: 'reminder',
-      title: 'Fuel Price Alert',
-      message: 'Fuel prices have dropped by 5% in your area',
-      time: '5d ago',
-      read: true
-    },
-  ];
-};
-
-const getIconForNotificationType = (type: string) => {
-  switch (type) {
-    case 'maintenance':
-      return <Wrench className="h-5 w-5 text-blue-500" />;
-    case 'reminder':
-      return <Calendar className="h-5 w-5 text-purple-500" />;
-    case 'document':
-      return <FileCheck className="h-5 w-5 text-green-500" />;
-    case 'system':
-    default:
-      return <Info className="h-5 w-5 text-amber-500" />;
+// Mock notifications
+const MOCK_NOTIFICATIONS: Notification[] = [
+  {
+    id: '1',
+    title: 'Service reminder',
+    message: 'Your vehicle is due for service in 3 days.',
+    type: 'reminder',
+    read: false,
+    date: new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
+  },
+  {
+    id: '2',
+    title: 'Inspection completed',
+    message: 'The inspection for your Honda City has been completed.',
+    type: 'success',
+    read: false,
+    date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) // 1 day ago
+  },
+  {
+    id: '3',
+    title: 'Document expiring',
+    message: 'Your insurance is expiring in 15 days. Renew it now!',
+    type: 'warning',
+    read: true,
+    date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) // 3 days ago
+  },
+  {
+    id: '4',
+    title: 'Appointment confirmed',
+    message: 'Your service appointment has been confirmed for May 25th.',
+    type: 'info',
+    read: true,
+    date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000) // 4 days ago
   }
-};
+];
 
-interface NotificationPopoverProps {
-  className?: string;
-}
-
-const NotificationPopover: React.FC<NotificationPopoverProps> = ({ className }) => {
-  const [notifications, setNotifications] = useState<Notification[]>(getMockNotifications());
-  const [isOpen, setIsOpen] = useState(false);
+export function NotificationPopover() {
+  const [open, setOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>(MOCK_NOTIFICATIONS);
   
+  // Count unread notifications
   const unreadCount = notifications.filter(n => !n.read).length;
   
+  // Mark a notification as read
   const markAsRead = (id: string) => {
     setNotifications(prev => 
-      prev.map(notification => 
-        notification.id === id 
-          ? { ...notification, read: true } 
-          : notification
-      )
+      prev.map(n => n.id === id ? { ...n, read: true } : n)
     );
   };
   
+  // Mark all as read
   const markAllAsRead = () => {
     setNotifications(prev => 
-      prev.map(notification => ({ ...notification, read: true }))
+      prev.map(n => ({ ...n, read: true }))
     );
   };
   
-  const deleteNotification = (id: string) => {
-    setNotifications(prev => prev.filter(notification => notification.id !== id));
+  // Remove a notification
+  const removeNotification = (id: string) => {
+    setNotifications(prev => 
+      prev.filter(n => n.id !== id)
+    );
+  };
+  
+  // Get icon based on notification type
+  const getNotificationIcon = (type: Notification['type']) => {
+    switch (type) {
+      case 'success':
+        return <Check className="h-4 w-4 text-green-500" />;
+      case 'warning':
+        return <AlertCircle className="h-4 w-4 text-amber-500" />;
+      case 'info':
+        return <Info className="h-4 w-4 text-blue-500" />;
+      case 'reminder':
+        return <Calendar className="h-4 w-4 text-purple-500" />;
+    }
+  };
+  
+  // Get background color based on notification type
+  const getNotificationBg = (type: Notification['type'], read: boolean) => {
+    if (read) return 'bg-white';
+    
+    switch (type) {
+      case 'success':
+        return 'bg-green-50';
+      case 'warning':
+        return 'bg-amber-50';
+      case 'info':
+        return 'bg-blue-50';
+      case 'reminder':
+        return 'bg-purple-50';
+    }
   };
   
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button 
-          variant="outline"
-          size="sm"
-          className={cn("relative", className)}
+          variant="outline" 
+          size="icon" 
+          className="relative"
+          onClick={() => setOpen(true)}
         >
-          <Bell className="h-4 w-4" />
+          <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center"
-            >
+            <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
               {unreadCount}
-            </motion.span>
+            </span>
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent 
-        align="end" 
-        className="w-[350px] p-0 max-h-[70vh] overflow-hidden flex flex-col"
-      >
-        <div className="p-4 border-b flex justify-between items-center">
-          <h3 className="font-semibold">Notifications</h3>
-          {unreadCount > 0 && (
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={markAllAsRead}
-              className="text-xs h-7 px-2"
-            >
-              Mark all as read
-            </Button>
-          )}
+      <PopoverContent className="w-80 p-0" align="end">
+        <div className="p-4 border-b">
+          <div className="flex items-center justify-between">
+            <h4 className="font-semibold">Notifications</h4>
+            {unreadCount > 0 && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-xs h-7" 
+                onClick={markAllAsRead}
+              >
+                Mark all as read
+              </Button>
+            )}
+          </div>
         </div>
         
-        <div className="overflow-y-auto py-2 max-h-[60vh]">
-          {notifications.length === 0 ? (
-            <div className="py-8 text-center">
-              <Bell className="h-8 w-8 text-neutral-300 mx-auto mb-2" />
-              <p className="text-neutral-light">No notifications</p>
-            </div>
-          ) : (
+        <div className="max-h-80 overflow-y-auto">
+          {notifications.length > 0 ? (
             <AnimatePresence initial={false}>
               {notifications.map((notification) => (
                 <motion.div
@@ -149,62 +157,67 @@ const NotificationPopover: React.FC<NotificationPopoverProps> = ({ className }) 
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
-                  className={cn(
-                    "border-l-4 p-3 mx-2 mb-2 rounded-md flex bg-white",
-                    notification.read ? "border-neutral-200" : "border-primary",
-                    !notification.read && "bg-primary/5"
-                  )}
+                  className={`border-b last:border-0 ${getNotificationBg(notification.type, notification.read)}`}
                 >
-                  <div className="w-9 h-9 rounded-full bg-neutral-100 flex items-center justify-center mr-3 flex-shrink-0">
-                    {getIconForNotificationType(notification.type)}
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start">
-                      <h4 className="font-medium text-sm">
-                        {notification.title}
-                        {!notification.read && (
-                          <Badge className="ml-2 bg-primary/10 text-primary hover:bg-primary/20 text-[10px] py-0">
-                            New
-                          </Badge>
-                        )}
-                      </h4>
-                      <button
-                        onClick={() => deleteNotification(notification.id)}
-                        className="text-neutral-400 hover:text-neutral-600"
-                      >
-                        <X className="h-3.5 w-3.5" />
-                      </button>
+                  <div 
+                    className="p-4 flex gap-3 relative"
+                    onClick={() => markAsRead(notification.id)}
+                  >
+                    <div className="shrink-0 mt-0.5">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center
+                        ${notification.type === 'success' ? 'bg-green-100' : ''}
+                        ${notification.type === 'warning' ? 'bg-amber-100' : ''}
+                        ${notification.type === 'info' ? 'bg-blue-100' : ''}
+                        ${notification.type === 'reminder' ? 'bg-purple-100' : ''}
+                      `}>
+                        {getNotificationIcon(notification.type)}
+                      </div>
                     </div>
-                    <p className="text-sm text-neutral-light mt-1 whitespace-normal break-words">
-                      {notification.message}
-                    </p>
-                    <div className="flex justify-between items-center mt-2">
-                      <p className="text-xs text-neutral-light">{notification.time}</p>
-                      {!notification.read && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => markAsRead(notification.id)}
-                          className="h-7 text-xs px-2 text-primary hover:text-primary-dark"
+                    
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start">
+                        <h5 className={`font-medium text-sm ${!notification.read ? 'text-neutral-dark' : 'text-neutral'}`}>
+                          {notification.title}
+                        </h5>
+                        <button 
+                          className="text-neutral-light hover:text-neutral-dark rounded-full p-1"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeNotification(notification.id);
+                          }}
                         >
-                          Mark as read
-                        </Button>
-                      )}
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                      
+                      <p className="text-xs text-neutral-light mt-1 mb-2">
+                        {notification.message}
+                      </p>
+                      
+                      <p className="text-[10px] text-neutral-light">
+                        {formatRelativeTime(notification.date)}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
               ))}
             </AnimatePresence>
+          ) : (
+            <div className="py-8 text-center">
+              <div className="w-12 h-12 bg-neutral-100 rounded-full mx-auto flex items-center justify-center mb-3">
+                <Bell className="h-5 w-5 text-neutral-400" />
+              </div>
+              <p className="text-neutral-dark font-medium">No notifications</p>
+              <p className="text-neutral-light text-sm mt-1">You're all caught up!</p>
+            </div>
           )}
         </div>
         
-        <div className="p-2 border-t mt-auto">
+        <div className="p-2 border-t">
           <Button 
-            variant="outline" 
+            variant="ghost" 
             size="sm" 
-            className="w-full text-xs"
-            onClick={() => setIsOpen(false)}
+            className="w-full text-xs justify-center text-primary"
           >
             View all notifications
           </Button>
@@ -212,6 +225,4 @@ const NotificationPopover: React.FC<NotificationPopoverProps> = ({ className }) 
       </PopoverContent>
     </Popover>
   );
-};
-
-export default NotificationPopover;
+}
