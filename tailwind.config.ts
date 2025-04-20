@@ -22,10 +22,9 @@ export default {
           foreground: "hsl(var(--popover-foreground))",
         },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "rgb(var(--primary) / <alpha-value>)",
           foreground: "hsl(var(--primary-foreground))",
-          dark: "#0056b3",
-          light: "#4da3ff",
+          dark: "rgb(var(--primary-dark) / <alpha-value>)",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -36,10 +35,9 @@ export default {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
+          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
           foreground: "hsl(var(--accent-foreground))",
-          dark: "#e69619",
-          light: "#ffc566",
+          dark: "rgb(var(--accent-dark) / <alpha-value>)",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -50,8 +48,8 @@ export default {
         ring: "hsl(var(--ring))",
         neutral: {
           DEFAULT: "#64748b",
-          dark: "#334155",
-          light: "#94a3b8",
+          dark: "rgb(var(--neutral-dark) / <alpha-value>)",
+          light: "rgb(var(--neutral-light) / <alpha-value>)",
         },
         chart: {
           "1": "hsl(var(--chart-1))",
@@ -88,10 +86,34 @@ export default {
             height: "0",
           },
         },
+        "fadeIn": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        "slideIn": {
+          from: { transform: "translateY(20px)", opacity: "0" },
+          to: { transform: "translateY(0)", opacity: "1" },
+        },
+        "pulse": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fadeIn 0.5s ease-out forwards",
+        "slide-in": "slideIn 0.5s ease-out forwards",
+        "pulse": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
+      boxShadow: {
+        'card': '0 2px 8px 0 rgba(0, 0, 0, 0.04)',
+        'card-hover': '0 4px 12px 0 rgba(0, 0, 0, 0.08)',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-primary': 'linear-gradient(to right, rgb(var(--primary)), rgb(var(--primary-dark)))',
+        'gradient-accent': 'linear-gradient(to right, rgb(var(--accent)), rgb(var(--accent-dark)))',
       },
     },
   },

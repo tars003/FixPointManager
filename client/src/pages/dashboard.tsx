@@ -38,7 +38,8 @@ const Dashboard = () => {
   
   // Fetch user's vehicles
   const { data: vehicles, isLoading } = useQuery<Vehicle[]>({
-    queryKey: ['/api/vehicles', { userId: 1 }],
+    queryKey: ['/api/vehicles', { userId: user.id }],
+    enabled: !!user.id,
   });
   
   // Mock upcoming service
