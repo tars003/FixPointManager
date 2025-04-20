@@ -19,7 +19,8 @@ import {
   GraduationCap,
   FileSearch,
   AlertTriangle,
-  Truck
+  Truck,
+  Gamepad2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -100,6 +101,13 @@ const navItems = [
     href: '/education',
     color: 'text-amber-500',
     bgColor: 'bg-amber-50',
+  },
+  {
+    title: 'Arena',
+    icon: Gamepad2,
+    href: '/arena',
+    color: 'text-violet-500',
+    bgColor: 'bg-violet-50',
   },
   {
     title: 'Commercial Fleet',
