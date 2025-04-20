@@ -1,225 +1,407 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { User, Customer } from '@shared/schema';
-import { Users, TrendingUp, RefreshCw, Search } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useLocation } from 'wouter';
+import { motion } from 'framer-motion';
+import { Vehicle } from '@shared/schema';
+import { 
+  Car, 
+  Bell, 
+  Wrench, 
+  MapPin, 
+  History, 
+  CreditCard, 
+  Search, 
+  FileText,
+  ShoppingBag,
+  Calendar,
+  Shield,
+  Info,
+  ArrowRight,
+  ChevronRight,
+  Clock
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  Legend
-} from 'recharts';
-import StatsCard from '@/components/dashboard/stats-card';
-import CustomersTable from '@/components/dashboard/customers-table';
-
-// Sample data for demonstration
-const newCustomersData = [
-  { name: 'Jan', value: 140 },
-  { name: 'Feb', value: 160 },
-  { name: 'Mar', value: 130 },
-  { name: 'Apr', value: 170 },
-  { name: 'May', value: 150 },
-  { name: 'Jun', value: 190 },
-  { name: 'Jul', value: 210 },
-  { name: 'Aug', value: 180 },
-  { name: 'Sep', value: 160 },
-  { name: 'Oct', value: 185 },
-  { name: 'Nov', value: 195 },
-  { name: 'Dec', value: 175 },
-];
-
-const retentionData = [
-  { name: 'Jan', value: 52 },
-  { name: 'Feb', value: 48 },
-  { name: 'Mar', value: 50 },
-  { name: 'Apr', value: 55 },
-  { name: 'May', value: 53 },
-  { name: 'Jun', value: 58 },
-  { name: 'Jul', value: 56 },
-  { name: 'Aug', value: 54 },
-  { name: 'Sep', value: 52 },
-  { name: 'Oct', value: 57 },
-  { name: 'Nov', value: 58 },
-  { name: 'Dec', value: 62 },
-];
-
-const repeatCustomersData = [
-  { name: 'Jan', value: 650 },
-  { name: 'Feb', value: 680 },
-  { name: 'Mar', value: 700 },
-  { name: 'Apr', value: 720 },
-  { name: 'May', value: 750 },
-  { name: 'Jun', value: 770 },
-  { name: 'Jul', value: 800 },
-  { name: 'Aug', value: 830 },
-  { name: 'Sep', value: 850 },
-  { name: 'Oct', value: 880 },
-  { name: 'Nov', value: 920 },
-  { name: 'Dec', value: 980 },
-];
-
-const serviceTypeData = [
-  { name: 'Oil Change', value: 320 },
-  { name: 'Brake Service', value: 180 },
-  { name: 'Tire Rotation', value: 220 },
-  { name: 'Engine Repair', value: 120 },
-  { name: 'Transmission', value: 90 },
-  { name: 'Inspection', value: 310 },
-];
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { formatDate } from '@/lib/format';
+import NotificationPopover from '@/components/notification/notification-popover';
 
 const Dashboard = () => {
-  // For a real app, you'd fetch this from the user context or API
-  const currentUser = {
-    id: 1,
-    fullName: "Joseph Schiefer",
-    initials: "JS",
-    role: "provider"
+  const [, navigate] = useLocation();
+  const queryClient = useQueryClient();
+  
+  // Mock data for user
+  const user = {
+    name: 'Raj',
+    id: 1
   };
   
-  const { data: customers, isLoading: isLoadingCustomers } = useQuery<Customer[]>({
-    queryKey: [`/api/customers/${currentUser.id}`],
+  // Fetch user's vehicles
+  const { data: vehicles, isLoading } = useQuery<Vehicle[]>({
+    queryKey: ['/api/vehicles', { userId: 1 }],
   });
+  
+  // Mock upcoming service
+  const upcomingService = {
+    date: '2025-05-25',
+    vehicle: 'Honda City',
+    daysLeft: 14
+  };
+  
+  // Mock document status
+  const documentStatus = {
+    total: 8,
+    updated: 8
+  };
+  
+  // Mock health status
+  const healthStatus = {
+    status: 'Good',
+    score: 88
+  };
+  
+  // Function to handle navigation to different sections
+  const navigateTo = (path: string) => {
+    navigate(path);
+  };
   
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="lg:flex lg:items-center lg:justify-between mb-6">
-        <div>
-          <h2 className="text-2xl font-bold text-neutral-dark">Dashboard</h2>
-          <p className="text-neutral-light">Good morning, {currentUser.fullName}</p>
+      {/* Header with greeting */}
+      <motion.div 
+        className="mb-6"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <h2 className="text-3xl font-bold text-neutral-dark mb-1">Welcome, {user.name}!</h2>
+        <p className="text-neutral-light">Manage all your vehicles in one place, regardless of fuel type.</p>
+        
+        <div className="flex items-center justify-end mt-4 space-x-2">
+          <NotificationPopover />
+          
+          <Button 
+            className="bg-primary text-white hover:bg-primary-dark flex items-center"
+            size="sm"
+            onClick={() => navigateTo('/book-service')}
+          >
+            <Wrench className="h-4 w-4 mr-2" />
+            Quick Service
+          </Button>
         </div>
-        <div className="mt-4 lg:mt-0">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <Search className="h-5 w-5 text-neutral-light" />
+      </motion.div>
+      
+      {/* Quick Actions Cards */}
+      <motion.div
+        className="mb-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
+        <h3 className="text-xl font-semibold mb-3">Quick Actions</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+          <motion.div 
+            whileHover={{ y: -5, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+            className="fx-card p-4 flex flex-col items-center justify-center cursor-pointer"
+            onClick={() => navigateTo('/vehicles')}
+          >
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+              <Car className="h-5 w-5 text-primary" />
             </div>
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="pl-10 pr-3 py-2 bg-white border border-gray-200 rounded-lg focus:ring-1 focus:ring-primary focus:outline-none"
+            <p className="text-center text-sm font-medium">My Vehicles</p>
+          </motion.div>
+          
+          <motion.div 
+            whileHover={{ y: -5, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+            className="fx-card p-4 flex flex-col items-center justify-center cursor-pointer"
+            onClick={() => navigateTo('/book-service')}
+          >
+            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mb-2">
+              <Wrench className="h-5 w-5 text-accent" />
+            </div>
+            <p className="text-center text-sm font-medium">Book Service</p>
+          </motion.div>
+          
+          <motion.div 
+            whileHover={{ y: -5, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+            className="fx-card p-4 flex flex-col items-center justify-center cursor-pointer"
+            onClick={() => navigateTo('/nearby')}
+          >
+            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mb-2">
+              <MapPin className="h-5 w-5 text-green-500" />
+            </div>
+            <p className="text-center text-sm font-medium">Nearby</p>
+          </motion.div>
+          
+          <motion.div 
+            whileHover={{ y: -5, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+            className="fx-card p-4 flex flex-col items-center justify-center cursor-pointer"
+            onClick={() => navigateTo('/history')}
+          >
+            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-2">
+              <History className="h-5 w-5 text-blue-500" />
+            </div>
+            <p className="text-center text-sm font-medium">History</p>
+          </motion.div>
+          
+          <motion.div 
+            whileHover={{ y: -5, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+            className="fx-card p-4 flex flex-col items-center justify-center cursor-pointer"
+            onClick={() => navigateTo('/card-system')}
+          >
+            <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mb-2">
+              <CreditCard className="h-5 w-5 text-purple-500" />
+            </div>
+            <p className="text-center text-sm font-medium">Card System</p>
+          </motion.div>
+          
+          <motion.div 
+            whileHover={{ y: -5, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+            className="fx-card p-4 flex flex-col items-center justify-center cursor-pointer"
+            onClick={() => navigateTo('/explore')}
+          >
+            <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center mb-2">
+              <Search className="h-5 w-5 text-pink-500" />
+            </div>
+            <p className="text-center text-sm font-medium">Find Parts</p>
+          </motion.div>
+          
+          <motion.div 
+            whileHover={{ y: -5, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+            className="fx-card p-4 flex flex-col items-center justify-center cursor-pointer"
+            onClick={() => navigateTo('/compare')}
+          >
+            <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center mb-2">
+              <FileText className="h-5 w-5 text-cyan-500" />
+            </div>
+            <p className="text-center text-sm font-medium">Compare</p>
+          </motion.div>
+        </div>
+      </motion.div>
+      
+      {/* Status Cards */}
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        {/* Vehicle Health Card */}
+        <motion.div 
+          className="fx-card p-4 border-l-4 border-primary"
+          whileHover={{ y: -3, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
+        >
+          <div className="flex items-start">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+              <Shield className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <h4 className="text-sm text-neutral-light font-medium">Vehicle Health</h4>
+              <div className="flex items-center mt-1">
+                <p className="text-xl font-bold text-neutral-dark">{healthStatus.status}</p>
+                <Badge className="ml-2 bg-green-100 text-green-600 hover:bg-green-100">
+                  {healthStatus.score}%
+                </Badge>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-3 w-full bg-neutral-100 rounded-full h-1.5">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${healthStatus.score}%` }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="h-1.5 rounded-full bg-green-500"
             />
           </div>
-        </div>
-      </div>
+        </motion.div>
+        
+        {/* Upcoming Service Card */}
+        <motion.div 
+          className="fx-card p-4 border-l-4 border-accent"
+          whileHover={{ y: -3, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
+        >
+          <div className="flex items-start">
+            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mr-3">
+              <Calendar className="h-5 w-5 text-accent" />
+            </div>
+            <div>
+              <h4 className="text-sm text-neutral-light font-medium">Upcoming Service</h4>
+              <p className="text-xl font-bold text-neutral-dark mt-1">May 25</p>
+              <div className="flex items-center mt-1">
+                <p className="text-sm text-neutral-light">{upcomingService.vehicle}</p>
+                <Badge className="ml-2 bg-accent/10 text-accent hover:bg-accent/10">
+                  {upcomingService.daysLeft} days
+                </Badge>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+        
+        {/* Documents Card */}
+        <motion.div 
+          className="fx-card p-4 border-l-4 border-green-500"
+          whileHover={{ y: -3, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
+        >
+          <div className="flex items-start">
+            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+              <FileText className="h-5 w-5 text-green-500" />
+            </div>
+            <div>
+              <h4 className="text-sm text-neutral-light font-medium">Documents</h4>
+              <p className="text-xl font-bold text-neutral-dark mt-1">All Updated</p>
+              <p className="text-sm text-neutral-light mt-1">
+                {documentStatus.updated}/{documentStatus.total} documents
+              </p>
+            </div>
+          </div>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="mt-2 w-full flex items-center justify-center text-primary"
+            onClick={() => navigateTo('/documents')}
+          >
+            <span>View all documents</span>
+            <ChevronRight className="h-4 w-4 ml-1" />
+          </Button>
+        </motion.div>
+      </motion.div>
       
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <StatsCard
-          title="New Customers"
-          value="175.4"
-          icon={<Users />}
-          description="Avg. per month"
-          chart={
-            <div className="relative pt-1">
-              <div className="flex mb-2 items-center justify-between">
-                <div>
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-primary bg-primary-light">
-                    Monthly: 95%
-                  </span>
+      {/* Tabs Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
+        <Tabs defaultValue="dashboard" className="w-full">
+          <TabsList className="grid w-full md:w-auto grid-cols-3 h-auto p-1">
+            <TabsTrigger value="dashboard" className="py-2">Dashboard</TabsTrigger>
+            <TabsTrigger value="services" className="py-2">Services</TabsTrigger>
+            <TabsTrigger value="calculators" className="py-2">Calculators</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="dashboard" className="mt-4">
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h3 className="text-xl font-semibold mb-4 flex items-center">
+                <span className="mr-2">Your Vehicle Journey</span>
+                <Info className="h-4 w-4 text-neutral-light" />
+              </h3>
+              <p className="text-neutral-light mb-4">Track your vehicle's complete lifecycle</p>
+              
+              {isLoading ? (
+                <div className="flex justify-center py-12">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                 </div>
+              ) : vehicles && vehicles.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {vehicles.slice(0, 3).map((vehicle, idx) => (
+                    <motion.div
+                      key={vehicle.id}
+                      className="fx-card overflow-hidden border"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.1 * idx }}
+                      whileHover={{ y: -5, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
+                      onClick={() => navigateTo(`/vehicles/${vehicle.id}`)}
+                    >
+                      <div className="h-32 bg-neutral-100 flex items-center justify-center relative">
+                        {vehicle.imageUrl ? (
+                          <img 
+                            src={vehicle.imageUrl} 
+                            alt={vehicle.name} 
+                            className="w-full h-full object-cover" 
+                          />
+                        ) : (
+                          <Car className="h-16 w-16 text-neutral-300" />
+                        )}
+                        <Badge 
+                          className={`absolute top-2 right-2 ${
+                            vehicle.fuelType === 'electric' 
+                              ? 'bg-blue-100 text-blue-600 hover:bg-blue-100'
+                              : vehicle.fuelType === 'hybrid'
+                                ? 'bg-green-100 text-green-600 hover:bg-green-100'
+                                : 'bg-orange-100 text-orange-600 hover:bg-orange-100'
+                          }`}
+                        >
+                          {vehicle.fuelType || 'Petrol'}
+                        </Badge>
+                      </div>
+                      <div className="p-3">
+                        <h4 className="font-semibold">{vehicle.name}</h4>
+                        <p className="text-sm text-neutral-light">{vehicle.make} {vehicle.model} • {vehicle.year}</p>
+                        
+                        <div className="flex justify-between mt-3">
+                          <div>
+                            <p className="text-xs text-neutral-light">Last Service</p>
+                            <p className="text-sm font-medium">
+                              {vehicle.lastService ? formatDate(vehicle.lastService) : 'N/A'}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs text-neutral-light">Health</p>
+                            <p className="text-sm font-medium">
+                              {vehicle.healthScore || '85'}%
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Car className="h-12 w-12 mx-auto text-neutral-light mb-3" />
+                  <h4 className="font-semibold mb-2">No Vehicles Found</h4>
+                  <p className="text-neutral-light mb-4">Add your first vehicle to get started</p>
+                  <Button 
+                    onClick={() => navigateTo('/vehicles/add')}
+                    className="fx-button-gradient"
+                  >
+                    Add Vehicle
+                  </Button>
+                </div>
+              )}
+              
+              {vehicles && vehicles.length > 0 && (
+                <div className="flex justify-center mt-4">
+                  <Button 
+                    variant="outline"
+                    onClick={() => navigateTo('/vehicles')}
+                    className="flex items-center"
+                  >
+                    View All Vehicles
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="services" className="mt-4">
+            <div className="bg-white rounded-xl shadow-sm p-6 text-center">
+              <h3 className="text-xl font-semibold mb-2">Service History</h3>
+              <p className="text-neutral-light mb-4">View your complete service history and upcoming appointments</p>
+              
+              <div className="py-8">
+                <Clock className="h-12 w-12 mx-auto text-neutral-light mb-3" />
+                <p className="text-neutral-light mb-4">Coming soon! This feature is under development.</p>
               </div>
-              <div className="flex h-2 overflow-hidden rounded-full bg-primary-light">
-                <div style={{ width: '95%' }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="calculators" className="mt-4">
+            <div className="bg-white rounded-xl shadow-sm p-6 text-center">
+              <h3 className="text-xl font-semibold mb-2">Maintenance Calculators</h3>
+              <p className="text-neutral-light mb-4">Calculate fuel efficiency, maintenance costs, and more</p>
+              
+              <div className="py-8">
+                <ShoppingBag className="h-12 w-12 mx-auto text-neutral-light mb-3" />
+                <p className="text-neutral-light mb-4">Coming soon! This feature is under development.</p>
               </div>
             </div>
-          }
-        />
-        
-        <StatsCard
-          title="Retention Rate"
-          value="57.4%"
-          icon={<TrendingUp />}
-          change={{
-            value: 4.8,
-            isPositive: true
-          }}
-          chart={
-            <ResponsiveContainer width="100%" height={40}>
-              <AreaChart data={retentionData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                <Area type="monotone" dataKey="value" stroke="#3b82f6" fill="#bfdbfe" />
-              </AreaChart>
-            </ResponsiveContainer>
-          }
-          iconBgClass="bg-secondary-light"
-          iconColorClass="text-secondary"
-        />
-        
-        <StatsCard
-          title="Repeat Customers"
-          value="892"
-          icon={<RefreshCw />}
-          change={{
-            value: 12.1,
-            isPositive: true
-          }}
-          chart={
-            <ResponsiveContainer width="100%" height={40}>
-              <AreaChart data={repeatCustomersData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                <Area type="monotone" dataKey="value" stroke="#f59e0b" fill="#fef3c7" />
-              </AreaChart>
-            </ResponsiveContainer>
-          }
-          iconBgClass="bg-accent-light"
-          iconColorClass="text-accent"
-        />
-      </div>
-      
-      {/* Revenue & Services Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <Card className="col-span-2">
-          <CardContent className="p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Monthly Revenue</h3>
-              <Button variant="outline" size="sm">
-                This Year
-              </Button>
-            </div>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={newCustomersData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.2} />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                  <YAxis axisLine={false} tickLine={false} tickFormatter={(value) => `$${value}`} />
-                  <Tooltip formatter={(value) => [`$${value}`, 'Revenue']} />
-                  <Area type="monotone" dataKey="value" stroke="#10b981" fill="#d1fae5" />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Services Provided</h3>
-              <Button variant="outline" size="sm">
-                This Month
-              </Button>
-            </div>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={serviceTypeData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
-                  <XAxis type="number" axisLine={false} tickLine={false} />
-                  <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={100} />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#10b981" radius={[0, 4, 4, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      
-      {/* Customers Table */}
-      <CustomersTable providerId={currentUser.id} />
+          </TabsContent>
+        </Tabs>
+      </motion.div>
     </div>
   );
 };
