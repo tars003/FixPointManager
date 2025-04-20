@@ -1000,7 +1000,7 @@ const PartsPage: React.FC = () => {
 
   return (
     <motion.div 
-      className="container py-8"
+      className="container py-8 pb-24 relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
@@ -1045,6 +1045,47 @@ const PartsPage: React.FC = () => {
           {renderVerifyTab()}
         </TabsContent>
       </Tabs>
+      
+      {/* Pink Action Bar */}
+      <motion.div
+        className="fixed bottom-0 left-0 right-0 bg-pink-300 text-white py-3 px-4 flex items-center justify-center z-50"
+        initial={{ y: 100 }}
+        animate={{ y: 0 }}
+        transition={{ 
+          type: "spring", 
+          stiffness: 300, 
+          damping: 30,
+          delay: 0.3
+        }}
+      >
+        <Button 
+          className="bg-white text-pink-500 hover:bg-pink-50 flex items-center gap-2 font-medium rounded-full shadow-lg px-6"
+          size="lg"
+        >
+          <Search className="h-5 w-5" />
+          Identify Parts
+        </Button>
+      </motion.div>
+      
+      {/* Floating action button */}
+      <motion.div
+        className="fixed bottom-20 right-6 z-50"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ 
+          type: "spring", 
+          stiffness: 300, 
+          damping: 20,
+          delay: 0.6
+        }}
+      >
+        <Button
+          size="icon"
+          className="h-14 w-14 rounded-full bg-pink-500 hover:bg-pink-600 text-white shadow-lg"
+        >
+          <Plus className="h-6 w-6" />
+        </Button>
+      </motion.div>
     </motion.div>
   );
 };
