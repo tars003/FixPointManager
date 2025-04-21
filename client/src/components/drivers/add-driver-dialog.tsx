@@ -558,7 +558,7 @@ export function AddDriverDialog({ open, onOpenChange, theme }: AddDriverDialogPr
                               >
                                 {field.value ? (
                                   <>
-                                    {format(new Date(field.value), "PPP")}
+                                    {safeFormat(field.value, "PPP")}
                                     <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                                       (Age: {calculateAge(field.value)})
                                     </span>
