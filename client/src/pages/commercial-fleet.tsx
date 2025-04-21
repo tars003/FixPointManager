@@ -592,7 +592,25 @@ const CommercialFleet = () => {
             Manage and optimize your commercial vehicle operations
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
+          {/* Live Tracking Button with Animation */}
+          <motion.button
+            className={`flex items-center space-x-1 px-3 py-1.5 rounded-full 
+              ${theme === 'light' 
+                ? 'bg-gradient-to-r from-green-500 to-blue-500 text-white' 
+                : 'bg-gradient-to-r from-green-400 to-blue-400 text-black'
+              } shadow-md hover:shadow-lg transition-shadow`}
+            onClick={() => setActiveTab('tracking')}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+            </span>
+            <span className="font-medium ml-1">LIVE Tracking</span>
+          </motion.button>
+          
           <Button
             variant={theme === 'light' ? 'outline' : 'default'}
             onClick={toggleTheme}
@@ -612,7 +630,7 @@ const CommercialFleet = () => {
       
       {/* Main navigation tabs */}
       <Tabs defaultValue="dashboard" value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className={`grid grid-cols-8 ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'}`}>
+        <TabsList className={`grid grid-cols-9 ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'}`}>
           <TabsTrigger value="dashboard" className={theme === 'light' ? 'data-[state=active]:bg-white' : 'data-[state=active]:bg-gray-700'}>
             Dashboard
           </TabsTrigger>
@@ -636,6 +654,16 @@ const CommercialFleet = () => {
           </TabsTrigger>
           <TabsTrigger value="calculators" className={theme === 'light' ? 'data-[state=active]:bg-white' : 'data-[state=active]:bg-gray-700'}>
             Calculators
+          </TabsTrigger>
+          <TabsTrigger value="tracking" className={theme === 'light' ? 'data-[state=active]:bg-white' : 'data-[state=active]:bg-gray-700'}>
+            <div className="flex items-center space-x-1">
+              {/* Pulsing dot for live indicator */}
+              <span className="relative flex h-2 w-2 mr-1">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              <span>Live Tracking</span>
+            </div>
           </TabsTrigger>
         </TabsList>
         
