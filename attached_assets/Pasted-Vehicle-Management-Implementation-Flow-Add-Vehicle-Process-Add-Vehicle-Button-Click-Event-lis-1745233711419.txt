@@ -1,0 +1,115 @@
+Vehicle Management Implementation Flow
+Add Vehicle Process
+Add Vehicle Button Click
+
+
+Event listener captures click on "Add Vehicle" button
+Modal dialog opens with multi-step form
+Progress indicator shows completion steps
+Form validation active for each field
+Vehicle Details Entry
+
+
+Registration information section:
+Registration number field with format validation
+"Scan Registration" button activates device camera
+OCR processes registration plate image
+System validates registration number against RTO database (if available)
+Registration date picker with calendar interface
+Registration document upload area with drag-and-drop support
+Vehicle specifications section:
+Vehicle type dropdown (Two-wheeler, Three-wheeler, Four-wheeler, Heavy vehicle, Construction equipment)
+Make dropdown (populated with common manufacturers)
+Model text field with autocomplete
+Year picker with min/max validation
+VIN/chassis number field with format validation
+Engine number field
+Seating capacity numeric field
+Load capacity numeric field (for commercial vehicles)
+Fuel type dropdown
+Color picker
+Ownership Information Entry
+
+
+Purchase details section:
+Purchase date picker
+Purchase price field with currency formatting
+Dealer/seller information fields
+Purchase document upload
+Financing information (if applicable)
+Loan details fields (if financing selected)
+Insurance details section:
+Insurance provider dropdown
+Policy number field
+Coverage type selection
+Premium amount field
+Start date picker
+End date picker
+Policy document upload
+Additional Information
+
+
+Permits and taxes section:
+Commercial permit checkbox
+Permit type dropdown (if commercial)
+Permit validity dates
+Permit document upload
+Road tax payment details
+Fitness certificate details
+GPS/Telematics section:
+Device installation checkbox
+Device ID field
+Installation date
+Service provider
+Tracking URL (if applicable)
+Review and Submit
+
+
+All entered information displayed for review
+Edit option for each section
+Form validation summary showing any missing fields
+Submit button to save vehicle to database
+Confirmation message on successful addition
+Option to add another vehicle or return to vehicle list
+Vehicle List Management
+Vehicle Filtering Process
+
+
+Filter controls at top of vehicle list:
+Vehicle Type dropdown (All Types, Two-wheeler, Three-wheeler, etc.)
+Status dropdown (All Status, Available, On Rent, In Maintenance, Broken Down)
+Fuel Type dropdown (All Fuel Types, Petrol, Diesel, CNG, Electric, etc.)
+Location dropdown (All Locations, with Pan-India city list)
+Search field for registration number, model, driver name
+Applied filters stored in session for persistence
+Results update dynamically as filters change
+Count indicator shows number of vehicles matching criteria
+Reset filters button to clear all selected filters
+Vehicle Card Interaction
+
+
+Each vehicle displayed as card with key information:
+Vehicle image/icon
+Make and model
+Registration number
+Type information
+Fuel type
+Last serviced date
+Current driver (if assigned)
+Current location
+Status indicator badge
+"Details" button functionality:
+Opens detailed vehicle profile page
+Displays all vehicle information in organized tabs
+Shows complete history (maintenance, rental, driver assignment)
+Displays documents with preview capability
+Shows financial data related to vehicle
+Provides insights on performance and efficiency
+"Manage" button functionality:
+Opens quick action menu with contextual options
+Change status option (with status transition workflow)
+Assign driver option (with driver selection interface)
+Schedule maintenance option (with maintenance form)
+Create rental option (with rental creation workflow)
+Edit details option (with editable vehicle form)
+Decommission option (with confirmation workflow)
