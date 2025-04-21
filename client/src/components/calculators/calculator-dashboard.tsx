@@ -3,6 +3,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ROICalculatorDialog } from './roi-calculator-dialog';
+import { TCOCalculatorDialog } from './tco-calculator-dialog';
+import { LeaseVsBuyCalculatorDialog } from './lease-vs-buy-calculator-dialog';
+import { FleetReplacementCalculatorDialog } from './fleet-replacement-calculator-dialog';
 import {
   Calculator,
   BarChart,
@@ -184,6 +187,9 @@ const CalculatorCard = ({
 export default function CalculatorDashboard({ theme }: CalculatorDashboardProps) {
   // States for calculator dialogs
   const [showROICalculator, setShowROICalculator] = useState(false);
+  const [showTCOCalculator, setShowTCOCalculator] = useState(false);
+  const [showLeaseVsBuyCalculator, setShowLeaseVsBuyCalculator] = useState(false);
+  const [showFleetReplacementCalculator, setShowFleetReplacementCalculator] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   
   return (
@@ -229,7 +235,7 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="green"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => setShowLeaseVsBuyCalculator(true)}
             />
             
             {/* Fleet Replacement Optimizer Card */}
@@ -245,7 +251,7 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="purple"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => setShowFleetReplacementCalculator(true)}
             />
             
             {/* TCO Calculator Card */}
@@ -262,7 +268,7 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="orange"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => setShowTCOCalculator(true)}
             />
             
             {/* Rental Rate Calculator Card */}
@@ -279,7 +285,7 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="red"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => alert('This calculator is coming soon!')}
             />
             
             {/* Fuel Efficiency ROI Calculator Card */}
@@ -296,7 +302,7 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="indigo"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => alert('This calculator is coming soon!')}
             />
           </div>
         </TabsContent>
@@ -330,7 +336,7 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="green"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => setShowLeaseVsBuyCalculator(true)}
             />
             
             <CalculatorCard
@@ -346,7 +352,7 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="indigo"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => alert('This calculator is coming soon!')}
             />
           </div>
         </TabsContent>
@@ -366,7 +372,7 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="orange"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => setShowTCOCalculator(true)}
             />
             
             <CalculatorCard
@@ -381,7 +387,7 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="purple"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => setShowFleetReplacementCalculator(true)}
             />
           </div>
         </TabsContent>
@@ -401,7 +407,7 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="red"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => alert('This calculator is coming soon!')}
             />
           </div>
         </TabsContent>
@@ -420,7 +426,7 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="blue"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => alert('This calculator is coming soon!')}
             />
             
             <CalculatorCard
@@ -435,7 +441,7 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="green"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => alert('This calculator is coming soon!')}
             />
             
             <CalculatorCard
@@ -450,16 +456,34 @@ export default function CalculatorDashboard({ theme }: CalculatorDashboardProps)
               ]}
               colorTheme="purple"
               theme={theme}
-              onOpen={() => alert('This calculator is not yet implemented')}
+              onOpen={() => alert('This calculator is coming soon!')}
             />
           </div>
         </TabsContent>
       </Tabs>
       
-      {/* ROI Calculator Dialog */}
+      {/* Calculator Dialog Components */}
       <ROICalculatorDialog 
         open={showROICalculator} 
         onOpenChange={setShowROICalculator} 
+        theme={theme} 
+      />
+      
+      <TCOCalculatorDialog 
+        open={showTCOCalculator} 
+        onOpenChange={setShowTCOCalculator} 
+        theme={theme} 
+      />
+      
+      <LeaseVsBuyCalculatorDialog 
+        open={showLeaseVsBuyCalculator} 
+        onOpenChange={setShowLeaseVsBuyCalculator} 
+        theme={theme} 
+      />
+      
+      <FleetReplacementCalculatorDialog 
+        open={showFleetReplacementCalculator} 
+        onOpenChange={setShowFleetReplacementCalculator} 
         theme={theme} 
       />
     </div>
