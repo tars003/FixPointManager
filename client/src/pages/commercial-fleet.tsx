@@ -9,6 +9,7 @@ import { AddDriverDialog } from '@/components/drivers/add-driver-dialog';
 import { UploadDocumentDialog } from '@/components/documents/upload-document-dialog';
 import { DocumentExpiryCard } from '@/components/documents/document-expiry-card';
 import CalculatorDashboard from '@/components/calculators/calculator-dashboard';
+import LiveTrackingDashboard from '@/components/tracking/live-tracking-dashboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -2003,6 +2004,34 @@ const CommercialFleet = () => {
           {/* Calculator Dashboard */}
           <div className="mt-4">
             <CalculatorDashboard theme={theme} />
+          </div>
+        </TabsContent>
+        
+        {/* Live Tracking Content */}
+        <TabsContent value="tracking" className="mt-6">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : ''}`}>
+                Live Fleet Tracking
+              </h2>
+              <p className={`mt-1 text-sm ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>
+                Real-time monitoring of your fleet vehicles and drivers
+              </p>
+            </div>
+            <div className="flex items-center">
+              <span className="relative flex h-2 w-2 mr-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              <span className={`text-sm ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>
+                Live Data • Last updated: {new Date().toLocaleTimeString()}
+              </span>
+            </div>
+          </div>
+          
+          {/* Live Tracking Dashboard */}
+          <div className="mt-4">
+            <LiveTrackingDashboard theme={theme} />
           </div>
         </TabsContent>
       </Tabs>
