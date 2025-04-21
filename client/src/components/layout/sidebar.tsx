@@ -112,7 +112,7 @@ const navItems = [
   {
     title: 'Commercial Fleet',
     icon: Truck,
-    href: '/fleet',
+    href: '/commercial-fleet',
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
   },

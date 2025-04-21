@@ -1,0 +1,251 @@
+# Commercial Fleet Management System Development Prompt
+
+## Overview
+Develop a comprehensive web-based Commercial Fleet Management System that allows business owners to track, manage, and optimize their vehicle fleet operations. The system should provide real-time insights into vehicle status, financial metrics, and maintenance needs, while offering tools for rental management, invoicing, and driver payment calculation.
+
+## Core Features
+
+### Dashboard
+1. **Overview Statistics**
+   - Total vehicles in fleet (count)
+   - Currently on rent (count + percentage)
+   - Currently available for rent (count + percentage)
+   - In service/maintenance (count + percentage)
+   - Broken down vehicles (count + percentage)
+   - Vehicles requiring scheduled service (count + percentage)
+
+2. **Financial Overview**
+   - Total fleet value (asset valuation)
+   - Total revenue generated (all-time and filterable by time period)
+   - Outstanding payments (amount yet to collect)
+   - Projected revenue forecasts (3, 6, 9, and 12-month projections)
+
+3. **Interactive Fleet Map**
+   - GPS integration showing real-time location of all vehicles
+   - Color-coded status indicators
+   - Route history and journey tracking
+
+### Vehicle Management
+1. **Vehicle Registry**
+   - Add, edit, and remove vehicles from the fleet
+   - Support for all vehicle types:
+     - Two-wheelers (motorcycles, scooters)
+     - Three-wheelers (auto-rickshaws, cargo three-wheelers)
+     - Four-wheelers (cars, SUVs, vans)
+     - Heavy vehicles (trucks, buses)
+     - Construction equipment (JCBs, excavators, bulldozers)
+     - Specialized vehicles
+
+2. **Fuel Type Classification**
+   - Petrol/Gasoline
+   - Diesel
+   - CNG/LPG
+   - Electric
+   - Hybrid
+   - Solar
+   - Other alternative fuels
+
+3. **Vehicle Details**
+   - Registration information
+   - Insurance details with expiration alerts
+   - Maintenance history
+   - Cost basis and depreciation tracking
+   - Performance metrics
+   - Fuel efficiency tracking
+   - Custom fields for additional information
+
+### Rental Management
+1. **Rental Processing**
+   - Create new rental agreements
+   - Set rental terms (daily, weekly, monthly rates)
+   - Security deposit tracking
+   - Client/customer database
+   - Rental history
+
+2. **Client Management**
+   - Customer database with contact information
+   - Rental history and preferences
+   - Payment history and reliability rating
+   - Document storage (ID, license, etc.)
+
+3. **Invoicing System**
+   - Generate professional invoices
+   - Multiple payment options integration
+   - Downloadable invoice in PDF format
+   - Email/sharing capabilities with direct links
+   - Automatic payment reminders
+   - Receipt generation
+
+### Maintenance Module
+1. **Service Scheduling**
+   - Preventive maintenance scheduling
+   - Service history tracking
+   - Service provider database
+   - Cost tracking and analysis
+   - Service notifications and alerts
+
+2. **Issue Reporting**
+   - Driver-initiated issue reporting
+   - Maintenance ticket system
+   - Severity classification
+   - Resolution tracking
+
+### Financial Management
+1. **Revenue Tracking**
+   - Detailed revenue reports by vehicle, fleet segment, or time period
+   - Cost tracking (maintenance, fuel, insurance, etc.)
+   - Profit/loss analysis by vehicle
+
+2. **Driver Payments**
+   - Driver assignment to vehicles
+   - Payment calculation based on trips/hours/revenue share
+   - Commission structure management
+   - Payment processing and history
+
+3. **Financial Forecasting**
+   - AI-powered revenue projections
+   - Seasonal trend analysis
+   - "What-if" scenario modeling
+   - ROI calculations for fleet expansion/replacement
+
+### Notification System
+1. **Alert Types**
+   - Maintenance due alerts
+   - Insurance/registration expiration alerts
+   - Rental contract expiration alerts
+   - Payment due/overdue alerts
+   - Vehicle status change alerts
+   - Abnormal vehicle usage alerts
+
+2. **Delivery Methods**
+   - In-app notifications
+   - Email alerts
+   - SMS options
+   - Push notifications for mobile app
+
+## Additional Features (to make it an all-in-one platform)
+
+1. **Fuel Management System**
+   - Fuel expense tracking
+   - Mileage calculation and efficiency analysis
+   - Refueling schedule optimization
+   - Integration with fuel cards/payment systems
+
+2. **Driver Management**
+   - Driver profiles and documentation
+   - License expiration tracking
+   - Performance metrics
+   - Working hours compliance
+   - Route optimization suggestions
+
+3. **Document Management**
+   - Centralized storage for all vehicle-related documents
+   - OCR for document scanning
+   - Automatic categorization
+   - Expiration tracking and alerts
+
+4. **Customer Portal**
+   - Client access for booking vehicles
+   - Self-service rental status checking
+   - Payment processing
+   - Communication channel with fleet management
+
+5. **Mobile Application**
+   - Driver app for status updates and navigation
+   - Manager app for on-the-go fleet monitoring
+   - Barcode/QR scanning for vehicle check-in/check-out
+   - Offline capabilities with sync
+
+6. **Parts Inventory & Maintenance Cost Management**
+   - Track inventory of spare parts and consumables
+   - Automatic reorder notifications for low-stock items
+   - Part usage tracking by vehicle
+   - Vendor management for parts procurement
+   - Cost comparison tools for maintenance vendors
+   - Total cost of ownership analysis by vehicle/model
+   - Maintenance cost forecasting
+   - Detailed breakdown of parts vs. labor costs
+   - Warranty tracking to prevent paying for covered repairs
+   - Integration with authorized service centers for price verification
+
+7. **Compliance & Regulatory Management**
+   - Automated tracking of vehicle permit renewals
+   - Tax payment schedules and reminders
+   - Regional regulatory requirement monitoring
+   - Emissions testing schedules and results tracking
+   - Commercial transport license management
+   - Route restriction alerts based on vehicle type/load
+   - Violation/infraction tracking and resolution
+   - Automatic generation of required compliance reports
+   - Document verification system for regulatory inspections
+   - Multiple jurisdiction support for fleets operating across regions
+
+8. **Fleet Financial & Decision Calculators**
+   - ROI Calculator: Determine return on investment for new vehicle purchases
+   - Lease vs. Buy Calculator: Compare financial implications of leasing versus buying
+   - Fleet Replacement Optimizer: Calculate optimal time to replace vehicles based on age, mileage, and maintenance costs
+   - TCO (Total Cost of Ownership) Calculator: Full lifecycle cost analysis per vehicle
+   - Rental Rate Calculator: Determine optimal pricing based on vehicle costs, market rates, and desired profit margin
+   - Fuel Efficiency ROI Calculator: Calculate savings from investing in more fuel-efficient vehicles
+   - Downtime Cost Calculator: Quantify financial impact of vehicle downtime
+   - Driver Efficiency Calculator: Measure driver performance impact on fuel costs and vehicle wear
+   - Route Profitability Calculator: Analyze costs versus revenue for specific routes or service areas
+   - Tax Benefit Calculator: Estimate depreciation benefits and tax implications of fleet decisions
+   - Insurance Optimization Calculator: Compare insurance options based on coverage and fleet characteristics
+   - Electric Vehicle Conversion Calculator: Calculate costs and benefits of transitioning to electric vehicles
+
+## Technical Requirements
+
+1. **User Interface**
+   - Clean, intuitive dashboard design
+   - Responsive for desktop, tablet, and mobile usage
+   - Dark/light mode options
+   - Customizable dashboard widgets
+   - Role-based access control
+
+2. **Integration Capabilities**
+   - GPS/telematics integration
+   - Accounting software integration (QuickBooks, Xero, etc.)
+   - Payment gateway integration
+   - Fuel card systems
+   - CRM systems
+
+3. **Data Security**
+   - Role-based access controls
+   - Data encryption
+   - Regular backup systems
+   - Compliance with data protection regulations
+   - Audit trails for all critical actions
+
+4. **Reporting**
+   - Customizable reports
+   - Export options (PDF, Excel, CSV)
+   - Scheduled report generation and distribution
+   - Visual analytics and charts
+   - KPI monitoring
+
+## Design Considerations
+
+1. **User Experience**
+   - Intuitive navigation
+   - Minimal clicks for common tasks
+   - Guided workflows for complex processes
+   - Contextual help and tooltips
+   - Onboarding tutorial for new users
+
+2. **Visual Design**
+   - Professional color scheme
+   - Clean, modern interface
+   - Clear typography
+   - Effective use of icons and visual indicators
+   - Consistent design language throughout
+
+## Implementation Approach
+Develop the system using modern web technologies that allow for:
+- Responsive design that works on all devices
+- Real-time data updates
+- Progressive web app capabilities for offline access
+- Scalability to handle growing fleets
+- API-driven architecture for future integrations
+
+The system should follow a modular approach so features can be enabled/disabled based on business needs and to allow for future expansion.

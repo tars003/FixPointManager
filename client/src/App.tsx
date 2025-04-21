@@ -20,6 +20,7 @@ import Inspection from "@/pages/inspection";
 import Energy from "@/pages/energy";
 import PartsPage from "@/pages/parts";
 import VehicleDetail from "@/pages/vehicle-detail";
+import CommercialFleet from "@/pages/commercial-fleet";
 
 function Router() {
   const [location] = useLocation();
@@ -201,6 +202,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <PartsPage />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/commercial-fleet">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <CommercialFleet />
               </motion.div>
             )}
           </Route>
