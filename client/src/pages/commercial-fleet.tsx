@@ -784,31 +784,23 @@ const CommercialFleet = () => {
                     actionText="Schedule now"
                   />
                   
-                  <div className={`p-3 rounded-lg flex items-start gap-3 ${theme === 'light' ? 'bg-blue-50' : 'bg-blue-900/20'}`}>
-                    <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-blue-100' : 'bg-blue-900/30'}`}>
-                      <FileTextIcon className={`h-4 w-4 ${theme === 'light' ? 'text-blue-600' : 'text-blue-400'}`} />
-                    </div>
-                    <div className="flex-1">
-                      <p className={`font-medium ${theme === 'light' ? 'text-blue-700' : 'text-blue-400'}`}>Permit Renewal</p>
-                      <p className={`text-sm ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>Commercial permit for Toyota Innova expires next week</p>
-                    </div>
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  <AlertItem 
+                    icon={<FileTextIcon className={`h-4 w-4 ${theme === 'light' ? 'text-blue-600' : 'text-blue-400'}`} />}
+                    title="Permit Renewal"
+                    description="Commercial permit for Toyota Innova expires next week"
+                    type="info"
+                    theme={theme}
+                    actionText="Renew permit"
+                  />
                   
-                  <div className={`p-3 rounded-lg flex items-start gap-3 ${theme === 'light' ? 'bg-green-50' : 'bg-green-900/20'}`}>
-                    <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-green-100' : 'bg-green-900/30'}`}>
-                      <CheckCircle className={`h-4 w-4 ${theme === 'light' ? 'text-green-600' : 'text-green-400'}`} />
-                    </div>
-                    <div className="flex-1">
-                      <p className={`font-medium ${theme === 'light' ? 'text-green-700' : 'text-green-400'}`}>Driver License Updated</p>
-                      <p className={`text-sm ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>Suresh Singh's license has been successfully renewed</p>
-                    </div>
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  <AlertItem 
+                    icon={<CheckCircle className={`h-4 w-4 ${theme === 'light' ? 'text-green-600' : 'text-green-400'}`} />}
+                    title="Driver License Updated"
+                    description="Suresh Singh's license has been successfully renewed"
+                    type="success"
+                    theme={theme}
+                    actionText="View details"
+                  />
                 </div>
                 <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <Button variant="outline" className="w-full" onClick={() => setShowAlertPanel(true)}>
