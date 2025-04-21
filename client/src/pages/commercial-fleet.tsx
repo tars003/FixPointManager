@@ -1786,8 +1786,8 @@ const CommercialFleet = () => {
                         <FileTextIcon className={`h-4 w-4 mr-2 ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`} />
                         <span>Registration Certificates</span>
                       </div>
-                      <Badge className={theme === 'light' ? 'bg-blue-100 text-blue-800' : 'bg-blue-900/30 text-blue-400'}>
-                        15 Files
+                      <Badge>
+                        {documents.filter(d => d.category === 'Registration Certificate').length || 0}
                       </Badge>
                     </div>
                   </div>
@@ -1797,8 +1797,8 @@ const CommercialFleet = () => {
                         <FileTextIcon className={`h-4 w-4 mr-2 ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`} />
                         <span>Insurance Policies</span>
                       </div>
-                      <Badge className={theme === 'light' ? 'bg-blue-100 text-blue-800' : 'bg-blue-900/30 text-blue-400'}>
-                        12 Files
+                      <Badge>
+                        {documents.filter(d => d.category === 'Insurance Policy').length || 0}
                       </Badge>
                     </div>
                   </div>
@@ -1808,8 +1808,8 @@ const CommercialFleet = () => {
                         <FileTextIcon className={`h-4 w-4 mr-2 ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`} />
                         <span>Permit Documents</span>
                       </div>
-                      <Badge className={theme === 'light' ? 'bg-blue-100 text-blue-800' : 'bg-blue-900/30 text-blue-400'}>
-                        8 Files
+                      <Badge>
+                        {documents.filter(d => d.category === 'Permit Document').length || 0}
                       </Badge>
                     </div>
                   </div>
@@ -1835,8 +1835,8 @@ const CommercialFleet = () => {
                         <FileTextIcon className={`h-4 w-4 mr-2 ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`} />
                         <span>Driving Licenses</span>
                       </div>
-                      <Badge className={theme === 'light' ? 'bg-purple-100 text-purple-800' : 'bg-purple-900/30 text-purple-400'}>
-                        8 Files
+                      <Badge>
+                        {documents.filter(d => d.category === 'Driving License').length || 0}
                       </Badge>
                     </div>
                   </div>
@@ -1846,8 +1846,8 @@ const CommercialFleet = () => {
                         <FileTextIcon className={`h-4 w-4 mr-2 ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`} />
                         <span>ID Proofs</span>
                       </div>
-                      <Badge className={theme === 'light' ? 'bg-purple-100 text-purple-800' : 'bg-purple-900/30 text-purple-400'}>
-                        8 Files
+                      <Badge>
+                        {documents.filter(d => d.category === 'ID Proof').length || 0}
                       </Badge>
                     </div>
                   </div>
@@ -1855,10 +1855,10 @@ const CommercialFleet = () => {
                     <div className="flex justify-between items-center">
                       <div className="flex items-center">
                         <FileTextIcon className={`h-4 w-4 mr-2 ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`} />
-                        <span>Address Proofs</span>
+                        <span>Employment Contracts</span>
                       </div>
-                      <Badge className={theme === 'light' ? 'bg-purple-100 text-purple-800' : 'bg-purple-900/30 text-purple-400'}>
-                        8 Files
+                      <Badge>
+                        {documents.filter(d => d.category === 'Employment Contract').length || 0}
                       </Badge>
                     </div>
                   </div>
@@ -1873,7 +1873,7 @@ const CommercialFleet = () => {
               <CardHeader className="pb-2">
                 <div className="flex items-center">
                   <FileTextIcon className={`h-5 w-5 mr-2 ${theme === 'light' ? 'text-green-600' : 'text-green-400'}`} />
-                  <CardTitle>Rental Agreements</CardTitle>
+                  <CardTitle>Client Documents</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
@@ -1884,8 +1884,8 @@ const CommercialFleet = () => {
                         <FileTextIcon className={`h-4 w-4 mr-2 ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`} />
                         <span>Active Contracts</span>
                       </div>
-                      <Badge className={theme === 'light' ? 'bg-green-100 text-green-800' : 'bg-green-900/30 text-green-400'}>
-                        3 Files
+                      <Badge>
+                        {documents.filter(d => d.category === 'Active Contract').length || 0}
                       </Badge>
                     </div>
                   </div>
@@ -1895,8 +1895,8 @@ const CommercialFleet = () => {
                         <FileTextIcon className={`h-4 w-4 mr-2 ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`} />
                         <span>Completed Contracts</span>
                       </div>
-                      <Badge className={theme === 'light' ? 'bg-green-100 text-green-800' : 'bg-green-900/30 text-green-400'}>
-                        25 Files
+                      <Badge>
+                        {documents.filter(d => d.category === 'Completed Contract').length || 0}
                       </Badge>
                     </div>
                   </div>
@@ -1906,8 +1906,8 @@ const CommercialFleet = () => {
                         <FileTextIcon className={`h-4 w-4 mr-2 ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`} />
                         <span>Template Documents</span>
                       </div>
-                      <Badge className={theme === 'light' ? 'bg-green-100 text-green-800' : 'bg-green-900/30 text-green-400'}>
-                        5 Files
+                      <Badge>
+                        {documents.filter(d => d.category === 'Template Document').length || 0}
                       </Badge>
                     </div>
                   </div>
@@ -1919,81 +1919,48 @@ const CommercialFleet = () => {
             </Card>
           </div>
           
-          {/* Document Expiration Alerts */}
-          <Card className={theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}>
-            <CardHeader>
-              <div className="flex justify-between items-center">
-                <CardTitle>Documents Expiring Soon</CardTitle>
-                <Button variant="outline" size="sm">
-                  <Bell className="h-4 w-4 mr-2" />
-                  Manage Alerts
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className={`p-4 rounded-lg flex items-start gap-3 ${theme === 'light' ? 'bg-red-50' : 'bg-red-900/20'}`}>
-                  <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-red-100' : 'bg-red-900/30'}`}>
-                    <AlertCircle className={`h-4 w-4 ${theme === 'light' ? 'text-red-600' : 'text-red-400'}`} />
-                  </div>
-                  <div className="flex-1">
-                    <p className={`font-medium ${theme === 'light' ? 'text-red-700' : 'text-red-400'}`}>
-                      Vehicle Insurance - Tata Ace (MH02-4532)
-                    </p>
-                    <p className={theme === 'light' ? 'text-red-600' : 'text-red-300'}>
-                      Expires in 3 days (Dec 24, 2023)
-                    </p>
-                  </div>
-                  <Button 
-                    className={theme === 'light' ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-red-500 hover:bg-red-600 text-white'}
-                    size="sm"
-                  >
-                    Renew
-                  </Button>
+          {/* Documents Expiring Soon */}
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className={`text-lg font-semibold ${theme === 'light' ? 'text-gray-800' : ''}`}>
+                <div className="flex items-center">
+                  <AlertCircle className="h-5 w-5 mr-2 text-yellow-500" />
+                  Documents Expiring Soon
                 </div>
-                
-                <div className={`p-4 rounded-lg flex items-start gap-3 ${theme === 'light' ? 'bg-yellow-50' : 'bg-yellow-900/20'}`}>
-                  <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-yellow-100' : 'bg-yellow-900/30'}`}>
-                    <AlertCircle className={`h-4 w-4 ${theme === 'light' ? 'text-yellow-600' : 'text-yellow-400'}`} />
-                  </div>
-                  <div className="flex-1">
-                    <p className={`font-medium ${theme === 'light' ? 'text-yellow-700' : 'text-yellow-400'}`}>
-                      Commercial Permit - Toyota Innova (TN01-3456)
-                    </p>
-                    <p className={theme === 'light' ? 'text-yellow-600' : 'text-yellow-300'}>
-                      Expires in 7 days (Dec 28, 2023)
-                    </p>
-                  </div>
-                  <Button 
-                    className={theme === 'light' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'bg-yellow-500 hover:bg-yellow-600 text-white'}
-                    size="sm"
-                  >
-                    Renew
-                  </Button>
+              </h3>
+              <Button variant="outline" size="sm">
+                <Bell className="h-4 w-4 mr-2" />
+                Manage Alerts
+              </Button>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {getExpiringDocuments().map(doc => (
+                <DocumentExpiryCard
+                  key={doc.id}
+                  id={doc.id}
+                  title={doc.title}
+                  documentType={doc.documentType}
+                  category={doc.category}
+                  entityType={doc.entityType}
+                  entityName={doc.entityName}
+                  expiryDate={doc.expiryDate!}
+                  theme={theme}
+                  onRenew={(id) => setShowUploadDocumentDialog(true)}
+                />
+              ))}
+              
+              {getExpiringDocuments().length === 0 && (
+                <div className={`col-span-3 p-6 rounded-lg text-center ${
+                  theme === 'light' ? 'bg-gray-50 text-gray-500' : 'bg-gray-800 text-gray-400'
+                }`}>
+                  <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-500" />
+                  <p className="font-medium">No documents expiring soon</p>
+                  <p className="text-sm">All your documents are up-to-date</p>
                 </div>
-                
-                <div className={`p-4 rounded-lg flex items-start gap-3 ${theme === 'light' ? 'bg-yellow-50' : 'bg-yellow-900/20'}`}>
-                  <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-yellow-100' : 'bg-yellow-900/30'}`}>
-                    <AlertCircle className={`h-4 w-4 ${theme === 'light' ? 'text-yellow-600' : 'text-yellow-400'}`} />
-                  </div>
-                  <div className="flex-1">
-                    <p className={`font-medium ${theme === 'light' ? 'text-yellow-700' : 'text-yellow-400'}`}>
-                      Driver License - Venkatesh Rao
-                    </p>
-                    <p className={theme === 'light' ? 'text-yellow-600' : 'text-yellow-300'}>
-                      Expires in 15 days (Jan 05, 2024)
-                    </p>
-                  </div>
-                  <Button 
-                    className={theme === 'light' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'bg-yellow-500 hover:bg-yellow-600 text-white'}
-                    size="sm"
-                  >
-                    Renew
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              )}
+            </div>
+          </div>
         </TabsContent>
         
         {/* Financial Calculators Module */}
@@ -2335,6 +2302,12 @@ const CommercialFleet = () => {
       <AddVehicleDialog 
         open={showAddVehicleDialog}
         onOpenChange={setShowAddVehicleDialog}
+        theme={theme}
+      />
+      
+      <UploadDocumentDialog
+        open={showUploadDocumentDialog}
+        onOpenChange={setShowUploadDocumentDialog}
         theme={theme}
       />
 
