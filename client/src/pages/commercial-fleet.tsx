@@ -635,6 +635,16 @@ const CommercialFleet = () => {
           <TabsTrigger value="dashboard" className={theme === 'light' ? 'data-[state=active]:bg-white' : 'data-[state=active]:bg-gray-700'}>
             Dashboard
           </TabsTrigger>
+          <TabsTrigger value="tracking" className={theme === 'light' ? 'data-[state=active]:bg-white' : 'data-[state=active]:bg-gray-700'}>
+            <div className="flex items-center space-x-1">
+              {/* Pulsing dot for live indicator */}
+              <span className="relative flex h-2 w-2 mr-1">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              <span>Live Tracking</span>
+            </div>
+          </TabsTrigger>
           <TabsTrigger value="vehicles" className={theme === 'light' ? 'data-[state=active]:bg-white' : 'data-[state=active]:bg-gray-700'}>
             Vehicles
           </TabsTrigger>
@@ -655,16 +665,6 @@ const CommercialFleet = () => {
           </TabsTrigger>
           <TabsTrigger value="calculators" className={theme === 'light' ? 'data-[state=active]:bg-white' : 'data-[state=active]:bg-gray-700'}>
             Calculators
-          </TabsTrigger>
-          <TabsTrigger value="tracking" className={theme === 'light' ? 'data-[state=active]:bg-white' : 'data-[state=active]:bg-gray-700'}>
-            <div className="flex items-center space-x-1">
-              {/* Pulsing dot for live indicator */}
-              <span className="relative flex h-2 w-2 mr-1">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
-              <span>Live Tracking</span>
-            </div>
           </TabsTrigger>
         </TabsList>
         
