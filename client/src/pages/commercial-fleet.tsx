@@ -753,15 +753,16 @@ const CommercialFleet = () => {
             </Card>
           </div>
           
-          {/* Financial Overview Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <Card className={`col-span-1 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
-              <CardHeader>
-                <CardTitle>Fleet Status</CardTitle>
-                <CardDescription>Current distribution of your fleet</CardDescription>
+          {/* Consolidated Dashboard with All Charts in One View */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
+            {/* Fleet Status Chart */}
+            <Card className={`lg:col-span-1 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
+              <CardHeader className="pb-1">
+                <CardTitle className="text-base">Fleet Status</CardTitle>
+                <CardDescription className="text-xs">Distribution of your fleet</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="h-80">
+              <CardContent className="p-2">
+                <div className="h-48">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -769,38 +770,43 @@ const CommercialFleet = () => {
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        outerRadius={80}
+                        outerRadius={60}
                         fill="#8884d8"
                         dataKey="value"
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
                       >
                         {fleetStatusData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
                       <Tooltip />
-                      <Legend />
+                      <Legend layout="horizontal" verticalAlign="bottom" align="center" />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
               </CardContent>
             </Card>
             
-            <Card className={`col-span-2 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
-              <CardHeader>
-                <CardTitle>Financial Overview</CardTitle>
-                <CardDescription>Total fleet value: ₹{totalFleetValue.toLocaleString()}</CardDescription>
+            {/* Financial Overview Chart */}
+            <Card className={`lg:col-span-3 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
+              <CardHeader className="pb-1">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="text-base">Financial Overview</CardTitle>
+                    <CardDescription className="text-xs">Total fleet value: ₹{totalFleetValue.toLocaleString()}</CardDescription>
+                  </div>
+                </div>
               </CardHeader>
-              <CardContent>
-                <div className="h-80">
+              <CardContent className="p-2">
+                <div className="h-48">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart
                       data={revenueData}
                       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
+                      <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} />
                       <Tooltip formatter={(value) => `₹${value.toLocaleString()}`} />
                       <Legend />
                       <Line type="monotone" dataKey="amount" stroke="#3b82f6" name="Revenue" />
@@ -809,25 +815,23 @@ const CommercialFleet = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
-          
-          {/* Rental Statistics and Most Efficient Vehicles */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <Card className={theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}>
-              <CardHeader>
-                <CardTitle>Rental Statistics</CardTitle>
-                <CardDescription>Monthly rental count for the past year</CardDescription>
+            
+            {/* Rental Statistics Chart */}
+            <Card className={`lg:col-span-2 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
+              <CardHeader className="pb-1">
+                <CardTitle className="text-base">Rental Statistics</CardTitle>
+                <CardDescription className="text-xs">Monthly rental count</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="h-80">
+              <CardContent className="p-2">
+                <div className="h-48">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={vehicleRentalData}
                       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
+                      <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} />
                       <Tooltip />
                       <Legend />
                       <Bar dataKey="count" name="Rental Count" fill="#10b981" />
@@ -837,13 +841,14 @@ const CommercialFleet = () => {
               </CardContent>
             </Card>
             
-            <Card className={theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}>
-              <CardHeader>
-                <CardTitle>Fuel Efficiency Comparison</CardTitle>
-                <CardDescription>Vehicle mileage in km/liter</CardDescription>
+            {/* Fuel Efficiency Chart */}
+            <Card className={`lg:col-span-2 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
+              <CardHeader className="pb-1">
+                <CardTitle className="text-base">Fuel Efficiency</CardTitle>
+                <CardDescription className="text-xs">Vehicle mileage in km/liter</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="h-80">
+              <CardContent className="p-2">
+                <div className="h-48">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={fuelEfficiencyData}
@@ -851,11 +856,11 @@ const CommercialFleet = () => {
                       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis type="number" />
-                      <YAxis dataKey="vehicle" type="category" />
+                      <XAxis type="number" tick={{ fontSize: 10 }} />
+                      <YAxis dataKey="vehicle" type="category" width={80} tick={{ fontSize: 10 }} />
                       <Tooltip />
                       <Legend />
-                      <Bar dataKey="efficiency" name="Fuel Efficiency (km/L)" fill="#f59e0b" />
+                      <Bar dataKey="efficiency" name="km/L" fill="#f59e0b" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -863,109 +868,117 @@ const CommercialFleet = () => {
             </Card>
           </div>
           
-          {/* Recent Activity & Alerts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className={theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}>
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>Latest activities across your fleet</CardDescription>
+          {/* Recent Activity & Alerts - More Compact */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            {/* Recent Activity */}
+            <Card className={`lg:col-span-2 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
+              <CardHeader className="pb-1">
+                <CardTitle className="text-base">Recent Activity</CardTitle>
+                <CardDescription className="text-xs">Latest activities</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className={`p-3 rounded-lg flex items-start gap-3 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
-                    <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-green-100' : 'bg-green-900/30'}`}>
-                      <Car className={`h-4 w-4 ${theme === 'light' ? 'text-green-600' : 'text-green-400'}`} />
+              <CardContent className="px-3 py-2">
+                <div className="space-y-2 text-sm">
+                  <div className={`p-2 rounded flex items-center gap-2 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
+                    <div className={`p-1 rounded-full ${theme === 'light' ? 'bg-green-100' : 'bg-green-900/30'}`}>
+                      <Car className={`h-3 w-3 ${theme === 'light' ? 'text-green-600' : 'text-green-400'}`} />
                     </div>
-                    <div className="flex-1">
-                      <p className="font-medium">Vehicle Rental</p>
-                      <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>Toyota Innova Crysta rented to ABC Travels</p>
-                      <p className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>2 hours ago</p>
-                    </div>
-                  </div>
-                  
-                  <div className={`p-3 rounded-lg flex items-start gap-3 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
-                    <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-yellow-100' : 'bg-yellow-900/30'}`}>
-                      <WrenchIcon className={`h-4 w-4 ${theme === 'light' ? 'text-yellow-600' : 'text-yellow-400'}`} />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium">Maintenance Completed</p>
-                      <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>Bajaj RE Auto serviced at Bajaj Service</p>
-                      <p className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>5 hours ago</p>
+                    <div className="flex-1 text-xs">
+                      <div className="font-medium">Toyota Innova rented to ABC Travels</div>
+                      <div className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>2 hours ago</div>
                     </div>
                   </div>
                   
-                  <div className={`p-3 rounded-lg flex items-start gap-3 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
-                    <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-blue-100' : 'bg-blue-900/30'}`}>
-                      <CreditCard className={`h-4 w-4 ${theme === 'light' ? 'text-blue-600' : 'text-blue-400'}`} />
+                  <div className={`p-2 rounded flex items-center gap-2 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
+                    <div className={`p-1 rounded-full ${theme === 'light' ? 'bg-yellow-100' : 'bg-yellow-900/30'}`}>
+                      <WrenchIcon className={`h-3 w-3 ${theme === 'light' ? 'text-yellow-600' : 'text-yellow-400'}`} />
                     </div>
-                    <div className="flex-1">
-                      <p className="font-medium">Payment Received</p>
-                      <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>₹12,000 received from Local Movers</p>
-                      <p className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>Yesterday</p>
+                    <div className="flex-1 text-xs">
+                      <div className="font-medium">Bajaj RE Auto serviced at Bajaj Service</div>
+                      <div className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>5 hours ago</div>
                     </div>
                   </div>
                   
-                  <div className={`p-3 rounded-lg flex items-start gap-3 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
-                    <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-purple-100' : 'bg-purple-900/30'}`}>
-                      <UserCheck className={`h-4 w-4 ${theme === 'light' ? 'text-purple-600' : 'text-purple-400'}`} />
+                  <div className={`p-2 rounded flex items-center gap-2 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
+                    <div className={`p-1 rounded-full ${theme === 'light' ? 'bg-blue-100' : 'bg-blue-900/30'}`}>
+                      <CreditCard className={`h-3 w-3 ${theme === 'light' ? 'text-blue-600' : 'text-blue-400'}`} />
                     </div>
-                    <div className="flex-1">
-                      <p className="font-medium">Driver Assignment</p>
-                      <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>Rajesh Kumar assigned to Toyota Innova</p>
-                      <p className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>Yesterday</p>
+                    <div className="flex-1 text-xs">
+                      <div className="font-medium">₹12,000 received from Local Movers</div>
+                      <div className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>Yesterday</div>
+                    </div>
+                  </div>
+                  
+                  <div className={`p-2 rounded flex items-center gap-2 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
+                    <div className={`p-1 rounded-full ${theme === 'light' ? 'bg-purple-100' : 'bg-purple-900/30'}`}>
+                      <UserCheck className={`h-3 w-3 ${theme === 'light' ? 'text-purple-600' : 'text-purple-400'}`} />
+                    </div>
+                    <div className="flex-1 text-xs">
+                      <div className="font-medium">Rajesh Kumar assigned to Toyota Innova</div>
+                      <div className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>Yesterday</div>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
             
-            <Card className={theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}>
-              <CardHeader>
-                <CardTitle>Important Alerts</CardTitle>
-                <CardDescription>Maintenance and regulatory requirements</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <AlertItem 
-                    icon={<AlertCircle className={`h-4 w-4 ${theme === 'light' ? 'text-red-600' : 'text-red-400'}`} />}
-                    title="Urgent: Insurance Expiring"
-                    description="Insurance for Tata Ace expires in 3 days"
-                    type="danger"
-                    theme={theme}
-                    actionText="Renew insurance"
-                  />
-                  
-                  <AlertItem 
-                    icon={<WrenchIcon className={`h-4 w-4 ${theme === 'light' ? 'text-yellow-600' : 'text-yellow-400'}`} />}
-                    title="Maintenance Due"
-                    description="Mahindra Bolero due for service in 5 days"
-                    type="warning"
-                    theme={theme}
-                    actionText="Schedule now"
-                  />
-                  
-                  <AlertItem 
-                    icon={<FileTextIcon className={`h-4 w-4 ${theme === 'light' ? 'text-blue-600' : 'text-blue-400'}`} />}
-                    title="Permit Renewal"
-                    description="Commercial permit for Toyota Innova expires next week"
-                    type="info"
-                    theme={theme}
-                    actionText="Renew permit"
-                  />
-                  
-                  <AlertItem 
-                    icon={<CheckCircle className={`h-4 w-4 ${theme === 'light' ? 'text-green-600' : 'text-green-400'}`} />}
-                    title="Driver License Updated"
-                    description="Suresh Singh's license has been successfully renewed"
-                    type="success"
-                    theme={theme}
-                    actionText="View details"
-                  />
-                </div>
-                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <Button variant="outline" className="w-full" onClick={() => setShowAlertPanel(true)}>
-                    <Settings className="h-4 w-4 mr-2" /> Manage Alerts
+            {/* Important Alerts - Condensed */}
+            <Card className={`lg:col-span-2 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
+              <CardHeader className="pb-1">
+                <div className="flex justify-between">
+                  <div>
+                    <CardTitle className="text-base">Important Alerts</CardTitle>
+                    <CardDescription className="text-xs">Maintenance and regulatory requirements</CardDescription>
+                  </div>
+                  <Button variant="ghost" size="sm" className="h-8 px-2" onClick={() => setShowAlertPanel(true)}>
+                    <Settings className="h-4 w-4" />
                   </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="px-3 py-2">
+                <div className="space-y-2">
+                  <div className={`p-2 rounded border-l-2 border-red-500 ${theme === 'light' ? 'bg-red-50' : 'bg-red-900/10'}`}>
+                    <div className="flex justify-between items-center">
+                      <div className="text-xs font-medium text-red-600 dark:text-red-400 flex items-center">
+                        <AlertCircle className="h-3 w-3 mr-1" />
+                        Urgent: Insurance Expiring
+                      </div>
+                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Renew</Button>
+                    </div>
+                    <div className="text-xs">Insurance for Tata Ace expires in 3 days</div>
+                  </div>
+                  
+                  <div className={`p-2 rounded border-l-2 border-yellow-500 ${theme === 'light' ? 'bg-yellow-50' : 'bg-yellow-900/10'}`}>
+                    <div className="flex justify-between items-center">
+                      <div className="text-xs font-medium text-yellow-600 dark:text-yellow-400 flex items-center">
+                        <WrenchIcon className="h-3 w-3 mr-1" />
+                        Maintenance Due
+                      </div>
+                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Schedule</Button>
+                    </div>
+                    <div className="text-xs">Mahindra Bolero due for service in 5 days</div>
+                  </div>
+                  
+                  <div className={`p-2 rounded border-l-2 border-blue-500 ${theme === 'light' ? 'bg-blue-50' : 'bg-blue-900/10'}`}>
+                    <div className="flex justify-between items-center">
+                      <div className="text-xs font-medium text-blue-600 dark:text-blue-400 flex items-center">
+                        <FileTextIcon className="h-3 w-3 mr-1" />
+                        Permit Renewal
+                      </div>
+                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Renew</Button>
+                    </div>
+                    <div className="text-xs">Commercial permit for Toyota Innova expires next week</div>
+                  </div>
+                  
+                  <div className={`p-2 rounded border-l-2 border-green-500 ${theme === 'light' ? 'bg-green-50' : 'bg-green-900/10'}`}>
+                    <div className="flex justify-between items-center">
+                      <div className="text-xs font-medium text-green-600 dark:text-green-400 flex items-center">
+                        <CheckCircle className="h-3 w-3 mr-1" />
+                        Driver License Updated
+                      </div>
+                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">View</Button>
+                    </div>
+                    <div className="text-xs">Suresh Singh's license has been successfully renewed</div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
