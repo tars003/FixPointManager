@@ -6,6 +6,8 @@ import { ScheduleMaintenanceDialog } from '@/components/maintenance/schedule-mai
 import { NewRentalDialog } from '@/components/rentals/new-rental-dialog';
 import { NewInvoiceDialog } from '@/components/finance/new-invoice-dialog';
 import { AddDriverDialog } from '@/components/drivers/add-driver-dialog';
+import { UploadDocumentDialog } from '@/components/documents/upload-document-dialog';
+import { DocumentExpiryCard } from '@/components/documents/document-expiry-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
