@@ -1,0 +1,60 @@
+Total Fleet Card Click
+
+
+Event listener captures click on "Total Fleet" card
+System queries database for complete vehicle list
+Results filtered by active status (excluding deleted vehicles)
+Navigation redirects to Vehicles tab
+All vehicles displayed in tabular format with filter preset to "All Types"
+Sorting defaults to registration date (newest first)
+On Rent Card Click
+
+
+Event listener captures click on "On Rent" card
+System queries database for vehicles with status = "rented"
+Navigation redirects to Vehicles tab
+Results filtered automatically to show only rented vehicles
+Additional rental information displayed (client, return date)
+Quick action button shown for "End Rental" operation
+Available Card Click
+
+
+Event listener captures click on "Available" card
+System queries database for vehicles with status = "available"
+Navigation redirects to Vehicles tab
+Results filtered automatically to show only available vehicles
+Quick action button shown for "Create Rental" operation
+Availability calendar accessible for each vehicle
+In Maintenance Card Click
+
+
+Event listener captures click on "In Maintenance" card
+System queries database for vehicles with status = "maintenance"
+Navigation redirects to Vehicles tab
+Results filtered automatically to show only vehicles in maintenance
+Service details displayed (provider, estimated completion)
+Quick action button shown for "Mark Complete" operation
+Alert Interaction
+
+
+Each alert includes action dots menu with options:
+Mark as read (changes status in notifications table)
+Snooze (adds time period before re-alerting)
+Take action (redirects to relevant section for resolution)
+"Renew" button triggers specific renewal workflow
+"Manage Alerts" button opens alert settings panel
+Alert settings allow customization of:
+Notification channels (in-app, email, SMS)
+Alert thresholds (days before expiration)
+Priority levels by category
+Map Interaction
+
+
+Vehicle icons displayed with color-coding by status
+Hover shows brief vehicle information tooltip
+Click opens detailed vehicle information panel
+Zoom/pan controls for map navigation
+Cluster management for areas with multiple vehicles
+Filter controls for showing specific vehicle types/status
+Toggle between map/satellite views
+Route history option for tracking previous journeys

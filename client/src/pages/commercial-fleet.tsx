@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
+  ArrowLeftFromLine,
   Car,
   TrendingUp,
   Calendar,
@@ -33,7 +34,9 @@ import {
   MoreHorizontal,
   ChevronRight,
   CheckCircle,
-  Plus
+  Plus,
+  PlusCircle,
+  Settings
 } from 'lucide-react';
 import { PieChart, Pie, LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
@@ -359,24 +362,76 @@ const CommercialFleet = () => {
 
   // Vehicle status filter state
   const [vehicleStatusFilter, setVehicleStatusFilter] = useState('all');
+  
+  // Default sort order
+  const [sortOrder, setSortOrder] = useState('newest');
+  
+  // Enhanced vehicle information based on status
+  const getEnhancedVehicleInfo = (vehicle: any) => {
+    switch(vehicle.status) {
+      case 'On Rent':
+        return {
+          ...vehicle,
+          clientInfo: vehicle.clientInfo || 'ABC Travels',
+          returnDate: vehicle.returnDate || '2025-05-15',
+          quickAction: 'End Rental',
+          quickActionColor: 'bg-blue-600 hover:bg-blue-700',
+          quickActionIcon: <ArrowLeftFromLine className="h-4 w-4 mr-1" />
+        };
+      case 'Available':
+        return {
+          ...vehicle,
+          availableSince: vehicle.availableSince || '2025-04-01',
+          quickAction: 'Create Rental',
+          quickActionColor: 'bg-green-600 hover:bg-green-700',
+          quickActionIcon: <PlusCircle className="h-4 w-4 mr-1" />
+        };
+      case 'In Maintenance':
+        return {
+          ...vehicle,
+          serviceProvider: vehicle.serviceProvider || 'FixPoint Authorized Service',
+          estimatedCompletion: vehicle.estimatedCompletion || '2025-04-28',
+          quickAction: 'Mark Complete',
+          quickActionColor: 'bg-yellow-600 hover:bg-yellow-700',
+          quickActionIcon: <CheckCircle className="h-4 w-4 mr-1" />
+        };
+      default:
+        return {
+          ...vehicle,
+          quickAction: 'Manage Vehicle',
+          quickActionColor: 'bg-primary hover:bg-primary/90',
+          quickActionIcon: <Settings className="h-4 w-4 mr-1" />
+        };
+    }
+  };
 
   // Search functionality for vehicles with status filtering
-  const filteredVehicles = fleetVehicles.filter(vehicle => {
-    // Text search filter
-    const matchesSearch = 
-      vehicle.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vehicle.registrationNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vehicle.currentDriver?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    // Status filter
-    const matchesStatus = 
-      vehicleStatusFilter === 'all' || 
-      (vehicleStatusFilter === 'on-rent' && vehicle.status === 'On Rent') ||
-      (vehicleStatusFilter === 'available' && vehicle.status === 'Available') ||
-      (vehicleStatusFilter === 'maintenance' && vehicle.status === 'In Maintenance');
-    
-    return matchesSearch && matchesStatus;
-  });
+  const filteredVehicles = fleetVehicles
+    .filter(vehicle => {
+      // Text search filter
+      const matchesSearch = 
+        vehicle.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.registrationNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.currentDriver?.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      // Status filter
+      const matchesStatus = 
+        vehicleStatusFilter === 'all' || 
+        (vehicleStatusFilter === 'on-rent' && vehicle.status === 'On Rent') ||
+        (vehicleStatusFilter === 'available' && vehicle.status === 'Available') ||
+        (vehicleStatusFilter === 'maintenance' && vehicle.status === 'In Maintenance');
+      
+      return matchesSearch && matchesStatus;
+    })
+    .map(vehicle => getEnhancedVehicleInfo(vehicle))
+    // Sort by newest first (simulated)
+    .sort((a, b) => {
+      if (sortOrder === 'newest') {
+        return a.id < b.id ? 1 : -1; // Higher ID means newer
+      } else {
+        return a.id > b.id ? 1 : -1;
+      }
+    });
 
   return (
     <div className={`container px-4 py-6 max-w-7xl mx-auto ${theme === 'light' ? 'bg-white text-gray-900' : ''}`}>
@@ -461,11 +516,7 @@ const CommercialFleet = () => {
             
             <Card 
               className={`${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'} cursor-pointer transition-all hover:shadow-md`}
-              onClick={() => {
-                setActiveTab('vehicles');
-                // Would filter to show only rented vehicles
-                console.log('On Rent card clicked - filtering to rented vehicles');
-              }}
+              onClick={handleOnRentClick}
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-sm font-medium ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>On Rent</CardTitle>
@@ -485,11 +536,7 @@ const CommercialFleet = () => {
             
             <Card 
               className={`${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'} cursor-pointer transition-all hover:shadow-md`}
-              onClick={() => {
-                setActiveTab('vehicles');
-                // Would filter to show only available vehicles
-                console.log('Available card clicked - filtering to available vehicles');
-              }}
+              onClick={handleAvailableClick}
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-sm font-medium ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>Available</CardTitle>
@@ -509,11 +556,7 @@ const CommercialFleet = () => {
             
             <Card 
               className={`${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'} cursor-pointer transition-all hover:shadow-md`}
-              onClick={() => {
-                setActiveTab('vehicles');
-                // Would filter to show only maintenance vehicles
-                console.log('Maintenance card clicked - filtering to vehicles in maintenance');
-              }}
+              onClick={handleMaintenanceClick}
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-sm font-medium ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>In Maintenance</CardTitle>
@@ -906,6 +949,40 @@ const CommercialFleet = () => {
                         <MapPin className="h-3 w-3 mr-1" /> {vehicle.location}
                       </span>
                     </div>
+                    
+                    {/* Status-specific information */}
+                    {vehicle.status === 'On Rent' && (
+                      <>
+                        <div className="flex justify-between">
+                          <span className={theme === 'light' ? 'text-gray-500' : 'text-gray-400'}>Client</span>
+                          <span>{vehicle.clientInfo}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className={theme === 'light' ? 'text-gray-500' : 'text-gray-400'}>Return Date</span>
+                          <span>{vehicle.returnDate}</span>
+                        </div>
+                      </>
+                    )}
+                    
+                    {vehicle.status === 'Available' && (
+                      <div className="flex justify-between">
+                        <span className={theme === 'light' ? 'text-gray-500' : 'text-gray-400'}>Available Since</span>
+                        <span>{vehicle.availableSince}</span>
+                      </div>
+                    )}
+                    
+                    {vehicle.status === 'In Maintenance' && (
+                      <>
+                        <div className="flex justify-between">
+                          <span className={theme === 'light' ? 'text-gray-500' : 'text-gray-400'}>Service Provider</span>
+                          <span>{vehicle.serviceProvider}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className={theme === 'light' ? 'text-gray-500' : 'text-gray-400'}>Est. Completion</span>
+                          <span>{vehicle.estimatedCompletion}</span>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </CardContent>
                 
@@ -917,9 +994,9 @@ const CommercialFleet = () => {
                     Details
                   </Button>
                   <Button 
-                    className={`flex-1 ${theme === 'light' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-primary hover:bg-primary/90 text-black'}`}
+                    className={`flex-1 text-white ${vehicle.quickActionColor}`}
                   >
-                    Manage
+                    {vehicle.quickActionIcon} {vehicle.quickAction}
                   </Button>
                 </CardFooter>
               </Card>
