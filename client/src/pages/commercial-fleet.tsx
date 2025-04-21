@@ -15,6 +15,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   ArrowLeftFromLine,
   Car,
   TrendingUp,
@@ -318,6 +326,7 @@ const CommercialFleet = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [searchTerm, setSearchTerm] = useState('');
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [showAlertPanel, setShowAlertPanel] = useState(false);
   
   // Total fleet value
   const totalFleetValue = fleetVehicles.reduce((total, vehicle) => total + vehicle.value, 0);
@@ -807,6 +816,11 @@ const CommercialFleet = () => {
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </div>
+                </div>
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <Button variant="outline" className="w-full" onClick={() => setShowAlertPanel(true)}>
+                    <Settings className="h-4 w-4 mr-2" /> Manage Alerts
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -2080,6 +2094,121 @@ const CommercialFleet = () => {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Alert Management Dialog */}
+      <Dialog open={showAlertPanel} onOpenChange={setShowAlertPanel}>
+        <DialogContent className={theme === 'light' ? '' : 'bg-gray-800 border-gray-700'}>
+          <DialogHeader>
+            <DialogTitle className={theme === 'light' ? '' : 'text-white'}>Alert Management</DialogTitle>
+            <DialogDescription>
+              Configure notification preferences and manage your alerts.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="py-4 space-y-4">
+            <div className={`p-4 rounded-lg ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700'}`}>
+              <h3 className={`font-medium mb-3 ${theme === 'light' ? 'text-gray-900' : 'text-white'}`}>Alert Preferences</h3>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>
+                    <span className="flex items-center">
+                      <Bell className="h-4 w-4 mr-2" />
+                      Document Expiry Alerts
+                    </span>
+                  </label>
+                  <Select defaultValue="30">
+                    <SelectTrigger className="w-32">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="7">7 days</SelectItem>
+                      <SelectItem value="15">15 days</SelectItem>
+                      <SelectItem value="30">30 days</SelectItem>
+                      <SelectItem value="60">60 days</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <label className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>
+                    <span className="flex items-center">
+                      <WrenchIcon className="h-4 w-4 mr-2" />
+                      Maintenance Reminders
+                    </span>
+                  </label>
+                  <Select defaultValue="15">
+                    <SelectTrigger className="w-32">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="7">7 days</SelectItem>
+                      <SelectItem value="15">15 days</SelectItem>
+                      <SelectItem value="30">30 days</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <label className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>
+                    <span className="flex items-center">
+                      <UserCheck className="h-4 w-4 mr-2" />
+                      Driver License Expiry
+                    </span>
+                  </label>
+                  <Select defaultValue="30">
+                    <SelectTrigger className="w-32">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="15">15 days</SelectItem>
+                      <SelectItem value="30">30 days</SelectItem>
+                      <SelectItem value="60">60 days</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+            
+            <div className={`p-4 rounded-lg ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700'}`}>
+              <h3 className={`font-medium mb-3 ${theme === 'light' ? 'text-gray-900' : 'text-white'}`}>Notification Channels</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-center space-x-2">
+                  <input type="checkbox" id="email-notif" className="rounded" defaultChecked />
+                  <label htmlFor="email-notif" className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>Email Notifications</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input type="checkbox" id="sms-notif" className="rounded" defaultChecked />
+                  <label htmlFor="sms-notif" className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>SMS Notifications</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input type="checkbox" id="push-notif" className="rounded" defaultChecked />
+                  <label htmlFor="push-notif" className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>Push Notifications</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input type="checkbox" id="whatsapp-notif" className="rounded" />
+                  <label htmlFor="whatsapp-notif" className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>WhatsApp Notifications</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setShowAlertPanel(false)}
+              className={theme === 'light' ? '' : 'border-gray-600 text-gray-300 hover:bg-gray-700'}
+            >
+              Cancel
+            </Button>
+            <Button 
+              className={theme === 'light' ? 'bg-blue-600 hover:bg-blue-700 text-white' : ''}
+              onClick={() => setShowAlertPanel(false)}
+            >
+              Save Preferences
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
