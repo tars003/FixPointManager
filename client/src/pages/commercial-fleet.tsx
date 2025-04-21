@@ -753,16 +753,19 @@ const CommercialFleet = () => {
             </Card>
           </div>
           
-          {/* Consolidated Dashboard with All Charts in One View */}
+          {/* Consolidated Dashboard with All Charts in One View - Modern Style */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
             {/* Fleet Status Chart */}
-            <Card className={`lg:col-span-1 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
-              <CardHeader className="pb-1">
-                <CardTitle className="text-base">Fleet Status</CardTitle>
-                <CardDescription className="text-xs">Distribution of your fleet</CardDescription>
+            <Card className={`lg:col-span-1 overflow-hidden shadow-sm hover:shadow-md transition-shadow ${theme === 'light' ? 'border-gray-200 bg-white' : 'bg-gray-800/90 border-gray-700'}`}>
+              <CardHeader className="pb-1 px-4 py-3">
+                <CardTitle className="text-base flex items-center">
+                  <div className={`w-1.5 h-1.5 rounded-full mr-2 ${theme === 'light' ? 'bg-blue-500' : 'bg-blue-400'}`}></div>
+                  Fleet Status
+                </CardTitle>
+                <CardDescription className="text-xs">Current distribution</CardDescription>
               </CardHeader>
               <CardContent className="p-2">
-                <div className="h-48">
+                <div className="h-44">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -770,17 +773,24 @@ const CommercialFleet = () => {
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        outerRadius={60}
+                        outerRadius={55}
                         fill="#8884d8"
                         dataKey="value"
-                        label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
+                        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                       >
                         {fleetStatusData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip />
-                      <Legend layout="horizontal" verticalAlign="bottom" align="center" />
+                      <Tooltip formatter={(value) => `${value}%`} />
+                      <Legend 
+                        layout="horizontal" 
+                        verticalAlign="bottom" 
+                        align="center" 
+                        iconSize={8}
+                        iconType="circle"
+                        wrapperStyle={{ fontSize: '10px', paddingTop: '10px' }}
+                      />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
@@ -788,28 +798,65 @@ const CommercialFleet = () => {
             </Card>
             
             {/* Financial Overview Chart */}
-            <Card className={`lg:col-span-3 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
-              <CardHeader className="pb-1">
+            <Card className={`lg:col-span-3 overflow-hidden shadow-sm hover:shadow-md transition-shadow ${theme === 'light' ? 'border-gray-200 bg-white' : 'bg-gray-800/90 border-gray-700'}`}>
+              <CardHeader className="pb-1 px-4 py-3">
                 <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle className="text-base">Financial Overview</CardTitle>
-                    <CardDescription className="text-xs">Total fleet value: ₹{totalFleetValue.toLocaleString()}</CardDescription>
+                    <CardTitle className="text-base flex items-center">
+                      <div className={`w-1.5 h-1.5 rounded-full mr-2 ${theme === 'light' ? 'bg-blue-500' : 'bg-blue-400'}`}></div>
+                      Financial Overview
+                    </CardTitle>
+                    <CardDescription className="text-xs">
+                      Total fleet value: 
+                      <span className={`ml-1 font-medium ${theme === 'light' ? 'text-blue-600' : 'text-blue-400'}`}>
+                        ₹{totalFleetValue.toLocaleString()}
+                      </span>
+                    </CardDescription>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="p-2">
-                <div className="h-48">
+              <CardContent className="p-3">
+                <div className="h-44">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart
                       data={revenueData}
-                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                      margin={{ top: 10, right: 30, left: 5, bottom: 5 }}
                     >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" tick={{ fontSize: 10 }} />
-                      <YAxis tick={{ fontSize: 10 }} />
-                      <Tooltip formatter={(value) => `₹${value.toLocaleString()}`} />
-                      <Legend />
-                      <Line type="monotone" dataKey="amount" stroke="#3b82f6" name="Revenue" />
+                      <CartesianGrid strokeDasharray="3 3" stroke={theme === 'light' ? '#eee' : '#555'} />
+                      <XAxis 
+                        dataKey="month" 
+                        tick={{ fontSize: 10 }} 
+                        tickLine={{ stroke: theme === 'light' ? '#ccc' : '#666' }}
+                        axisLine={{ stroke: theme === 'light' ? '#ccc' : '#666' }}
+                      />
+                      <YAxis 
+                        tick={{ fontSize: 10 }} 
+                        tickFormatter={(value) => value >= 1000 ? `${value/1000}k` : value}
+                        tickLine={{ stroke: theme === 'light' ? '#ccc' : '#666' }}
+                        axisLine={{ stroke: theme === 'light' ? '#ccc' : '#666' }}
+                      />
+                      <Tooltip 
+                        formatter={(value) => `₹${value.toLocaleString()}`}
+                        contentStyle={{ 
+                          fontSize: '12px', 
+                          backgroundColor: theme === 'light' ? 'white' : '#333',
+                          borderColor: theme === 'light' ? '#ddd' : '#555'
+                        }}
+                      />
+                      <Legend 
+                        iconSize={8}
+                        iconType="circle"
+                        wrapperStyle={{ fontSize: '10px' }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="amount" 
+                        stroke="#3b82f6" 
+                        strokeWidth={2}
+                        dot={{ r: 2 }}
+                        activeDot={{ r: 4 }}
+                        name="Revenue" 
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -817,24 +864,52 @@ const CommercialFleet = () => {
             </Card>
             
             {/* Rental Statistics Chart */}
-            <Card className={`lg:col-span-2 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
-              <CardHeader className="pb-1">
-                <CardTitle className="text-base">Rental Statistics</CardTitle>
+            <Card className={`lg:col-span-2 overflow-hidden shadow-sm hover:shadow-md transition-shadow ${theme === 'light' ? 'border-gray-200 bg-white' : 'bg-gray-800/90 border-gray-700'}`}>
+              <CardHeader className="pb-1 px-4 py-3">
+                <CardTitle className="text-base flex items-center">
+                  <div className={`w-1.5 h-1.5 rounded-full mr-2 ${theme === 'light' ? 'bg-green-500' : 'bg-green-400'}`}></div>
+                  Rental Statistics
+                </CardTitle>
                 <CardDescription className="text-xs">Monthly rental count</CardDescription>
               </CardHeader>
-              <CardContent className="p-2">
-                <div className="h-48">
+              <CardContent className="p-3">
+                <div className="h-44">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={vehicleRentalData}
-                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                      margin={{ top: 10, right: 10, left: 5, bottom: 5 }}
                     >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" tick={{ fontSize: 10 }} />
-                      <YAxis tick={{ fontSize: 10 }} />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="count" name="Rental Count" fill="#10b981" />
+                      <CartesianGrid strokeDasharray="3 3" stroke={theme === 'light' ? '#eee' : '#555'} />
+                      <XAxis 
+                        dataKey="month" 
+                        tick={{ fontSize: 9 }} 
+                        tickLine={{ stroke: theme === 'light' ? '#ccc' : '#666' }}
+                        axisLine={{ stroke: theme === 'light' ? '#ccc' : '#666' }}
+                        interval={'preserveStartEnd'}
+                      />
+                      <YAxis 
+                        tick={{ fontSize: 9 }} 
+                        tickLine={{ stroke: theme === 'light' ? '#ccc' : '#666' }}
+                        axisLine={{ stroke: theme === 'light' ? '#ccc' : '#666' }}
+                      />
+                      <Tooltip 
+                        contentStyle={{ 
+                          fontSize: '12px', 
+                          backgroundColor: theme === 'light' ? 'white' : '#333',
+                          borderColor: theme === 'light' ? '#ddd' : '#555'
+                        }}
+                      />
+                      <Legend 
+                        iconSize={8}
+                        iconType="circle"
+                        wrapperStyle={{ fontSize: '10px' }}
+                      />
+                      <Bar 
+                        dataKey="count" 
+                        name="Rental Count" 
+                        fill="#10b981" 
+                        radius={[2, 2, 0, 0]}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -842,25 +917,57 @@ const CommercialFleet = () => {
             </Card>
             
             {/* Fuel Efficiency Chart */}
-            <Card className={`lg:col-span-2 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
-              <CardHeader className="pb-1">
-                <CardTitle className="text-base">Fuel Efficiency</CardTitle>
-                <CardDescription className="text-xs">Vehicle mileage in km/liter</CardDescription>
+            <Card className={`lg:col-span-2 overflow-hidden shadow-sm hover:shadow-md transition-shadow ${theme === 'light' ? 'border-gray-200 bg-white' : 'bg-gray-800/90 border-gray-700'}`}>
+              <CardHeader className="pb-1 px-4 py-3">
+                <CardTitle className="text-base flex items-center">
+                  <div className={`w-1.5 h-1.5 rounded-full mr-2 ${theme === 'light' ? 'bg-amber-500' : 'bg-amber-400'}`}></div>
+                  Fuel Efficiency
+                </CardTitle>
+                <CardDescription className="text-xs">Vehicle mileage (km/liter)</CardDescription>
               </CardHeader>
-              <CardContent className="p-2">
-                <div className="h-48">
+              <CardContent className="p-3">
+                <div className="h-44">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={fuelEfficiencyData}
                       layout="vertical"
-                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                      margin={{ top: 5, right: 10, left: 5, bottom: 5 }}
                     >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis type="number" tick={{ fontSize: 10 }} />
-                      <YAxis dataKey="vehicle" type="category" width={80} tick={{ fontSize: 10 }} />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="efficiency" name="km/L" fill="#f59e0b" />
+                      <CartesianGrid strokeDasharray="3 3" stroke={theme === 'light' ? '#eee' : '#555'} />
+                      <XAxis 
+                        type="number" 
+                        tick={{ fontSize: 9 }} 
+                        tickLine={{ stroke: theme === 'light' ? '#ccc' : '#666' }}
+                        axisLine={{ stroke: theme === 'light' ? '#ccc' : '#666' }}
+                        domain={[0, 'dataMax + 2']}
+                      />
+                      <YAxis 
+                        dataKey="vehicle" 
+                        type="category" 
+                        width={60} 
+                        tick={{ fontSize: 9 }} 
+                        tickLine={{ stroke: theme === 'light' ? '#ccc' : '#666' }}
+                        axisLine={{ stroke: theme === 'light' ? '#ccc' : '#666' }}
+                      />
+                      <Tooltip 
+                        formatter={(value) => `${value} km/L`}
+                        contentStyle={{ 
+                          fontSize: '12px', 
+                          backgroundColor: theme === 'light' ? 'white' : '#333',
+                          borderColor: theme === 'light' ? '#ddd' : '#555'
+                        }}
+                      />
+                      <Legend 
+                        iconSize={8}
+                        iconType="circle"
+                        wrapperStyle={{ fontSize: '10px' }}
+                      />
+                      <Bar 
+                        dataKey="efficiency" 
+                        name="Fuel Efficiency" 
+                        fill="#f59e0b" 
+                        radius={[0, 2, 2, 0]}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -868,116 +975,175 @@ const CommercialFleet = () => {
             </Card>
           </div>
           
-          {/* Recent Activity & Alerts - More Compact */}
+          {/* Recent Activity & Alerts - Modern Compact */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
             {/* Recent Activity */}
-            <Card className={`lg:col-span-2 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
-              <CardHeader className="pb-1">
-                <CardTitle className="text-base">Recent Activity</CardTitle>
+            <Card className={`lg:col-span-2 overflow-hidden shadow-sm hover:shadow-md transition-shadow ${theme === 'light' ? 'border-gray-200 bg-white' : 'bg-gray-800/90 border-gray-700'}`}>
+              <CardHeader className="pb-1 px-4 py-3">
+                <CardTitle className="text-base flex items-center">
+                  <div className={`w-1.5 h-1.5 rounded-full mr-2 ${theme === 'light' ? 'bg-purple-500' : 'bg-purple-400'}`}></div>
+                  Recent Activity
+                </CardTitle>
                 <CardDescription className="text-xs">Latest activities</CardDescription>
               </CardHeader>
-              <CardContent className="px-3 py-2">
-                <div className="space-y-2 text-sm">
-                  <div className={`p-2 rounded flex items-center gap-2 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
+              <CardContent className="px-3 pt-1 pb-3">
+                <div className="space-y-2">
+                  <div className={`p-2 rounded-md flex items-center gap-2 ${theme === 'light' ? 'bg-gray-50 hover:bg-gray-100' : 'bg-gray-700/50 hover:bg-gray-700'} transition-colors`}>
                     <div className={`p-1 rounded-full ${theme === 'light' ? 'bg-green-100' : 'bg-green-900/30'}`}>
                       <Car className={`h-3 w-3 ${theme === 'light' ? 'text-green-600' : 'text-green-400'}`} />
                     </div>
-                    <div className="flex-1 text-xs">
-                      <div className="font-medium">Toyota Innova rented to ABC Travels</div>
-                      <div className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>2 hours ago</div>
+                    <div className="flex-1 min-w-0"> {/* Added min-width to prevent text overflow */}
+                      <div className="font-medium text-xs truncate"> {/* Add truncate to handle long text */}
+                        Toyota Innova rented to ABC Travels
+                      </div>
+                      <div className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        2 hours ago
+                      </div>
                     </div>
                   </div>
                   
-                  <div className={`p-2 rounded flex items-center gap-2 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
+                  <div className={`p-2 rounded-md flex items-center gap-2 ${theme === 'light' ? 'bg-gray-50 hover:bg-gray-100' : 'bg-gray-700/50 hover:bg-gray-700'} transition-colors`}>
                     <div className={`p-1 rounded-full ${theme === 'light' ? 'bg-yellow-100' : 'bg-yellow-900/30'}`}>
                       <WrenchIcon className={`h-3 w-3 ${theme === 'light' ? 'text-yellow-600' : 'text-yellow-400'}`} />
                     </div>
-                    <div className="flex-1 text-xs">
-                      <div className="font-medium">Bajaj RE Auto serviced at Bajaj Service</div>
-                      <div className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>5 hours ago</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-xs truncate">
+                        Bajaj RE Auto serviced at Bajaj Service
+                      </div>
+                      <div className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        5 hours ago
+                      </div>
                     </div>
                   </div>
                   
-                  <div className={`p-2 rounded flex items-center gap-2 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
+                  <div className={`p-2 rounded-md flex items-center gap-2 ${theme === 'light' ? 'bg-gray-50 hover:bg-gray-100' : 'bg-gray-700/50 hover:bg-gray-700'} transition-colors`}>
                     <div className={`p-1 rounded-full ${theme === 'light' ? 'bg-blue-100' : 'bg-blue-900/30'}`}>
                       <CreditCard className={`h-3 w-3 ${theme === 'light' ? 'text-blue-600' : 'text-blue-400'}`} />
                     </div>
-                    <div className="flex-1 text-xs">
-                      <div className="font-medium">₹12,000 received from Local Movers</div>
-                      <div className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>Yesterday</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-xs truncate">
+                        ₹12,000 received from Local Movers
+                      </div>
+                      <div className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Yesterday
+                      </div>
                     </div>
                   </div>
                   
-                  <div className={`p-2 rounded flex items-center gap-2 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
+                  <div className={`p-2 rounded-md flex items-center gap-2 ${theme === 'light' ? 'bg-gray-50 hover:bg-gray-100' : 'bg-gray-700/50 hover:bg-gray-700'} transition-colors`}>
                     <div className={`p-1 rounded-full ${theme === 'light' ? 'bg-purple-100' : 'bg-purple-900/30'}`}>
                       <UserCheck className={`h-3 w-3 ${theme === 'light' ? 'text-purple-600' : 'text-purple-400'}`} />
                     </div>
-                    <div className="flex-1 text-xs">
-                      <div className="font-medium">Rajesh Kumar assigned to Toyota Innova</div>
-                      <div className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>Yesterday</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-xs truncate">
+                        Rajesh Kumar assigned to Toyota Innova
+                      </div>
+                      <div className={`text-xs ${theme === 'light' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Yesterday
+                      </div>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
             
-            {/* Important Alerts - Condensed */}
-            <Card className={`lg:col-span-2 ${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}`}>
-              <CardHeader className="pb-1">
-                <div className="flex justify-between">
+            {/* Important Alerts - Modern Condensed */}
+            <Card className={`lg:col-span-2 overflow-hidden shadow-sm hover:shadow-md transition-shadow ${theme === 'light' ? 'border-gray-200 bg-white' : 'bg-gray-800/90 border-gray-700'}`}>
+              <CardHeader className="pb-1 px-4 py-3">
+                <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle className="text-base">Important Alerts</CardTitle>
-                    <CardDescription className="text-xs">Maintenance and regulatory requirements</CardDescription>
+                    <CardTitle className="text-base flex items-center">
+                      <div className={`w-1.5 h-1.5 rounded-full mr-2 ${theme === 'light' ? 'bg-red-500' : 'bg-red-400'}`}></div>
+                      Important Alerts
+                    </CardTitle>
+                    <CardDescription className="text-xs">Maintenance and expiry alerts</CardDescription>
                   </div>
-                  <Button variant="ghost" size="sm" className="h-8 px-2" onClick={() => setShowAlertPanel(true)}>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => setShowAlertPanel(true)}
+                    className="h-7 w-7"
+                  >
                     <Settings className="h-4 w-4" />
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="px-3 py-2">
+              <CardContent className="px-3 pt-1 pb-3">
                 <div className="space-y-2">
-                  <div className={`p-2 rounded border-l-2 border-red-500 ${theme === 'light' ? 'bg-red-50' : 'bg-red-900/10'}`}>
+                  <div className={`p-2 rounded-md border-l-2 border-red-500 ${theme === 'light' ? 'bg-red-50/50 hover:bg-red-50' : 'bg-red-900/10 hover:bg-red-900/20'} transition-colors`}>
                     <div className="flex justify-between items-center">
-                      <div className="text-xs font-medium text-red-600 dark:text-red-400 flex items-center">
-                        <AlertCircle className="h-3 w-3 mr-1" />
-                        Urgent: Insurance Expiring
+                      <div className="text-xs font-medium text-red-600 dark:text-red-400 flex items-center truncate mr-1">
+                        <AlertCircle className="h-3 w-3 mr-1 flex-shrink-0" />
+                        <span className="truncate">Insurance Expiring</span>
                       </div>
-                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Renew</Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-6 px-2 text-xs ml-1 flex-shrink-0 border-red-200 text-red-600 hover:bg-red-50"
+                      >
+                        Renew
+                      </Button>
                     </div>
-                    <div className="text-xs">Insurance for Tata Ace expires in 3 days</div>
+                    <div className="text-xs mt-1 text-gray-600 dark:text-gray-400 truncate">
+                      Tata Ace insurance expires in 3 days
+                    </div>
                   </div>
                   
-                  <div className={`p-2 rounded border-l-2 border-yellow-500 ${theme === 'light' ? 'bg-yellow-50' : 'bg-yellow-900/10'}`}>
+                  <div className={`p-2 rounded-md border-l-2 border-yellow-500 ${theme === 'light' ? 'bg-yellow-50/50 hover:bg-yellow-50' : 'bg-yellow-900/10 hover:bg-yellow-900/20'} transition-colors`}>
                     <div className="flex justify-between items-center">
-                      <div className="text-xs font-medium text-yellow-600 dark:text-yellow-400 flex items-center">
-                        <WrenchIcon className="h-3 w-3 mr-1" />
-                        Maintenance Due
+                      <div className="text-xs font-medium text-yellow-600 dark:text-yellow-400 flex items-center truncate mr-1">
+                        <WrenchIcon className="h-3 w-3 mr-1 flex-shrink-0" />
+                        <span className="truncate">Maintenance Due</span>
                       </div>
-                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Schedule</Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-6 px-2 text-xs ml-1 flex-shrink-0 border-yellow-200 text-yellow-600 hover:bg-yellow-50"
+                      >
+                        Schedule
+                      </Button>
                     </div>
-                    <div className="text-xs">Mahindra Bolero due for service in 5 days</div>
+                    <div className="text-xs mt-1 text-gray-600 dark:text-gray-400 truncate">
+                      Mahindra Bolero service due in 5 days
+                    </div>
                   </div>
                   
-                  <div className={`p-2 rounded border-l-2 border-blue-500 ${theme === 'light' ? 'bg-blue-50' : 'bg-blue-900/10'}`}>
+                  <div className={`p-2 rounded-md border-l-2 border-blue-500 ${theme === 'light' ? 'bg-blue-50/50 hover:bg-blue-50' : 'bg-blue-900/10 hover:bg-blue-900/20'} transition-colors`}>
                     <div className="flex justify-between items-center">
-                      <div className="text-xs font-medium text-blue-600 dark:text-blue-400 flex items-center">
-                        <FileTextIcon className="h-3 w-3 mr-1" />
-                        Permit Renewal
+                      <div className="text-xs font-medium text-blue-600 dark:text-blue-400 flex items-center truncate mr-1">
+                        <FileTextIcon className="h-3 w-3 mr-1 flex-shrink-0" />
+                        <span className="truncate">Permit Renewal</span>
                       </div>
-                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Renew</Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-6 px-2 text-xs ml-1 flex-shrink-0 border-blue-200 text-blue-600 hover:bg-blue-50"
+                      >
+                        Renew
+                      </Button>
                     </div>
-                    <div className="text-xs">Commercial permit for Toyota Innova expires next week</div>
+                    <div className="text-xs mt-1 text-gray-600 dark:text-gray-400 truncate">
+                      Toyota Innova permit expires next week
+                    </div>
                   </div>
                   
-                  <div className={`p-2 rounded border-l-2 border-green-500 ${theme === 'light' ? 'bg-green-50' : 'bg-green-900/10'}`}>
+                  <div className={`p-2 rounded-md border-l-2 border-green-500 ${theme === 'light' ? 'bg-green-50/50 hover:bg-green-50' : 'bg-green-900/10 hover:bg-green-900/20'} transition-colors`}>
                     <div className="flex justify-between items-center">
-                      <div className="text-xs font-medium text-green-600 dark:text-green-400 flex items-center">
-                        <CheckCircle className="h-3 w-3 mr-1" />
-                        Driver License Updated
+                      <div className="text-xs font-medium text-green-600 dark:text-green-400 flex items-center truncate mr-1">
+                        <CheckCircle className="h-3 w-3 mr-1 flex-shrink-0" />
+                        <span className="truncate">License Updated</span>
                       </div>
-                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">View</Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-6 px-2 text-xs ml-1 flex-shrink-0 border-green-200 text-green-600 hover:bg-green-50"
+                      >
+                        View
+                      </Button>
                     </div>
-                    <div className="text-xs">Suresh Singh's license has been successfully renewed</div>
+                    <div className="text-xs mt-1 text-gray-600 dark:text-gray-400 truncate">
+                      Suresh Singh's license successfully renewed
+                    </div>
                   </div>
                 </div>
               </CardContent>
