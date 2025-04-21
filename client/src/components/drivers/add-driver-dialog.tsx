@@ -904,7 +904,7 @@ export function AddDriverDialog({ open, onOpenChange, theme }: AddDriverDialogPr
                             }`}
                           >
                             {field.value ? (
-                              format(field.value, "PPP")
+                              safeFormat(field.value, "PPP")
                             ) : (
                               <span>Pick a date</span>
                             )}
@@ -949,7 +949,7 @@ export function AddDriverDialog({ open, onOpenChange, theme }: AddDriverDialogPr
                             }`}
                           >
                             {field.value ? (
-                              format(field.value, "PPP")
+                              safeFormat(field.value, "PPP")
                             ) : (
                               <span>Pick a date</span>
                             )}
