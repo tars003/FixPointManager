@@ -5,6 +5,7 @@ import { AddVehicleDialog } from '@/components/vehicles/add-vehicle-dialog';
 import { ScheduleMaintenanceDialog } from '@/components/maintenance/schedule-maintenance-dialog';
 import { NewRentalDialog } from '@/components/rentals/new-rental-dialog';
 import { NewInvoiceDialog } from '@/components/finance/new-invoice-dialog';
+import { AddDriverDialog } from '@/components/drivers/add-driver-dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -336,6 +337,7 @@ const CommercialFleet = () => {
   const [showScheduleMaintenanceDialog, setShowScheduleMaintenanceDialog] = useState(false);
   const [showNewRentalDialog, setShowNewRentalDialog] = useState(false);
   const [showNewInvoiceDialog, setShowNewInvoiceDialog] = useState(false);
+  const [showAddDriverDialog, setShowAddDriverDialog] = useState(false);
   
   // Total fleet value
   const totalFleetValue = fleetVehicles.reduce((total, vehicle) => total + vehicle.value, 0);
@@ -1530,6 +1532,7 @@ const CommercialFleet = () => {
             
             <Button 
               className={theme === 'light' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-primary hover:bg-primary/90 text-black'}
+              onClick={() => setShowAddDriverDialog(true)}
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Driver
@@ -2234,6 +2237,13 @@ const CommercialFleet = () => {
       <NewInvoiceDialog 
         open={showNewInvoiceDialog}
         onOpenChange={setShowNewInvoiceDialog}
+        theme={theme}
+      />
+
+      {/* Add Driver Dialog */}
+      <AddDriverDialog 
+        open={showAddDriverDialog}
+        onOpenChange={setShowAddDriverDialog}
         theme={theme}
       />
     </div>
