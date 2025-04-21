@@ -373,7 +373,9 @@ export function AddDriverDialog({ open, onOpenChange, theme }: AddDriverDialogPr
   
   // Calculate age from date of birth
   const calculateAge = (dateOfBirth: Date): number => {
-    return differenceInYears(new Date(), dateOfBirth);
+    // Ensure we're working with a Date object
+    const birthDate = dateOfBirth instanceof Date ? dateOfBirth : new Date(dateOfBirth);
+    return differenceInYears(new Date(), birthDate);
   };
   
   // Handle form submissions for each step
@@ -544,7 +546,7 @@ export function AddDriverDialog({ open, onOpenChange, theme }: AddDriverDialogPr
                               >
                                 {field.value ? (
                                   <>
-                                    {format(field.value, "PPP")}
+                                    {format(new Date(field.value), "PPP")}
                                     <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                                       (Age: {calculateAge(field.value)})
                                     </span>
