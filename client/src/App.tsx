@@ -9,7 +9,7 @@ import Layout from "@/components/layout/layout";
 import NotFound from "@/pages/not-found";
 
 // Pages
-import MyVehicles from "@/pages/my-vehicles";
+import MyVehicles from "@/pages/my-vehicles-updated";
 import AddVehicle from "@/pages/add-vehicle";
 import BookService from "@/pages/book-service";
 import Nearby from "@/pages/nearby";
@@ -19,6 +19,7 @@ import Dashboard from "@/pages/dashboard";
 import Inspection from "@/pages/inspection";
 import Energy from "@/pages/energy";
 import PartsPage from "@/pages/parts";
+import VehicleDetail from "@/pages/vehicle-detail";
 
 function Router() {
   const [location] = useLocation();
@@ -70,6 +71,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <AddVehicle />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/vehicles/:id">
+            {(params) => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <VehicleDetail />
               </motion.div>
             )}
           </Route>
