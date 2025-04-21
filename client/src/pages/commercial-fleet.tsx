@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { AlertItem } from '@/components/dashboard/alert-item';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -765,31 +766,23 @@ const CommercialFleet = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className={`p-3 rounded-lg flex items-start gap-3 ${theme === 'light' ? 'bg-red-50' : 'bg-red-900/20'}`}>
-                    <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-red-100' : 'bg-red-900/30'}`}>
-                      <AlertCircle className={`h-4 w-4 ${theme === 'light' ? 'text-red-600' : 'text-red-400'}`} />
-                    </div>
-                    <div className="flex-1">
-                      <p className={`font-medium ${theme === 'light' ? 'text-red-700' : 'text-red-400'}`}>Urgent: Insurance Expiring</p>
-                      <p className={`text-sm ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>Insurance for Tata Ace expires in 3 days</p>
-                    </div>
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  <AlertItem 
+                    icon={<AlertCircle className={`h-4 w-4 ${theme === 'light' ? 'text-red-600' : 'text-red-400'}`} />}
+                    title="Urgent: Insurance Expiring"
+                    description="Insurance for Tata Ace expires in 3 days"
+                    type="danger"
+                    theme={theme}
+                    actionText="Renew insurance"
+                  />
                   
-                  <div className={`p-3 rounded-lg flex items-start gap-3 ${theme === 'light' ? 'bg-yellow-50' : 'bg-yellow-900/20'}`}>
-                    <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-yellow-100' : 'bg-yellow-900/30'}`}>
-                      <WrenchIcon className={`h-4 w-4 ${theme === 'light' ? 'text-yellow-600' : 'text-yellow-400'}`} />
-                    </div>
-                    <div className="flex-1">
-                      <p className={`font-medium ${theme === 'light' ? 'text-yellow-700' : 'text-yellow-400'}`}>Maintenance Due</p>
-                      <p className={`text-sm ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>Mahindra Bolero due for service in 5 days</p>
-                    </div>
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  <AlertItem 
+                    icon={<WrenchIcon className={`h-4 w-4 ${theme === 'light' ? 'text-yellow-600' : 'text-yellow-400'}`} />}
+                    title="Maintenance Due"
+                    description="Mahindra Bolero due for service in 5 days"
+                    type="warning"
+                    theme={theme}
+                    actionText="Schedule now"
+                  />
                   
                   <div className={`p-3 rounded-lg flex items-start gap-3 ${theme === 'light' ? 'bg-blue-50' : 'bg-blue-900/20'}`}>
                     <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-blue-100' : 'bg-blue-900/30'}`}>
