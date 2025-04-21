@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { AlertItem } from '@/components/dashboard/alert-item';
 import { AddVehicleDialog } from '@/components/vehicles/add-vehicle-dialog';
 import { ScheduleMaintenanceDialog } from '@/components/maintenance/schedule-maintenance-dialog';
+import { NewRentalDialog } from '@/components/rentals/new-rental-dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -29,7 +30,7 @@ import {
   ArrowLeftFromLine,
   Car,
   TrendingUp,
-  Calendar,
+  Calendar as CalendarIcon2,
   MapPin,
   TruckIcon,
   FileTextIcon,
@@ -332,6 +333,7 @@ const CommercialFleet = () => {
   const [showAlertPanel, setShowAlertPanel] = useState(false);
   const [showAddVehicleDialog, setShowAddVehicleDialog] = useState(false);
   const [showScheduleMaintenanceDialog, setShowScheduleMaintenanceDialog] = useState(false);
+  const [showNewRentalDialog, setShowNewRentalDialog] = useState(false);
   
   // Total fleet value
   const totalFleetValue = fleetVehicles.reduce((total, vehicle) => total + vehicle.value, 0);
@@ -1047,7 +1049,7 @@ const CommercialFleet = () => {
                     <p className={`text-xs ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>Upcoming maintenance</p>
                   </div>
                   <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-blue-100' : 'bg-blue-900/20'}`}>
-                    <Calendar className={`h-6 w-6 ${theme === 'light' ? 'text-blue-600' : 'text-blue-500'}`} />
+                    <CalendarIcon2 className={`h-6 w-6 ${theme === 'light' ? 'text-blue-600' : 'text-blue-500'}`} />
                   </div>
                 </div>
               </CardContent>
@@ -1142,6 +1144,7 @@ const CommercialFleet = () => {
             
             <Button 
               className={theme === 'light' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-primary hover:bg-primary/90 text-black'}
+              onClick={() => setShowNewRentalDialog(true)}
             >
               <Plus className="h-4 w-4 mr-2" />
               New Rental
@@ -1178,7 +1181,7 @@ const CommercialFleet = () => {
                     <p className={`text-xs ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>Scheduled bookings</p>
                   </div>
                   <div className={`p-2 rounded-full ${theme === 'light' ? 'bg-purple-100' : 'bg-purple-900/20'}`}>
-                    <Calendar className={`h-6 w-6 ${theme === 'light' ? 'text-purple-600' : 'text-purple-500'}`} />
+                    <CalendarIcon2 className={`h-6 w-6 ${theme === 'light' ? 'text-purple-600' : 'text-purple-500'}`} />
                   </div>
                 </div>
               </CardContent>
@@ -2214,6 +2217,13 @@ const CommercialFleet = () => {
       <ScheduleMaintenanceDialog 
         open={showScheduleMaintenanceDialog}
         onOpenChange={setShowScheduleMaintenanceDialog}
+        theme={theme}
+      />
+
+      {/* New Rental Dialog */}
+      <NewRentalDialog 
+        open={showNewRentalDialog}
+        onOpenChange={setShowNewRentalDialog}
         theme={theme}
       />
     </div>

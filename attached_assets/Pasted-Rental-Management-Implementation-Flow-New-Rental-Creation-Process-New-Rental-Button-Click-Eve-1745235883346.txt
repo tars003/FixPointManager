@@ -1,0 +1,170 @@
+Rental Management Implementation Flow
+New Rental Creation Process
+New Rental Button Click
+
+
+Event listener captures click on "New Rental" button
+Multi-step rental creation wizard launches
+Progress indicator shows completion status
+Vehicle Selection Step
+
+
+Available vehicles displayed with filtering options:
+Vehicle type filter
+Seating capacity filter
+Location filter
+Date range availability filter
+Each vehicle card shows:
+Vehicle image
+Make and model
+Registration number
+Fuel type
+Daily/weekly/monthly rate
+Features and amenities
+Selection highlights vehicle and enables next step
+Unavailable vehicles shown but disabled with reason
+Client Selection Step
+
+
+Client search field with auto-complete
+Recent clients quick selection list
+New client registration form with:
+Personal/company information
+Contact details
+Address information
+ID verification process
+Document upload section
+KYC compliance checks
+Corporate client selection includes:
+Company profile
+Authorized representatives
+Billing preferences
+Contract terms reference
+Rental Details Step
+
+
+Rental period selection:
+Start date and time picker
+End date and time picker
+Duration calculation with automatic update
+Extended hours options
+Rate calculation section:
+Base rate display (hourly/daily/weekly/monthly)
+Duration multiplier
+Seasonal adjustments
+Corporate discount application
+Loyalty program benefits
+Special offer codes
+Additional options:
+Insurance coverage selection
+Fuel option (pre-paid/return-full)
+GPS device add-on
+Child seat add-on
+Other accessories and services
+Driver Assignment Step
+
+
+Driver requirement selection:
+Self-drive option
+Company driver assignment
+If company driver selected:
+Available drivers list filtered by:
+License compatibility
+Current assignment status
+Location proximity
+Languages spoken
+Rating and experience
+Driver assignment confirmation
+Driver notification process
+Backup driver option
+Payment and Documentation Step
+
+
+Rate summary with itemized breakdown
+Tax calculation based on location and duration
+Security deposit amount calculation
+Payment method selection:
+Credit/debit card
+Bank transfer
+Digital wallet
+Cash
+Corporate account
+Payment processing with gateway integration
+Document generation:
+Rental agreement with terms
+Vehicle condition report
+Handover checklist
+Payment receipt
+Confirmation Step
+
+
+Complete rental details summary
+QR code for digital contract access
+Email and SMS notification options
+Calendar event creation
+Add to itinerary option
+Print documents option
+Vehicle preparation instructions
+Active Rental Management
+Rental Dashboard Interaction
+
+
+Active rentals card shows current count with status
+Upcoming rentals displays scheduled bookings
+This month's revenue shows running financial total
+Pending payments highlights outstanding amounts
+Recent rentals table includes:
+Vehicle details with status indicator
+Client information with contact link
+Rental duration with countdown
+Assigned driver with contact option
+Status badge (Active, Upcoming, Overdue)
+Payment amount with outstanding flag
+Actions menu with contextual options
+Rental Detail Interaction
+
+
+Clicking rental entry opens detailed view with tabs:
+Overview tab:
+Key rental information
+Status and timeline
+Financial summary
+Contact information
+Vehicle tab:
+Vehicle details and specifications
+Current location on map
+Mileage and fuel level
+Condition reports
+Client tab:
+Client profile information
+Rental history and rating
+Communication log
+Preferences and notes
+Financial tab:
+Complete cost breakdown
+Payment history
+Outstanding balance
+Additional charges
+Refund details (if applicable)
+Documents tab:
+All rental-related documents
+Digital signature status
+Document download/print options
+Sharing capabilities
+Rental Status Transitions
+
+
+Status workflow management:
+Reserved → Confirmed → Vehicle Prepared → Active → Completed → Closed
+Each transition requires specific actions:
+Confirmation requires deposit payment
+Vehicle preparation requires checklist completion
+Activation requires handover signature
+Completion requires return inspection
+Closing requires final payment reconciliation
+Status changes trigger notifications to relevant parties
+Exceptions handling for:
+Late returns with automatic fee calculation
+Vehicle swaps with documentation update
+Early termination with refund processing
+Extensions with availability checking
