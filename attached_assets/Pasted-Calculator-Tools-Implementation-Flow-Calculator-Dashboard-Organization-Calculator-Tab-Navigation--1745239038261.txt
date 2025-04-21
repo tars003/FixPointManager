@@ -1,0 +1,125 @@
+Calculator Tools Implementation Flow
+Calculator Dashboard Organization
+Calculator Tab Navigation
+
+
+Navigation to Calculators tab loads calculator dashboard
+Calculators organized in categories:
+Investment Decision Calculators
+Operational Cost Calculators
+Pricing Strategy Calculators
+Performance Analysis Calculators
+Each calculator displayed as card with:
+Descriptive title
+Purpose explanation
+Icon representing function
+List of key determinations
+"Open Calculator" button
+Calculator Card Organization
+
+
+ROI Calculator card:
+Blue color theme
+Investment return icon
+Four key determinations listed
+Description focused on vehicle purchase decisions
+Lease vs. Buy Calculator card:
+Green color theme
+Comparison scale icon
+Four key determinations listed
+Description focused on acquisition approach
+Fleet Replacement Optimizer card:
+Purple color theme
+Vehicle lifecycle icon
+Four key determinations listed
+Description focused on replacement timing
+TCO Calculator card:
+Orange color theme
+Cost analysis icon
+Five key determinations listed
+Description focused on lifecycle cost analysis
+Rental Rate Calculator card:
+Red color theme
+Pricing strategy icon
+Five key determinations listed
+Description focused on optimal pricing
+Fuel Efficiency ROI Calculator card:
+Blue color theme
+Fuel economy icon
+Five key determinations listed
+Description focused on efficiency investment
+Calculator Operation Flow
+Calculator Initialization
+
+
+Event listener captures click on "Open Calculator" button
+Calculator interface loads in modal dialog or dedicated page
+System initializes with default values
+User instruction panel displays
+Input fields presented in logical sequence
+Required fields marked with indicators
+ROI Calculator Operation
+
+
+Input section collects:
+Vehicle purchase price
+Expected operational costs
+Projected revenue per period
+Financing details if applicable
+Expected useful life
+Projected residual value
+Tax implications
+Opportunity cost rate
+Calculation triggers update:
+Breakeven point calculation
+Annual return projection
+Internal rate of return
+Net present value
+Return on investment percentage
+Profitability index
+Results visualization includes:
+Breakeven chart with timeline
+Cash flow projection graph
+Comparison table for alternatives
+Sensitivity analysis for key variables
+Summary recommendation
+Action options include:
+Save calculation scenario
+Generate PDF report
+Email results
+Create comparison with different inputs
+Export data to spreadsheet
+TCO (Total Cost of Ownership) Calculator Operation
+
+
+Input section collects:
+Initial acquisition cost
+Financing terms and interest
+Expected useful life
+Annual mileage projection
+Fuel consumption rate and cost
+Insurance premium
+Registration and taxes
+Scheduled maintenance costs
+Estimated repair costs
+Depreciation rate
+Disposal/residual value
+Calculation triggers update:
+Total ownership cost over lifecycle
+Average cost per year
+Average cost per kilometer
+Cost breakdown by category
+Depreciation schedule
+Tax benefit calculation
+Results visualization includes:
+Pie chart of cost categories
+Annual cost bar chart
+Cumulative cost line graph
+Depreciation curve
+Cost comparison with industry benchmarks
+Action options include:
+Save calculation scenario
+Generate detailed TCO report
+Compare multiple vehicles
+Export results to accounting system
+Create maintenance budget based on projections
