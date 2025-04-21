@@ -329,6 +329,7 @@ const CommercialFleet = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [showAlertPanel, setShowAlertPanel] = useState(false);
+  const [showAddVehicleDialog, setShowAddVehicleDialog] = useState(false);
   
   // Total fleet value
   const totalFleetValue = fleetVehicles.reduce((total, vehicle) => total + vehicle.value, 0);
@@ -474,7 +475,9 @@ const CommercialFleet = () => {
           </Button>
           <Button 
             className={theme === 'light' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-primary hover:bg-primary/90 text-black'}
+            onClick={() => setShowAddVehicleDialog(true)}
           >
+            <Plus className="h-4 w-4 mr-2" />
             Add Vehicle
           </Button>
         </div>
@@ -833,6 +836,7 @@ const CommercialFleet = () => {
               
               <Button 
                 className={theme === 'light' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-primary hover:bg-primary/90 text-black'}
+                onClick={() => setShowAddVehicleDialog(true)}
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Vehicle
@@ -2195,6 +2199,13 @@ const CommercialFleet = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Add Vehicle Dialog */}
+      <AddVehicleDialog 
+        open={showAddVehicleDialog}
+        onOpenChange={setShowAddVehicleDialog}
+        theme={theme}
+      />
     </div>
   );
 };
