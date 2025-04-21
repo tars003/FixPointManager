@@ -1,0 +1,1280 @@
+Dashboard Interaction Flow
+
+Total Fleet Card Click
+
+Event listener captures click on "Total Fleet" card
+System queries database for complete vehicle list
+Results filtered by active status (excluding deleted vehicles)
+Navigation redirects to Vehicles tab
+All vehicles displayed in tabular format with filter preset to "All Types"
+Sorting defaults to registration date (newest first)
+
+
+On Rent Card Click
+
+Event listener captures click on "On Rent" card
+System queries database for vehicles with status = "rented"
+Navigation redirects to Vehicles tab
+Results filtered automatically to show only rented vehicles
+Additional rental information displayed (client, return date)
+Quick action button shown for "End Rental" operation
+
+
+Available Card Click
+
+Event listener captures click on "Available" card
+System queries database for vehicles with status = "available"
+Navigation redirects to Vehicles tab
+Results filtered automatically to show only available vehicles
+Quick action button shown for "Create Rental" operation
+Availability calendar accessible for each vehicle
+
+
+In Maintenance Card Click
+
+Event listener captures click on "In Maintenance" card
+System queries database for vehicles with status = "maintenance"
+Navigation redirects to Vehicles tab
+Results filtered automatically to show only vehicles in maintenance
+Service details displayed (provider, estimated completion)
+Quick action button shown for "Mark Complete" operation
+
+
+Alert Interaction
+
+Each alert includes action dots menu with options:
+
+Mark as read (changes status in notifications table)
+Snooze (adds time period before re-alerting)
+Take action (redirects to relevant section for resolution)
+
+
+"Renew" button triggers specific renewal workflow
+"Manage Alerts" button opens alert settings panel
+Alert settings allow customization of:
+
+Notification channels (in-app, email, SMS)
+Alert thresholds (days before expiration)
+Priority levels by category
+
+
+
+
+Map Interaction
+
+Vehicle icons displayed with color-coding by status
+Hover shows brief vehicle information tooltip
+Click opens detailed vehicle information panel
+Zoom/pan controls for map navigation
+Cluster management for areas with multiple vehicles
+Filter controls for showing specific vehicle types/status
+Toggle between map/satellite views
+Route history option for tracking previous journeys
+
+
+
+2. Vehicle Management Implementation Flow
+Add Vehicle Process
+
+Add Vehicle Button Click
+
+Event listener captures click on "Add Vehicle" button
+Modal dialog opens with multi-step form
+Progress indicator shows completion steps
+Form validation active for each field
+
+
+Vehicle Details Entry
+
+Registration information section:
+
+Registration number field with format validation
+"Scan Registration" button activates device camera
+OCR processes registration plate image
+System validates registration number against RTO database (if available)
+Registration date picker with calendar interface
+Registration document upload area with drag-and-drop support
+
+
+Vehicle specifications section:
+
+Vehicle type dropdown (Two-wheeler, Three-wheeler, Four-wheeler, Heavy vehicle, Construction equipment)
+Make dropdown (populated with common manufacturers)
+Model text field with autocomplete
+Year picker with min/max validation
+VIN/chassis number field with format validation
+Engine number field
+Seating capacity numeric field
+Load capacity numeric field (for commercial vehicles)
+Fuel type dropdown
+Color picker
+
+
+
+
+Ownership Information Entry
+
+Purchase details section:
+
+Purchase date picker
+Purchase price field with currency formatting
+Dealer/seller information fields
+Purchase document upload
+Financing information (if applicable)
+Loan details fields (if financing selected)
+
+
+Insurance details section:
+
+Insurance provider dropdown
+Policy number field
+Coverage type selection
+Premium amount field
+Start date picker
+End date picker
+Policy document upload
+
+
+
+
+Additional Information
+
+Permits and taxes section:
+
+Commercial permit checkbox
+Permit type dropdown (if commercial)
+Permit validity dates
+Permit document upload
+Road tax payment details
+Fitness certificate details
+
+
+GPS/Telematics section:
+
+Device installation checkbox
+Device ID field
+Installation date
+Service provider
+Tracking URL (if applicable)
+
+
+
+
+Review and Submit
+
+All entered information displayed for review
+Edit option for each section
+Form validation summary showing any missing fields
+Submit button to save vehicle to database
+Confirmation message on successful addition
+Option to add another vehicle or return to vehicle list
+
+
+
+Vehicle List Management
+
+Vehicle Filtering Process
+
+Filter controls at top of vehicle list:
+
+Vehicle Type dropdown (All Types, Two-wheeler, Three-wheeler, etc.)
+Status dropdown (All Status, Available, On Rent, In Maintenance, Broken Down)
+Fuel Type dropdown (All Fuel Types, Petrol, Diesel, CNG, Electric, etc.)
+Location dropdown (All Locations, with Pan-India city list)
+
+
+Search field for registration number, model, driver name
+Applied filters stored in session for persistence
+Results update dynamically as filters change
+Count indicator shows number of vehicles matching criteria
+Reset filters button to clear all selected filters
+
+
+Vehicle Card Interaction
+
+Each vehicle displayed as card with key information:
+
+Vehicle image/icon
+Make and model
+Registration number
+Type information
+Fuel type
+Last serviced date
+Current driver (if assigned)
+Current location
+Status indicator badge
+
+
+"Details" button functionality:
+
+Opens detailed vehicle profile page
+Displays all vehicle information in organized tabs
+Shows complete history (maintenance, rental, driver assignment)
+Displays documents with preview capability
+Shows financial data related to vehicle
+Provides insights on performance and efficiency
+
+
+"Manage" button functionality:
+
+Opens quick action menu with contextual options
+Change status option (with status transition workflow)
+Assign driver option (with driver selection interface)
+Schedule maintenance option (with maintenance form)
+Create rental option (with rental creation workflow)
+Edit details option (with editable vehicle form)
+Decommission option (with confirmation workflow)
+
+
+
+
+
+3. Maintenance Module Implementation Flow
+Schedule Maintenance Process
+
+Schedule Maintenance Button Click
+
+Event listener captures click on "Schedule Maintenance" button
+Modal dialog opens with maintenance scheduling form
+Form initializes with default values for regular service
+
+
+Maintenance Form Completion
+
+Vehicle selection section:
+
+Vehicle dropdown with search functionality
+Quick filter for type/status
+Current status and last maintenance date displayed
+Odometer reading field with validation
+
+
+Service details section:
+
+Service type selection (Regular service, Repair, Emergency, Preventive)
+Service category dropdown (Engine, Transmission, Electrical, etc.)
+Issue description text area
+Severity level selection (Low, Medium, High, Critical)
+Expected duration estimate
+
+
+Service provider section:
+
+Provider selection from database
+Location dropdown with service centers
+Contact person and number
+Service package selection (if applicable)
+Estimated cost field with currency formatting
+
+
+Scheduling section:
+
+Date picker with calendar interface
+Time slot selection
+Pickup/drop service checkbox
+Driver assignment for vehicle transport
+Notification settings for status updates
+
+
+
+
+Maintenance Record Creation
+
+Form validation to ensure all required fields complete
+Submit button creates maintenance record in database
+Vehicle status automatically updated to "Scheduled for Maintenance"
+Notification sent to assigned personnel
+Calendar event created for maintenance date
+Confirmation screen with maintenance details
+Option to print service request or send to provider
+
+
+
+Maintenance Tracking Flow
+
+Maintenance Dashboard Interaction
+
+Scheduled services card displays count with clickable link
+Current month expenses card shows running total with drill-down
+Completed services card shows monthly count with history
+Recent maintenance records displayed in table with:
+
+Vehicle details with link to vehicle profile
+Service type with category icon
+Date performed with time indicator
+Service provider with contact link
+Cost breakdown with itemization option
+Status indicator with progress tracking
+Actions menu with context-specific options
+
+
+
+
+Maintenance Detail Interaction
+
+Each maintenance record expandable to show details
+Service checklist with completion tracking
+Parts replacement section with inventory integration
+Labor charges itemization
+Additional services added during maintenance
+Before/after images with comparison
+Technician notes and recommendations
+Quality inspection results
+Invoice details with payment status
+
+
+Maintenance Status Updates
+
+Status transition workflow:
+
+Scheduled → In Progress → Completed/Cancelled
+
+
+Status change triggers notifications
+In Progress status requires check-in confirmation
+Delayed status requires reason and new ETA
+Completed status requires:
+
+Actual service details
+Parts replaced inventory update
+Final cost confirmation
+Invoice attachment
+Next service recommendation
+
+
+Vehicle status automatically updated upon completion
+
+
+
+4. Rental Management Implementation Flow
+New Rental Creation Process
+
+New Rental Button Click
+
+Event listener captures click on "New Rental" button
+Multi-step rental creation wizard launches
+Progress indicator shows completion status
+
+
+Vehicle Selection Step
+
+Available vehicles displayed with filtering options:
+
+Vehicle type filter
+Seating capacity filter
+Location filter
+Date range availability filter
+
+
+Each vehicle card shows:
+
+Vehicle image
+Make and model
+Registration number
+Fuel type
+Daily/weekly/monthly rate
+Features and amenities
+
+
+Selection highlights vehicle and enables next step
+Unavailable vehicles shown but disabled with reason
+
+
+Client Selection Step
+
+Client search field with auto-complete
+Recent clients quick selection list
+New client registration form with:
+
+Personal/company information
+Contact details
+Address information
+ID verification process
+Document upload section
+KYC compliance checks
+
+
+Corporate client selection includes:
+
+Company profile
+Authorized representatives
+Billing preferences
+Contract terms reference
+
+
+
+
+Rental Details Step
+
+Rental period selection:
+
+Start date and time picker
+End date and time picker
+Duration calculation with automatic update
+Extended hours options
+
+
+Rate calculation section:
+
+Base rate display (hourly/daily/weekly/monthly)
+Duration multiplier
+Seasonal adjustments
+Corporate discount application
+Loyalty program benefits
+Special offer codes
+
+
+Additional options:
+
+Insurance coverage selection
+Fuel option (pre-paid/return-full)
+GPS device add-on
+Child seat add-on
+Other accessories and services
+
+
+
+
+Driver Assignment Step
+
+Driver requirement selection:
+
+Self-drive option
+Company driver assignment
+
+
+If company driver selected:
+
+Available drivers list filtered by:
+
+License compatibility
+Current assignment status
+Location proximity
+Languages spoken
+Rating and experience
+
+
+Driver assignment confirmation
+Driver notification process
+Backup driver option
+
+
+
+
+Payment and Documentation Step
+
+Rate summary with itemized breakdown
+Tax calculation based on location and duration
+Security deposit amount calculation
+Payment method selection:
+
+Credit/debit card
+Bank transfer
+Digital wallet
+Cash
+Corporate account
+
+
+Payment processing with gateway integration
+Document generation:
+
+Rental agreement with terms
+Vehicle condition report
+Handover checklist
+Payment receipt
+
+
+
+
+Confirmation Step
+
+Complete rental details summary
+QR code for digital contract access
+Email and SMS notification options
+Calendar event creation
+Add to itinerary option
+Print documents option
+Vehicle preparation instructions
+
+
+
+Active Rental Management
+
+Rental Dashboard Interaction
+
+Active rentals card shows current count with status
+Upcoming rentals displays scheduled bookings
+This month's revenue shows running financial total
+Pending payments highlights outstanding amounts
+Recent rentals table includes:
+
+Vehicle details with status indicator
+Client information with contact link
+Rental duration with countdown
+Assigned driver with contact option
+Status badge (Active, Upcoming, Overdue)
+Payment amount with outstanding flag
+Actions menu with contextual options
+
+
+
+
+Rental Detail Interaction
+
+Clicking rental entry opens detailed view with tabs:
+
+Overview tab:
+
+Key rental information
+Status and timeline
+Financial summary
+Contact information
+
+
+Vehicle tab:
+
+Vehicle details and specifications
+Current location on map
+Mileage and fuel level
+Condition reports
+
+
+Client tab:
+
+Client profile information
+Rental history and rating
+Communication log
+Preferences and notes
+
+
+Financial tab:
+
+Complete cost breakdown
+Payment history
+Outstanding balance
+Additional charges
+Refund details (if applicable)
+
+
+Documents tab:
+
+All rental-related documents
+Digital signature status
+Document download/print options
+Sharing capabilities
+
+
+
+
+
+
+Rental Status Transitions
+
+Status workflow management:
+
+Reserved → Confirmed → Vehicle Prepared → Active → Completed → Closed
+
+
+Each transition requires specific actions:
+
+Confirmation requires deposit payment
+Vehicle preparation requires checklist completion
+Activation requires handover signature
+Completion requires return inspection
+Closing requires final payment reconciliation
+
+
+Status changes trigger notifications to relevant parties
+Exceptions handling for:
+
+Late returns with automatic fee calculation
+Vehicle swaps with documentation update
+Early termination with refund processing
+Extensions with availability checking
+
+
+
+
+
+5. Financial Management Implementation Flow
+Financial Dashboard Navigation
+
+Finance Tab Selection
+
+Navigation to Finance tab initializes financial dashboard
+System retrieves current financial data:
+
+Year-to-date revenue from all transactions
+Maintenance expense total from service records
+Fuel expenses from fuel transaction log
+Net profit calculation with performance indicators
+
+
+Data visualization components render:
+
+Revenue trend chart with monthly progression
+Income vs Expenses comparison
+Profit margin calculation
+
+
+Quick action buttons initialize with appropriate permissions
+
+
+Financial Metrics Interaction
+
+Each financial metric card includes:
+
+Current value with currency formatting
+Comparison indicator with previous period
+Trend arrow with color coding
+Percentage change calculation
+
+
+Click on metric card opens detailed breakdown:
+
+Revenue card shows income by source:
+
+Rental income by vehicle type
+Additional services revenue
+Late fees and penalties
+Damage claim recoveries
+
+
+Expense cards show costs by category:
+
+Regular maintenance costs
+Repair expenses
+Part replacement costs
+Service provider breakdown
+Fuel costs by vehicle
+Administrative expenses
+
+
+
+
+
+
+Revenue Chart Interaction
+
+Revenue trend chart includes:
+
+Monthly data points with hover information
+Year-over-year comparison option
+Cumulative revenue toggle
+Forecast projection toggle
+Annotation capability for significant events
+
+
+Chart filter controls:
+
+Date range selector with presets
+Vehicle type filter
+Revenue type filter
+Location filter
+
+
+Export options for chart data and visualization
+
+
+
+Invoice Management Process
+
+New Invoice Creation
+
+Event listener captures click on "New Invoice" button
+Invoice creation form opens with sections:
+
+Client section:
+
+Client selector with search
+Billing address with auto-fill
+Contact person information
+Tax registration details
+
+
+Services section:
+
+Service type selection
+Vehicle selection if rental
+Date range specification
+Rate and quantity inputs
+Automatic calculation of line items
+Tax application based on location and service
+
+
+Additional items section:
+
+Add line item button for custom entries
+Predefined additional services selection
+Discount application with amount/percentage
+Adjustments for damages or special circumstances
+
+
+Payment terms section:
+
+Due date selection
+Payment methods accepted
+Late payment terms
+Partial payment options
+Early payment discount
+
+
+
+
+Preview and finalization:
+
+Complete invoice preview with formatting
+Edit option for each section
+Approval workflow for large invoices
+Generation of invoice number
+Storage in invoice database
+Distribution options configuration
+
+
+
+
+Invoice Distribution Options
+
+Email delivery with:
+
+Customizable email template
+PDF attachment
+Online payment link
+Invoice portal access
+
+
+SMS notification with payment link
+WhatsApp business integration
+Print option with formatting settings
+Download in multiple formats:
+
+PDF with customizable template
+Excel for accounting import
+CSV for system integration
+
+
+Client portal upload with notification
+
+
+Payment Tracking Process
+
+Invoice status monitoring:
+
+Draft → Sent → Partially Paid → Paid → Overdue → Cancelled
+
+
+Payment receipt workflow:
+
+Payment method recording
+Transaction reference capture
+Amount reconciliation
+Automatic receipt generation
+Thank you notification
+Accounting system integration
+
+
+Overdue invoice management:
+
+Automatic reminder schedule configuration
+Escalation process definition
+Late fee application rules
+Payment plan negotiation
+Collections process integration
+
+
+
+
+
+6. Driver Management Implementation Flow
+Driver Dashboard Interaction
+
+Driver Tab Navigation
+
+Navigation to Drivers tab initializes driver dashboard
+System retrieves current driver data:
+
+Active drivers with status indicators
+Available drivers for assignment
+Driver performance metrics
+Schedule information
+
+
+Driver cards display with key information:
+
+Driver name with status badge
+Rating information with star display
+Experience duration
+Contact information with click-to-call
+License information with expiration alert
+Currently assigned vehicle with link
+Monthly earnings with trend indicator
+Pending payments with highlight for overdue
+
+
+
+
+Add Driver Process
+
+Event listener captures click on "Add Driver" button
+Multi-section driver registration form opens:
+
+Personal information section:
+
+Full name fields
+Date of birth with age calculation
+Gender selection
+Contact information (phone, email, emergency contact)
+Residential address with map selection
+Profile photo upload or capture
+
+
+License information section:
+
+License number with validation
+License type and categories
+Issuing authority
+Issue date and expiry date
+License scan upload (front and back)
+Verification process initiation
+
+
+Experience and skills section:
+
+Years of driving experience
+Vehicle types qualified to drive
+Previous employers
+Areas of expertise
+Languages spoken
+Special certifications
+
+
+Background verification section:
+
+Identity proof upload
+Address proof upload
+Police verification status
+Traffic violation history
+Medical fitness certificate
+Background check consent
+
+
+Employment terms section:
+
+Employment type (full-time, part-time, contract)
+Compensation structure
+Working hours and availability
+Benefits eligibility
+Reporting structure
+Performance evaluation criteria
+
+
+
+
+
+
+Driver Detail Pages
+
+"Performance" button functionality:
+
+Opens performance dashboard with metrics:
+
+Overall rating trend
+Customer feedback summary
+Punctuality score
+Safety record
+Fuel efficiency comparison
+Revenue generation statistics
+Completed trips count
+Cancellation rate
+Vehicle maintenance contribution
+
+
+Performance charts with historical data
+Comparison against fleet averages
+Improvement recommendations
+Recognition achievements
+
+
+"Details" button functionality:
+
+Opens comprehensive driver profile with tabs:
+
+Overview tab with summary information
+Documents tab with all uploaded files
+History tab with employment record
+Assignments tab with vehicle history
+Incidents tab with reported issues
+Training tab with completed courses
+Payments tab with earnings history
+Notes tab with supervisor comments
+
+
+
+
+
+
+Driver Schedule Management
+
+Schedule section displays:
+
+Calendar view of driver assignments
+List view of upcoming duties
+Availability status indicators
+Working hours compliance tracking
+Rest period enforcement
+Conflict detection for assignments
+
+
+Schedule management tools include:
+
+Drag-and-drop assignment capability
+Recurring schedule templates
+Time-off request processing
+Shift swapping functionality
+Overtime authorization
+Emergency driver identification
+Notification system for schedule changes
+
+
+
+
+
+7. Document Management Implementation Flow
+Document Organization System
+
+Document Dashboard Structure
+
+Document tab navigation loads organized repository
+Three main category sections:
+
+Vehicle Documents section:
+
+Registration Certificates folder
+Insurance Policies folder
+Permit Documents folder
+Maintenance Records folder
+Purchase Documentation folder
+
+
+Driver Documents section:
+
+Driving Licenses folder
+ID Proofs folder
+Address Proofs folder
+Employment Contracts folder
+Training Certificates folder
+
+
+Rental Agreements section:
+
+Active Contracts folder
+Completed Contracts folder
+Template Documents folder
+Addendum Documents folder
+Client Verification folder
+
+
+
+
+Each folder displays count of contained documents
+Search functionality with multiple parameters
+
+
+Upload Document Process
+
+Event listener captures click on "Upload Document" button
+Document upload form opens with fields:
+
+Document type selection with category and subcategory
+Related entity selection (vehicle, driver, client)
+Document title with auto-suggestion
+Description field for additional details
+Issue date picker
+Expiry date picker with alert setting
+Document upload area with:
+
+Drag and drop support
+File browser option
+Camera capture option
+File type restriction
+Size limit indication
+
+
+OCR processing option for text extraction
+Tagging system for enhanced searchability
+Version control for document updates
+
+
+Preview capability before final upload
+Processing status with completion confirmation
+
+
+Document Viewing Interface
+
+Document list view with:
+
+Thumbnail preview
+Document title
+Related entity
+Upload date
+Expiry status
+Version indicator
+Actions menu
+
+
+Document detail view with:
+
+Full document preview
+Metadata panel
+Version history
+Related documents
+Audit trail of accesses
+Comment and annotation capability
+
+
+Document actions include:
+
+Download in original format
+Convert to PDF
+Print with formatting options
+Share with permission settings
+Edit metadata
+Replace with new version
+Archive or delete with authorization
+
+
+
+
+
+Document Expiration Management
+
+Expiration Tracking System
+
+Documents Expiring Soon section on dashboard
+Automated scanning of expiry dates
+Prioritized display based on days remaining
+Color-coded urgency indicators:
+
+Red for critical (less than 7 days)
+Yellow for warning (8-30 days)
+Blue for notice (31-60 days)
+
+
+Document cards show:
+
+Document type with icon
+Related entity information
+Exact expiration date
+Days remaining countdown
+Quick action "Renew" button
+
+
+
+
+Renewal Process
+
+"Renew" button click initiates renewal workflow:
+
+Current document details displayed
+New document upload interface
+Renewal fee information if applicable
+Authority contact information
+Checklist of renewal requirements
+Appointment scheduling if needed
+Reminder setting for follow-up
+
+
+Updated document processing:
+
+Validation of new expiry date
+Verification of document authenticity
+Linking to previous version
+Notification to stakeholders
+Updating of alert system
+Recording of renewal in audit log
+
+
+
+
+
+8. Calculator Tools Implementation Flow
+Calculator Dashboard Organization
+
+Calculator Tab Navigation
+
+Navigation to Calculators tab loads calculator dashboard
+Calculators organized in categories:
+
+Investment Decision Calculators
+Operational Cost Calculators
+Pricing Strategy Calculators
+Performance Analysis Calculators
+
+
+Each calculator displayed as card with:
+
+Descriptive title
+Purpose explanation
+Icon representing function
+List of key determinations
+"Open Calculator" button
+
+
+
+
+Calculator Card Organization
+
+ROI Calculator card:
+
+Blue color theme
+Investment return icon
+Four key determinations listed
+Description focused on vehicle purchase decisions
+
+
+Lease vs. Buy Calculator card:
+
+Green color theme
+Comparison scale icon
+Four key determinations listed
+Description focused on acquisition approach
+
+
+Fleet Replacement Optimizer card:
+
+Purple color theme
+Vehicle lifecycle icon
+Four key determinations listed
+Description focused on replacement timing
+
+
+TCO Calculator card:
+
+Orange color theme
+Cost analysis icon
+Five key determinations listed
+Description focused on lifecycle cost analysis
+
+
+Rental Rate Calculator card:
+
+Red color theme
+Pricing strategy icon
+Five key determinations listed
+Description focused on optimal pricing
+
+
+Fuel Efficiency ROI Calculator card:
+
+Blue color theme
+Fuel economy icon
+Five key determinations listed
+Description focused on efficiency investment
+
+
+
+
+
+Calculator Operation Flow
+
+Calculator Initialization
+
+Event listener captures click on "Open Calculator" button
+Calculator interface loads in modal dialog or dedicated page
+System initializes with default values
+User instruction panel displays
+Input fields presented in logical sequence
+Required fields marked with indicators
+
+
+ROI Calculator Operation
+
+Input section collects:
+
+Vehicle purchase price
+Expected operational costs
+Projected revenue per period
+Financing details if applicable
+Expected useful life
+Projected residual value
+Tax implications
+Opportunity cost rate
+
+
+Calculation triggers update:
+
+Breakeven point calculation
+Annual return projection
+Internal rate of return
+Net present value
+Return on investment percentage
+Profitability index
+
+
+Results visualization includes:
+
+Breakeven chart with timeline
+Cash flow projection graph
+Comparison table for alternatives
+Sensitivity analysis for key variables
+Summary recommendation
+
+
+Action options include:
+
+Save calculation scenario
+Generate PDF report
+Email results
+Create comparison with different inputs
+Export data to spreadsheet
+
+
+
+
+TCO (Total Cost of Ownership) Calculator Operation
+
+Input section collects:
+
+Initial acquisition cost
+Financing terms and interest
+Expected useful life
+Annual mileage projection
+Fuel consumption rate and cost
+Insurance premium
+Registration and taxes
+Scheduled maintenance costs
+Estimated repair costs
+Depreciation rate
+Disposal/residual value
+
+
+Calculation triggers update:
+
+Total ownership cost over lifecycle
+Average cost per year
+Average cost per kilometer
+Cost breakdown by category
+Depreciation schedule
+Tax benefit calculation
+
+
+Results visualization includes:
+
+Pie chart of cost categories
+Annual cost bar chart
+Cumulative cost line graph
+Depreciation curve
+Cost comparison with industry benchmarks
+
+
+Action options include:
+
+Save calculation scenario
+Generate detailed TCO report
+Compare multiple vehicles
+Export results to accounting system
+Create maintenance budget based on projections
+
+
+
+

@@ -329,12 +329,54 @@ const CommercialFleet = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  // Search functionality for vehicles
-  const filteredVehicles = fleetVehicles.filter(vehicle => 
-    vehicle.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    vehicle.registrationNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    vehicle.currentDriver?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Dashboard card click handlers - based on interaction flow
+  const handleTotalFleetClick = () => {
+    setActiveTab('vehicles');
+    // Would query database for all vehicles in a real implementation
+    // Already showing all vehicles by default, so no additional filtering needed
+  };
+
+  const handleOnRentClick = () => {
+    setActiveTab('vehicles');
+    // Would query database for vehicles with status = "rented"
+    // For demo, we'll filter to "On Rent" status
+    setVehicleStatusFilter('on-rent');
+  };
+
+  const handleAvailableClick = () => {
+    setActiveTab('vehicles');
+    // Would query database for vehicles with status = "available"
+    // For demo, we'll filter to "Available" status
+    setVehicleStatusFilter('available');
+  };
+
+  const handleMaintenanceClick = () => {
+    setActiveTab('vehicles');
+    // Would query database for vehicles with status = "maintenance"
+    // For demo, we'll filter to "In Maintenance" status
+    setVehicleStatusFilter('maintenance');
+  };
+
+  // Vehicle status filter state
+  const [vehicleStatusFilter, setVehicleStatusFilter] = useState('all');
+
+  // Search functionality for vehicles with status filtering
+  const filteredVehicles = fleetVehicles.filter(vehicle => {
+    // Text search filter
+    const matchesSearch = 
+      vehicle.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vehicle.registrationNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vehicle.currentDriver?.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    // Status filter
+    const matchesStatus = 
+      vehicleStatusFilter === 'all' || 
+      (vehicleStatusFilter === 'on-rent' && vehicle.status === 'On Rent') ||
+      (vehicleStatusFilter === 'available' && vehicle.status === 'Available') ||
+      (vehicleStatusFilter === 'maintenance' && vehicle.status === 'In Maintenance');
+    
+    return matchesSearch && matchesStatus;
+  });
 
   return (
     <div className={`container px-4 py-6 max-w-7xl mx-auto ${theme === 'light' ? 'bg-white text-gray-900' : ''}`}>
@@ -397,7 +439,10 @@ const CommercialFleet = () => {
         <TabsContent value="dashboard" className="mt-6">
           {/* Overview Statistics Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <Card className={theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}>
+            <Card 
+              className={`${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'} cursor-pointer transition-all hover:shadow-md`}
+              onClick={handleTotalFleetClick}
+            >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-sm font-medium ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>Total Fleet</CardTitle>
               </CardHeader>
@@ -414,7 +459,14 @@ const CommercialFleet = () => {
               </CardContent>
             </Card>
             
-            <Card className={theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}>
+            <Card 
+              className={`${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'} cursor-pointer transition-all hover:shadow-md`}
+              onClick={() => {
+                setActiveTab('vehicles');
+                // Would filter to show only rented vehicles
+                console.log('On Rent card clicked - filtering to rented vehicles');
+              }}
+            >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-sm font-medium ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>On Rent</CardTitle>
               </CardHeader>
@@ -431,7 +483,14 @@ const CommercialFleet = () => {
               </CardContent>
             </Card>
             
-            <Card className={theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}>
+            <Card 
+              className={`${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'} cursor-pointer transition-all hover:shadow-md`}
+              onClick={() => {
+                setActiveTab('vehicles');
+                // Would filter to show only available vehicles
+                console.log('Available card clicked - filtering to available vehicles');
+              }}
+            >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-sm font-medium ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>Available</CardTitle>
               </CardHeader>
@@ -448,7 +507,14 @@ const CommercialFleet = () => {
               </CardContent>
             </Card>
             
-            <Card className={theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'}>
+            <Card 
+              className={`${theme === 'light' ? 'border-gray-200' : 'bg-gray-800 border-none'} cursor-pointer transition-all hover:shadow-md`}
+              onClick={() => {
+                setActiveTab('vehicles');
+                // Would filter to show only maintenance vehicles
+                console.log('Maintenance card clicked - filtering to vehicles in maintenance');
+              }}
+            >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-sm font-medium ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>In Maintenance</CardTitle>
               </CardHeader>
@@ -743,7 +809,10 @@ const CommercialFleet = () => {
             
             <div>
               <label className={`block text-sm font-medium mb-1 ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>Status</label>
-              <Select defaultValue="all">
+              <Select 
+                value={vehicleStatusFilter} 
+                onValueChange={setVehicleStatusFilter}
+              >
                 <SelectTrigger className={theme === 'light' ? 'border-gray-300 bg-white' : 'bg-gray-700 border-gray-600'}>
                   <SelectValue placeholder="All Status" />
                 </SelectTrigger>
