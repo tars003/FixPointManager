@@ -33,11 +33,23 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { format, differenceInYears } from 'date-fns';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+
+// Utility function to safely format dates
+const safeFormat = (date: any, formatString: string): string => {
+  try {
+    // Ensure we have a valid Date object
+    return format(date instanceof Date ? date : new Date(date), formatString);
+  } catch (error) {
+    console.error('Error formatting date:', error);
+    return 'Invalid date';
+  }
+};
 import { 
-  CalendarIcon, 
+  Calendar as CalendarIcon, 
   ChevronLeft,
   ChevronRight,
   Upload,
@@ -51,7 +63,7 @@ import {
   CreditCard,
   Camera,
   UserCheck,
-  StarIcon,
+  Star as StarIcon,
   Truck,
   Languages,
   Award,
