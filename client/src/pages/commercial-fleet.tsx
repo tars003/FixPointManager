@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { AlertItem } from '@/components/dashboard/alert-item';
 import { AddVehicleDialog } from '@/components/vehicles/add-vehicle-dialog';
+import { ScheduleMaintenanceDialog } from '@/components/maintenance/schedule-maintenance-dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -330,6 +331,7 @@ const CommercialFleet = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [showAlertPanel, setShowAlertPanel] = useState(false);
   const [showAddVehicleDialog, setShowAddVehicleDialog] = useState(false);
+  const [showScheduleMaintenanceDialog, setShowScheduleMaintenanceDialog] = useState(false);
   
   // Total fleet value
   const totalFleetValue = fleetVehicles.reduce((total, vehicle) => total + vehicle.value, 0);
@@ -1025,6 +1027,7 @@ const CommercialFleet = () => {
             
             <Button 
               className={theme === 'light' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-primary hover:bg-primary/90 text-black'}
+              onClick={() => setShowScheduleMaintenanceDialog(true)}
             >
               <Plus className="h-4 w-4 mr-2" />
               Schedule Maintenance
@@ -2204,6 +2207,13 @@ const CommercialFleet = () => {
       <AddVehicleDialog 
         open={showAddVehicleDialog}
         onOpenChange={setShowAddVehicleDialog}
+        theme={theme}
+      />
+
+      {/* Schedule Maintenance Dialog */}
+      <ScheduleMaintenanceDialog 
+        open={showScheduleMaintenanceDialog}
+        onOpenChange={setShowScheduleMaintenanceDialog}
         theme={theme}
       />
     </div>
