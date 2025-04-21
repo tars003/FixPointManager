@@ -258,6 +258,117 @@ const rentalRecords = [
   }
 ];
 
+// Mock documents
+const documents = [
+  {
+    id: "d1",
+    title: "Toyota Innova Registration Certificate",
+    documentType: "Certificate",
+    category: "Registration Certificate",
+    entityType: "vehicle" as const,
+    entityName: "Toyota Innova Crysta (TN01-3456)",
+    entityId: "v1",
+    createdAt: "2024-01-15",
+    expiryDate: new Date("2025-05-10"),
+    issuingAuthority: "Regional Transport Office, Chennai",
+    documentPath: "/documents/v1_rc.pdf",
+    tags: ["Important", "Legal"]
+  },
+  {
+    id: "d2",
+    title: "Rajesh Kumar's Driving License",
+    documentType: "License",
+    category: "Driving License",
+    entityType: "driver" as const,
+    entityName: "Rajesh Kumar",
+    entityId: "d1",
+    createdAt: "2023-06-10",
+    expiryDate: new Date("2025-06-09"),
+    issuingAuthority: "Regional Transport Office, Chennai",
+    documentPath: "/documents/d1_license.pdf",
+    tags: ["Important", "Legal"]
+  },
+  {
+    id: "d3",
+    title: "Tata Ace Insurance Policy",
+    documentType: "Policy",
+    category: "Insurance Policy",
+    entityType: "vehicle" as const,
+    entityName: "Tata Ace (MH02-4532)",
+    entityId: "v3",
+    createdAt: "2023-11-20",
+    expiryDate: new Date("2025-04-28"), // Expiring soon
+    issuingAuthority: "ICICI Lombard",
+    documentPath: "/documents/v3_insurance.pdf",
+    tags: ["Important", "Financial", "Insurance"]
+  },
+  {
+    id: "d4",
+    title: "Suresh Singh Aadhar Card",
+    documentType: "ID Proof",
+    category: "ID Proof",
+    entityType: "driver" as const,
+    entityName: "Suresh Singh",
+    entityId: "d2",
+    createdAt: "2023-08-05",
+    issuingAuthority: "UIDAI",
+    documentPath: "/documents/d2_aadhar.pdf",
+    tags: ["Identity", "Verified"]
+  },
+  {
+    id: "d5",
+    title: "ABC Travels Contract",
+    documentType: "Contract",
+    category: "Active Contract",
+    entityType: "client" as const,
+    entityName: "ABC Travels",
+    entityId: "c1",
+    createdAt: "2024-02-15",
+    expiryDate: new Date("2025-04-25"), // Expiring very soon
+    documentPath: "/documents/c1_contract.pdf",
+    tags: ["Contract", "Legal", "Financial"]
+  },
+  {
+    id: "d6",
+    title: "Mahindra Bolero Fitness Certificate",
+    documentType: "Certificate",
+    category: "Permit Document",
+    entityType: "vehicle" as const,
+    entityName: "Mahindra Bolero (DL01-8794)",
+    entityId: "v2",
+    createdAt: "2023-09-30",
+    expiryDate: new Date("2025-05-02"), // Expiring soon
+    issuingAuthority: "Delhi Transport Department",
+    documentPath: "/documents/v2_fitness.pdf",
+    tags: ["Compliance", "Legal"]
+  },
+  {
+    id: "d7",
+    title: "Venkatesh Rao Employment Contract",
+    documentType: "Contract",
+    category: "Employment Contract",
+    entityType: "driver" as const,
+    entityName: "Venkatesh Rao",
+    entityId: "d3",
+    createdAt: "2023-04-10",
+    expiryDate: new Date("2026-04-09"),
+    documentPath: "/documents/d3_employment.pdf",
+    tags: ["Contract", "HR", "Legal"]
+  }
+];
+
+// Filter documents that are expiring soon (within 60 days)
+const getExpiringDocuments = () => {
+  return documents.filter(doc => {
+    if (!doc.expiryDate) return false;
+    const daysRemaining = Math.round((doc.expiryDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+    return daysRemaining > 0 && daysRemaining <= 60;
+  }).sort((a, b) => {
+    if (!a.expiryDate || !b.expiryDate) return 0;
+    return a.expiryDate.getTime() - b.expiryDate.getTime(); // Sort by earliest expiry
+  });
+};
+
 // Mock drivers
 const drivers = [
   {
@@ -340,6 +451,11 @@ const CommercialFleet = () => {
   const [showNewRentalDialog, setShowNewRentalDialog] = useState(false);
   const [showNewInvoiceDialog, setShowNewInvoiceDialog] = useState(false);
   const [showAddDriverDialog, setShowAddDriverDialog] = useState(false);
+  const [showUploadDocumentDialog, setShowUploadDocumentDialog] = useState(false);
+  
+  // Document search state
+  const [documentSearchTerm, setDocumentSearchTerm] = useState('');
+  const [documentCategoryFilter, setDocumentCategoryFilter] = useState('all');
   
   // Total fleet value
   const totalFleetValue = fleetVehicles.reduce((total, vehicle) => total + vehicle.value, 0);
@@ -1646,6 +1762,7 @@ const CommercialFleet = () => {
             
             <Button 
               className={theme === 'light' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-primary hover:bg-primary/90 text-black'}
+              onClick={() => setShowUploadDocumentDialog(true)}
             >
               <Plus className="h-4 w-4 mr-2" />
               Upload Document
