@@ -25,6 +25,7 @@ import {
   Plus
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import FastagServiceCards from '@/components/fastag/FastagServiceCards';
 
 // FASTag and E-Challan Services
 const FastagEchallan = () => {

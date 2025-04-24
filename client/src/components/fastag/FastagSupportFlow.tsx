@@ -92,92 +92,92 @@ type SupportFormValues = z.infer<typeof supportFormSchema>;
 const faqsByCategory: Record<string, Array<{ question: string; answer: string }>> = {
   balance: [
     {
-      question: 'How do I check my FASTag balance?',
-      answer: 'You can check your FASTag balance through your issuer bank's mobile app, website, by calling customer care, or by sending an SMS as per your bank's format.',
+      question: "How do I check my FASTag balance?",
+      answer: "You can check your FASTag balance through your issuer bank's mobile app, website, by calling customer care, or by sending an SMS as per your bank's format."
     },
     {
-      question: 'Why is my FASTag recharge failing?',
-      answer: 'Recharge failures can occur due to bank server issues, payment gateway problems, or insufficient funds in your account. Try using a different payment method or contact your bank for assistance.',
+      question: "Why is my FASTag recharge failing?",
+      answer: "Recharge failures can occur due to bank server issues, payment gateway problems, or insufficient funds in your account. Try using a different payment method or contact your bank for assistance."
     },
     {
-      question: 'How long does it take for a recharge to reflect?',
-      answer: 'Typically, FASTag recharges reflect immediately. However, during high traffic or server issues, it might take up to 4 hours. If not credited after 4 hours, contact customer support.',
+      question: "How long does it take for a recharge to reflect?",
+      answer: "Typically, FASTag recharges reflect immediately. However, during high traffic or server issues, it might take up to 4 hours. If not credited after 4 hours, contact customer support."
     },
     {
-      question: 'Is there a minimum recharge amount?',
-      answer: 'Yes, most banks require a minimum recharge of ₹100 for your FASTag account. Some banks might have different minimums, so check with your issuer bank.',
-    },
+      question: "Is there a minimum recharge amount?",
+      answer: "Yes, most banks require a minimum recharge of ₹100 for your FASTag account. Some banks might have different minimums, so check with your issuer bank."
+    }
   ],
   tag: [
     {
-      question: 'Why is my FASTag not being detected at toll plazas?',
-      answer: 'Your FASTag might not be detected if it's not properly affixed to the windshield, if it's damaged, or if there's insufficient balance. Ensure it's placed correctly and has adequate balance.',
+      question: "Why is my FASTag not being detected at toll plazas?",
+      answer: "Your FASTag might not be detected if it's not properly affixed to the windshield, if it's damaged, or if there's insufficient balance. Ensure it's placed correctly and has adequate balance."
     },
     {
-      question: 'Do I need to stop at toll plazas if I have a FASTag?',
-      answer: 'No, with a valid FASTag having sufficient balance, you can drive through the FASTag lane without stopping. The toll amount is automatically deducted.',
+      question: "Do I need to stop at toll plazas if I have a FASTag?",
+      answer: "No, with a valid FASTag having sufficient balance, you can drive through the FASTag lane without stopping. The toll amount is automatically deducted."
     },
     {
-      question: 'What should I do if my FASTag is damaged?',
-      answer: 'If your FASTag is damaged, you should apply for a replacement through your issuer bank. Do not attempt to remove or modify the damaged tag as it might void its functionality.',
-    },
+      question: "What should I do if my FASTag is damaged?",
+      answer: "If your FASTag is damaged, you should apply for a replacement through your issuer bank. Do not attempt to remove or modify the damaged tag as it might void its functionality."
+    }
   ],
   account: [
     {
-      question: 'How do I update my mobile number linked to FASTag?',
-      answer: 'To update your mobile number, visit your issuer bank's website or app, navigate to FASTag management, and follow the steps to update your profile. Alternatively, visit the nearest branch with your ID proof.',
+      question: "How do I update my mobile number linked to FASTag?",
+      answer: "To update your mobile number, visit your issuer bank's website or app, navigate to FASTag management, and follow the steps to update your profile. Alternatively, visit the nearest branch with your ID proof."
     },
     {
-      question: 'Can I transfer my FASTag to another vehicle?',
-      answer: 'No, FASTags are linked to specific vehicles and cannot be transferred. You need to obtain a new FASTag for a different vehicle.',
+      question: "Can I transfer my FASTag to another vehicle?",
+      answer: "No, FASTags are linked to specific vehicles and cannot be transferred. You need to obtain a new FASTag for a different vehicle."
     },
     {
-      question: 'How do I check my FASTag transaction history?',
-      answer: 'You can view your transaction history through your issuer bank's mobile app, website, or by requesting a statement via customer care.',
-    },
+      question: "How do I check my FASTag transaction history?",
+      answer: "You can view your transaction history through your issuer bank's mobile app, website, or by requesting a statement via customer care."
+    }
   ],
   refund: [
     {
-      question: 'I was charged twice for a single toll crossing. How do I get a refund?',
-      answer: 'Contact your issuer bank's customer care with details of the transaction including date, time, toll plaza name, and transaction ID. They will investigate and process the refund if validated.',
+      question: "I was charged twice for a single toll crossing. How do I get a refund?",
+      answer: "Contact your issuer bank's customer care with details of the transaction including date, time, toll plaza name, and transaction ID. They will investigate and process the refund if validated."
     },
     {
-      question: 'How long does a refund take to process?',
-      answer: 'Refunds typically take 7-14 working days to process after verification. The timeframe may vary depending on your issuer bank.',
+      question: "How long does a refund take to process?",
+      answer: "Refunds typically take 7-14 working days to process after verification. The timeframe may vary depending on your issuer bank."
     },
     {
-      question: 'I was charged despite taking a different route. What should I do?',
-      answer: 'Report the incorrect charge to your issuer bank with details of your actual travel route and the date/time of the charge. Include any proof like GPS data or receipts if available.',
-    },
+      question: "I was charged despite taking a different route. What should I do?",
+      answer: "Report the incorrect charge to your issuer bank with details of your actual travel route and the date/time of the charge. Include any proof like GPS data or receipts if available."
+    }
   ],
   replacement: [
     {
-      question: 'How do I get a replacement for a damaged FASTag?',
-      answer: 'Contact your issuer bank's customer care or visit their website to apply for a replacement. You may need to provide your current FASTag ID and vehicle details.',
+      question: "How do I get a replacement for a damaged FASTag?",
+      answer: "Contact your issuer bank's customer care or visit their website to apply for a replacement. You may need to provide your current FASTag ID and vehicle details."
     },
     {
-      question: 'Is there a fee for FASTag replacement?',
-      answer: 'Yes, most banks charge a replacement fee ranging from ₹100 to ₹150. The exact amount depends on your issuer bank.',
+      question: "Is there a fee for FASTag replacement?",
+      answer: "Yes, most banks charge a replacement fee ranging from ₹100 to ₹150. The exact amount depends on your issuer bank."
     },
     {
-      question: 'What happens to my balance when I replace my FASTag?',
-      answer: 'Your existing balance is transferred to the new FASTag after verification. There might be a processing time of 2-3 business days for the transfer.',
-    },
+      question: "What happens to my balance when I replace my FASTag?",
+      answer: "Your existing balance is transferred to the new FASTag after verification. There might be a processing time of 2-3 business days for the transfer."
+    }
   ],
   general: [
     {
-      question: 'Does FASTag have an expiry date?',
-      answer: 'Yes, FASTag has a validity of 5 years from the date of issuance. The expiry date is mentioned on the tag itself.',
+      question: "Does FASTag have an expiry date?",
+      answer: "Yes, FASTag has a validity of 5 years from the date of issuance. The expiry date is mentioned on the tag itself."
     },
     {
-      question: 'Can I have multiple FASTags for the same vehicle?',
-      answer: 'No, only one active FASTag is allowed per vehicle as per NHAI regulations. Having multiple tags may lead to double deduction or blacklisting.',
+      question: "Can I have multiple FASTags for the same vehicle?",
+      answer: "No, only one active FASTag is allowed per vehicle as per NHAI regulations. Having multiple tags may lead to double deduction or blacklisting."
     },
     {
-      question: 'Is FASTag mandatory for all vehicles?',
-      answer: 'Yes, as per the Ministry of Road Transport & Highways notification, FASTag is mandatory for all four-wheeler vehicles in India.',
-    },
-  ],
+      question: "Is FASTag mandatory for all vehicles?",
+      answer: "Yes, as per the Ministry of Road Transport & Highways notification, FASTag is mandatory for all four-wheeler vehicles in India."
+    }
+  ]
 };
 
 interface FastagSupportFlowProps {
