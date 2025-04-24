@@ -149,7 +149,7 @@ const trafficRulesQuestions: TrafficQuestion[] = [
       'Ignore it if you are obeying the speed limit'
     ],
     correctAnswer: 2,
-    explanation: 'When you see an emergency vehicle with flashing lights, you should find a safe place to pull over and stop to allow it to pass. Don't panic or brake suddenly.'
+    explanation: 'When you see an emergency vehicle with flashing lights, you should find a safe place to pull over and stop to allow it to pass. Do not panic or brake suddenly.'
   },
   {
     id: 5,
