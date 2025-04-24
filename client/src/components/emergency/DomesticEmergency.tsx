@@ -152,7 +152,7 @@ export default function DomesticEmergency({
 
   const renderCategoryGrid = () => {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {emergencyCategories.map((category) => (
           <CategoryCard 
             key={category.id}
@@ -213,6 +213,7 @@ interface CategoryCardProps {
     icon: React.ReactNode;
     color: string;
     description: string;
+    actionButton: string;
   };
   onClick: () => void;
   theme: 'light' | 'dark';
@@ -290,26 +291,41 @@ function CategoryCard({ category, onClick, theme }: CategoryCardProps) {
 
   return (
     <Card 
-      className={`cursor-pointer transition-all overflow-hidden ${
+      className={`cursor-pointer transition-all overflow-hidden h-full flex flex-col ${
         theme === 'light' 
         ? 'border border-gray-100 hover:shadow-md' 
         : 'bg-gray-800/80 border-gray-700 hover:bg-gray-800 hover:border-gray-600'
       }`}
       onClick={onClick}
     >
-      <CardContent className="p-0">
+      <CardContent className="p-0 flex flex-col flex-grow">
         <div className={`p-4 flex flex-col items-center justify-center ${theme === 'light' ? colorClasses.bg : colorClasses.darkBg}`}>
           <div className={`p-3 rounded-full ${theme === 'light' ? 'bg-white shadow-sm' : 'bg-gray-800'} mb-2`}>
             <div className={`w-10 h-10 flex items-center justify-center ${theme === 'light' ? colorClasses.text : colorClasses.darkText}`}>
               {category.icon}
             </div>
           </div>
-          <h3 className={`font-bold text-center ${theme === 'light' ? colorClasses.text : colorClasses.darkText}`}>
+          <h3 className={`font-bold text-center text-sm ${theme === 'light' ? colorClasses.text : colorClasses.darkText}`}>
             {category.name}
           </h3>
         </div>
-        <div className={`px-3 py-2 text-xs text-center ${theme === 'light' ? 'text-gray-600 bg-white' : 'text-gray-400 bg-gray-800/50'}`}>
+        <div className={`px-3 py-3 text-xs text-center ${theme === 'light' ? 'text-gray-600 bg-white' : 'text-gray-400 bg-gray-800/50'} flex-grow`}>
           {category.description}
+        </div>
+        <div className={`px-3 pb-3 flex justify-center ${theme === 'light' ? 'bg-white' : 'bg-gray-800/50'}`}>
+          <button
+            className={`w-full py-2 rounded-full text-xs font-medium transition-colors ${
+              theme === 'light'
+                ? `${colorClasses.bg} ${colorClasses.text} hover:bg-opacity-80`
+                : `${colorClasses.darkBg.replace('/30', '/50')} ${colorClasses.darkText} hover:bg-opacity-80`
+            }`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick();
+            }}
+          >
+            {category.actionButton}
+          </button>
         </div>
       </CardContent>
     </Card>
