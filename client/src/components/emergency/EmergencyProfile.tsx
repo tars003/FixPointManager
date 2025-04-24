@@ -382,29 +382,29 @@ export default function EmergencyProfile({
                 <ProfileField 
                   icon={<User className="h-4 w-4" />} 
                   label="Name" 
-                  value={profile.name}
+                  value={editedProfile.fullName}
                   theme={theme}
                 />
                 <ProfileField 
                   icon={<Droplet className="h-4 w-4" />} 
                   label="Blood Type" 
-                  value={profile.bloodType}
+                  value={editedProfile.bloodType}
                   theme={theme}
-                  highlight={true}
+                  highlight={!!editedProfile.bloodType}
                 />
                 <ProfileField 
                   icon={<AlertCircle className="h-4 w-4" />} 
                   label="Allergies" 
-                  value={profile.allergies}
+                  value={editedProfile.allergies}
                   theme={theme}
-                  highlight={profile.allergies !== 'None'}
+                  highlight={editedProfile.allergies && editedProfile.allergies.length > 0}
                 />
                 <ProfileField 
                   icon={<Activity className="h-4 w-4" />} 
                   label="Medical Conditions" 
-                  value={profile.medicalConditions}
+                  value={editedProfile.medicalConditions}
                   theme={theme}
-                  highlight={profile.medicalConditions !== 'None'}
+                  highlight={editedProfile.medicalConditions && editedProfile.medicalConditions.length > 0}
                 />
               </div>
             )}
@@ -422,14 +422,48 @@ export default function EmergencyProfile({
           <CardContent>
             {isEditing ? (
               <div className="space-y-4">
-                {editedProfile.emergencyContacts.map((contact, index) => (
+                <div className="p-3 border rounded border-orange-200 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-900/50">
+                  <h4 className="font-medium text-orange-800 dark:text-orange-300 mb-2">Primary Contact</h4>
+                  <div className="space-y-2">
+                    <div>
+                      <Label htmlFor="primaryContactName">Contact Name</Label>
+                      <Input 
+                        id="primaryContactName"
+                        value={editedProfile.primaryEmergencyContact.name}
+                        onChange={(e) => handlePrimaryContactChange('name', e.target.value)}
+                        className={theme === 'light' ? 'border-gray-200 bg-white' : 'bg-gray-700 border-gray-600'}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="primaryContactRelation">Relation</Label>
+                      <Input 
+                        id="primaryContactRelation"
+                        value={editedProfile.primaryEmergencyContact.relation}
+                        onChange={(e) => handlePrimaryContactChange('relation', e.target.value)}
+                        className={theme === 'light' ? 'border-gray-200 bg-white' : 'bg-gray-700 border-gray-600'}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="primaryContactPhone">Phone Number</Label>
+                      <Input 
+                        id="primaryContactPhone"
+                        value={editedProfile.primaryEmergencyContact.phone}
+                        onChange={(e) => handlePrimaryContactChange('phone', e.target.value)}
+                        className={theme === 'light' ? 'border-gray-200 bg-white' : 'bg-gray-700 border-gray-600'}
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <h4 className="font-medium text-gray-600 dark:text-gray-300 mt-3">Secondary Contacts</h4>
+                {editedProfile.secondaryEmergencyContacts.map((contact, index) => (
                   <div key={index} className="space-y-2 pb-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
                     <div>
                       <Label htmlFor={`contact-name-${index}`}>Contact Name</Label>
                       <Input 
                         id={`contact-name-${index}`}
                         value={contact.name}
-                        onChange={(e) => handleContactChange(index, 'name', e.target.value)}
+                        onChange={(e) => handleSecondaryContactChange(index, 'name', e.target.value)}
                         className={theme === 'light' ? 'border-gray-200' : 'bg-gray-700 border-gray-600'}
                       />
                     </div>
@@ -438,7 +472,7 @@ export default function EmergencyProfile({
                       <Input 
                         id={`contact-relation-${index}`}
                         value={contact.relation}
-                        onChange={(e) => handleContactChange(index, 'relation', e.target.value)}
+                        onChange={(e) => handleSecondaryContactChange(index, 'relation', e.target.value)}
                         className={theme === 'light' ? 'border-gray-200' : 'bg-gray-700 border-gray-600'}
                       />
                     </div>
@@ -447,7 +481,7 @@ export default function EmergencyProfile({
                       <Input 
                         id={`contact-phone-${index}`}
                         value={contact.phone}
-                        onChange={(e) => handleContactChange(index, 'phone', e.target.value)}
+                        onChange={(e) => handleSecondaryContactChange(index, 'phone', e.target.value)}
                         className={theme === 'light' ? 'border-gray-200' : 'bg-gray-700 border-gray-600'}
                       />
                     </div>
@@ -456,7 +490,40 @@ export default function EmergencyProfile({
               </div>
             ) : (
               <div className="space-y-4">
-                {profile.emergencyContacts.map((contact, index) => (
+                <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-orange-50' : 'bg-orange-900/20'} mb-4`}>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className={`font-medium ${theme === 'light' ? 'text-orange-800' : 'text-orange-300'}`}>
+                        Primary Contact
+                      </h4>
+                      <p className={`font-medium ${theme === 'light' ? 'text-gray-800' : 'text-gray-100'}`}>
+                        {editedProfile.primaryEmergencyContact.name}
+                      </p>
+                      <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
+                        {editedProfile.primaryEmergencyContact.relation}
+                      </p>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className={`h-8 ${theme === 'light' ? 'hover:bg-orange-100' : 'hover:bg-orange-950'}`}
+                      onClick={() => window.open(`tel:${editedProfile.primaryEmergencyContact.phone.replace(/\s/g, '')}`, '_self')}
+                    >
+                      <Phone className={`h-4 w-4 ${theme === 'light' ? 'text-green-600' : 'text-green-400'}`} />
+                    </Button>
+                  </div>
+                  <p className={`text-sm font-medium mt-1 ${theme === 'light' ? 'text-blue-600' : 'text-blue-400'}`}>
+                    {editedProfile.primaryEmergencyContact.phone}
+                  </p>
+                </div>
+                
+                {editedProfile.secondaryEmergencyContacts.length > 0 && (
+                  <h4 className={`text-sm font-medium ${theme === 'light' ? 'text-gray-600' : 'text-gray-300'} mb-2`}>
+                    Secondary Contacts
+                  </h4>
+                )}
+                
+                {editedProfile.secondaryEmergencyContacts.map((contact, index) => (
                   <div key={index} className={`p-3 rounded-lg ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'} mb-2 last:mb-0`}>
                     <div className="flex justify-between items-start">
                       <div>
@@ -514,7 +581,7 @@ export default function EmergencyProfile({
                     Preferred Hospital
                   </p>
                   <p className={`${theme === 'light' ? 'text-purple-800' : 'text-purple-200'}`}>
-                    {profile.preferredHospital}
+                    {editedProfile.preferredHospital || 'Not specified'}
                   </p>
                 </div>
               </div>
@@ -537,7 +604,7 @@ export default function EmergencyProfile({
                   <Label htmlFor="insuranceProvider">Insurance Provider</Label>
                   <Input 
                     id="insuranceProvider"
-                    value={editedProfile.insurance.provider}
+                    value={editedProfile.insuranceDetails?.provider || ''}
                     onChange={(e) => handleInsuranceChange('provider', e.target.value)}
                     className={theme === 'light' ? 'border-gray-200' : 'bg-gray-700 border-gray-600'}
                   />
@@ -546,7 +613,7 @@ export default function EmergencyProfile({
                   <Label htmlFor="policyNumber">Policy Number</Label>
                   <Input 
                     id="policyNumber"
-                    value={editedProfile.insurance.policyNumber}
+                    value={editedProfile.insuranceDetails?.policyNumber || ''}
                     onChange={(e) => handleInsuranceChange('policyNumber', e.target.value)}
                     className={theme === 'light' ? 'border-gray-200' : 'bg-gray-700 border-gray-600'}
                   />
@@ -555,7 +622,7 @@ export default function EmergencyProfile({
                   <Label htmlFor="insuranceContact">Insurance Contact</Label>
                   <Input 
                     id="insuranceContact"
-                    value={editedProfile.insurance.contactNumber}
+                    value={editedProfile.insuranceDetails?.contactNumber || ''}
                     onChange={(e) => handleInsuranceChange('contactNumber', e.target.value)}
                     className={theme === 'light' ? 'border-gray-200' : 'bg-gray-700 border-gray-600'}
                   />
@@ -566,30 +633,32 @@ export default function EmergencyProfile({
                 <ProfileField 
                   icon={<Shield className="h-4 w-4" />} 
                   label="Provider" 
-                  value={profile.insurance.provider}
+                  value={editedProfile.insuranceDetails?.provider}
                   theme={theme}
                 />
                 <ProfileField 
                   icon={<Activity className="h-4 w-4" />} 
                   label="Policy Number" 
-                  value={profile.insurance.policyNumber}
+                  value={editedProfile.insuranceDetails?.policyNumber}
                   theme={theme}
                 />
                 <div className="flex justify-between items-center">
                   <ProfileField 
                     icon={<Phone className="h-4 w-4" />} 
                     label="Contact" 
-                    value={profile.insurance.contactNumber}
+                    value={editedProfile.insuranceDetails?.contactNumber}
                     theme={theme}
                   />
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className={`h-8 ${theme === 'light' ? 'hover:bg-gray-100' : 'hover:bg-gray-700'}`}
-                    onClick={() => window.open(`tel:${profile.insurance.contactNumber.replace(/\s/g, '')}`, '_self')}
-                  >
-                    <Phone className={`h-4 w-4 ${theme === 'light' ? 'text-green-600' : 'text-green-400'}`} />
-                  </Button>
+                  {editedProfile.insuranceDetails?.contactNumber && (
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className={`h-8 ${theme === 'light' ? 'hover:bg-gray-100' : 'hover:bg-gray-700'}`}
+                      onClick={() => window.open(`tel:${editedProfile.insuranceDetails.contactNumber.replace(/\s/g, '')}`, '_self')}
+                    >
+                      <Phone className={`h-4 w-4 ${theme === 'light' ? 'text-green-600' : 'text-green-400'}`} />
+                    </Button>
+                  )}
                 </div>
               </div>
             )}
