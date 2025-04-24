@@ -22,6 +22,7 @@ import PartsPage from "@/pages/parts";
 import VehicleDetail from "@/pages/vehicle-detail";
 import CommercialFleet from "@/pages/commercial-fleet";
 import EmergencyServices from "@/pages/emergency-services";
+import DrivingEducation from "@/pages/driving-education";
 
 function Router() {
   const [location] = useLocation();

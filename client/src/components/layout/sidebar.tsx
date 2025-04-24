@@ -97,9 +97,9 @@ const navItems = [
     bgColor: 'bg-emerald-50',
   },
   {
-    title: 'Education',
+    title: 'Learn Driving & RTO',
     icon: GraduationCap,
-    href: '/education',
+    href: '/driving-education',
     color: 'text-amber-500',
     bgColor: 'bg-amber-50',
   },
