@@ -247,6 +247,35 @@ export default function EmergencyProfile({
     setIsEditing(false);
   };
   
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 space-y-4">
+        <AlertCircle className="h-10 w-10 text-red-500" />
+        <p className="text-red-500">Error loading emergency profile</p>
+        <Button onClick={onBack} variant="outline">Go Back</Button>
+      </div>
+    );
+  }
+
+  // Show loading state if profile is not loaded yet
+  if (!editedProfile) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -580,12 +609,23 @@ export default function EmergencyProfile({
 interface ProfileFieldProps {
   icon: React.ReactNode;
   label: string;
-  value: string;
+  value: string | null | undefined | string[];
   theme: 'light' | 'dark';
   highlight?: boolean;
 }
 
 function ProfileField({ icon, label, value, theme, highlight = false }: ProfileFieldProps) {
+  // Handle different value types
+  let displayValue: string;
+  
+  if (value === null || value === undefined) {
+    displayValue = 'Not specified';
+  } else if (Array.isArray(value)) {
+    displayValue = value.length > 0 ? value.join(', ') : 'None';
+  } else {
+    displayValue = value;
+  }
+  
   return (
     <div className={`flex items-start space-x-2 ${highlight ? `p-2 rounded-md ${theme === 'light' ? 'bg-amber-50' : 'bg-amber-900/20'}` : ''}`}>
       <div className={`mt-0.5 ${theme === 'light' ? (highlight ? 'text-amber-600' : 'text-gray-500') : (highlight ? 'text-amber-400' : 'text-gray-400')}`}>
@@ -596,7 +636,7 @@ function ProfileField({ icon, label, value, theme, highlight = false }: ProfileF
           {label}
         </p>
         <p className={`${theme === 'light' ? (highlight ? 'text-amber-800 font-medium' : 'text-gray-700') : (highlight ? 'text-amber-300 font-medium' : 'text-gray-200')}`}>
-          {value}
+          {displayValue}
         </p>
       </div>
     </div>

@@ -18,23 +18,8 @@ export default function EmergencyDashboard({ theme }: { theme: 'light' | 'dark' 
   const [location, setLocation] = useState<{ latitude: number; longitude: number; address: string } | null>(null);
   const [, setLocation2] = useLocation();
   
-  // Emergency profile data
-  const [profile, setProfile] = useState({
-    name: 'Rajesh Kumar',
-    bloodType: 'O+',
-    allergies: 'None',
-    medicalConditions: 'None',
-    emergencyContacts: [
-      { name: 'Suresh Singh', relation: 'Brother', phone: '+91 9765432109' },
-      { name: 'FixPoint Support', relation: 'Service', phone: '+91 1800-123-4567' },
-    ],
-    preferredHospital: 'Apollo Hospitals',
-    insurance: {
-      provider: 'ICICI Lombard',
-      policyNumber: 'IL-23456789',
-      contactNumber: '+91 1800-2666',
-    }
-  });
+  // Assuming user ID 1 for demo purposes (would be from auth context in real app)
+  const userId = 1;
 
   // Fetch user's current location
   useEffect(() => {
@@ -285,8 +270,7 @@ export default function EmergencyDashboard({ theme }: { theme: 'light' | 'dark' 
           
           {emergencyState === 'profile' && (
             <EmergencyProfile 
-              profile={profile}
-              onUpdateProfile={setProfile}
+              userId={userId}
               theme={theme}
               onBack={handleGoBack}
             />
