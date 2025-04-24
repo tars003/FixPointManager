@@ -48,14 +48,18 @@ const testCategories = [
 
 interface DrivingTestFlowProps {
   onClose: () => void;
+  testType?: 'signs' | 'rules' | 'mock-test' | 'mock-advanced';
 }
 
-const DrivingTestFlow: React.FC<DrivingTestFlowProps> = ({ onClose }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [testInProgress, setTestInProgress] = useState(false);
+const DrivingTestFlow: React.FC<DrivingTestFlowProps> = ({ onClose, testType }) => {
+  // Auto-select the category based on the testType prop (if provided)
+  const initialCategory = testType ? testCategories.find(c => c.testType === testType)?.id || null : null;
+  
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory);
+  const [testInProgress, setTestInProgress] = useState(testType ? true : false);
   const [testCompleted, setTestCompleted] = useState(false);
   const [testScore, setTestScore] = useState({ score: 0, total: 0 });
-  const [selectedTestType, setSelectedTestType] = useState<'signs' | 'rules' | 'mock-test' | 'mock-advanced'>('signs');
+  const [selectedTestType, setSelectedTestType] = useState<'signs' | 'rules' | 'mock-test' | 'mock-advanced'>(testType || 'signs');
 
   const handleTestComplete = (score: number, total: number) => {
     setTestCompleted(true);
@@ -78,8 +82,8 @@ const DrivingTestFlow: React.FC<DrivingTestFlowProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+    <div className="w-full">
+      <Card className="w-full max-h-[90vh] overflow-y-auto">
         <CardContent className="p-0">
           {/* Header */}
           <div className="p-4 border-b flex items-center justify-between sticky top-0 bg-card z-10">

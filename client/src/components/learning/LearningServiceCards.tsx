@@ -367,10 +367,17 @@ const LearningServiceCards = () => {
     setShowEnquiryForm(false);
     setShowApplicationForm(false);
     setShowTestForm(false);
+    setShowDrivingTest(false);
     setFormSuccess(false);
     enquiryForm.reset();
     applicationForm.reset();
     testRegistrationForm.reset();
+  };
+  
+  // Handle driving test close
+  const handleDrivingTestClose = () => {
+    setShowDrivingTest(false);
+    setSelectedTest(null);
   };
 
   return (
@@ -1109,6 +1116,21 @@ const LearningServiceCards = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Driving Test Component */}
+      {showDrivingTest && (
+        <Dialog open={showDrivingTest} onOpenChange={(open) => {
+          if (!open) handleDrivingTestClose();
+          setShowDrivingTest(open);
+        }}>
+          <DialogContent className="max-w-5xl max-h-[95vh] overflow-y-auto p-0">
+            <DrivingTestFlow 
+              onClose={handleDrivingTestClose} 
+              testType={selectedTestType}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 };
