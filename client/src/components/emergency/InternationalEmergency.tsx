@@ -190,6 +190,7 @@ export default function InternationalEmergency({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
+      className={theme === 'light' ? 'bg-white p-6 rounded-xl' : ''}
     >
       {selectedCategory === 'none' && (
         <div className="text-center mb-6">
@@ -205,9 +206,31 @@ export default function InternationalEmergency({
       {renderEmergencyContent()}
 
       {selectedCategory === 'none' && (
-        <div className={`text-center text-sm mt-8 ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
-          <p>For immediate emergency assistance, call the universal emergency number: 112/911</p>
-          <p className="mt-1">Indian Embassy Emergency Hotline: +91 1800-11-3090</p>
+        <div className={`text-center mt-8 ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>
+          <p className="text-sm">For immediate emergency assistance, call the universal number: <span className="font-semibold text-red-600 dark:text-red-400">112/911</span></p>
+          <p className="text-sm mt-1">Indian Embassy Emergency Hotline: <span className="font-semibold text-blue-600 dark:text-blue-400">+91 1800-11-3090</span></p>
+          <div className="mt-3 flex justify-center gap-3">
+            <button 
+              onClick={() => window.open('tel:112', '_self')} 
+              className={`inline-flex items-center justify-center px-4 py-2 rounded-full text-xs font-medium ${
+                theme === 'light' 
+                  ? 'bg-red-100 text-red-700 hover:bg-red-200' 
+                  : 'bg-red-900/30 text-red-400 hover:bg-red-900/50'
+              }`}
+            >
+              Call Emergency
+            </button>
+            <button 
+              onClick={() => window.open('tel:+911800113090', '_self')} 
+              className={`inline-flex items-center justify-center px-4 py-2 rounded-full text-xs font-medium ${
+                theme === 'light' 
+                  ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
+                  : 'bg-blue-900/30 text-blue-400 hover:bg-blue-900/50'
+              }`}
+            >
+              Call Embassy
+            </button>
+          </div>
         </div>
       )}
     </motion.div>
@@ -422,14 +445,14 @@ function CategoryCard({ category, onClick, theme }: CategoryCardProps) {
     <Card 
       className={`cursor-pointer transition-all overflow-hidden ${
         theme === 'light' 
-        ? `border hover:border-${category.color}-300 hover:shadow-md` 
+        ? 'border border-gray-100 hover:shadow-md' 
         : 'bg-gray-800/80 border-gray-700 hover:bg-gray-800 hover:border-gray-600'
       }`}
       onClick={onClick}
     >
       <CardContent className="p-0">
         <div className={`p-4 flex flex-col items-center justify-center ${theme === 'light' ? colorClasses.bg : colorClasses.darkBg}`}>
-          <div className={`p-3 rounded-full ${theme === 'light' ? 'bg-white' : 'bg-gray-800'} mb-2`}>
+          <div className={`p-3 rounded-full ${theme === 'light' ? 'bg-white shadow-sm' : 'bg-gray-800'} mb-2`}>
             <div className={`w-10 h-10 flex items-center justify-center ${theme === 'light' ? colorClasses.text : colorClasses.darkText}`}>
               {category.icon}
             </div>
@@ -438,7 +461,7 @@ function CategoryCard({ category, onClick, theme }: CategoryCardProps) {
             {category.name}
           </h3>
         </div>
-        <div className={`px-3 py-2 text-xs text-center ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
+        <div className={`px-3 py-2 text-xs text-center ${theme === 'light' ? 'text-gray-600 bg-white' : 'text-gray-400 bg-gray-800/50'}`}>
           {category.description}
         </div>
       </CardContent>
