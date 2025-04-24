@@ -39,37 +39,43 @@ const DrivingEducation = () => {
       title: 'Learn Two-Wheeler',
       icon: <Bike className="h-5 w-5" />,
       color: 'bg-blue-100 text-blue-600',
-      darkColor: 'dark:bg-blue-900/30 dark:text-blue-400'
+      darkColor: 'dark:bg-blue-900/30 dark:text-blue-400',
+      tab: 'learn'
     },
     {
       title: 'Learn Car Driving',
       icon: <Car className="h-5 w-5" />,
       color: 'bg-green-100 text-green-600',
-      darkColor: 'dark:bg-green-900/30 dark:text-green-400'
+      darkColor: 'dark:bg-green-900/30 dark:text-green-400',
+      tab: 'learn'
     },
     {
       title: 'Apply for License',
       icon: <FileText className="h-5 w-5" />,
       color: 'bg-purple-100 text-purple-600',
-      darkColor: 'dark:bg-purple-900/30 dark:text-purple-400'
+      darkColor: 'dark:bg-purple-900/30 dark:text-purple-400',
+      tab: 'rto'
     },
     {
       title: 'Renew License',
       icon: <CreditCard className="h-5 w-5" />,
       color: 'bg-amber-100 text-amber-600',
-      darkColor: 'dark:bg-amber-900/30 dark:text-amber-400'
+      darkColor: 'dark:bg-amber-900/30 dark:text-amber-400',
+      tab: 'rto'
     },
     {
       title: 'Find RTO Office',
       icon: <MapPin className="h-5 w-5" />,
       color: 'bg-red-100 text-red-600',
-      darkColor: 'dark:bg-red-900/30 dark:text-red-400'
+      darkColor: 'dark:bg-red-900/30 dark:text-red-400',
+      tab: 'rto'
     },
     {
       title: 'RTO Test Prep',
       icon: <BookOpen className="h-5 w-5" />,
       color: 'bg-indigo-100 text-indigo-600',
-      darkColor: 'dark:bg-indigo-900/30 dark:text-indigo-400'
+      darkColor: 'dark:bg-indigo-900/30 dark:text-indigo-400',
+      tab: 'learn'
     }
   ];
   
@@ -124,11 +130,20 @@ const DrivingEducation = () => {
                 Professional driving education and hassle-free RTO assistance across India, in your language, on your schedule
               </p>
               <div className="flex flex-wrap gap-3">
-                <Button size="lg" className="bg-primary hover:bg-primary-dark">
+                <Button 
+                  size="lg" 
+                  className="bg-primary hover:bg-primary-dark"
+                  onClick={() => setActiveTab('learn')}
+                >
                   <BookOpen className="h-5 w-5 mr-2" />
                   Start Learning
                 </Button>
-                <Button size="lg" variant="outline" className="bg-white/10 text-white border-white/20 hover:bg-white/20">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="bg-white/10 text-white border-white/20 hover:bg-white/20"
+                  onClick={() => setActiveTab('rto')}
+                >
                   <FileText className="h-5 w-5 mr-2" />
                   RTO Services
                 </Button>
@@ -156,7 +171,11 @@ const DrivingEducation = () => {
         {/* Quick Links */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-8">
           {quickLinks.map((link, index) => (
-            <Card key={index} className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card 
+              key={index} 
+              className="cursor-pointer hover:shadow-md transition-shadow"
+              onClick={() => setActiveTab(link.tab)}
+            >
               <CardContent className="p-4 flex flex-col items-center text-center">
                 <div className={`rounded-full p-2 mb-2 ${link.color} ${link.darkColor}`}>
                   {link.icon}
@@ -199,10 +218,18 @@ const DrivingEducation = () => {
               Join thousands of satisfied learners who have mastered driving skills and navigated RTO processes with our help.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button size="lg" className="bg-primary hover:bg-primary-dark">
+              <Button 
+                size="lg" 
+                className="bg-primary hover:bg-primary-dark"
+                onClick={() => setActiveTab('learn')}
+              >
                 Book a Driving Lesson
               </Button>
-              <Button size="lg" variant="outline">
+              <Button 
+                size="lg" 
+                variant="outline"
+                onClick={() => setActiveTab('rto')}
+              >
                 Schedule RTO Assistance
               </Button>
             </div>
