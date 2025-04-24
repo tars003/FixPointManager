@@ -1,0 +1,308 @@
+Based on the images you've shared and your requirements, I'll create a comprehensive development prompt for building a FASTag and E-Challan service within a driving education and RTO services application.
+
+# Development Prompt: FASTag & E-Challan Services Module
+
+## Overview
+Create a comprehensive FASTag and E-Challan services module for our driving education and RTO services platform. This module should provide a seamless user experience for checking, paying, and managing traffic challans as well as purchasing, recharging, and managing FASTags. The module will integrate with government databases and payment gateways to provide real-time information and transaction capabilities.
+
+## Core Functionality Requirements
+
+### 1. Combined Dashboard Design
+- Create a unified dashboard with two clearly defined tabs: "FASTag" and "E-Challan"
+- Default view should open to the E-Challan tab
+- Implement a toggle design that clearly indicates which service is currently active
+- Both tabs should maintain consistent design language while highlighting service-specific features
+- Ensure smooth transition between tabs without page reload
+
+### 2. E-Challan Services
+
+#### 2.1 Vehicle Search & Verification
+- **Search Interface:**
+  - Clean search bar with placeholder text "Enter your vehicle number"
+  - Format validation for Indian vehicle numbers (XX00XX0000)
+  - Country/state indicator badge next to search field (default: IND)
+  - Auto-formatting of input to proper vehicle number format
+  - "Check pending challans" CTA button with appropriate loading states
+
+- **OTP Verification System:**
+  - Implement SMS-based OTP verification for first-time vehicle checks
+  - Display clear error message: "OTP required to fetch all challans"
+  - Sub-message: "Some challans were not fetched" when partial results available
+  - Include resend OTP option with cooldown timer
+  - Store verified vehicles in user profile for quicker future access
+
+#### 2.2 Challan Status Display
+- **Status Categories:**
+  - Create tab navigation between "Pending" and "Paid" challans
+  - Show count indicator for pending challans (e.g., "Pending (2)")
+  - Design empty state with friendly message: "No challans, great driving!"
+  - Include motivational subtext: "Your driving deserves rewards"
+  - Incorporate gamification element: "Predict & Win Rewards" for safe drivers
+
+- **Challan Details View:**
+  - List challans with essential information (date, location, amount, reason)
+  - Include expandable view for complete details
+  - Show violation images where available
+  - Display challan number and officer details
+  - Indicate payment due date and late fee information
+
+#### 2.3 Multi-State Challan Search
+- **State Selection Interface:**
+  - Implement "State Wise Challan Search" with visual state selection
+  - Include state cards with iconic landmarks/monuments for each state
+  - Add search bar for quick state filtering
+  - Display radio button list for alternative state selection
+  - Include "Did you travel to other states?" prompt
+  - Show loading indicator with "Loading state challans" message during retrieval
+
+#### 2.4 Challan Payment System
+- **Payment Flow:**
+  - Clear "Pay challan" buttons for individual and bulk payments
+  - Itemized breakdown of challan amount, late fees, and convenience fees
+  - Multiple payment options (UPI, cards, net banking, wallets)
+  - Receipt generation with unique transaction ID
+  - Payment confirmation notification via SMS and email
+  - Downloadable payment proof in PDF format
+
+- **Discount Section:**
+  - Early payment discount information where applicable
+  - Promotional code field for special discounts (e.g., "GET500")
+  - Cashback offers on specific payment methods
+
+### 3. FASTag Services
+
+#### 3.1 FASTag Status & Management
+- **Account Overview:**
+  - FASTag ID and vehicle details display
+  - Current balance with last updated timestamp
+  - Recent transaction history (last 5 transactions)
+  - Monthly usage statistics with graphical representation
+  - Active/inactive status indicator
+  - Expiry date notification with renewal option
+
+- **Vehicle Management:**
+  - Add/remove vehicles from FASTag account
+  - Vehicle details verification against RTO database
+  - KYC status indicator
+  - Vehicle class selection for appropriate toll charges
+  - Tag transfer request system between vehicles
+
+#### 3.2 FASTag Purchase Flow
+- **Eligibility Check:**
+  - Vehicle ownership verification
+  - Document upload system (RC, insurance, address proof)
+  - KYC form with auto-fill from user profile
+  - Document verification status tracker
+  - Estimated delivery timeline
+
+- **Purchase Options:**
+  - Bank-specific FASTag options with comparison
+  - Security deposit and issuance fee details
+  - Home delivery and branch pickup options
+  - Tracking system for FASTag delivery
+  - Installation guide with visual instructions
+
+#### 3.3 Recharge System
+- **Recharge Interface:**
+  - Quick recharge buttons for common amounts (₹500, ₹1000, ₹2000)
+  - Custom amount input with minimum/maximum validators
+  - Recharge history with status indicators
+  - Scheduled/automatic recharge option
+  - Low balance alert configuration
+
+- **Payment Methods:**
+  - Saved payment methods from user profile
+  - New payment method addition interface
+  - Bank account linking for auto-debit
+  - UPI-based instant recharge option
+  - Corporate account recharge for business users
+
+#### 3.4 Toll Calculator
+- **Route Planning:**
+  - Origin-destination input with map integration
+  - Alternate route suggestions with toll cost comparison
+  - Toll plaza listing with individual fee breakdown
+  - Vehicle class selection for accurate calculation
+  - Journey cost estimation with FASTag discount applied
+
+- **Toll History:**
+  - Transaction log with date, time, location, and amount
+  - Downloadable statement for expense reporting
+  - Filter by date range, toll operator, or route
+  - Dispute flagging system for incorrect charges
+  - GST invoice generation for business travel
+
+### 4. Notification System
+- **Alert Types:**
+  - New challan detection alerts
+  - Payment reminders for pending challans
+  - Payment confirmation notifications
+  - Low FASTag balance warnings
+  - Successful toll deduction receipts
+  - KYC expiry/renewal reminders
+
+- **Delivery Channels:**
+  - In-app notification center
+  - Push notifications with priority settings
+  - Email digests (daily/weekly options)
+  - SMS alerts for critical notifications
+  - WhatsApp integration for important updates
+
+## Content Guidelines
+
+### 1. E-Challan Section Copy
+
+#### Header & Navigation:
+- **Main Heading:** "E-Challan: Check Status and Pay Online"
+- **Subheading:** "Check Challan Instantly For Free ⚡"
+- **Tab Labels:** "Pending" | "Paid"
+- **Search Placeholder:** "Enter your vehicle number"
+- **Button Text:** "Check pending challans"
+
+#### Empty States:
+- **No Challans:** "Hurray! You are driving good. No recent challans found"
+- **Alternative:** "No challans, great driving! Your driving deserves rewards"
+- **Loading:** "Retrieving Challans from External Servers"
+- **Processing:** "This process may take upto 45 to 60 seconds"
+
+#### Verification Messaging:
+- **OTP Required:** "OTP required to fetch all challans"
+- **Partial Results:** "Some challans were not fetched"
+- **Verification Success:** "Vehicle verified successfully"
+- **State Selection:** "Did you travel to other states? Select the state to show challans"
+
+#### Action Buttons:
+- **Payment:** "Pay challans online"
+- **Details:** "See details like violation images"
+- **Real-time:** "Get real-time challan results"
+- **Saving:** "Saving this vehicle to your ACKO App"
+
+#### Promotions:
+- **Rewards:** "Predict & Win Rewards"
+- **Contest:** "Who will win this match"
+- **Discount:** "USE CODE: GET500"
+
+### 2. FASTag Section Copy
+
+#### Header & Navigation:
+- **Main Heading:** "FASTag: Purchase, Recharge & Manage"
+- **Subheading:** "Drive through tolls without stopping ✅"
+- **Tab Labels:** "My FASTag" | "Buy New" | "Recharge" | "Toll Calculator"
+- **Search Placeholder:** "Enter FASTag ID or vehicle number"
+- **Button Text:** "Check FASTag balance"
+
+#### Status Messages:
+- **Active Status:** "Your FASTag is active and ready for use"
+- **Low Balance:** "Low balance alert! Recharge now to avoid inconvenience"
+- **KYC Pending:** "Complete your KYC to activate FASTag"
+- **Blacklisted:** "Your FASTag has been blacklisted. Contact customer support"
+
+#### Account Information:
+- **Balance:** "Current Balance: ₹1,245.50 (Last updated: Today, 10:30 AM)"
+- **Vehicle Details:** "Linked to: MP04UE2047 | Suzuki Burgman"
+- **Recent Transaction:** "Last toll: NH-44 Nagpur Toll Plaza | ₹145 | 22 Apr, 9:15 AM"
+- **Usage Stats:** "This month: 12 tolls crossed | Total spent: ₹1,860"
+
+#### Action Buttons:
+- **Recharge:** "Recharge FASTag"
+- **History:** "View transaction history"
+- **Add Vehicle:** "Link new vehicle"
+- **Support:** "FASTag helpline"
+
+#### Promotions:
+- **Cashback:** "Get 5% cashback on recharges above ₹1000"
+- **Offer:** "Zero issuance fee on new FASTag - Limited time offer!"
+- **Referral:** "Refer a friend and get ₹100 cashback"
+
+## Technical Requirements
+
+### 1. Integration Points
+- **RTO Database:**
+  - Vehicle ownership verification API
+  - Challan status checking endpoint
+  - Payment status update webhook
+  - Document verification service
+
+- **FASTag Issuer Banks:**
+  - Account creation API
+  - Balance inquiry service
+  - Recharge processing endpoint
+  - Transaction history retrieval
+
+- **Payment Gateways:**
+  - UPI integration (GPay, PhonePe, Paytm)
+  - Card payment processor
+  - Netbanking support
+  - Wallet integration
+
+- **External Services:**
+  - SMS gateway for OTP and notifications
+  - Email service for receipts and statements
+  - WhatsApp Business API for updates
+  - Google Maps for toll location and route planning
+
+### 2. Performance Requirements
+- Page load time under 2 seconds on 3G connections
+- OTP verification processing within 15 seconds
+- Challan search results within 3 seconds for cached vehicles
+- Real-time balance update after FASTag recharge
+- Offline data caching for previously checked vehicles
+- Lazy loading for transaction history and images
+
+### 3. Security Considerations
+- End-to-end encryption for payment processing
+- Tokenization for saved payment methods
+- OTP-based verification for new vehicle addition
+- Session timeout after 10 minutes of inactivity
+- Fraud detection system for suspicious transactions
+- Rate limiting for challan check and payment attempts
+
+### 4. Mobile Optimization
+- Touch-optimized buttons (minimum 44×44px)
+- Bottom sheet navigation for mobile users
+- Native share functionality for receipts
+- Add to wallet option for FASTag cards
+- Camera access for document scanning
+- Biometric authentication support
+
+## Implementation Timeline
+1. **Phase 1 (Weeks 1-2):**
+   - Basic dashboard structure with tab navigation
+   - E-Challan search functionality with mock data
+   - Vehicle number validation and storage
+
+2. **Phase 2 (Weeks 3-4):**
+   - OTP verification system
+   - RTO database integration
+   - Challan listing and detail views
+   - State-wise challan search
+
+3. **Phase 3 (Weeks 5-6):**
+   - Challan payment processing
+   - Receipt generation and history
+   - FASTag account viewing (read-only)
+   - Basic notification system
+
+4. **Phase 4 (Weeks 7-8):**
+   - FASTag purchase flow
+   - KYC processing
+   - Recharge functionality
+   - Transaction history
+
+5. **Phase 5 (Weeks 9-10):**
+   - Toll calculator implementation
+   - Advanced analytics dashboard
+   - Complete notification system
+   - Final testing and optimization
+
+## Design Assets Required
+- Loading/success/error state animations
+- State icons and landmark illustrations
+- Vehicle type icons for different categories
+- Payment method logos
+- Empty state illustrations
+- Status and notification icons
+- Banner templates for promotions
+- Data visualization components for usage statistics
+
+This module should integrate seamlessly with the existing driving education and RTO services platform while providing a comprehensive solution for all vehicle-related regulatory compliance needs.

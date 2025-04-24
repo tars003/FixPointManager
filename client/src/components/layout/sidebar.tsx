@@ -21,7 +21,9 @@ import {
   AlertTriangle,
   AlertCircle,
   Truck,
-  Gamepad2
+  Gamepad2,
+  Tag,
+  Receipt
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -48,9 +50,9 @@ const navItems = [
     bgColor: 'bg-accent/10',
   },
   {
-    title: 'FASTag & e-Challan',
-    icon: CreditCard,
-    href: '/fastag',
+    title: 'FASTag & E-Challan',
+    icon: Receipt,
+    href: '/fastag-echallan',
     color: 'text-indigo-500',
     bgColor: 'bg-indigo-50',
   },

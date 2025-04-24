@@ -23,6 +23,7 @@ import VehicleDetail from "@/pages/vehicle-detail";
 import CommercialFleet from "@/pages/commercial-fleet";
 import EmergencyServices from "@/pages/emergency-services";
 import DrivingEducation from "@/pages/driving-education";
+import FastagEchallan from "@/pages/fastag-echallan";
 
 function Router() {
   const [location] = useLocation();
@@ -243,6 +244,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <DrivingEducation />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/fastag-echallan">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <FastagEchallan />
               </motion.div>
             )}
           </Route>
