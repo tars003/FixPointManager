@@ -1,0 +1,38 @@
+Here's a prompt for an AI website development task focused on the emergency page functionality:
+
+# Emergency Services Website Development Prompt
+
+## Core Functionality Requirements
+
+Create an emergency services interface with the following specifications:
+
+1. **Default Landing Configuration**:
+   - The emergency page should automatically load the "Domestic (India)" view as the default tab when opened
+   - All 9 domestic emergency service cards should be fully functional and pre-loaded
+   - Cards should be arranged in a 3×3 grid with proper spacing and visual hierarchy
+
+2. **Tab Navigation System**:
+   - Design a prominent tab navigation bar at the top of the page
+   - "Domestic" tab should be pre-selected with clear visual indication (highlighted, underlined, etc.)
+   - "International" tab should be clearly visible as an alternative option
+   - Tab switching should be instantaneous with no page reload
+
+3. **Visual Design Elements**:
+   - Use a high-contrast color scheme optimized for emergency situations
+   - Implement consistent visual language across both domestic and international views
+   - Ensure all interactive elements have proper hover/active states
+   - Optimize typography for maximum readability under stress
+
+4. **Technical Implementation**:
+   - Ensure all card touch targets are appropriately sized for emergency use
+   - Pre-load international card data to minimize switching delay
+   - Implement proper state management to preserve user navigation path
+   - Optimize for both desktop and mobile emergency scenarios
+
+5. **Accessibility Considerations**:
+   - Ensure tab navigation works with keyboard controls
+   - Implement proper ARIA roles for screen reader compatibility
+   - Maintain adequate color contrast for all emergency scenarios
+   - Include voice command capability for hands-free operation
+
+Deliver a responsive, intuitive emergency interface that prioritizes immediate access to domestic services while maintaining easy switching to international support when needed.

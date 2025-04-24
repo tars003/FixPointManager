@@ -6,13 +6,15 @@ import DomesticEmergency from './DomesticEmergency';
 import InternationalEmergency from './InternationalEmergency';
 import EmergencyProfile from './EmergencyProfile';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, ArrowLeft, Globe, MapPin, PhoneCall, Share2, Users } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AlertTriangle, ArrowLeft, Globe, MapPin, PhoneCall, Share2, Users, Home } from 'lucide-react';
 
 // Emergency states
 type EmergencyState = 'location-verification' | 'domestic' | 'international' | 'profile';
 
 export default function EmergencyDashboard({ theme }: { theme: 'light' | 'dark' }) {
-  const [emergencyState, setEmergencyState] = useState<EmergencyState>('location-verification');
+  // Set default state to domestic as per requirements
+  const [emergencyState, setEmergencyState] = useState<EmergencyState>('domestic');
   const [location, setLocation] = useState<{ latitude: number; longitude: number; address: string } | null>(null);
   const [, setLocation2] = useLocation();
   
@@ -79,12 +81,10 @@ export default function EmergencyDashboard({ theme }: { theme: 'light' | 'dark' 
   };
 
   const handleGoBack = () => {
-    if (emergencyState === 'domestic' || emergencyState === 'international') {
-      setEmergencyState('location-verification');
-    } else if (emergencyState === 'profile') {
-      setEmergencyState(localStorage.getItem('previousEmergencyState') as EmergencyState || 'location-verification');
+    if (emergencyState === 'profile') {
+      setEmergencyState(localStorage.getItem('previousEmergencyState') as EmergencyState || 'domestic');
     } else {
-      // If on location verification, go back to main app
+      // Go back to main app for any other state - with tabs, we don't need to go back to location verification
       setLocation2('/');
     }
   };
@@ -220,7 +220,37 @@ export default function EmergencyDashboard({ theme }: { theme: 'light' | 'dark' 
     <div className={`min-h-screen ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-900'}`}>
       {renderEmergencyHeader()}
       
-      <div className={`container max-w-5xl mx-auto px-4 py-6 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
+      <div className={`container max-w-5xl mx-auto px-4 py-4 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
+        {/* Add Tab Navigation System */}
+        {(emergencyState === 'domestic' || emergencyState === 'international') && (
+          <Tabs 
+            defaultValue={emergencyState} 
+            onValueChange={(value) => setEmergencyState(value as EmergencyState)}
+            className="mb-4"
+          >
+            <TabsList className={`grid w-full grid-cols-2 ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'}`}>
+              <TabsTrigger 
+                value="domestic"
+                className={`flex items-center gap-2 ${theme === 'light' 
+                  ? 'data-[state=active]:bg-white' 
+                  : 'data-[state=active]:bg-gray-700'}`}
+              >
+                <Home className="h-4 w-4" />
+                Domestic (India)
+              </TabsTrigger>
+              <TabsTrigger 
+                value="international"
+                className={`flex items-center gap-2 ${theme === 'light' 
+                  ? 'data-[state=active]:bg-white' 
+                  : 'data-[state=active]:bg-gray-700'}`}
+              >
+                <Globe className="h-4 w-4" />
+                International
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        )}
+        
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}

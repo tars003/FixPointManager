@@ -1,0 +1,133 @@
+# FixPoint Emergency Services - Card Content for All Service Categories
+
+## Domestic (India) Emergency Flow Cards
+
+### 1. Accident
+**Title:** "Vehicle Accident Assistance"  
+**Card Content:** "Immediate support for collision, damage, or injury incidents. Documentation, police liaison, and recovery services."  
+**Functionality:** Tapping leads to accident type selection screen with emergency protocols and documentation tools.  
+**Action Button:** "Get Help Now"  
+**Icon:** Car crash with caution symbol
+
+### 2. Breakdown
+**Title:** "Vehicle Breakdown Support"  
+**Card Content:** "Stuck on the road? Get immediate technical help, roadside assistance, and repair services anywhere in India."  
+**Functionality:** Tapping opens breakdown type assessment leading to troubleshooting or professional help connection.  
+**Action Button:** "Fix My Vehicle"  
+**Icon:** Car with engine warning light
+
+### 3. Police Issue
+**Title:** "Police & Legal Assistance"  
+**Card Content:** "Navigate police checkpoints, document verification, or traffic violations with real-time legal guidance."  
+**Functionality:** Tapping leads to police issue categorization with legal rights information and documentation tools.  
+**Action Button:** "Legal Support"  
+**Icon:** Police badge with shield
+
+### 4. Medical
+**Title:** "Medical Emergency Response"  
+**Card Content:** "Immediate access to ambulance services, nearby hospitals, and first-aid guidance for any health crisis."  
+**Functionality:** Tapping opens severity assessment leading to ambulance dispatch or directed hospital navigation.  
+**Action Button:** "Medical Help"  
+**Icon:** Red cross/ambulance symbol
+
+### 5. Theft/Security
+**Title:** "Theft & Security Alert"  
+**Card Content:** "Report vehicle theft, break-ins, or security concerns with direct police connection and tracking support."  
+**Functionality:** Tapping opens theft reporting protocol with location tracking and police coordination tools.  
+**Action Button:** "Security Alert"  
+**Icon:** Lock with alert symbol
+
+### 6. Documentation
+**Title:** "Emergency Document Services"  
+**Card Content:** "Lost or damaged vehicle documents? Get digital backups, temporary permits, and official replacements."  
+**Functionality:** Tapping leads to document type selection with digital recovery tools and official replacement guidance.  
+**Action Button:** "Recover Documents"  
+**Icon:** Document folder with exclamation
+
+### 7. Natural Hazard
+**Title:** "Natural Disaster Response"  
+**Card Content:** "Navigate floods, landslides, extreme weather, or road hazards with real-time alerts and safe routes."  
+**Functionality:** Tapping opens hazard assessment with safety protocols and evacuation guidance specific to detected hazard.  
+**Action Button:** "Safety Routes"  
+**Icon:** Warning triangle with nature elements
+
+### 8. Fuel Emergency
+**Title:** "Fuel Crisis Assistance"  
+**Card Content:** "Out of fuel or wrong fuel emergency? Get immediate delivery or tank draining services wherever you are."  
+**Functionality:** Tapping leads to fuel type selection and nearest delivery service dispatch with real-time tracking.  
+**Action Button:** "Fuel Solution"  
+**Icon:** Fuel pump with alert
+
+### 9. Other Emergency
+**Title:** "Additional Emergency Support"  
+**Card Content:** "Facing an unusual emergency? Get customized assistance for any vehicle or travel crisis not listed above."  
+**Functionality:** Tapping opens guided assessment questionnaire leading to specialized support protocols.  
+**Action Button:** "Get Custom Help"  
+**Icon:** Question mark with support symbol
+
+---
+
+## International Emergency Flow Cards
+
+### 1. Accident/Breakdown
+**Title:** "International Vehicle Emergency"  
+**Card Content:** "Complete support for accidents or breakdowns abroad, with local protocol guidance and language assistance."  
+**Functionality:** Tapping opens country-specific accident/breakdown protocols with translation tools and service connection.  
+**Action Button:** "Vehicle Help"  
+**Icon:** Combined car crash and repair wrench
+
+### 2. Police/Legal
+**Title:** "Global Legal Protection"  
+**Card Content:** "Navigate foreign police interactions, checkpoints, or legal systems with country-specific rights guidance."  
+**Functionality:** Tapping leads to situation assessment with translated legal rights information and embassy connections.  
+**Action Button:** "Legal Shield"  
+**Icon:** Legal scale with global symbol
+
+### 3. Medical
+**Title:** "Worldwide Medical Response"  
+**Card Content:** "Access emergency healthcare anywhere with language support, insurance coordination, and hospital direction."  
+**Functionality:** Tapping opens severity assessment leading to appropriate medical facility connection with translation support.  
+**Action Button:** "Medical Alert"  
+**Icon:** Red cross with globe
+
+### 4. Border/Customs
+**Title:** "Border & Customs Navigation"  
+**Card Content:** "Resolve vehicle import/export issues, documentation problems, or border crossing emergencies."  
+**Functionality:** Tapping leads to border issue categorization with document verification tools and customs procedure guidance.  
+**Action Button:** "Border Help"  
+**Icon:** Passport with barrier symbol
+
+### 5. Documentation
+**Title:** "Global Document Recovery"  
+**Card Content:** "Lost passport, license, or vehicle papers abroad? Get emergency replacements and digital verification."  
+**Functionality:** Tapping opens document type selection with embassy connection and digital recovery procedures.  
+**Action Button:** "Document SOS"  
+**Icon:** International document folder
+
+### 6. Vehicle Transport
+**Title:** "Emergency Vehicle Shipping"  
+**Card Content:** "Arrange emergency vehicle transport across borders or back to India with customs clearance support."  
+**Functionality:** Tapping leads to transport type selection with shipping arrangement tools and cost estimation.  
+**Action Button:** "Transport Solution"  
+**Icon:** Vehicle with plane/ship symbol
+
+### 7. Natural Disaster
+**Title:** "Global Disaster Response"  
+**Card Content:** "Navigate foreign natural disasters with real-time alerts, evacuation guidance, and embassy coordination."  
+**Functionality:** Tapping opens disaster assessment with country-specific safety protocols and evacuation support.  
+**Action Button:** "Safety Protocol"  
+**Icon:** Global warning symbol
+
+### 8. Language Help
+**Title:** "Emergency Translation"  
+**Card Content:** "Break through language barriers in any crisis with instant translation tools and emergency phrase guides."  
+**Functionality:** Tapping opens multi-mode translation tools with emergency phrase library and live interpreter connection.  
+**Action Button:** "Translate Now"  
+**Icon:** Speech bubbles with translation symbol
+
+### 9. Embassy Contact
+**Title:** "Embassy Emergency Line"  
+**Card Content:** "Direct connection to Indian embassy or consulate services for any crisis situation while abroad."  
+**Functionality:** Tapping leads to nearest embassy connection with pre-formatted emergency request templates.  
+**Action Button:** "Embassy SOS"  
+**Icon:** Diplomatic seal with alert

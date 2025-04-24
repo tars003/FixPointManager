@@ -59,70 +59,79 @@ export default function DomesticEmergency({
     setSelectedCategory('none');
   };
 
-  // Categories with icons, colors and descriptions
+  // Categories with icons, colors and descriptions - updated with provided specifications
   const emergencyCategories = [
     {
       id: 'accident',
-      name: 'Accident',
+      name: 'Vehicle Accident Assistance',
       icon: <Car />,
       color: 'red',
-      description: 'Vehicle collision or accident'
+      description: 'Immediate support for collision, damage, or injury incidents. Documentation, police liaison, and recovery services.',
+      actionButton: 'Get Help Now'
     },
     {
       id: 'breakdown',
-      name: 'Breakdown',
+      name: 'Vehicle Breakdown Support',
       icon: <Engine />,
       color: 'orange',
-      description: 'Vehicle not starting or functioning'
+      description: 'Stuck on the road? Get immediate technical help, roadside assistance, and repair services anywhere in India.',
+      actionButton: 'Fix My Vehicle'
     },
     {
       id: 'police',
-      name: 'Police Issue',
+      name: 'Police & Legal Assistance',
       icon: <Shield />,
       color: 'blue',
-      description: 'Traffic violation or police matter'
+      description: 'Navigate police checkpoints, document verification, or traffic violations with real-time legal guidance.',
+      actionButton: 'Legal Support'
     },
     {
       id: 'medical',
-      name: 'Medical',
+      name: 'Medical Emergency Response',
       icon: <Heart />,
       color: 'pink',
-      description: 'Health emergency during travel'
+      description: 'Immediate access to ambulance services, nearby hospitals, and first-aid guidance for any health crisis.',
+      actionButton: 'Medical Help'
     },
     {
       id: 'theft',
-      name: 'Theft/Security',
+      name: 'Theft & Security Alert',
       icon: <LockKeyhole />,
       color: 'purple',
-      description: 'Vehicle theft or security concern'
+      description: 'Report vehicle theft, break-ins, or security concerns with direct police connection and tracking support.',
+      actionButton: 'Security Alert'
     },
     {
       id: 'document',
-      name: 'Documentation',
+      name: 'Emergency Document Services',
       icon: <FileText />,
       color: 'cyan',
-      description: 'Document issue or assistance'
+      description: 'Lost or damaged vehicle documents? Get digital backups, temporary permits, and official replacements.',
+      actionButton: 'Recover Documents'
     },
     {
       id: 'natural',
-      name: 'Natural Hazard',
+      name: 'Natural Disaster Response',
       icon: <AlertTriangle />,
       color: 'amber',
-      description: 'Flooding, landslide or weather hazard'
+      description: 'Navigate floods, landslides, extreme weather, or road hazards with real-time alerts and safe routes.',
+      actionButton: 'Safety Routes'
     },
     {
       id: 'fuel',
-      name: 'Fuel Emergency',
+      name: 'Fuel Crisis Assistance',
       icon: <Fuel />,
       color: 'green',
-      description: 'Ran out of fuel or charging issue'
+      description: 'Out of fuel or wrong fuel emergency? Get immediate delivery or tank draining services wherever you are.',
+      actionButton: 'Fuel Solution'
     },
     {
       id: 'other',
-      name: 'Other Emergency',
+      name: 'Additional Emergency Support',
       icon: <HelpCircle />,
       color: 'gray',
-      description: 'Other vehicle-related emergency'
+      description: 'Facing an unusual emergency? Get customized assistance for any vehicle or travel crisis not listed above.',
+      actionButton: 'Get Custom Help'
     }
   ];
 
