@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, varchar, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, varchar, jsonb, date } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -380,6 +380,90 @@ export const insertCardTransactionSchema = createInsertSchema(cardTransactions).
   referenceNumber: true,
 });
 
+// Emergency Profile schema
+export const emergencyProfiles = pgTable("emergency_profiles", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  fullName: text("full_name").notNull(),
+  dateOfBirth: date("date_of_birth"),
+  bloodType: text("blood_type"),
+  allergies: text("allergies").array(),
+  medications: jsonb("medications").default([]), // Store medication name, dosage, frequency
+  medicalConditions: text("medical_conditions").array(),
+  specialNeeds: text("special_needs"),
+  primaryEmergencyContact: jsonb("primary_emergency_contact").notNull(), // Name, relation, phone, email
+  secondaryEmergencyContacts: jsonb("secondary_emergency_contacts").default([]),
+  preferredHospital: text("preferred_hospital"),
+  insuranceDetails: jsonb("insurance_details").default({}), // Provider, policy number, contact
+  organDonor: boolean("organ_donor").default(false),
+  lastUpdated: timestamp("last_updated").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertEmergencyProfileSchema = createInsertSchema(emergencyProfiles).pick({
+  userId: true,
+  fullName: true,
+  dateOfBirth: true,
+  bloodType: true,
+  allergies: true,
+  medications: true,
+  medicalConditions: true,
+  specialNeeds: true,
+  primaryEmergencyContact: true,
+  secondaryEmergencyContacts: true,
+  preferredHospital: true,
+  insuranceDetails: true,
+  organDonor: true,
+});
+
+// Emergency Incident schema
+export const emergencyIncidents = pgTable("emergency_incidents", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  incidentType: text("incident_type").notNull(), // accident, breakdown, police, medical, theft, document, natural, fuel, other
+  incidentCategory: text("incident_category").notNull(), // domestic, international
+  incidentSubType: text("incident_sub_type"), // More specific categorization
+  vehicleIds: integer("vehicle_ids").array(), // Primary and other involved vehicles
+  otherParties: jsonb("other_parties").default([]), // Info about other people involved
+  location: jsonb("location").notNull(), // lat, lng, address
+  incidentDate: timestamp("incident_date").defaultNow().notNull(),
+  status: text("status").default("active").notNull(), // active, resolved, cancelled
+  emergencyServices: jsonb("emergency_services").default([]), // Services contacted
+  responseTimes: jsonb("response_times").default({}), // Track response times for different services
+  mediaFiles: jsonb("media_files").default([]), // Photos, videos, audio of incident
+  incidentReport: jsonb("incident_report").default({}), // Structured incident data
+  resolutionDetails: jsonb("resolution_details").default({}),
+  officialReportNumbers: jsonb("official_report_numbers").default({}), // Police report, insurance claim numbers
+  relatedServiceBookings: integer("related_service_bookings").array(),
+  followUpRequired: boolean("follow_up_required").default(false),
+  followUpDate: timestamp("follow_up_date"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertEmergencyIncidentSchema = createInsertSchema(emergencyIncidents).pick({
+  userId: true,
+  incidentType: true,
+  incidentCategory: true,
+  incidentSubType: true,
+  vehicleIds: true,
+  otherParties: true,
+  location: true,
+  incidentDate: true,
+  status: true,
+  emergencyServices: true,
+  responseTimes: true,
+  mediaFiles: true,
+  incidentReport: true,
+  resolutionDetails: true,
+  officialReportNumbers: true,
+  relatedServiceBookings: true,
+  followUpRequired: true,
+  followUpDate: true,
+  notes: true,
+});
+
 // FasTag schema
 export const fastags = pgTable("fastags", {
   id: serial("id").primaryKey(),
@@ -576,3 +660,9 @@ export type InsertMarketplaceProduct = z.infer<typeof insertMarketplaceProductSc
 
 export type LearningContent = typeof learningContent.$inferSelect;
 export type InsertLearningContent = z.infer<typeof insertLearningContentSchema>;
+
+export type EmergencyProfile = typeof emergencyProfiles.$inferSelect;
+export type InsertEmergencyProfile = z.infer<typeof insertEmergencyProfileSchema>;
+
+export type EmergencyIncident = typeof emergencyIncidents.$inferSelect;
+export type InsertEmergencyIncident = z.infer<typeof insertEmergencyIncidentSchema>;

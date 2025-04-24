@@ -1,0 +1,1268 @@
+# FixPoint Emergency Services - Functional Flows
+
+## Domestic (India) Emergency Flows
+
+### 1. Vehicle Accident Assistance
+**When user taps "Get Help Now":**
+
+1. **Vehicle Selection Screen**
+   - **Title:** "Vehicles Involved in Accident"
+   - **Content:** 
+     - Auto-populated list of user's registered vehicles
+     - Option to select multiple vehicles if several owned vehicles involved
+     - "Add Other Vehicle" button for adding third-party vehicles
+   - **Functionality:** User selects their vehicle(s) involved
+
+2. **Other Party Information**
+   - **Title:** "Add Other Party Details"
+   - **Content:**
+     - Vehicle number plate entry field with automatic validation
+     - Vehicle make/model selection (optional)
+     - Driver contact number
+     - "Add More Parties" button if multiple vehicles involved
+   - **Functionality:** System sends OTP to all registered numbers for verification
+
+3. **Incident Verification**
+   - **Title:** "Multi-Party Verification"
+   - **Content:**
+     - OTP entry fields for all parties
+     - "Responsibility Declaration" with options:
+       - "I accept responsibility"
+       - "Other party is responsible"
+       - "Shared responsibility"
+       - "Not determined yet"
+   - **Functionality:** Creates verified digital record of incident with timestamp
+
+4. **Documentation Center**
+   - **Title:** "Accident Documentation"
+   - **Content:**
+     - Guided photo capture with frames for:
+       - Vehicle damage (front, sides, rear)
+       - License plates
+       - Accident scene wide shot
+       - Road conditions
+     - Video recording option (max 60 seconds)
+     - Voice note recording for verbal statement
+     - Text note field for additional details
+   - **Functionality:** Creates comprehensive accident record package
+
+5. **Instant Assessment**
+   - **Title:** "Damage & Recovery Assessment"
+   - **Content:**
+     - AI-powered damage assessment with cost estimate
+     - Insurance coverage verification showing:
+       - Policy number
+       - Coverage amount
+       - Deductible
+       - Claim procedure
+     - "Nearest Service Centers" map with:
+       - Authorized centers highlighted
+       - Availability status
+       - Direct booking option
+   - **Functionality:** Provides immediate recovery path
+
+6. **Resolution Center**
+   - **Title:** "Accident Resolution"
+   - **Content:**
+     - Digital FIR filing assistance
+     - Insurance claim initiation with pre-filled information
+     - Tow truck booking with real-time tracking
+     - Temporary transportation options
+     - Follow-up appointment scheduler
+   - **Functionality:** Completes end-to-end accident management
+
+### 2. Vehicle Breakdown Support
+**When user taps "Fix My Vehicle":**
+
+1. **Vehicle Selection Screen**
+   - **Title:** "Select Vehicle Needing Assistance"
+   - **Content:**
+     - List of user's registered vehicles with thumbnails
+     - Quick option to use "Current Location Vehicle" (most recently driven)
+     - "Add Temporary Vehicle" option (for non-registered vehicles)
+   - **Functionality:** Identifies vehicle specifications for accurate support
+
+2. **Breakdown Category Selection**
+   - **Title:** "What's Happening With Your Vehicle?"
+   - **Content:**
+     - Visual selection grid with categories:
+       - "Engine Won't Start"
+       - "Vehicle Stalled While Driving"
+       - "Flat Tire/Wheel Issue"
+       - "Battery/Electrical Problem"
+       - "Overheating"
+       - "Locked Out/Key Issue"
+       - "Warning Lights On"
+       - "Unusual Sounds/Behavior"
+     - "Not Sure" option with guided diagnostic
+   - **Functionality:** Routes to specific troubleshooting protocol
+
+3. **Safety Position Confirmation**
+   - **Title:** "Confirm Your Safety First"
+   - **Content:**
+     - Animated safety guidance for:
+       - Hazard lights activation
+       - Safe vehicle positioning
+       - Warning triangle placement (if available)
+       - Passenger safety
+     - Checkbox confirmations for safety steps
+   - **Functionality:** Ensures user safety before technical support
+
+4. **DIY Troubleshooting (When Applicable)**
+   - **Title:** "Quick Fix Attempt"
+   - **Content:**
+     - Step-by-step guided troubleshooting with animations
+     - Simple diagnostic tests user can perform
+     - Success/failure confirmation buttons
+     - "Skip to Professional Help" option
+   - **Functionality:** Attempts to resolve simple issues immediately
+
+5. **Roadside Assistance Dispatch**
+   - **Title:** "Professional Help On The Way"
+   - **Content:**
+     - Nearest service providers with:
+       - Service specialties matching your issue
+       - ETA based on real-time traffic
+       - Direct call button
+       - User ratings and reviews
+     - Cost estimate breakdown
+     - Payment method selection
+   - **Functionality:** Dispatches appropriate technical help
+
+6. **While You Wait Tools**
+   - **Title:** "Support While Waiting"
+   - **Content:**
+     - Real-time tracking of service vehicle
+     - Nearby amenities map (restrooms, food, etc.)
+     - Estimated repair time
+     - Alternative transportation options
+     - "Share Status" button for updating family/colleagues
+   - **Functionality:** Improves waiting experience with practical tools
+
+### 3. Police & Legal Assistance
+**When user taps "Legal Support":**
+
+1. **Situation Assessment**
+   - **Title:** "What Police Situation Are You Facing?"
+   - **Content:**
+     - Selection buttons for:
+       - "Document Verification/Check"
+       - "Traffic Violation Charge"
+       - "Vehicle Detention Threat"
+       - "Accident Report Filing"
+       - "Checkpoint/Roadblock Issue"
+       - "Unclear Challan/Fine"
+       - "Security Concern"
+     - Location sharing with police jurisdiction identification
+   - **Functionality:** Routes to specific legal protocol
+
+2. **Digital Document Center**
+   - **Title:** "Your Vehicle Documents"
+   - **Content:**
+     - Digital display of all legal documents:
+       - Driver's License
+       - Registration Certificate
+       - Insurance Policy
+       - PUC Certificate
+       - Fitness Certificate (if applicable)
+       - Tax Payment Receipt
+     - Validity status indicators for each document
+     - QR codes for official verification
+   - **Functionality:** Provides instant access to all required documentation
+
+3. **Legal Rights Information**
+   - **Title:** "Know Your Rights"
+   - **Content:**
+     - Location-specific traffic laws summary
+     - Proper police identification requirements
+     - Official violation fine schedule
+     - Legal vs. illegal police requests guide
+     - Recording consent information
+   - **Functionality:** Educates user on their legal standing
+
+4. **Interaction Documentation**
+   - **Title:** "Document This Interaction"
+   - **Content:**
+     - Audio recording with automatic transcription
+     - Officer ID and badge number entry field
+     - Violation details entry with photo evidence upload
+     - Receipt requirement notification
+     - Witness information collection
+   - **Functionality:** Creates verifiable record of interaction
+
+5. **Resolution Pathways**
+   - **Title:** "Resolve This Situation"
+   - **Content:**
+     - Digital challan payment option with receipt
+     - Dispute filing assistant with templates
+     - Senior officer escalation protocol
+     - Traffic authority helpline direct connect
+     - Future court date scheduling assistant
+   - **Functionality:** Provides multiple resolution options
+
+6. **Post-Interaction Support**
+   - **Title:** "After the Interaction"
+   - **Content:**
+     - Interaction record storage in secure cloud
+     - Legal consultation booking options
+     - Similar case resolution examples
+     - Rating system for police interaction
+     - Feedback submission to traffic authorities
+   - **Functionality:** Ensures proper follow-up and accountability
+
+### 4. Medical Emergency Response
+**When user taps "Medical Help":**
+
+1. **Emergency Severity Assessment**
+   - **Title:** "Medical Emergency Level"
+   - **Content:**
+     - Large button options:
+       - "Life-Threatening Emergency" (red)
+       - "Serious but Stable" (orange)
+       - "Minor Injury/Illness" (yellow)
+     - Quick symptoms checklist for:
+       - Breathing difficulties
+       - Chest pain
+       - Bleeding
+       - Loss of consciousness
+       - Accident injuries
+   - **Functionality:** Prioritizes response based on severity
+
+2. **Location & Ambulance Dispatch**
+   - **Title:** "Medical Help Location"
+   - **Content:**
+     - Precise location confirmation with map
+     - Nearest ambulance services with:
+       - ETA based on real-time traffic
+       - Ambulance type (basic/advanced life support)
+       - Direct dispatch button
+     - Alternative: "Get to Hospital" navigation if faster
+   - **Functionality:** Connects to fastest appropriate medical transportation
+
+3. **Patient Information Center**
+   - **Title:** "Critical Medical Information"
+   - **Content:**
+     - Auto-populated from emergency profile:
+       - Blood type
+       - Known allergies
+       - Existing conditions
+       - Current medications
+       - Emergency contacts
+       - Primary physician
+     - Quick edit option for situation-specific details
+   - **Functionality:** Provides essential information for responders
+
+4. **First Aid Guidance**
+   - **Title:** "While Waiting for Help"
+   - **Content:**
+     - Condition-specific first aid instructions with visuals
+     - Step-by-step emergency protocols
+     - Voice-guided CPR with timing
+     - "On Call Support" button for medical professional guidance
+     - Calming breathing exercise guide for patient/caregiver
+   - **Functionality:** Provides immediate care instructions before professionals arrive
+
+5. **Hospital Coordination**
+   - **Title:** "Hospital Preparation"
+   - **Content:**
+     - Selected/nearest hospital information
+     - Pre-registration initiation
+     - Insurance verification
+     - Estimated arrival notification to facility
+     - Department routing recommendation
+   - **Functionality:** Streamlines hospital arrival process
+
+6. **Recovery Support**
+   - **Title:** "After Emergency Care"
+   - **Content:**
+     - Prescription management tools
+     - Follow-up appointment scheduler
+     - Home care instructions
+     - Medical transport for vehicle recovery
+     - Medical expense tracking for insurance
+   - **Functionality:** Supports post-emergency recovery process
+
+### 5. Theft & Security Alert
+**When user taps "Security Alert":**
+
+1. **Incident Classification**
+   - **Title:** "Security Incident Type"
+   - **Content:**
+     - Selection options:
+       - "Vehicle Theft (Missing Vehicle)"
+       - "Break-in/Vandalism"
+       - "Part/Accessory Theft"
+       - "Attempted Theft"
+       - "Suspicious Activity Near Vehicle"
+       - "Carjacking Incident"
+     - Time of incident selection (now or earlier)
+   - **Functionality:** Routes to appropriate response protocol
+
+2. **Vehicle Identification**
+   - **Title:** "Affected Vehicle Details"
+   - **Content:**
+     - Selection from registered vehicles
+     - Vehicle details auto-populated:
+       - Registration number
+       - Make/model/color
+       - VIN
+       - Distinguishing features
+       - Tracking system status (if equipped)
+     - Last known location with timestamp
+   - **Functionality:** Creates accurate identification for authorities
+
+3. **Official Report Filing**
+   - **Title:** "Police Report Assistance"
+   - **Content:**
+     - FIR pre-filling with vehicle and incident details
+     - Nearest police station locator with directions
+     - Online FIR submission option (where available)
+     - Direct police hotline connection
+     - FIR number tracker
+   - **Functionality:** Streamlines official reporting process
+
+4. **Evidence Collection**
+   - **Title:** "Document the Incident"
+   - **Content:**
+     - Photo/video capture tool with guidance
+     - Nearby CCTV camera locator
+     - Witness information collection form
+     - Voice note recorder for detailed account
+     - Timeline reconstruction assistant
+   - **Functionality:** Gathers comprehensive evidence for investigation
+
+5. **Tracking & Recovery Tools**
+   - **Title:** "Locate Your Vehicle"
+   - **Content:**
+     - GPS tracker activation (if equipped)
+     - Social media alert template with vehicle details
+     - Local security camera network check request
+     - Vehicle marking as "stolen" in FixPoint network
+     - Real-time alerts for matching vehicle sightings
+   - **Functionality:** Maximizes recovery chances with multiple tracking methods
+
+6. **Post-Theft Support**
+   - **Title:** "Next Steps"
+   - **Content:**
+     - Insurance claim initiation with pre-filled details
+     - Temporary transportation options
+     - Stolen document replacement guides
+     - New vehicle purchase assistant (if total loss)
+     - Security upgrade recommendations
+   - **Functionality:** Provides comprehensive support for theft aftermath
+
+### 6. Emergency Document Services
+**When user taps "Recover Documents":**
+
+1. **Document Issue Identification**
+   - **Title:** "Document Issue Type"
+   - **Content:**
+     - Selection options:
+       - "Lost Documents"
+       - "Damaged/Illegible Documents"
+       - "Expired Documents"
+       - "Stolen Documents"
+       - "Digital Access Only (Physical Unavailable)"
+       - "Verification/Authentication Issue"
+     - Vehicle selection from registered list
+   - **Functionality:** Routes to specific document recovery protocol
+
+2. **Digital Document Retrieval**
+   - **Title:** "Your Digital Document Vault"
+   - **Content:**
+     - Secure cloud access to stored document copies:
+       - Registration Certificate
+       - Insurance Policy
+       - Driving License
+       - PUC Certificate
+       - Tax Payment Receipts
+       - Service Records
+     - Download, share, or display options
+     - Validity status indicators
+   - **Functionality:** Provides immediate access to digital backups
+
+3. **Temporary Permit Generator**
+   - **Title:** "Temporary Authorization"
+   - **Content:**
+     - Official temporary permit application:
+       - Pre-filled vehicle information
+       - Purpose selection
+       - Duration request
+       - Digital signature
+     - Payment processing for fees
+     - QR code generation for verification
+   - **Functionality:** Creates legally valid temporary authorization
+
+4. **Replacement Procedure Guide**
+   - **Title:** "Get Replacement Documents"
+   - **Content:**
+     - Document-specific replacement procedures:
+       - Required forms (pre-filled when possible)
+       - Supporting documents checklist
+       - Fee information with payment options
+       - Processing time estimates
+       - Tracking number generation
+     - Appointment booking with relevant authorities
+   - **Functionality:** Streamlines official replacement process
+
+5. **Authentication Tools**
+   - **Title:** "Verify Document Authenticity"
+   - **Content:**
+     - Official verification channel links
+     - Authority contact information
+     - Document validation scanner
+     - Digital signature verification
+     - History log of verification attempts
+   - **Functionality:** Resolves questions about document validity
+
+6. **Document Security Advisor**
+   - **Title:** "Protect Your Documents"
+   - **Content:**
+     - Secure storage recommendations
+     - Regular backup reminders
+     - Watermarking and protection features
+     - Fraud alert settings
+     - Access log monitoring
+   - **Functionality:** Prevents future document issues
+
+### 7. Natural Disaster Response
+**When user taps "Safety Routes":**
+
+1. **Disaster Assessment**
+   - **Title:** "Identify Natural Hazard"
+   - **Content:**
+     - Selection options with visual indicators:
+       - "Flooding/Water Logging"
+       - "Landslide/Road Collapse"
+       - "Severe Weather (Storm/Cyclone)"
+       - "Earthquake Aftermath"
+       - "Fire/Smoke Hazard"
+       - "Extreme Weather Conditions"
+     - Severity level indicator
+     - Current location mapping with hazard overlay
+   - **Functionality:** Identifies specific natural threat for appropriate guidance
+
+2. **Immediate Safety Protocol**
+   - **Title:** "First Safety Steps"
+   - **Content:**
+     - Hazard-specific safety instructions with animations
+     - Vehicle positioning guidance
+     - Passenger safety instructions
+     - Emergency supply checklist
+     - "Mark Safe" button for emergency contacts notification
+   - **Functionality:** Provides critical immediate safety guidance
+
+3. **Evacuation Route Planner**
+   - **Title:** "Safe Route Options"
+   - **Content:**
+     - Real-time map with:
+       - Hazard zones marked in red
+       - Safe routes in green
+       - Emergency shelter locations
+       - Fuel/charging stations en route
+       - Road condition updates
+     - Turn-by-turn navigation with hazard avoidance
+     - Offline map download option
+   - **Functionality:** Provides safest evacuation options with real-time updates
+
+4. **Emergency Services Connector**
+   - **Title:** "Emergency Support"
+   - **Content:**
+     - One-tap connection to:
+       - Disaster Response Force
+       - Fire Services
+       - Flood Relief
+       - Search & Rescue
+       - Medical Emergency Services
+     - Current wait times and availability
+     - Request priority option for vulnerable individuals
+   - **Functionality:** Connects to specialized emergency services
+
+5. **Community Alert System**
+   - **Title:** "Hazard Alert Network"
+   - **Content:**
+     - Report hazard details for community notification
+     - View nearby user reports with verification count
+     - Receive real-time updates from official sources
+     - Join location-based emergency groups
+     - Share status and location with selected contacts
+   - **Functionality:** Creates community-based alert and support network
+
+6. **Recovery Resources**
+   - **Title:** "After the Hazard"
+   - **Content:**
+     - Vehicle damage assessment tool
+     - Insurance claim initiation for natural disasters
+     - Repair facility finder with disaster response capabilities
+     - Temporary accommodation options
+     - Financial assistance program connections
+   - **Functionality:** Provides post-disaster recovery support
+
+### 8. Fuel Emergency
+**When user taps "Fuel Solution":**
+
+1. **Fuel Issue Identification**
+   - **Title:** "Fuel Emergency Type"
+   - **Content:**
+     - Selection options:
+       - "Out of Fuel (Empty Tank)"
+       - "Wrong Fuel Added"
+       - "Fuel Leak/Spillage"
+       - "Poor Quality Fuel Issues"
+       - "Fuel System Warning Light"
+       - "EV: Critical Battery Level"
+     - Vehicle selection with fuel type display
+     - Current location mapping
+   - **Functionality:** Routes to specific fuel emergency protocol
+
+2. **Location & Vehicle Assessment**
+   - **Title:** "Vehicle & Location Details"
+   - **Content:**
+     - Safe position confirmation checklist
+     - Remaining range estimate (if applicable)
+     - Nearest safe waiting area
+     - Traffic hazard assessment
+     - Vehicle accessibility evaluation
+   - **Functionality:** Assesses situation logistics for appropriate response
+
+3. **Immediate Solution Dispatch**
+   - **Title:** "Fuel Emergency Response"
+   - **Content:**
+     - Service options based on issue:
+       - Mobile fuel delivery (with fuel type, quantity, price)
+       - Fuel system draining service (for wrong fuel)
+       - Towing to nearest fuel station
+       - EV: Mobile charging service
+       - Leak containment specialist
+     - ETA with real-time tracking
+     - Direct communication with service provider
+   - **Functionality:** Dispatches fastest appropriate remedy
+
+4. **While Waiting Guidance**
+   - **Title:** "While Help is On the Way"
+   - **Content:**
+     - Safety position reminder
+     - Hazard light instructions
+     - Battery preservation tips
+     - Nearby amenities map
+     - Estimated resolution time
+   - **Functionality:** Provides practical waiting period guidance
+
+5. **Payment & Verification**
+   - **Title:** "Service Completion"
+   - **Content:**
+     - Service verification checklist
+     - Payment options with:
+       - Saved payment methods
+       - Insurance coverage check
+       - Split payment option
+       - Roadside assistance membership application
+     - Digital receipt generation
+   - **Functionality:** Completes service transaction securely
+
+6. **Future Prevention Tools**
+   - **Title:** "Prevent Future Fuel Issues"
+   - **Content:**
+     - Fuel efficiency monitoring setup
+     - Nearest fuel station mapping for routes
+     - Fuel quality reporting network
+     - Maintenance reminder for fuel system
+     - EV: Charging station planner
+   - **Functionality:** Helps avoid future fuel emergencies
+
+### 9. Other Emergency
+**When user taps "Get Custom Help":**
+
+1. **Emergency Assessment**
+   - **Title:** "Tell Us About Your Emergency"
+   - **Content:**
+     - Free text description field
+     - Voice note recording option
+     - Photo/video upload
+     - Quick category tags for:
+       - Vehicle-related
+       - Location-related
+       - Weather-related
+       - Personal safety
+       - External threat
+     - Urgency level selection slider
+   - **Functionality:** Collects comprehensive situation information for custom response
+
+2. **AI Solution Finder**
+   - **Title:** "Finding Your Solution"
+   - **Content:**
+     - AI processing animation
+     - Suggested emergency categories matching description
+     - Recommended action plan
+     - Alternative solution options
+     - "Not Quite Right" feedback option
+   - **Functionality:** Uses AI to route to most appropriate solution path
+
+3. **Custom Response Team**
+   - **Title:** "Specialized Support"
+   - **Content:**
+     - Direct connection options to:
+       - FixPoint emergency specialists
+       - Voice call support
+       - Video assistance
+       - Chat support
+     - Estimated response time
+     - Priority level indicator
+   - **Functionality:** Connects to human specialists for unique emergencies
+
+4. **Resource Mobilization**
+   - **Title:** "Help On the Way"
+   - **Content:**
+     - Custom resource dispatch options:
+       - Technical specialist
+       - Security personnel
+       - Specialized equipment
+       - Multi-service coordination
+     - ETA tracking
+     - Special instructions relay
+   - **Functionality:** Mobilizes appropriate custom resources
+
+5. **Situation Monitoring**
+   - **Title:** "Emergency Progress"
+   - **Content:**
+     - Status updates with timeline
+     - Resolution milestone tracking
+     - Additional resource suggestions
+     - Location sharing with responders
+     - Situation escalation option
+   - **Functionality:** Provides ongoing monitoring of unique emergency
+
+6. **Custom Resolution Report**
+   - **Title:** "Emergency Resolution"
+   - **Content:**
+     - Incident summary
+     - Resolution details
+     - Cost breakdown
+     - Future prevention recommendations
+     - Feedback and rating system
+   - **Functionality:** Documents custom emergency for future reference
+
+---
+
+## International Emergency Flows
+
+### 1. International Vehicle Emergency
+**When user taps "Vehicle Help":**
+
+1. **Country Protocol Guide**
+   - **Title:** "Local Requirements for [Country]"
+   - **Content:**
+     - Country-specific accident/breakdown procedures
+     - Required documentation display
+     - Local emergency number auto-configuration
+     - Legal obligations summary
+     - "Translate Instructions" button in local language
+   - **Functionality:** Orients user to foreign vehicle emergency protocols
+
+2. **Incident Documentation**
+   - **Title:** "Document Your Situation"
+   - **Content:**
+     - Guided photo/video capture with international standards
+     - Geo-tagged location with timestamp
+     - Bilingual information collection forms
+     - International insurance information exchange templates
+     - Document translation camera for foreign paperwork
+   - **Functionality:** Creates legally valid documentation for international incidents
+
+3. **Local Service Connection**
+   - **Title:** "Local Assistance"
+   - **Content:**
+     - Country-specific service options:
+       - Authorized repair networks
+       - International roadside assistance partners
+       - Manufacturer service centers
+       - Multi-language support services
+     - Service request with pre-translated details
+     - Local payment method guidance
+   - **Functionality:** Bridges language and service gaps in foreign country
+
+4. **Communication Assistance**
+   - **Title:** "Overcome Language Barriers"
+   - **Content:**
+     - Visual communication cards with local translations
+     - Emergency phrase audio playback in local language
+     - Real-time translation chat with service providers
+     - International calling with automatic interpretation
+     - Cultural etiquette guidance for emergency situations
+   - **Functionality:** Resolves communication challenges during foreign emergencies
+
+5. **Insurance & Coverage Verification**
+   - **Title:** "International Coverage Check"
+   - **Content:**
+     - International policy verification
+     - Coverage limits in local currency
+     - Claim procedure for international incidents
+     - Required documentation checklist
+     - Direct insurer contact with translation support
+   - **Functionality:** Clarifies insurance status in foreign territory
+
+6. **International Document Protection**
+   - **Title:** "Secure Your Documents Abroad"
+   - **Content:**
+     - Document security best practices by country
+     - Fraud alert monitoring for documents
+     - Backup creation protocols
+     - Access management controls
+     - Document insurance verification
+   - **Functionality:** Enhances document security in international travel
+
+### 6. Vehicle Transport
+**When user taps "Transport Solution":**
+
+1. **Transport Need Assessment**
+   - **Title:** "Vehicle Transport Requirements"
+   - **Content:**
+     - Selection options:
+       - "Border to Border Transport"
+       - "Sea Shipping to Home Country"
+       - "Air Freight Emergency Return"
+       - "Intra-Country Transport"
+       - "Recovery from Inaccessible Location"
+       - "Multi-Vehicle Convoy Support"
+     - Vehicle details confirmation
+     - Origin and destination selection
+   - **Functionality:** Identifies specific international transport needs
+
+2. **Transport Method Selection**
+   - **Title:** "Transport Options"
+   - **Content:**
+     - Available transport methods with:
+       - Estimated time
+       - Cost comparison
+       - Required documentation
+       - Insurance coverage
+       - Environmental impact
+     - Interactive comparison tool
+     - Urgency vs. cost optimization slider
+   - **Functionality:** Presents optimal transport methods for situation
+
+3. **Customs & Border Procedure**
+   - **Title:** "Cross-Border Requirements"
+   - **Content:**
+     - Pre-transport documentation checklist
+     - Customs declaration preparation
+     - Duty and tax calculator
+     - Temporary export/import permits
+     - Carnet de Passage management
+   - **Functionality:** Prepares all regulatory aspects of vehicle transport
+
+4. **Transport Provider Connection**
+   - **Title:** "International Transport Services"
+   - **Content:**
+     - Vetted international transport companies
+     - Service comparison with ratings
+     - Specialized vehicle handling capabilities
+     - Multi-language support availability
+     - Direct booking interface
+   - **Functionality:** Connects to appropriate international transport service
+
+5. **Vehicle Preparation Guide**
+   - **Title:** "Prepare for Transport"
+   - **Content:**
+     - Vehicle preparation checklist:
+       - Required servicing
+       - Fuel level requirements
+       - Personal item removal
+       - Security measures
+       - Documentation placement
+     - Handover procedure guidance
+     - Photo documentation tool
+   - **Functionality:** Ensures vehicle is properly prepared for transport
+
+6. **Transport Tracking & Recovery**
+   - **Title:** "Monitor & Receive Vehicle"
+   - **Content:**
+     - Real-time transport tracking
+     - Milestone notifications
+     - Customs clearance status
+     - Delivery coordination
+     - Post-transport inspection checklist
+   - **Functionality:** Manages entire transport process to successful delivery
+
+### 7. Global Disaster Response
+**When user taps "Safety Protocol":**
+
+1. **Disaster Situation Assessment**
+   - **Title:** "Identify Natural Disaster"
+   - **Content:**
+     - Selection options with severity scale:
+       - "Flooding/Tsunami"
+       - "Earthquake/Aftershocks"
+       - "Hurricane/Typhoon/Cyclone"
+       - "Wildfire/Smoke Hazard"
+       - "Landslide/Avalanche"
+       - "Extreme Weather Conditions"
+     - Current location mapping with hazard overlay
+     - Travel route risk assessment
+   - **Functionality:** Identifies specific international disaster threat
+
+2. **Country-Specific Response Guide**
+   - **Title:** "Local Emergency Protocol for [Country]"
+   - **Content:**
+     - Country-specific disaster responses
+     - Local emergency numbers configuration
+     - Standard evacuation procedures
+     - Authority contact information
+     - Translated emergency phrases
+   - **Functionality:** Provides country-appropriate disaster response guidance
+
+3. **Evacuation Navigation**
+   - **Title:** "Safe Route Planner"
+   - **Content:**
+     - Real-time disaster zone mapping
+     - International evacuation routes
+     - Designated shelter locations
+     - Border crossing emergency protocols
+     - Offline map download with evacuation markers
+   - **Functionality:** Guides to safety during international disasters
+
+4. **Embassy Emergency Connection**
+   - **Title:** "Diplomatic Emergency Support"
+   - **Content:**
+     - Embassy emergency line direct connect
+     - Citizen evacuation program information
+     - Registration with embassy alert system
+     - Emergency repatriation procedures
+     - Diplomatic advisory updates
+   - **Functionality:** Establishes critical embassy connection during disasters
+
+5. **International Resource Locator**
+   - **Title:** "Find Critical Resources"
+   - **Content:**
+     - Multi-language map of essential services:
+       - Emergency medical facilities
+       - Potable water sources
+       - Food distribution centers
+       - Temporary accommodation
+       - Communication centers
+     - Resource verification with community updates
+     - Navigation with accessibility routing
+   - **Functionality:** Locates vital resources during disaster situations
+
+6. **Recovery & Continuation**
+   - **Title:** "After the Disaster"
+   - **Content:**
+     - Vehicle recovery options
+     - Travel route replanning tools
+     - Insurance claim initiation for natural disasters
+     - Home country return arrangement
+     - Property retrieval coordination
+   - **Functionality:** Supports post-disaster recovery and travel continuation
+
+### 8. Emergency Translation
+**When user taps "Translate Now":**
+
+1. **Language Need Assessment**
+   - **Title:** "Language Assistance Type"
+   - **Content:**
+     - Current country language auto-detection
+     - Emergency situation type selection:
+       - "Police/Authority Interaction"
+       - "Medical Emergency"
+       - "Vehicle Service Emergency"
+       - "Directions/Location Help"
+       - "Documentation Translation"
+       - "General Conversation"
+     - Urgency level indicator
+   - **Functionality:** Identifies specific translation needs for emergency
+
+2. **Multi-Mode Translation Tools**
+   - **Title:** "Choose Translation Method"
+   - **Content:**
+     - Translation method options:
+       - "Voice Conversation" (real-time speech)
+       - "Text Translation" (typing/written)
+       - "Image Translation" (document/sign camera)
+       - "Phrase Library" (pre-translated emergency phrases)
+       - "Live Interpreter" (human translation service)
+     - Mode switching with single tap
+     - Language pair display with accuracy rating
+   - **Functionality:** Provides multiple translation approaches for different scenarios
+
+3. **Emergency Phrase Library**
+   - **Title:** "Critical Emergency Phrases"
+   - **Content:**
+     - Categorized emergency phrases with:
+       - Written translation
+       - Phonetic pronunciation guide
+       - Audio playback (male/female voice options)
+       - Font size adjustment
+       - Offline accessibility
+     - Favorites marking for quick access
+     - Phrase search functionality
+   - **Functionality:** Offers ready-to-use critical phrases for emergency communication
+
+4. **Visual Translation Suite**
+   - **Title:** "Translate What You See"
+   - **Content:**
+     - Camera-based translation with overlay
+     - Document scanning with formatted translation
+     - Road sign and direction interpretation
+     - Menu and price translation
+     - Medical label translation
+   - **Functionality:** Translates visual text in real environment
+
+5. **Human Interpreter Connection**
+   - **Title:** "Live Language Support"
+   - **Content:**
+     - Professional interpreter connection options:
+       - Voice call with interpreter
+       - Three-way translation call
+       - Video interpretation service
+       - Chat-based interpretation
+     - Language specialist selection
+     - Emergency priority queue
+   - **Functionality:** Provides human translation for complex emergency situations
+
+6. **Cultural Context Guidance**
+   - **Title:** "Communication Guidance"
+   - **Content:**
+     - Cultural etiquette tips for emergency situations
+     - Authority interaction protocols by country
+     - Gesture and body language guidance
+     - Formality level recommendations
+     - Local custom alerts relevant to situation
+   - **Functionality:** Enhances communication effectiveness beyond translation
+
+### 9. Embassy Emergency Line
+**When user taps "Embassy SOS":**
+
+1. **Embassy Service Selector**
+   - **Title:** "Embassy Assistance Type"
+   - **Content:**
+     - Selection options:
+       - "Emergency Evacuation Help"
+       - "Lost/Stolen Passport"
+       - "Medical Emergency Support"
+       - "Legal/Detention Situation"
+       - "Natural Disaster Assistance"
+       - "Death/Serious Accident"
+     - Current country with nearest embassy/consulate identification
+     - Embassy jurisdiction verification
+   - **Functionality:** Routes to specific embassy support service
+
+2. **Embassy Contact Center**
+   - **Title:** "Connect with Indian Embassy"
+   - **Content:**
+     - Multiple contact options:
+       - Emergency hotline direct dial
+       - Embassy WhatsApp connection
+       - Email with pre-formatted template
+       - Physical location with directions
+       - Working hours with current status
+     - Contact verification system
+     - Off-hours emergency procedures
+   - **Functionality:** Establishes optimal embassy communication channel
+
+3. **Citizen Service Request**
+   - **Title:** "Request Embassy Assistance"
+   - **Content:**
+     - Structured assistance request form:
+       - Personal information auto-fill
+       - Situation description field
+       - Document reference numbers
+       - Current location details
+       - Support requested specification
+     - Attachment tool for supporting evidence
+     - Priority indicator based on emergency type
+   - **Functionality:** Creates formal record of assistance request
+
+4. **Embassy Document Portal**
+   - **Title:** "Embassy Document Services"
+   - **Content:**
+     - Emergency document service requests:
+       - Emergency passport application
+       - Identity verification letter
+       - Travel authorization request
+       - Death/accident certificate assistance
+       - Legal representation request
+     - Document tracking system
+     - Appointment scheduling when required
+   - **Functionality:** Initiates official document processes through embassy
+
+5. **Citizen Safety Check-in**
+   - **Title:** "Embassy Safety Registration"
+   - **Content:**
+     - Traveler registration with embassy
+     - Travel itinerary sharing
+     - Local contact information update
+     - Emergency contact designation
+     - Travel advisory subscription
+   - **Functionality:** Establishes official record of citizen presence for emergency response
+
+6. **Embassy Guidance Center**
+   - **Title:** "Embassy Advisory"
+   - **Content:**
+     - Country-specific embassy advisories
+     - Regional safety status updates
+     - Local emergency procedures endorsed by embassy
+     - Cultural/legal briefing for emergency situations
+     - Embassy-recommended service providers
+   - **Functionality:** Provides official guidance for Indian citizens in emergency
+ Recovery**
+   - **Title:** "Vehicle & Travel Recovery"
+   - **Content:**
+     - Vehicle repatriation service options
+     - Temporary accommodation arrangements
+     - Alternative transportation booking
+     - Embassy/consulate coordination
+     - International shipping procedures for damaged vehicles
+   - **Functionality:** Provides comprehensive foreign recovery solutions
+
+### 2. Global Legal Protection
+**When user taps "Legal Shield":**
+
+1. **Legal Situation Assessment**
+   - **Title:** "Police/Legal Issue Type"
+   - **Content:**
+     - Selection options:
+       - "Document Check/Verification"
+       - "Traffic Violation Charge"
+       - "Vehicle Impoundment Threat"
+       - "Border/Customs Issue"
+       - "Accident Report Filing"
+       - "Bribery Demand Situation"
+     - Country recognition with local legal system information
+   - **Functionality:** Identifies specific legal challenge in foreign context
+
+2. **Rights & Requirements Guide**
+   - **Title:** "Your Rights in [Country]"
+   - **Content:**
+     - Country-specific traffic law summary
+     - Foreign visitor/tourist specific rights
+     - Legal vs. illegal official requests
+     - Document requirements for foreign drivers
+     - Official fine/penalty schedule with currency conversion
+   - **Functionality:** Educates on legal standing in foreign jurisdiction
+
+3. **Document Authentication**
+   - **Title:** "Verify Your Documents"
+   - **Content:**
+     - International driving permit display
+     - Foreign vehicle registration verification
+     - Translated insurance certificate
+     - Country-specific required permits
+     - Digital authentication with official verification links
+   - **Functionality:** Provides properly formatted documentation for foreign authorities
+
+4. **Translation & Communication**
+   - **Title:** "Communicate Legally"
+   - **Content:**
+     - Legal phrases with audio pronunciation
+     - Authority interaction recording (where legal)
+     - Official request translation
+     - Officer identification protocol
+     - Legal response templates in local language
+   - **Functionality:** Ensures clear legal communication despite language barriers
+
+5. **Embassy & Consular Support**
+   - **Title:** "Diplomatic Assistance"
+   - **Content:**
+     - Nearest embassy/consulate contact
+     - Legal rights advisory service
+     - Diplomatic intervention request
+     - Emergency legal representation
+     - Situation reporting for consular record
+   - **Functionality:** Connects to diplomatic channels for legal assistance
+
+6. **Resolution Protocol**
+   - **Title:** "Resolve Foreign Legal Issues"
+   - **Content:**
+     - Legitimate payment methods for fines
+     - Dispute filing in foreign system
+     - Documentation of resolution
+     - Travel continuation clearance
+     - Future legal obligation tracking
+   - **Functionality:** Navigates to proper resolution of foreign legal challenges
+
+### 3. Worldwide Medical Response
+**When user taps "Medical Alert":**
+
+1. **Medical Emergency Classification**
+   - **Title:** "Medical Situation Level"
+   - **Content:**
+     - Severity assessment with visual guides
+     - Symptom selection in multiple languages
+     - Pre-existing condition identification
+     - Injury vs. illness categorization
+     - Medical history quick access
+   - **Functionality:** Determines appropriate international medical response
+
+2. **Country-Specific Medical Dispatch**
+   - **Title:** "Local Medical Services"
+   - **Content:**
+     - Country-specific emergency services connection
+     - International emergency number auto-dialer
+     - Private medical services with international patient support
+     - Ambulance dispatch with translated medical details
+     - Medical evacuation service assessment
+   - **Functionality:** Connects to appropriate medical care in foreign country
+
+3. **Language-Supported Symptoms Communication**
+   - **Title:** "Describe Medical Needs"
+   - **Content:**
+     - Visual body map for symptom indication
+     - Medical phrase translator with audio
+     - Symptom severity scale with visual indicators
+     - Medical history translation
+     - Allergy and medication translator
+   - **Functionality:** Overcomes language barriers for accurate medical communication
+
+4. **Insurance & Payment Coordination**
+   - **Title:** "Medical Coverage Abroad"
+   - **Content:**
+     - International health insurance verification
+     - Travel insurance medical benefits display
+     - Direct billing arrangement with facility
+     - Cost estimate with currency conversion
+     - Payment guarantee documentation
+   - **Functionality:** Resolves financial aspects of international medical care
+
+5. **Hospital Navigation & Coordination**
+   - **Title:** "Hospital Guidance"
+   - **Content:**
+     - International-standard hospitals nearby
+     - Specialty care filtering
+     - English-speaking staff availability
+     - Turn-by-turn navigation to facility
+     - Pre-arrival notification with translated information
+   - **Functionality:** Guides to appropriate medical facility with advance coordination
+
+6. **Medical Repatriation**
+   - **Title:** "Return Home Options"
+   - **Content:**
+     - Medical condition travel assessment
+     - Air ambulance service connection
+     - Commercial flight medical accommodation
+     - Border crossing medical documentation
+     - Home country medical handover coordination
+   - **Functionality:** Arranges medically appropriate return to home country
+
+### 4. Border & Customs Navigation
+**When user taps "Border Help":**
+
+1. **Border Issue Identification**
+   - **Title:** "Border/Customs Situation"
+   - **Content:**
+     - Selection options:
+       - "Vehicle Import/Export Issue"
+       - "Entry/Exit Documentation Problem"
+       - "Customs Duty Dispute"
+       - "Vehicle Seizure Threat"
+       - "Temporary Import Extension"
+       - "Carnet de Passage Issues"
+     - Current country and destination country selection
+   - **Functionality:** Identifies specific border challenge for targeted assistance
+
+2. **Document Verification Suite**
+   - **Title:** "Border Crossing Documents"
+   - **Content:**
+     - International document checklist specific to countries
+     - Digital document organizer with translations
+     - Validity period verification
+     - Missing document identification
+     - Emergency document acquisition guide
+   - **Functionality:** Ensures documentation completeness for border crossing
+
+3. **Customs Procedure Guide**
+   - **Title:** "Customs Requirements"
+   - **Content:**
+     - Vehicle import/export requirements by country
+     - Duty and tax calculator
+     - Prohibited items alert
+     - Declaration form assistance
+     - Customs broker connection service
+   - **Functionality:** Navigates complex customs procedures for vehicles
+
+4. **Border Communication Kit**
+   - **Title:** "Communicate at Borders"
+   - **Content:**
+     - Border-specific phrase translator
+     - Visual communication cards for customs
+     - Document translation camera
+     - Explanation request templates
+     - Official procedure recording (where permitted)
+   - **Functionality:** Overcomes communication barriers at international borders
+
+5. **International Vehicle Authorization**
+   - **Title:** "Vehicle Border Clearance"
+   - **Content:**
+     - Temporary import permit application
+     - Vehicle documentation bundle with translations
+     - Transit permit processing
+     - Carnet de Passage management
+     - Vehicle specification compliance verification
+   - **Functionality:** Facilitates vehicle clearance at international borders
+
+6. **Border Resolution Center**
+   - **Title:** "Resolve Border Issues"
+   - **Content:**
+     - Embassy border assistance request
+     - International automobile association support
+     - Appeal procedure guides
+     - Alternative border crossing options
+     - Future border crossing preparation
+   - **Functionality:** Provides pathways to resolve border/customs challenges
+
+### 5. Global Document Recovery
+**When user taps "Document SOS":**
+
+1. **International Document Issue**
+   - **Title:** "Missing/Invalid Document Type"
+   - **Content:**
+     - Selection options:
+       - "Passport/Visa Issue"
+       - "International Driving Permit"
+       - "Vehicle Registration/Title"
+       - "Insurance Documentation"
+       - "Carnet de Passage/Vehicle Import"
+       - "Local Permits/Licenses"
+     - Current country identification
+   - **Functionality:** Routes to specific international document solution
+
+2. **Digital Backup Access**
+   - **Title:** "Your Secure Document Cloud"
+   - **Content:**
+     - Secure access to cloud-stored document copies
+     - Multi-language document display options
+     - Official digital verification links
+     - Embassy-acceptable digital formats
+     - Email/share functions with security
+   - **Functionality:** Provides immediate access to document backups abroad
+
+3. **Embassy Document Services**
+   - **Title:** "Diplomatic Document Help"
+   - **Content:**
+     - Nearest embassy/consulate locator
+     - Document service appointment booking
+     - Required forms pre-filling
+     - Fee information with payment options
+     - Expedited service requests
+   - **Functionality:** Connects to official document replacement channels
+
+4. **International Authorization**
+   - **Title:** "Temporary International Permits"
+   - **Content:**
+     - Emergency travel document application
+     - Temporary vehicle authorization
+     - Digital identity verification
+     - International organization endorsements
+     - Limited validity permit creation
+   - **Functionality:** Establishes temporary valid documentation
+
+5. **Document Translation Service**
+   - **Title:** "Translate Your Documents"
+   - **Content:**
+     - Camera-based document translation
+     - Certified translation service connection
+     - Multi-language document templates
+     - Interpretation of foreign documents
+     - Legal terminology glossary
+   - **Functionality:** Bridges document language barriers
+
+6. **International

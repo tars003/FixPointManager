@@ -5,7 +5,9 @@ import {
   serviceBookings, ServiceBooking, InsertServiceBooking,
   availability, Availability, InsertAvailability,
   inspections, Inspection, InsertInspection,
-  customers, Customer, InsertCustomer
+  customers, Customer, InsertCustomer,
+  emergencyProfiles, EmergencyProfile, InsertEmergencyProfile,
+  emergencyIncidents, EmergencyIncident, InsertEmergencyIncident
 } from "@shared/schema";
 
 export interface IStorage {
@@ -51,6 +53,20 @@ export interface IStorage {
   getCustomersByProviderId(providerId: number): Promise<Customer[]>;
   createCustomer(customer: InsertCustomer): Promise<Customer>;
   updateCustomer(id: number, customer: Partial<InsertCustomer>): Promise<Customer | undefined>;
+  
+  // Emergency Profiles
+  getEmergencyProfile(id: number): Promise<EmergencyProfile | undefined>;
+  getEmergencyProfileByUserId(userId: number): Promise<EmergencyProfile | undefined>;
+  createEmergencyProfile(profile: InsertEmergencyProfile): Promise<EmergencyProfile>;
+  updateEmergencyProfile(id: number, profile: Partial<InsertEmergencyProfile>): Promise<EmergencyProfile | undefined>;
+  
+  // Emergency Incidents
+  getEmergencyIncident(id: number): Promise<EmergencyIncident | undefined>;
+  getEmergencyIncidentsByUserId(userId: number): Promise<EmergencyIncident[]>;
+  getEmergencyIncidentsByVehicleId(vehicleId: number): Promise<EmergencyIncident[]>;
+  getActiveEmergencyIncidents(userId: number): Promise<EmergencyIncident[]>;
+  createEmergencyIncident(incident: InsertEmergencyIncident): Promise<EmergencyIncident>;
+  updateEmergencyIncident(id: number, incident: Partial<InsertEmergencyIncident>): Promise<EmergencyIncident | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -61,6 +77,8 @@ export class MemStorage implements IStorage {
   private availabilities: Map<number, Availability>;
   private inspections: Map<number, Inspection>;
   private customers: Map<number, Customer>;
+  private emergencyProfiles: Map<number, EmergencyProfile>;
+  private emergencyIncidents: Map<number, EmergencyIncident>;
   
   private userIdCounter: number;
   private vehicleIdCounter: number;
@@ -69,6 +87,8 @@ export class MemStorage implements IStorage {
   private availabilityIdCounter: number;
   private inspectionIdCounter: number;
   private customerIdCounter: number;
+  private emergencyProfileIdCounter: number;
+  private emergencyIncidentIdCounter: number;
 
   constructor() {
     this.users = new Map();
@@ -78,6 +98,8 @@ export class MemStorage implements IStorage {
     this.availabilities = new Map();
     this.inspections = new Map();
     this.customers = new Map();
+    this.emergencyProfiles = new Map();
+    this.emergencyIncidents = new Map();
     
     this.userIdCounter = 1;
     this.vehicleIdCounter = 1;
@@ -86,6 +108,8 @@ export class MemStorage implements IStorage {
     this.availabilityIdCounter = 1;
     this.inspectionIdCounter = 1;
     this.customerIdCounter = 1;
+    this.emergencyProfileIdCounter = 1;
+    this.emergencyIncidentIdCounter = 1;
     
     // Initialize with sample data
     this.initializeSampleData();
@@ -319,6 +343,78 @@ export class MemStorage implements IStorage {
     const updatedCustomer = { ...customer, ...updateData };
     this.customers.set(id, updatedCustomer);
     return updatedCustomer;
+  }
+
+  // Emergency Profile Methods
+  async getEmergencyProfile(id: number): Promise<EmergencyProfile | undefined> {
+    return this.emergencyProfiles.get(id);
+  }
+
+  async getEmergencyProfileByUserId(userId: number): Promise<EmergencyProfile | undefined> {
+    return Array.from(this.emergencyProfiles.values()).find(
+      (profile) => profile.userId === userId
+    );
+  }
+
+  async createEmergencyProfile(insertProfile: InsertEmergencyProfile): Promise<EmergencyProfile> {
+    const id = this.emergencyProfileIdCounter++;
+    const createdAt = new Date();
+    const lastUpdated = new Date();
+    const profile: EmergencyProfile = { ...insertProfile, id, createdAt, lastUpdated };
+    this.emergencyProfiles.set(id, profile);
+    return profile;
+  }
+
+  async updateEmergencyProfile(id: number, updateData: Partial<InsertEmergencyProfile>): Promise<EmergencyProfile | undefined> {
+    const profile = this.emergencyProfiles.get(id);
+    if (!profile) return undefined;
+    
+    const lastUpdated = new Date();
+    const updatedProfile = { ...profile, ...updateData, lastUpdated };
+    this.emergencyProfiles.set(id, updatedProfile);
+    return updatedProfile;
+  }
+
+  // Emergency Incident Methods
+  async getEmergencyIncident(id: number): Promise<EmergencyIncident | undefined> {
+    return this.emergencyIncidents.get(id);
+  }
+
+  async getEmergencyIncidentsByUserId(userId: number): Promise<EmergencyIncident[]> {
+    return Array.from(this.emergencyIncidents.values()).filter(
+      (incident) => incident.userId === userId
+    );
+  }
+
+  async getEmergencyIncidentsByVehicleId(vehicleId: number): Promise<EmergencyIncident[]> {
+    return Array.from(this.emergencyIncidents.values()).filter(
+      (incident) => incident.vehicleIds?.includes(vehicleId)
+    );
+  }
+
+  async getActiveEmergencyIncidents(userId: number): Promise<EmergencyIncident[]> {
+    return Array.from(this.emergencyIncidents.values()).filter(
+      (incident) => incident.userId === userId && incident.status === "active"
+    );
+  }
+
+  async createEmergencyIncident(insertIncident: InsertEmergencyIncident): Promise<EmergencyIncident> {
+    const id = this.emergencyIncidentIdCounter++;
+    const createdAt = new Date();
+    const updatedAt = new Date();
+    const incident: EmergencyIncident = { ...insertIncident, id, createdAt, updatedAt };
+    this.emergencyIncidents.set(id, incident);
+    return incident;
+  }
+
+  async updateEmergencyIncident(id: number, updateData: Partial<InsertEmergencyIncident>): Promise<EmergencyIncident | undefined> {
+    const incident = this.emergencyIncidents.get(id);
+    if (!incident) return undefined;
+    
+    const updatedAt = new Date();
+    const updatedIncident = { ...incident, ...updateData, updatedAt };
+    this.emergencyIncidents.set(id, updatedIncident);
+    return updatedIncident;
   }
 }
 
