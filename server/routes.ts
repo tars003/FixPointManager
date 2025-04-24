@@ -5,7 +5,9 @@ import {
   insertVehicleSchema, 
   insertServiceBookingSchema, 
   insertAvailabilitySchema,
-  insertInspectionSchema
+  insertInspectionSchema,
+  insertEmergencyProfileSchema,
+  insertEmergencyIncidentSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -231,6 +233,91 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const providerId = parseInt(req.params.providerId);
     const customers = await storage.getCustomersByProviderId(providerId);
     res.json(customers);
+  });
+
+  // Emergency Profile Routes
+  apiRouter.get("/emergency-profiles/user/:userId", async (req, res) => {
+    const userId = parseInt(req.params.userId);
+    const profile = await storage.getEmergencyProfileByUserId(userId);
+    
+    if (!profile) {
+      return res.status(404).json({ message: "Emergency profile not found" });
+    }
+    
+    res.json(profile);
+  });
+
+  apiRouter.get("/emergency-profiles/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const profile = await storage.getEmergencyProfile(id);
+    
+    if (!profile) {
+      return res.status(404).json({ message: "Emergency profile not found" });
+    }
+    
+    res.json(profile);
+  });
+
+  apiRouter.post("/emergency-profiles", validateRequest(insertEmergencyProfileSchema), async (req, res) => {
+    const profile = await storage.createEmergencyProfile(req.body);
+    res.status(201).json(profile);
+  });
+
+  apiRouter.put("/emergency-profiles/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const updatedProfile = await storage.updateEmergencyProfile(id, req.body);
+    
+    if (!updatedProfile) {
+      return res.status(404).json({ message: "Emergency profile not found" });
+    }
+    
+    res.json(updatedProfile);
+  });
+
+  // Emergency Incident Routes
+  apiRouter.get("/emergency-incidents/user/:userId", async (req, res) => {
+    const userId = parseInt(req.params.userId);
+    const incidents = await storage.getEmergencyIncidentsByUserId(userId);
+    res.json(incidents);
+  });
+
+  apiRouter.get("/emergency-incidents/vehicle/:vehicleId", async (req, res) => {
+    const vehicleId = parseInt(req.params.vehicleId);
+    const incidents = await storage.getEmergencyIncidentsByVehicleId(vehicleId);
+    res.json(incidents);
+  });
+
+  apiRouter.get("/emergency-incidents/active/:userId", async (req, res) => {
+    const userId = parseInt(req.params.userId);
+    const incidents = await storage.getActiveEmergencyIncidents(userId);
+    res.json(incidents);
+  });
+
+  apiRouter.get("/emergency-incidents/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const incident = await storage.getEmergencyIncident(id);
+    
+    if (!incident) {
+      return res.status(404).json({ message: "Emergency incident not found" });
+    }
+    
+    res.json(incident);
+  });
+
+  apiRouter.post("/emergency-incidents", validateRequest(insertEmergencyIncidentSchema), async (req, res) => {
+    const incident = await storage.createEmergencyIncident(req.body);
+    res.status(201).json(incident);
+  });
+
+  apiRouter.put("/emergency-incidents/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const updatedIncident = await storage.updateEmergencyIncident(id, req.body);
+    
+    if (!updatedIncident) {
+      return res.status(404).json({ message: "Emergency incident not found" });
+    }
+    
+    res.json(updatedIncident);
   });
 
   // Mock auth routes for demo purposes

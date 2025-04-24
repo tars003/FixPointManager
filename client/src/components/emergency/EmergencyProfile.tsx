@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 import { 
   User, 
   Droplet, 
@@ -16,7 +18,10 @@ import {
   Save,
   X
 } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
 
+// Interface matching the database schema
 interface EmergencyContactType {
   name: string;
   relation: string;
@@ -24,72 +29,221 @@ interface EmergencyContactType {
 }
 
 interface EmergencyProfileType {
-  name: string;
-  bloodType: string;
-  allergies: string;
-  medicalConditions: string;
-  emergencyContacts: EmergencyContactType[];
-  preferredHospital: string;
-  insurance: {
+  id?: number;
+  userId: number;
+  fullName: string;
+  bloodType: string | null;
+  allergies: string[] | null;
+  medicalConditions: string[] | null;
+  primaryEmergencyContact: {
+    name: string;
+    relation: string;
+    phone: string;
+    email?: string;
+  };
+  secondaryEmergencyContacts: EmergencyContactType[];
+  preferredHospital: string | null;
+  insuranceDetails: {
     provider: string;
     policyNumber: string;
     contactNumber: string;
   };
+  organDonor: boolean;
 }
 
 interface EmergencyProfileProps {
-  profile: EmergencyProfileType;
-  onUpdateProfile: (profile: EmergencyProfileType) => void;
+  userId: number;
   theme: 'light' | 'dark';
   onBack: () => void;
 }
 
+// Default empty profile for new users
+const defaultProfile: EmergencyProfileType = {
+  userId: 1, // Will be replaced with actual user ID
+  fullName: '',
+  bloodType: null,
+  allergies: null,
+  medicalConditions: null,
+  primaryEmergencyContact: {
+    name: '',
+    relation: '',
+    phone: ''
+  },
+  secondaryEmergencyContacts: [],
+  preferredHospital: null,
+  insuranceDetails: {
+    provider: '',
+    policyNumber: '',
+    contactNumber: ''
+  },
+  organDonor: false
+};
+
 export default function EmergencyProfile({
-  profile,
-  onUpdateProfile,
+  userId,
   theme,
   onBack
 }: EmergencyProfileProps) {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
-  const [editedProfile, setEditedProfile] = useState<EmergencyProfileType>(profile);
+  const [editedProfile, setEditedProfile] = useState<EmergencyProfileType | null>(null);
   
-  const handleInputChange = (field: string, value: string) => {
-    setEditedProfile(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  // Fetch user's emergency profile
+  const { 
+    data: profile, 
+    isLoading, 
+    error 
+  } = useQuery({
+    queryKey: [`/api/emergency-profiles/user/${userId}`],
+    queryFn: async () => {
+      try {
+        const res = await fetch(`/api/emergency-profiles/user/${userId}`);
+        if (res.status === 404) {
+          return null; // User doesn't have a profile yet
+        }
+        if (!res.ok) throw new Error('Failed to fetch emergency profile');
+        return await res.json();
+      } catch (err) {
+        console.error('Error fetching emergency profile:', err);
+        return null;
+      }
+    }
+  });
+  
+  // Initialize edited profile when data is loaded
+  useEffect(() => {
+    if (profile) {
+      setEditedProfile(profile);
+    } else if (!isLoading && !error) {
+      // Create a new default profile with the correct user ID
+      setEditedProfile({
+        ...defaultProfile,
+        userId
+      });
+    }
+  }, [profile, isLoading, error, userId]);
+  
+  // Create a new profile
+  const createProfileMutation = useMutation({
+    mutationFn: async (newProfile: EmergencyProfileType) => {
+      const res = await apiRequest('POST', '/api/emergency-profiles', newProfile);
+      if (!res.ok) throw new Error('Failed to create emergency profile');
+      return await res.json();
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData([`/api/emergency-profiles/user/${userId}`], data);
+      toast({
+        title: "Profile Created",
+        description: "Your emergency profile has been created successfully.",
+      });
+      setIsEditing(false);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: `Failed to create profile: ${error.message}`,
+        variant: "destructive"
+      });
+    }
+  });
+  
+  // Update an existing profile
+  const updateProfileMutation = useMutation({
+    mutationFn: async (updatedProfile: EmergencyProfileType) => {
+      const res = await apiRequest('PUT', `/api/emergency-profiles/${updatedProfile.id}`, updatedProfile);
+      if (!res.ok) throw new Error('Failed to update emergency profile');
+      return await res.json();
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData([`/api/emergency-profiles/user/${userId}`], data);
+      toast({
+        title: "Profile Updated",
+        description: "Your emergency profile has been updated successfully.",
+      });
+      setIsEditing(false);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: `Failed to update profile: ${error.message}`,
+        variant: "destructive"
+      });
+    }
+  });
+  
+  const handleInputChange = (field: string, value: string | string[] | boolean) => {
+    if (!editedProfile) return;
+    
+    setEditedProfile(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        [field]: value
+      };
+    });
   };
   
   const handleInsuranceChange = (field: string, value: string) => {
-    setEditedProfile(prev => ({
-      ...prev,
-      insurance: {
-        ...prev.insurance,
-        [field]: value
-      }
-    }));
+    if (!editedProfile) return;
+    
+    setEditedProfile(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        insuranceDetails: {
+          ...prev.insuranceDetails,
+          [field]: value
+        }
+      };
+    });
   };
   
-  const handleContactChange = (index: number, field: string, value: string) => {
-    const updatedContacts = [...editedProfile.emergencyContacts];
+  const handlePrimaryContactChange = (field: string, value: string) => {
+    if (!editedProfile) return;
+    
+    setEditedProfile(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        primaryEmergencyContact: {
+          ...prev.primaryEmergencyContact,
+          [field]: value
+        }
+      };
+    });
+  };
+  
+  const handleSecondaryContactChange = (index: number, field: string, value: string) => {
+    if (!editedProfile) return;
+    
+    const updatedContacts = [...editedProfile.secondaryEmergencyContacts];
     updatedContacts[index] = {
       ...updatedContacts[index],
       [field]: value
     };
     
-    setEditedProfile(prev => ({
-      ...prev,
-      emergencyContacts: updatedContacts
-    }));
+    setEditedProfile(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        secondaryEmergencyContacts: updatedContacts
+      };
+    });
   };
   
   const saveChanges = () => {
-    onUpdateProfile(editedProfile);
-    setIsEditing(false);
+    if (!editedProfile) return;
+    
+    if (editedProfile.id) {
+      updateProfileMutation.mutate(editedProfile);
+    } else {
+      createProfileMutation.mutate(editedProfile);
+    }
   };
   
   const cancelEditing = () => {
-    setEditedProfile(profile);
+    setEditedProfile(profile || {...defaultProfile, userId});
     setIsEditing(false);
   };
   
