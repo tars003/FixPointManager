@@ -17,7 +17,7 @@ import {
   Mail,
   Award,
   UserCheck,
-  Motorcycle
+  Bike
 } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 import LearnDriving from './learn-driving';
@@ -40,7 +40,7 @@ const DrivingEducation = () => {
   const quickLinks = [
     {
       title: 'Learn Two-Wheeler',
-      icon: <Motorcycle className="h-5 w-5" />,
+      icon: <Bike className="h-5 w-5" />,
       color: 'bg-blue-100 text-blue-600',
       darkColor: 'dark:bg-blue-900/30 dark:text-blue-400'
     },
