@@ -576,14 +576,40 @@ const LearningServiceCards = () => {
                     />
                   </div>
 
-                  <div className="pt-4 flex gap-3 justify-end">
-                    <Button type="button" variant="outline" onClick={() => {
-                      setSelectedCourse(null);
-                      setShowEnquiryForm(false);
-                    }}>
-                      Back
-                    </Button>
-                    <Button type="submit">Submit Enquiry</Button>
+                  <div className="pt-4 space-y-4">
+                    <div className="flex flex-wrap gap-4">
+                      <a 
+                        href="https://example.com/download/brochure" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                        </svg>
+                        Download Course Brochure
+                      </a>
+                      <a 
+                        href="https://example.com/download/demo" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        Watch Course Demo
+                      </a>
+                    </div>
+                    <div className="flex gap-3 justify-end">
+                      <Button type="button" variant="outline" onClick={() => {
+                        setSelectedCourse(null);
+                        setShowEnquiryForm(false);
+                      }}>
+                        Back
+                      </Button>
+                      <Button type="submit">Submit Enquiry</Button>
+                    </div>
                   </div>
                 </form>
               </Form>

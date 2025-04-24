@@ -1,41 +1,19 @@
 import { useState } from 'react';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  FormDescription,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { Progress } from '@/components/ui/progress';
 import {
   X,
   ArrowLeft,
   ArrowRight,
-  RefreshCw,
   AlertTriangle,
-  Check,
-  XCircle,
   CheckCircle,
-  Pencil,
-  Trophy,
-  Timer,
   Clipboard,
+  Timer,
+  FileText,
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
+import DrivingTestQuestions, { TestResults } from './DrivingTestQuestions';
 
 // Test categories
 const testCategories = [
