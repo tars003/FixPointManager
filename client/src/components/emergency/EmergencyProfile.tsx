@@ -341,11 +341,11 @@ export default function EmergencyProfile({
             {isEditing ? (
               <div className="space-y-3">
                 <div>
-                  <Label htmlFor="name">Full Name</Label>
+                  <Label htmlFor="fullName">Full Name</Label>
                   <Input 
-                    id="name"
-                    value={editedProfile.name}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
+                    id="fullName"
+                    value={editedProfile.fullName}
+                    onChange={(e) => handleInputChange('fullName', e.target.value)}
                     className={theme === 'light' ? 'border-gray-200' : 'bg-gray-700 border-gray-600'}
                   />
                 </div>
