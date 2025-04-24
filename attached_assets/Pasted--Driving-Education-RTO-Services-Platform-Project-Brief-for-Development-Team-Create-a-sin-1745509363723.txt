@@ -1,0 +1,162 @@
+# Driving Education & RTO Services Platform
+
+## Project Brief for Development Team
+
+Create a single-page website application that helps users learn vehicle driving and access RTO-related services across India. The platform should be simple, intuitive and cater specifically to the Indian market.
+
+## Core User Flows
+
+### 1. Homepage & Navigation
+- Clean, accessible design with clear CTAs
+- Simple navigation with four main tabs: Learn Driving, RTO Services, About Us, Contact
+- Prominent search bar for quickly finding specific services
+- Quick contact options including WhatsApp button (essential for Indian users)
+- Language selector with support for Hindi and major regional languages
+
+### 2. Learn Driving Flow
+- **Vehicle Type Selection**
+  - Clear visual choices for:
+    - Two-wheeler (motorcycle/scooter)
+    - Three-wheeler (auto-rickshaw)
+    - Four-wheeler (car)
+    - Commercial vehicles (trucks/buses)
+  - Each option shows license requirements and fees
+  - Simple toggle for geared/non-geared options
+
+- **Learning Level Selection**
+  - Beginner: For first-time drivers with comprehensive basics
+  - Refresh: For those who know basics but need practice
+  - Professional: Advanced training for commercial drivers
+  - Special skills: Hill driving, highway driving, etc.
+
+- **Schedule Selection**
+  - Calendar with available time slots
+  - Option for weekday/weekend preferences
+  - Flexible timing options (morning/afternoon/evening)
+  - One-time or package bookings
+
+- **Instructor Preferences**
+  - Male/female instructor option (important cultural consideration)
+  - Language preference for instruction
+  - Request for same instructor across sessions
+
+### 3. RTO Services Flow
+- **Service Selection**
+  - New Learner's License application
+  - Driving License test booking
+  - License renewal
+  - Vehicle registration assistance
+  - Ownership transfer
+  - PUC certificate
+  - International Driving Permit
+  - Address/name change in documents
+
+- **Location Selection**
+  - RTO office selection by pin code or city
+  - Map integration showing nearest RTO offices
+  - Detailed information about selected RTO (working hours, contact)
+  - Option to check office crowding status (unique India-specific feature)
+
+- **Document Collection Guide**
+  - Customized checklist based on service selected
+  - Document photography guide with examples
+  - Aadhaar/DigiLocker integration for digital documents
+  - Option to upload documents directly from phone gallery
+
+- **Appointment Booking**
+  - Date and time slot booking
+  - Queue number allocation (India-specific feature)
+  - Option for premium "skip-the-line" service
+  - Status tracking with SMS notifications
+
+### 4. Payment & Confirmation
+- Multiple payment options essential for Indian market:
+  - UPI (PhonePe, Google Pay, Paytm)
+  - Net banking
+  - Credit/debit cards
+  - Cash on arrival option
+  - EMI options for expensive packages
+
+- Confirmation details:
+  - WhatsApp confirmation with all details
+  - SMS confirmation backup
+  - Email with PDF receipt and document checklist
+  - Google Calendar/phone calendar integration
+
+## India-Specific Features
+
+### Must-Have Features
+1. **Regional Language Support**
+   - Hindi, Tamil, Telugu, Bengali, Marathi and other regional languages
+   - Translated RTO forms in local languages
+
+2. **Document Assistance**
+   - Aadhaar-based verification
+   - Help with form filling in regional languages
+   - Document photography service option
+
+3. **Transportation Arrangement**
+   - Pick-up and drop service for driving lessons
+   - Transport to RTO office for tests
+
+4. **Test Preparation**
+   - Practice tests in multiple languages
+   - Road sign recognition training
+   - State-specific traffic rules guidance
+
+5. **Mobile-First Experience**
+   - Lightweight design for slower connections
+   - Low-data mode option
+   - Offline functionality for critical information
+
+6. **Trust Building Elements**
+   - Success rate statistics for RTO test clearing
+   - Instructor credentials and ratings
+   - Testimonials from local customers with photos
+   - Transparent fee structure comparison with competitors
+
+### Nice-to-Have Features
+1. **Family Packages**
+   - Discounted rates for multiple family members
+   - Special women's batches for driving lessons
+
+2. **Job Connection Services**
+   - For commercial driver training graduates
+   - Verified employer listings
+
+3. **Vehicle Rental**
+   - Practice vehicle rental for test day
+   - Short-term vehicle options for new license holders
+
+4. **Community Features**
+   - Driving tips from experienced drivers
+   - Local traffic update sharing
+   - RTO experience sharing
+
+5. **Festival/Season Specials**
+   - Seasonal discounts (e.g., Diwali offer, New Year special)
+   - Gift a driving course option for family members
+
+## Technical Considerations
+
+- Make the website extremely lightweight and fast-loading
+- Ensure compatibility with budget Android devices
+- Design for intermittent internet connectivity
+- Implement easy data-saving options
+- Provide accessible offline content when possible
+- Create WhatsApp integration for updates and support
+- Build seamless mobile payment experiences
+- Include vernacular language support throughout
+
+## User Experience Guidelines
+
+- Minimize text entry where possible (use selection instead)
+- Incorporate visual guides and video tutorials
+- Implement voice search for regional language users
+- Create a jargon-free, simple interface
+- Use familiar Indian iconography and cultural references
+- Provide clear pricing with no hidden costs
+- Include social proof elements throughout the journey
+- Design for users with limited digital literacy
+
+Focus on creating a simple, accessible experience that addresses the practical needs and challenges of Indian users seeking driving education and RTO services.
