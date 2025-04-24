@@ -4,35 +4,76 @@
 
 @layer base {
   :root {
-    --primary: 254 71 87;
-    --primary-dark: 221 36 53;
-    --accent: 82 110 248;
-    --accent-dark: 39 72 232;
-    --neutral-light: 113 128 150;
-    --neutral-dark: 45 55 72;
-    --background: 248 250 252;
-    --success: 72 187 120;
-    --warning: 246 173 85;
-    --error: 231 76 60;
+    /* Light theme variables with high contrast for accessibility */
+    --primary: 87 100% 50%; /* Lime green - matches theme.json's HSL color */
+    --primary-dark: 87 100% 40%; /* Darker lime green for contrast */
+    --accent: 220 95% 60%; /* Vibrant blue for accent */
+    --accent-dark: 220 95% 50%; /* Darker blue for contrast */
+    --neutral-light: 220 15% 60%; /* Light neutral */
+    --neutral-dark: 220 15% 30%; /* Dark neutral */
+    --background: 0 0% 100%; /* Pure white background */
+    --success: 142 70% 45%; /* Accessible green */
+    --warning: 35 100% 60%; /* Accessible amber */
+    --error: 0 85% 60%; /* Accessible red */
 
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* shadcn variables - light theme with high contrast */
+    --foreground: 222.2 84% 4.9%; /* Dark text for contrast */
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 0 0% 0%; /* Black text on primary buttons for contrast */
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --muted-foreground: 220 15% 40%; /* Darker muted text for better contrast */
+    --accent-foreground: 0 0% 0%; /* Black text on accent for contrast */
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --destructive-foreground: 0 0% 100%; /* White text on destructive for contrast */
+    --border: 220 15% 80%; /* Higher contrast border */
+    --input: 220 15% 80%;
     --ring: 222.2 84% 4.9%;
     --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Dark theme variables with high contrast for accessibility */
+    --background: 222.2 84% 5%; /* Dark background but not pure black */
+    --foreground: 210 40% 98%; /* Light text for contrast */
+    
+    --card: 222.2 84% 7%; /* Slightly lighter than background */
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 222.2 84% 7%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 87 100% 54%; /* Bright lime green - from theme.json */
+    --primary-foreground: 0 0% 0%; /* Black text on primary for contrast */
+    
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 75%; /* Lighter muted text for contrast */
+    
+    --accent: 220 95% 70%; /* Brighter accent for dark mode */
+    --accent-foreground: 0 0% 0%;
+    
+    --destructive: 0 72.2% 50.6%; /* Brighter destructive for visibility */
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 217.2 32.6% 25%; /* Higher contrast border for dark mode */
+    --input: 217.2 32.6% 25%;
+    --ring: 212.7 26.8% 83.9%;
+
+    /* Custom dark mode variables */
+    --primary-dark: 87 100% 40%;
+    --accent-dark: 220 95% 50%;
+    --neutral-light: 220 15% 70%;
+    --neutral-dark: 220 15% 40%;
+    --success: 142 70% 50%;
+    --warning: 35 100% 65%;
+    --error: 0 85% 65%;
   }
 }
 

@@ -14,6 +14,10 @@ import {
   Building as LandPlot
 } from 'lucide-react';
 
+// Import the actual international emergency components
+import InternationalAccidentEmergency from './international/InternationalAccidentEmergency';
+import InternationalLegalEmergency from './international/InternationalLegalEmergency';
+
 interface InternationalEmergencyProps {
   location: {
     latitude: number;
@@ -143,10 +147,31 @@ export default function InternationalEmergency({
   const renderEmergencyContent = () => {
     switch(selectedCategory) {
       case 'accident':
-        return <InternationalAccidentBreakdown location={location} theme={theme} onGoBack={handleGoBack} />;
+        return <InternationalAccidentEmergency location={location} theme={theme} onGoBack={handleGoBack} />;
       case 'legal':
-        return <InternationalLegalHelp location={location} theme={theme} onGoBack={handleGoBack} />;
+        return <InternationalLegalEmergency location={location} theme={theme} onGoBack={handleGoBack} />;
       // We would implement all other category components for production
+      case 'medical':
+        // Placeholder for medical emergency - will implement in future
+        return renderCategoryGrid();
+      case 'border':
+        // Placeholder for border emergency - will implement in future
+        return renderCategoryGrid();
+      case 'document':
+        // Placeholder for document emergency - will implement in future
+        return renderCategoryGrid();
+      case 'transport':
+        // Placeholder for transport emergency - will implement in future
+        return renderCategoryGrid();
+      case 'natural':
+        // Placeholder for natural disaster emergency - will implement in future
+        return renderCategoryGrid();
+      case 'language':
+        // Placeholder for language emergency - will implement in future
+        return renderCategoryGrid();
+      case 'embassy':
+        // Placeholder for embassy emergency - will implement in future
+        return renderCategoryGrid();
       case 'none':
       default:
         return renderCategoryGrid();
@@ -242,127 +267,6 @@ export default function InternationalEmergency({
           </div>
         </div>
       )}
-    </motion.div>
-  );
-}
-
-// Placeholder components for emergency categories
-function InternationalAccidentBreakdown({ location, theme, onGoBack }: any) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="space-y-6"
-    >
-      <div className="flex items-center justify-between">
-        <h2 className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-          International Accident/Breakdown
-        </h2>
-        <Button variant="outline" size="sm" onClick={onGoBack}>
-          Back to Categories
-        </Button>
-      </div>
-      
-      <Card className={theme === 'light' ? 'bg-white' : 'bg-gray-800 border-gray-700'}>
-        <CardContent className="p-4">
-          <h3 className={`font-bold mb-2 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-            Country-Specific Protocol
-          </h3>
-          <p className={`text-sm ${theme === 'light' ? 'text-gray-600' : 'text-gray-300'}`}>
-            Based on your location, here are the local accident reporting requirements and procedures.
-          </p>
-          
-          <div className={`mt-4 p-3 rounded-lg ${theme === 'light' ? 'bg-amber-50 border border-amber-100' : 'bg-amber-900/20 border border-amber-900/30'}`}>
-            <p className={`text-sm font-medium ${theme === 'light' ? 'text-amber-800' : 'text-amber-300'}`}>
-              Accident reporting is mandatory in this country. You must:
-            </p>
-            <ul className={`mt-2 text-sm space-y-1 ${theme === 'light' ? 'text-amber-700' : 'text-amber-300'}`}>
-              <li>• Call local police: 112</li>
-              <li>• Exchange information with all parties</li>
-              <li>• Take photographs of all vehicles and the scene</li>
-              <li>• Do not move vehicles until police arrive (for serious accidents)</li>
-              <li>• Complete an accident report form (provided by police)</li>
-            </ul>
-          </div>
-          
-          {/* More content would be here in the full implementation */}
-        </CardContent>
-      </Card>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Button 
-          className={`h-14 ${theme === 'light' ? 'bg-red-600 hover:bg-red-700' : 'bg-red-700 hover:bg-red-800'} text-white`}
-          onClick={() => window.open('tel:112', '_self')}
-        >
-          <Car className="h-5 w-5 mr-2" />
-          Call Local Emergency (112)
-        </Button>
-        
-        <Button 
-          className={`h-14 ${theme === 'light' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-700 hover:bg-blue-800'} text-white`}
-          onClick={() => window.open('tel:+911800113090', '_self')}
-        >
-          <LandPlot className="h-5 w-5 mr-2" />
-          Call Indian Embassy Emergency
-        </Button>
-      </div>
-    </motion.div>
-  );
-}
-
-function InternationalLegalHelp({ location, theme, onGoBack }: any) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="space-y-6"
-    >
-      <div className="flex items-center justify-between">
-        <h2 className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-          International Legal Assistance
-        </h2>
-        <Button variant="outline" size="sm" onClick={onGoBack}>
-          Back to Categories
-        </Button>
-      </div>
-      
-      <div className={`p-4 rounded-lg ${theme === 'light' ? 'bg-blue-50 border border-blue-100' : 'bg-blue-900/20 border border-blue-900/30'}`}>
-        <h3 className={`font-bold mb-2 flex items-center ${theme === 'light' ? 'text-blue-800' : 'text-blue-300'}`}>
-          <Scale className="h-5 w-5 mr-2" />
-          Know Your Rights Internationally
-        </h3>
-        <p className={`text-sm ${theme === 'light' ? 'text-blue-700' : 'text-blue-300'}`}>
-          As an Indian citizen traveling abroad, you have certain rights. The Vienna Convention protects your 
-          right to consular assistance. You have the right to:
-        </p>
-        <ul className={`mt-2 text-sm space-y-1 ${theme === 'light' ? 'text-blue-700' : 'text-blue-300'}`}>
-          <li>• Contact your embassy or consulate</li>
-          <li>• Have access to legal representation</li>
-          <li>• Request an interpreter if needed</li>
-          <li>• Be treated fairly and according to local laws</li>
-        </ul>
-      </div>
-      
-      {/* More content would be here in the full implementation */}
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-        <Button 
-          className={`h-14 ${theme === 'light' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-indigo-700 hover:bg-indigo-800'} text-white`}
-        >
-          <Languages className="h-5 w-5 mr-2" />
-          Translate Legal Terms
-        </Button>
-        
-        <Button 
-          className={`h-14 ${theme === 'light' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-purple-700 hover:bg-purple-800'} text-white`}
-          onClick={() => window.open('tel:+911800113090', '_self')}
-        >
-          <LandPlot className="h-5 w-5 mr-2" />
-          Contact Embassy Legal Help
-        </Button>
-      </div>
     </motion.div>
   );
 }
