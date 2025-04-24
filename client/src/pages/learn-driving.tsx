@@ -11,9 +11,90 @@ import {
   Car,
   AlertTriangle,
   FileText,
+  BookOpen,
+  Bike,
+  MapPinned
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import LearningServiceCards from '@/components/learning/LearningServiceCards';
+
+// Quick access service cards
+const QuickAccessCards = () => {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-8">
+      <Card className="cursor-pointer hover:shadow-md transition-all">
+        <CardContent className="p-4 flex flex-col items-center text-center">
+          <div className="rounded-full p-3 bg-blue-100 mb-2">
+            <Bike className="h-5 w-5 text-blue-600" />
+          </div>
+          <span className="font-medium text-sm">Learn Two-Wheeler</span>
+        </CardContent>
+      </Card>
+      
+      <Card className="cursor-pointer hover:shadow-md transition-all">
+        <CardContent className="p-4 flex flex-col items-center text-center">
+          <div className="rounded-full p-3 bg-green-100 mb-2">
+            <Car className="h-5 w-5 text-green-600" />
+          </div>
+          <span className="font-medium text-sm">Learn Car Driving</span>
+        </CardContent>
+      </Card>
+      
+      <Card className="cursor-pointer hover:shadow-md transition-all">
+        <CardContent className="p-4 flex flex-col items-center text-center">
+          <div className="rounded-full p-3 bg-purple-100 mb-2">
+            <FileText className="h-5 w-5 text-purple-600" />
+          </div>
+          <span className="font-medium text-sm">Apply for License</span>
+        </CardContent>
+      </Card>
+      
+      <Card className="cursor-pointer hover:shadow-md transition-all">
+        <CardContent className="p-4 flex flex-col items-center text-center">
+          <div className="rounded-full p-3 bg-amber-100 mb-2">
+            <FileText className="h-5 w-5 text-amber-600" />
+          </div>
+          <span className="font-medium text-sm">Renew License</span>
+        </CardContent>
+      </Card>
+      
+      <Card className="cursor-pointer hover:shadow-md transition-all">
+        <CardContent className="p-4 flex flex-col items-center text-center">
+          <div className="rounded-full p-3 bg-red-100 mb-2">
+            <MapPinned className="h-5 w-5 text-red-600" />
+          </div>
+          <span className="font-medium text-sm">Find RTO Office</span>
+        </CardContent>
+      </Card>
+      
+      <Card className="cursor-pointer hover:shadow-md transition-all">
+        <CardContent className="p-4 flex flex-col items-center text-center">
+          <div className="rounded-full p-3 bg-indigo-100 mb-2">
+            <BookOpen className="h-5 w-5 text-indigo-600" />
+          </div>
+          <span className="font-medium text-sm">RTO Test Prep</span>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+// Tab buttons for category navigation
+const CategoryTabs = () => {
+  return (
+    <div className="flex gap-4 mb-4">
+      <Button variant="outline" className="bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 flex gap-2 items-center">
+        <BookOpen className="h-4 w-4" />
+        <span>Learn Driving</span>
+      </Button>
+      
+      <Button variant="outline" className="hover:bg-gray-100 flex gap-2 items-center">
+        <FileText className="h-4 w-4" />
+        <span>RTO Services</span>
+      </Button>
+    </div>
+  );
+};
 
 // Learn Driving & RTO Services Page
 const LearnDrivingPage = () => {
@@ -50,6 +131,12 @@ const LearnDrivingPage = () => {
             </div>
           </CardContent>
         </Card>
+        
+        {/* Quick Access Cards - Matching the Screenshot 2025-04-25 005506.png */}
+        <QuickAccessCards />
+        
+        {/* Category Tabs - Matching the tabs in Screenshot 2025-04-25 005506.png */}
+        <CategoryTabs />
         
         {/* Services Cards */}
         <div className="mb-12">
@@ -208,6 +295,30 @@ const LearnDrivingPage = () => {
           </div>
         </div>
         
+        {/* Footer Banner - Matching Screenshot 2025-04-25 005513.png */}
+        <Card className="mb-8 overflow-hidden">
+          <CardContent className="p-0">
+            <div className="relative">
+              <div className="bg-gradient-to-r from-black/90 to-black/70 text-white p-6 sm:p-8 relative z-10">
+                <div className="max-w-3xl">
+                  <h2 className="text-2xl sm:text-3xl font-bold mb-4">Professional driving education and hassle-free RTO assistance across your language, on your schedule</h2>
+                  <div className="flex flex-wrap gap-3 mt-6">
+                    <Button size="lg" className="bg-green-500 hover:bg-green-600 border-none text-white flex items-center gap-2">
+                      <BookOpen className="h-5 w-5" />
+                      Start Learning
+                    </Button>
+                    <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 flex items-center gap-2">
+                      <FileText className="h-5 w-5" />
+                      RTO Services
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute inset-0 bg-cover bg-center z-0 opacity-60" style={{ backgroundColor: '#000' }}></div>
+            </div>
+          </CardContent>
+        </Card>
+        
         {/* FAQs */}
         <div className="mb-8">
           <h2 className="text-xl font-bold mb-6">Frequently Asked Questions</h2>
@@ -304,26 +415,6 @@ const LearnDrivingPage = () => {
             </Card>
           </div>
         </div>
-        
-        {/* CTA Section */}
-        <Card className="mb-8 overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
-          <CardContent className="p-6 sm:p-8">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Become a Confident Driver?</h2>
-              <p className="text-lg opacity-90 mb-6">
-                Start your driving journey today with expert guidance every step of the way.
-              </p>
-              <div className="flex flex-wrap gap-3 justify-center">
-                <Button size="lg" className="bg-white text-indigo-600 hover:bg-white/90">
-                  Book a Lesson Now
-                </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  Contact Us
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
