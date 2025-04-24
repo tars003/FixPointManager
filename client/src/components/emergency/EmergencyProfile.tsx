@@ -177,6 +177,18 @@ export default function EmergencyProfile({
     
     setEditedProfile(prev => {
       if (!prev) return prev;
+      
+      // Handle array fields - convert comma-separated string to array
+      if (field === 'allergies' || field === 'medicalConditions') {
+        if (typeof value === 'string') {
+          const arrayValue = value ? value.split(',').map(item => item.trim()) : [];
+          return {
+            ...prev,
+            [field]: arrayValue.length > 0 ? arrayValue : null
+          };
+        }
+      }
+      
       return {
         ...prev,
         [field]: value
@@ -192,7 +204,7 @@ export default function EmergencyProfile({
       return {
         ...prev,
         insuranceDetails: {
-          ...prev.insuranceDetails,
+          ...(prev.insuranceDetails || { provider: '', policyNumber: '', contactNumber: '' }),
           [field]: value
         }
       };
@@ -353,7 +365,7 @@ export default function EmergencyProfile({
                   <Label htmlFor="bloodType">Blood Type</Label>
                   <Input 
                     id="bloodType"
-                    value={editedProfile.bloodType}
+                    value={editedProfile.bloodType || ''}
                     onChange={(e) => handleInputChange('bloodType', e.target.value)}
                     className={theme === 'light' ? 'border-gray-200' : 'bg-gray-700 border-gray-600'}
                   />
@@ -362,7 +374,7 @@ export default function EmergencyProfile({
                   <Label htmlFor="allergies">Allergies</Label>
                   <Input 
                     id="allergies"
-                    value={editedProfile.allergies}
+                    value={Array.isArray(editedProfile.allergies) ? editedProfile.allergies.join(', ') : ''}
                     onChange={(e) => handleInputChange('allergies', e.target.value)}
                     className={theme === 'light' ? 'border-gray-200' : 'bg-gray-700 border-gray-600'}
                   />
@@ -371,7 +383,7 @@ export default function EmergencyProfile({
                   <Label htmlFor="medicalConditions">Medical Conditions</Label>
                   <Input 
                     id="medicalConditions"
-                    value={editedProfile.medicalConditions}
+                    value={Array.isArray(editedProfile.medicalConditions) ? editedProfile.medicalConditions.join(', ') : ''}
                     onChange={(e) => handleInputChange('medicalConditions', e.target.value)}
                     className={theme === 'light' ? 'border-gray-200' : 'bg-gray-700 border-gray-600'}
                   />
@@ -568,7 +580,7 @@ export default function EmergencyProfile({
                   <Label htmlFor="preferredHospital">Preferred Hospital</Label>
                   <Input 
                     id="preferredHospital"
-                    value={editedProfile.preferredHospital}
+                    value={editedProfile.preferredHospital || ''}
                     onChange={(e) => handleInputChange('preferredHospital', e.target.value)}
                     className={theme === 'light' ? 'border-gray-200' : 'bg-gray-700 border-gray-600'}
                   />
