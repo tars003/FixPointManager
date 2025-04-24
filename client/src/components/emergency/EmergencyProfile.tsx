@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { 
@@ -467,9 +468,53 @@ export default function EmergencyProfile({
                   </div>
                 </div>
                 
-                <h4 className="font-medium text-gray-600 dark:text-gray-300 mt-3">Secondary Contacts</h4>
+                <div className="flex justify-between items-center">
+                  <h4 className="font-medium text-gray-600 dark:text-gray-300 mt-3">Secondary Contacts</h4>
+                  <Button 
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setEditedProfile(prev => {
+                        if (!prev) return prev;
+                        return {
+                          ...prev,
+                          secondaryEmergencyContacts: [
+                            ...prev.secondaryEmergencyContacts, 
+                            { name: '', relation: '', phone: '' }
+                          ]
+                        };
+                      });
+                    }}
+                    className={theme === 'light' ? 'border-blue-200 text-blue-600' : 'border-blue-800 text-blue-400'}
+                  >
+                    Add Contact
+                  </Button>
+                </div>
                 {editedProfile.secondaryEmergencyContacts.map((contact, index) => (
                   <div key={index} className="space-y-2 pb-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Contact #{index + 1}</span>
+                      <Button 
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          setEditedProfile(prev => {
+                            if (!prev) return prev;
+                            const updatedContacts = [...prev.secondaryEmergencyContacts];
+                            updatedContacts.splice(index, 1);
+                            return {
+                              ...prev,
+                              secondaryEmergencyContacts: updatedContacts
+                            };
+                          });
+                        }}
+                        className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 h-6 px-2"
+                      >
+                        Remove
+                      </Button>
+                    </div>
                     <div>
                       <Label htmlFor={`contact-name-${index}`}>Contact Name</Label>
                       <Input 
@@ -585,16 +630,55 @@ export default function EmergencyProfile({
                     className={theme === 'light' ? 'border-gray-200' : 'bg-gray-700 border-gray-600'}
                   />
                 </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="organDonor" className="cursor-pointer">Organ Donor</Label>
+                  <div className="flex items-center space-x-2">
+                    <span className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
+                      {editedProfile.organDonor ? 'Yes' : 'No'}
+                    </span>
+                    <Switch
+                      id="organDonor"
+                      checked={editedProfile.organDonor}
+                      onCheckedChange={(checked: boolean) => handleInputChange('organDonor', checked)}
+                      className={editedProfile.organDonor ? 'bg-green-500' : ''}
+                    />
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="space-y-4">
-                <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-purple-50' : 'bg-purple-900/20'}`}>
+                <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-purple-50' : 'bg-purple-900/20'} mb-3`}>
                   <p className={`text-sm font-medium ${theme === 'light' ? 'text-purple-700' : 'text-purple-300'}`}>
                     Preferred Hospital
                   </p>
                   <p className={`${theme === 'light' ? 'text-purple-800' : 'text-purple-200'}`}>
                     {editedProfile.preferredHospital || 'Not specified'}
                   </p>
+                </div>
+                
+                <div className={`p-3 rounded-lg ${editedProfile.organDonor ? 
+                  (theme === 'light' ? 'bg-green-50' : 'bg-green-900/20') : 
+                  (theme === 'light' ? 'bg-gray-50' : 'bg-gray-700/30')
+                }`}>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className={`text-sm font-medium ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>
+                        Organ Donor
+                      </p>
+                      <p className={`font-medium ${
+                        editedProfile.organDonor ? 
+                          (theme === 'light' ? 'text-green-700' : 'text-green-400') : 
+                          (theme === 'light' ? 'text-gray-500' : 'text-gray-400')
+                      }`}>
+                        {editedProfile.organDonor ? 'Yes' : 'No'}
+                      </p>
+                    </div>
+                    {editedProfile.organDonor && (
+                      <div className={`h-8 w-8 rounded-full flex items-center justify-center ${theme === 'light' ? 'bg-green-100 text-green-700' : 'bg-green-900/30 text-green-400'}`}>
+                        ♥
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
