@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -28,7 +28,7 @@ import { toast } from '@/hooks/use-toast';
 
 // FASTag and E-Challan Services
 const FastagEchallan = () => {
-  const [activeTab, setActiveTab] = useState('echallan');
+  const [activeTab, setActiveTab] = useState('fastag');
   const [vehicleNumber, setVehicleNumber] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [challanTab, setChallanTab] = useState('pending');
@@ -37,6 +37,21 @@ const FastagEchallan = () => {
   const [showStateSearch, setShowStateSearch] = useState(false);
   const [selectedState, setSelectedState] = useState('');
   const [rechargeAmount, setRechargeAmount] = useState('');
+  
+  // Mock vehicles
+  const vehicles = [
+    { id: 1, number: "MP04UE2047", model: "Suzuki Burgman", image: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3" },
+    { id: 2, number: "DL01AB1234", model: "Honda City", image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3" },
+    { id: 3, number: "MH02CD5678", model: "Tata Nexon", image: "https://images.unsplash.com/photo-1609521263047-f8f205293f24?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3" }
+  ];
+
+  const [selectedVehicle, setSelectedVehicle] = useState(vehicles[0]);
+  const [showVehicleSelector, setShowVehicleSelector] = useState(false);
+
+  // Set vehicle number on selected vehicle change
+  useEffect(() => {
+    setVehicleNumber(selectedVehicle.number);
+  }, [selectedVehicle]);
   
   // Sample pending challans data
   const pendingChallans = [
@@ -75,11 +90,11 @@ const FastagEchallan = () => {
     }
   ];
   
-  // Sample FASTag data
-  const fastagData = {
-    id: 'FT0123456789',
-    vehicleNumber: 'MP04UE2047',
-    vehicleModel: 'Suzuki Burgman',
+  // Sample FASTag data for selected vehicle
+  const getFastagData = (vehicle: { number: string; model: string }) => ({
+    id: `FT${Math.floor(Math.random() * 10000000000)}`,
+    vehicleNumber: vehicle.number,
+    vehicleModel: vehicle.model,
     balance: 1245.50,
     lastUpdated: 'Today, 10:30 AM',
     status: 'active',
@@ -95,7 +110,7 @@ const FastagEchallan = () => {
       tollsCrossed: 12,
       totalSpent: 1860
     }
-  };
+  });
   
   // List of Indian states
   const indianStates = [
@@ -256,7 +271,7 @@ const FastagEchallan = () => {
       variant: "default",
     });
   };
-  
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6">
       <div className="py-8">
@@ -269,27 +284,281 @@ const FastagEchallan = () => {
               Check, pay and manage your traffic challans and FASTag accounts easily
             </p>
           </div>
+          
+          {/* Vehicle Selector */}
+          <div className="relative">
+            <button 
+              className="flex items-center gap-2 p-2 rounded-lg border hover:bg-neutral-50 transition-colors"
+              onClick={() => setShowVehicleSelector(!showVehicleSelector)}
+            >
+              <div className="w-10 h-10 rounded-full overflow-hidden border">
+                <img 
+                  src={selectedVehicle.image} 
+                  alt={selectedVehicle.model}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="text-left">
+                <div className="font-medium text-sm">{selectedVehicle.number}</div>
+                <div className="text-xs text-neutral-light">{selectedVehicle.model}</div>
+              </div>
+              <ChevronDown className="h-4 w-4 text-neutral-light" />
+            </button>
+            
+            {showVehicleSelector && (
+              <div className="absolute right-0 top-full mt-2 w-64 bg-white border rounded-lg shadow-lg z-50">
+                <div className="p-2 border-b text-sm font-medium">
+                  Select Vehicle
+                </div>
+                {vehicles.map(vehicle => (
+                  <button
+                    key={vehicle.id}
+                    className={`w-full flex items-center gap-2 p-2 hover:bg-neutral-50 transition-colors ${selectedVehicle.id === vehicle.id ? 'bg-neutral-50' : ''}`}
+                    onClick={() => {
+                      setSelectedVehicle(vehicle);
+                      setShowVehicleSelector(false);
+                    }}
+                  >
+                    <div className="w-10 h-10 rounded-full overflow-hidden border">
+                      <img 
+                        src={vehicle.image} 
+                        alt={vehicle.model}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="text-left">
+                      <div className="font-medium text-sm">{vehicle.number}</div>
+                      <div className="text-xs text-neutral-light">{vehicle.model}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         
         {/* Main Tabs */}
         <Tabs 
-          defaultValue="echallan" 
+          defaultValue="fastag" 
           value={activeTab} 
           onValueChange={setActiveTab}
           className="w-full"
         >
           <TabsList className="grid grid-cols-2 mb-6">
-            <TabsTrigger value="echallan" className="flex items-center gap-1">
-              <ReceiptText className="h-4 w-4" />
-              <span className="hidden sm:inline">E-Challan</span>
-              <span className="sm:hidden">Challan</span>
-            </TabsTrigger>
             <TabsTrigger value="fastag" className="flex items-center gap-1">
               <Tag className="h-4 w-4" />
               <span className="hidden sm:inline">FASTag</span>
               <span className="sm:hidden">FASTag</span>
             </TabsTrigger>
+            <TabsTrigger value="echallan" className="flex items-center gap-1">
+              <ReceiptText className="h-4 w-4" />
+              <span className="hidden sm:inline">E-Challan</span>
+              <span className="sm:hidden">Challan</span>
+            </TabsTrigger>
           </TabsList>
+
+          {/* FASTag Content */}
+          <TabsContent value="fastag">
+            {/* FASTag Account Overview */}
+            <Card className="mb-6 overflow-hidden">
+              <CardContent className="p-0">
+                <div className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 text-white p-6">
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
+                    <div>
+                      <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">Primary Account</span>
+                      <h2 className="text-xl font-bold mt-1">{selectedVehicle.number}</h2>
+                      <p className="text-sm text-white/80">{selectedVehicle.model}</p>
+                    </div>
+                    <div className="mt-4 md:mt-0 text-right">
+                      <div className="text-sm text-white/80">FASTag Balance</div>
+                      <div className="text-3xl font-bold">₹ {getFastagData(selectedVehicle).balance.toFixed(2)}</div>
+                      <div className="text-xs text-white/60">Last updated: {getFastagData(selectedVehicle).lastUpdated}</div>
+                    </div>
+                  </div>
+                  <div className="mt-6 flex flex-wrap gap-4">
+                    <Button variant="outline" className="bg-white/10 text-white border-white/20 hover:bg-white/20">
+                      <History className="h-4 w-4 mr-2" />
+                      Transaction History
+                    </Button>
+                    <Button className="bg-white text-primary hover:bg-white/90">
+                      <ArrowRightLeft className="h-4 w-4 mr-2" />
+                      Recharge Now
+                    </Button>
+                  </div>
+                </div>
+                <div className="p-6 bg-white">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                      <h3 className="text-sm font-medium text-neutral-light mb-1">Status</h3>
+                      <div className="flex items-center">
+                        <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2" />
+                        <span className="font-medium">{getFastagData(selectedVehicle).status === 'active' ? 'Active' : 'Inactive'}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-neutral-light mb-1">FASTag ID</h3>
+                      <p className="font-medium">{getFastagData(selectedVehicle).id}</p>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-neutral-light mb-1">Expiry Date</h3>
+                      <p className="font-medium">{getFastagData(selectedVehicle).expiryDate}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6">
+                    <h3 className="text-md font-semibold mb-3">Monthly Usage Summary</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Card className="bg-neutral-50">
+                        <CardContent className="p-4 flex items-center gap-4">
+                          <div className="bg-primary/10 p-3 rounded-full">
+                            <MapPin className="h-6 w-6 text-primary" />
+                          </div>
+                          <div>
+                            <div className="text-xl font-bold">{getFastagData(selectedVehicle).monthlyUsage.tollsCrossed}</div>
+                            <div className="text-sm text-neutral-light">Tolls crossed this month</div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card className="bg-neutral-50">
+                        <CardContent className="p-4 flex items-center gap-4">
+                          <div className="bg-primary/10 p-3 rounded-full">
+                            <CircleDollarSign className="h-6 w-6 text-primary" />
+                          </div>
+                          <div>
+                            <div className="text-xl font-bold">₹ {getFastagData(selectedVehicle).monthlyUsage.totalSpent}</div>
+                            <div className="text-sm text-neutral-light">Total spent this month</div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-8">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-md font-semibold">Recent Transactions</h3>
+                      <Button variant="ghost" size="sm" className="text-sm">
+                        View All
+                        <ChevronRight className="ml-1 h-4 w-4" />
+                      </Button>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      {getFastagData(selectedVehicle).recentTransactions.slice(0, 3).map((transaction) => (
+                        <Card key={transaction.id} className="hover:shadow-md cursor-pointer transition-shadow">
+                          <CardContent className="p-4">
+                            <div className="flex items-center gap-3">
+                              <div className="bg-neutral-100 p-2 rounded-full">
+                                <MapPin className="h-5 w-5 text-neutral-600" />
+                              </div>
+                              <div className="flex-1">
+                                <div className="font-medium">{transaction.plaza}</div>
+                                <div className="text-xs text-neutral-light">{transaction.date}</div>
+                              </div>
+                              <div className="text-right">
+                                <div className="font-bold">₹ {transaction.amount}</div>
+                                <div className="text-xs text-green-600">Success</div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6">
+                    <h3 className="text-md font-semibold mb-3">Recharge FASTag</h3>
+                    <div className="flex gap-3">
+                      <Input
+                        type="number"
+                        placeholder="Enter amount (min ₹100)"
+                        className="max-w-[200px]"
+                        value={rechargeAmount}
+                        onChange={(e) => setRechargeAmount(e.target.value)}
+                      />
+                      <Button onClick={handleRechargeFASTtag}>
+                        Recharge Now
+                      </Button>
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {[200, 500, 1000, 2000].map((amount) => (
+                        <Button
+                          key={amount}
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setRechargeAmount(amount.toString())}
+                        >
+                          ₹ {amount}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Additional FASTag Services */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {/* Buy New FASTag */}
+              <Card 
+                className="cursor-pointer hover:shadow-md transition-shadow overflow-hidden"
+                onClick={() => toast({
+                  title: "Buy New FASTag",
+                  description: "Redirecting to FASTag purchase page",
+                })}
+              >
+                <CardContent className="p-4">
+                  <div className="rounded-full p-2 bg-green-100 dark:bg-green-900/30 w-12 h-12 flex items-center justify-center mb-3">
+                    <Plus className="h-6 w-6 text-green-600 dark:text-green-400" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">Buy New FASTag</h3>
+                  <p className="text-purple-600 dark:text-purple-400 text-sm mb-4">
+                    Purchase a new FASTag for your vehicle with easy online registration
+                  </p>
+                  <Button variant="outline" className="w-full">Apply Now</Button>
+                </CardContent>
+              </Card>
+              
+              {/* Toll Calculator */}
+              <Card 
+                className="cursor-pointer hover:shadow-md transition-shadow overflow-hidden"
+                onClick={() => toast({
+                  title: "Toll Calculator",
+                  description: "Launching toll calculator tool",
+                })}
+              >
+                <CardContent className="p-4">
+                  <div className="rounded-full p-2 bg-blue-100 dark:bg-blue-900/30 w-12 h-12 flex items-center justify-center mb-3">
+                    <Map className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">Toll Calculator</h3>
+                  <p className="text-blue-600 dark:text-blue-400 text-sm mb-4">
+                    Calculate toll charges for your journey before you start driving
+                  </p>
+                  <Button variant="outline" className="w-full">Calculate Toll</Button>
+                </CardContent>
+              </Card>
+              
+              {/* FASTag Help */}
+              <Card 
+                className="cursor-pointer hover:shadow-md transition-shadow overflow-hidden"
+                onClick={() => toast({
+                  title: "FASTag Support",
+                  description: "Connecting to FASTag support services",
+                })}
+              >
+                <CardContent className="p-4">
+                  <div className="rounded-full p-2 bg-purple-100 dark:bg-purple-900/30 w-12 h-12 flex items-center justify-center mb-3">
+                    <Info className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">FASTag Support</h3>
+                  <p className="text-indigo-600 dark:text-indigo-400 text-sm mb-4">
+                    Need help with your FASTag? Contact customer support or read FAQs
+                  </p>
+                  <Button variant="outline" className="w-full">Get Support</Button>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
           
           {/* E-Challan Content */}
           <TabsContent value="echallan">
@@ -434,402 +703,151 @@ const FastagEchallan = () => {
                   className={`pb-2 px-1 ${challanTab === 'pending' ? 'border-b-2 border-primary font-medium' : 'text-neutral-light'}`}
                   onClick={() => setChallanTab('pending')}
                 >
-                  Pending ({pendingChallans.length})
+                  Pending Challans ({pendingChallans.length})
                 </button>
                 <button 
                   className={`pb-2 px-1 ${challanTab === 'paid' ? 'border-b-2 border-primary font-medium' : 'text-neutral-light'}`}
                   onClick={() => setChallanTab('paid')}
                 >
-                  Paid ({paidChallans.length})
+                  Paid Challans ({paidChallans.length})
                 </button>
               </div>
               
               {challanTab === 'pending' && (
                 <div className="space-y-4">
-                  {pendingChallans.length === 0 ? (
-                    <Card>
-                      <CardContent className="p-6 text-center">
-                        <CheckCircle className="h-12 w-12 mx-auto text-green-500 mb-3" />
-                        <h3 className="text-xl font-medium mb-2">Hurray! You are driving good.</h3>
-                        <p className="text-neutral-light">No recent challans found</p>
-                        <div className="mt-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 max-w-md mx-auto">
-                          <h4 className="font-medium mb-1">Predict & Win Rewards</h4>
-                          <p className="text-sm text-neutral-light">Your driving deserves rewards. Join our safe driver program.</p>
-                          <Button className="mt-3 w-full sm:w-auto">Learn More</Button>
+                  {pendingChallans.map(challan => (
+                    <Card key={challan.id} className="overflow-hidden">
+                      <CardContent className="p-0">
+                        <div className="p-4 bg-white">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h3 className="font-bold">{challan.id}</h3>
+                                {challan.hasImage && (
+                                  <span className="px-2 py-0.5 text-xs bg-orange-100 text-orange-800 rounded-full">
+                                    Evidence Available
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-sm text-neutral-light mt-1">
+                                <div className="flex items-center gap-1">
+                                  <Car className="h-3 w-3" /> {challan.vehicleNumber}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="font-bold text-lg text-red-600">₹ {challan.amount}</div>
+                          </div>
+
+                          <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                            <div>
+                              <div className="text-neutral-light">Date</div>
+                              <div className="font-medium">{challan.date}</div>
+                            </div>
+                            <div>
+                              <div className="text-neutral-light">Location</div>
+                              <div className="font-medium">{challan.location}</div>
+                            </div>
+                            <div>
+                              <div className="text-neutral-light">Violation</div>
+                              <div className="font-medium">{challan.violation}</div>
+                            </div>
+                            <div>
+                              <div className="text-neutral-light">Due Date</div>
+                              <div className="font-medium">{challan.dueDate}</div>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-4 flex gap-2 flex-wrap">
+                            <Button 
+                              onClick={() => handlePayChallan(challan.id)} 
+                              className="bg-green-600 hover:bg-green-700"
+                            >
+                              Pay Now
+                            </Button>
+                            <Button variant="outline">
+                              View Details
+                            </Button>
+                          </div>
                         </div>
                       </CardContent>
                     </Card>
-                  ) : (
-                    <>
-                      {pendingChallans.map(challan => (
-                        <Card key={challan.id} className="overflow-hidden">
-                          <div className="bg-red-50 dark:bg-red-900/20 px-4 py-2 border-b flex justify-between items-center">
-                            <div className="flex items-center">
-                              <AlertTriangle className="h-4 w-4 text-red-600 mr-2" />
-                              <span className="font-medium">Unpaid Challan</span>
-                            </div>
-                            <div className="text-sm text-neutral-light">
-                              Due: {challan.dueDate}
-                            </div>
-                          </div>
-                          <CardContent className="p-4">
-                            <div className="flex flex-col md:flex-row justify-between">
-                              <div>
-                                <div className="flex items-center gap-3 mb-3">
-                                  <Car className="h-5 w-5 text-neutral-light" />
-                                  <span className="font-medium">{challan.vehicleNumber}</span>
-                                  <span className="text-sm text-neutral-light">({challan.id})</span>
-                                </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 mb-4">
-                                  <div className="flex items-start gap-2">
-                                    <Clock className="h-4 w-4 text-neutral-light mt-1" />
-                                    <div>
-                                      <div className="text-sm font-medium">Date & Time</div>
-                                      <div className="text-sm text-neutral-light">{challan.date}</div>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start gap-2">
-                                    <MapPin className="h-4 w-4 text-neutral-light mt-1" />
-                                    <div>
-                                      <div className="text-sm font-medium">Location</div>
-                                      <div className="text-sm text-neutral-light">{challan.location}</div>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start gap-2 sm:col-span-2">
-                                    <Info className="h-4 w-4 text-neutral-light mt-1" />
-                                    <div>
-                                      <div className="text-sm font-medium">Violation</div>
-                                      <div className="text-sm text-neutral-light">{challan.violation}</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="flex flex-col items-end justify-between">
-                                <div className="text-right mb-3">
-                                  <div className="text-sm text-neutral-light">Amount Due</div>
-                                  <div className="text-xl font-bold text-red-600">₹{challan.amount.toLocaleString()}</div>
-                                </div>
-                                <div className="flex gap-2">
-                                  {challan.hasImage && (
-                                    <Button variant="outline" size="sm">
-                                      View Evidence
-                                    </Button>
-                                  )}
-                                  <Button 
-                                    size="sm"
-                                    onClick={() => handlePayChallan(challan.id)}
-                                  >
-                                    Pay Now
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                      
-                      {pendingChallans.length > 1 && (
-                        <div className="flex justify-end mt-4">
-                          <Card className="p-4 w-full sm:w-auto">
-                            <div className="flex flex-col sm:flex-row items-center gap-4">
-                              <div>
-                                <div className="text-sm text-neutral-light">Total Amount Due</div>
-                                <div className="text-xl font-bold text-red-600">
-                                  ₹{pendingChallans.reduce((sum, challan) => sum + challan.amount, 0).toLocaleString()}
-                                </div>
-                              </div>
-                              <Button>Pay All Challans</Button>
-                            </div>
-                          </Card>
-                        </div>
-                      )}
-                    </>
+                  ))}
+                  
+                  {pendingChallans.length === 0 && (
+                    <div className="flex flex-col items-center justify-center text-center p-12 bg-neutral-50 rounded-lg">
+                      <CheckCircle className="h-12 w-12 text-green-500 mb-3" />
+                      <h3 className="text-lg font-bold mb-1">No Pending Challans</h3>
+                      <p className="text-neutral-light max-w-md">
+                        You have no pending challans for this vehicle. Keep following traffic rules and stay safe!
+                      </p>
+                    </div>
                   )}
                 </div>
               )}
               
               {challanTab === 'paid' && (
                 <div className="space-y-4">
-                  {paidChallans.length === 0 ? (
-                    <Card>
-                      <CardContent className="p-6 text-center">
-                        <Info className="h-12 w-12 mx-auto text-blue-500 mb-3" />
-                        <h3 className="text-xl font-medium mb-2">No paid challans found</h3>
-                        <p className="text-neutral-light">Your payment history will appear here</p>
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    <>
-                      {paidChallans.map(challan => (
-                        <Card key={challan.id} className="overflow-hidden">
-                          <div className="bg-green-50 dark:bg-green-900/20 px-4 py-2 border-b flex justify-between items-center">
-                            <div className="flex items-center">
-                              <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                              <span className="font-medium">Paid Challan</span>
+                  {paidChallans.map(challan => (
+                    <Card key={challan.id} className="overflow-hidden">
+                      <CardContent className="p-0">
+                        <div className="p-4 bg-white">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h3 className="font-bold">{challan.id}</h3>
+                                <span className="px-2 py-0.5 text-xs bg-green-100 text-green-800 rounded-full">
+                                  Paid
+                                </span>
+                              </div>
+                              <div className="text-sm text-neutral-light mt-1">
+                                <div className="flex items-center gap-1">
+                                  <Car className="h-3 w-3" /> {challan.vehicleNumber}
+                                </div>
+                              </div>
                             </div>
-                            <div className="text-sm text-neutral-light">
-                              Paid: {challan.paidDate}
+                            <div className="font-bold text-lg text-neutral-800">₹ {challan.amount}</div>
+                          </div>
+
+                          <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                            <div>
+                              <div className="text-neutral-light">Date</div>
+                              <div className="font-medium">{challan.date}</div>
+                            </div>
+                            <div>
+                              <div className="text-neutral-light">Location</div>
+                              <div className="font-medium">{challan.location}</div>
+                            </div>
+                            <div>
+                              <div className="text-neutral-light">Violation</div>
+                              <div className="font-medium">{challan.violation}</div>
+                            </div>
+                            <div>
+                              <div className="text-neutral-light">Paid On</div>
+                              <div className="font-medium">{challan.paidDate}</div>
                             </div>
                           </div>
-                          <CardContent className="p-4">
-                            <div className="flex flex-col md:flex-row justify-between">
-                              <div>
-                                <div className="flex items-center gap-3 mb-3">
-                                  <Car className="h-5 w-5 text-neutral-light" />
-                                  <span className="font-medium">{challan.vehicleNumber}</span>
-                                  <span className="text-sm text-neutral-light">({challan.id})</span>
-                                </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 mb-4">
-                                  <div className="flex items-start gap-2">
-                                    <Clock className="h-4 w-4 text-neutral-light mt-1" />
-                                    <div>
-                                      <div className="text-sm font-medium">Date & Time</div>
-                                      <div className="text-sm text-neutral-light">{challan.date}</div>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start gap-2">
-                                    <MapPin className="h-4 w-4 text-neutral-light mt-1" />
-                                    <div>
-                                      <div className="text-sm font-medium">Location</div>
-                                      <div className="text-sm text-neutral-light">{challan.location}</div>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start gap-2 sm:col-span-2">
-                                    <Info className="h-4 w-4 text-neutral-light mt-1" />
-                                    <div>
-                                      <div className="text-sm font-medium">Violation</div>
-                                      <div className="text-sm text-neutral-light">{challan.violation}</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="flex flex-col items-end justify-between">
-                                <div className="text-right mb-3">
-                                  <div className="text-sm text-neutral-light">Amount Paid</div>
-                                  <div className="text-xl font-bold text-green-600">₹{challan.amount.toLocaleString()}</div>
-                                </div>
-                                <Button variant="outline" size="sm">
-                                  Download Receipt
-                                </Button>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </>
+                          
+                          <div className="mt-4 flex gap-2">
+                            <Button variant="outline">
+                              View Receipt
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                  
+                  {paidChallans.length === 0 && (
+                    <div className="flex flex-col items-center justify-center text-center p-12 bg-neutral-50 rounded-lg">
+                      <AlertTriangle className="h-12 w-12 text-yellow-500 mb-3" />
+                      <h3 className="text-lg font-bold mb-1">No Payment History</h3>
+                      <p className="text-neutral-light max-w-md">
+                        You have no record of previously paid challans for this vehicle.
+                      </p>
+                    </div>
                   )}
                 </div>
               )}
-            </div>
-          </TabsContent>
-          
-          {/* FASTag Content */}
-          <TabsContent value="fastag">
-            <Card className="mb-6">
-              <CardContent className="p-6">
-                <h2 className="text-xl font-bold mb-1">FASTag: Purchase, Recharge & Manage</h2>
-                <p className="text-neutral-light mb-6">Drive through tolls without stopping ✅</p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {/* FASTag Status Card */}
-                  <div className="md:col-span-2">
-                    <Card className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 overflow-hidden relative">
-                      <div className="absolute top-3 right-3">
-                        {fastagData.status === 'active' ? (
-                          <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                            <span className="mr-1 h-1.5 w-1.5 rounded-full bg-green-500"></span>
-                            Active
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-400">
-                            <span className="mr-1 h-1.5 w-1.5 rounded-full bg-red-500"></span>
-                            Inactive
-                          </span>
-                        )}
-                      </div>
-                      <CardContent className="p-6">
-                        <div className="flex items-center gap-3 mb-4">
-                          <Tag className="h-6 w-6 text-blue-600" />
-                          <span className="font-bold text-lg">FASTag ID: {fastagData.id}</span>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-4">
-                          <div>
-                            <div className="text-sm text-neutral-light mb-1">Linked Vehicle</div>
-                            <div className="flex items-center gap-2">
-                              <Car className="h-5 w-5 text-neutral-light" />
-                              <div>
-                                <div className="font-medium">{fastagData.vehicleNumber}</div>
-                                <div className="text-sm text-neutral-light">{fastagData.vehicleModel}</div>
-                              </div>
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-sm text-neutral-light mb-1">Current Balance</div>
-                            <div className="flex items-center gap-1">
-                              <div className="font-bold text-xl">₹{fastagData.balance.toLocaleString()}</div>
-                              <InfoTooltip text={`Last updated: ${fastagData.lastUpdated}`} />
-                            </div>
-                            {fastagData.balance < 300 && (
-                              <div className="text-xs text-red-600 mt-1 flex items-center gap-1">
-                                <AlertTriangle className="h-3 w-3" />
-                                Low balance, please recharge
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-4">
-                          <div>
-                            <div className="text-sm text-neutral-light mb-1">Monthly Usage</div>
-                            <div className="font-medium">{fastagData.monthlyUsage.tollsCrossed} tolls crossed</div>
-                            <div className="text-sm text-neutral-light">
-                              Total spent: ₹{fastagData.monthlyUsage.totalSpent.toLocaleString()}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-sm text-neutral-light mb-1">Expires On</div>
-                            <div className="font-medium">{fastagData.expiryDate}</div>
-                          </div>
-                        </div>
-                        
-                        <div className="flex flex-wrap gap-2 mt-4">
-                          <Button>
-                            Recharge Now
-                          </Button>
-                          <Button variant="outline">
-                            <History className="h-4 w-4 mr-1" />
-                            Transaction History
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                  
-                  {/* Quick Recharge */}
-                  <div>
-                    <Card>
-                      <CardContent className="p-4">
-                        <h3 className="font-medium mb-3">Quick Recharge</h3>
-                        <div className="grid grid-cols-2 gap-2 mb-4">
-                          {[500, 1000, 1500, 2000].map(amount => (
-                            <Button 
-                              key={amount}
-                              variant={rechargeAmount === amount.toString() ? "default" : "outline"}
-                              size="sm"
-                              className="text-md"
-                              onClick={() => setRechargeAmount(amount.toString())}
-                            >
-                              ₹{amount}
-                            </Button>
-                          ))}
-                        </div>
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium mb-1">Custom Amount</label>
-                          <div className="relative">
-                            <Input 
-                              placeholder="Enter amount"
-                              value={rechargeAmount}
-                              onChange={(e) => setRechargeAmount(e.target.value.replace(/\D/g, ''))}
-                              className="pl-8"
-                            />
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                              <span className="text-neutral-light">₹</span>
-                            </div>
-                          </div>
-                        </div>
-                        <Button 
-                          className="w-full"
-                          onClick={handleRechargeFASTtag}
-                          disabled={!rechargeAmount || isNaN(Number(rechargeAmount)) || Number(rechargeAmount) < 100}
-                        >
-                          Proceed to Pay
-                        </Button>
-                        <div className="mt-3 p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-xs text-center">
-                          <span className="text-blue-600 dark:text-blue-400 font-medium">5% cashback</span> on recharges above ₹1000
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-                
-                {/* Recent Transactions */}
-                <div className="mt-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="font-medium">Recent Transactions</h3>
-                    <Button variant="ghost" size="sm" className="text-sm">
-                      View All
-                      <ChevronRight className="h-4 w-4 ml-1" />
-                    </Button>
-                  </div>
-                  
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse">
-                      <thead>
-                        <tr className="bg-neutral-100 dark:bg-neutral-800">
-                          <th className="text-left p-3 text-sm font-medium">Date & Time</th>
-                          <th className="text-left p-3 text-sm font-medium">Toll Plaza</th>
-                          <th className="text-right p-3 text-sm font-medium">Amount</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y">
-                        {fastagData.recentTransactions.map(transaction => (
-                          <tr key={transaction.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                            <td className="p-3 text-sm">{transaction.date}</td>
-                            <td className="p-3 text-sm">{transaction.plaza}</td>
-                            <td className="p-3 text-sm text-right font-medium">₹{transaction.amount}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            {/* Additional FASTag Services */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              {/* Buy New FASTag */}
-              <Card>
-                <CardContent className="p-4">
-                  <div className="rounded-full p-2 bg-green-100 dark:bg-green-900/30 w-12 h-12 flex items-center justify-center mb-3">
-                    <Plus className="h-6 w-6 text-green-600 dark:text-green-400" />
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">Buy New FASTag</h3>
-                  <p className="text-neutral-light text-sm mb-4">
-                    Purchase a new FASTag for your vehicle with easy online registration
-                  </p>
-                  <Button variant="outline" className="w-full">Apply Now</Button>
-                </CardContent>
-              </Card>
-              
-              {/* Toll Calculator */}
-              <Card>
-                <CardContent className="p-4">
-                  <div className="rounded-full p-2 bg-blue-100 dark:bg-blue-900/30 w-12 h-12 flex items-center justify-center mb-3">
-                    <Map className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">Toll Calculator</h3>
-                  <p className="text-neutral-light text-sm mb-4">
-                    Calculate toll charges for your journey before you start driving
-                  </p>
-                  <Button variant="outline" className="w-full">Calculate Toll</Button>
-                </CardContent>
-              </Card>
-              
-              {/* FASTag Help */}
-              <Card>
-                <CardContent className="p-4">
-                  <div className="rounded-full p-2 bg-purple-100 dark:bg-purple-900/30 w-12 h-12 flex items-center justify-center mb-3">
-                    <Info className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">FASTag Support</h3>
-                  <p className="text-neutral-light text-sm mb-4">
-                    Need help with your FASTag? Contact customer support or read FAQs
-                  </p>
-                  <Button variant="outline" className="w-full">Get Support</Button>
-                </CardContent>
-              </Card>
             </div>
           </TabsContent>
         </Tabs>
