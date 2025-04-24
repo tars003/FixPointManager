@@ -6,12 +6,12 @@ import {
   Car, 
   Scale, 
   Heart, 
-  Passport, 
+  BookCopy as Passport, 
   FileText, 
-  Plane, 
+  PlaneTakeoff as Plane, 
   AlertTriangle,
   Languages,
-  LandPlot
+  Building as LandPlot
 } from 'lucide-react';
 
 interface InternationalEmergencyProps {

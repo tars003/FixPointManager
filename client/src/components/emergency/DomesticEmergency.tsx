@@ -1,14 +1,19 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
-import AccidentEmergency from './domestic/AccidentEmergency';
-import BreakdownEmergency from './domestic/BreakdownEmergency';
-import PoliceEmergency from './domestic/PoliceEmergency';
+// Temporarily use placeholder components until imports are ready
+const AccidentEmergency = ({ location, theme, onGoBack }: any) => 
+  <div>Accident Emergency Component (Placeholder)</div>;
+const BreakdownEmergency = ({ location, theme, onGoBack }: any) => 
+  <div>Breakdown Emergency Component (Placeholder)</div>;
+const PoliceEmergency = ({ location, theme, onGoBack }: any) => 
+  <div>Police Emergency Component (Placeholder)</div>;
+
 import { 
   Car, 
-  Engine, 
+  Wrench as Engine, 
   Shield, 
-  BadgeAlert,
+  CircleAlert as BadgeAlert,
   Heart, 
   LockKeyhole, 
   FileText, 

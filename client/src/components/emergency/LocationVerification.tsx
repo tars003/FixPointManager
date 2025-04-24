@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { MapPin, Navigation, Flag, Map } from 'lucide-react';
+import { MapPin, Navigation, Flag, Map, Globe } from 'lucide-react';
 
 interface LocationVerificationProps {
   location: {
