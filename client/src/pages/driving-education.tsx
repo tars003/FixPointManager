@@ -6,15 +6,12 @@ import { Input } from '@/components/ui/input';
 import { 
   BookOpen, 
   FileText, 
-  Info, 
-  Phone, 
   Search, 
   MessageCircle,
   Languages,
   Car,
   MapPin,
   CreditCard,
-  Mail,
   Award,
   UserCheck,
   Bike
@@ -172,7 +169,7 @@ const DrivingEducation = () => {
         
         {/* Main Content Tabs */}
         <Tabs defaultValue="learn" className="w-full" onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-4 mb-6">
+          <TabsList className="grid grid-cols-2 mb-6">
             <TabsTrigger value="learn" className="flex items-center gap-1">
               <BookOpen className="h-4 w-4" />
               <span className="hidden sm:inline">Learn Driving</span>
@@ -183,16 +180,6 @@ const DrivingEducation = () => {
               <span className="hidden sm:inline">RTO Services</span>
               <span className="sm:hidden">RTO</span>
             </TabsTrigger>
-            <TabsTrigger value="about" className="flex items-center gap-1">
-              <Info className="h-4 w-4" />
-              <span className="hidden sm:inline">About Us</span>
-              <span className="sm:hidden">About</span>
-            </TabsTrigger>
-            <TabsTrigger value="contact" className="flex items-center gap-1">
-              <Phone className="h-4 w-4" />
-              <span className="hidden sm:inline">Contact</span>
-              <span className="sm:hidden">Contact</span>
-            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="learn">
@@ -201,110 +188,6 @@ const DrivingEducation = () => {
           
           <TabsContent value="rto">
             <RTOServices />
-          </TabsContent>
-          
-          <TabsContent value="about">
-            <Card>
-              <CardContent className="p-6">
-                <h2 className="text-xl font-bold mb-4">About Us</h2>
-                <p className="text-neutral-light mb-4">
-                  FixPoint Driving Education is India's premier platform for comprehensive driving education and RTO services. 
-                  We combine technology with expert instruction to make learning to drive and navigating RTO processes simple 
-                  and stress-free.
-                </p>
-                
-                <h3 className="font-semibold mt-6 mb-3">Our Mission</h3>
-                <p className="text-neutral-light mb-4">
-                  To create safer roads in India by providing accessible, high-quality driving education and simplifying 
-                  the complex processes of vehicle licensing and registration.
-                </p>
-                
-                <h3 className="font-semibold mt-6 mb-3">What Makes Us Different</h3>
-                <ul className="list-disc pl-5 space-y-2 text-neutral-light">
-                  <li>Certified instructors with extensive experience</li>
-                  <li>Multilingual support across major Indian languages</li>
-                  <li>Flexible scheduling to fit your busy lifestyle</li>
-                  <li>Comprehensive RTO assistance with real-time status tracking</li>
-                  <li>Personalized approach based on your skill level and needs</li>
-                  <li>Modern teaching methodologies with practical, hands-on training</li>
-                </ul>
-                
-                <div className="mt-8 text-center">
-                  <Button size="lg">
-                    Learn More About Our Services
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="contact">
-            <Card>
-              <CardContent className="p-6">
-                <h2 className="text-xl font-bold mb-4">Contact Us</h2>
-                <p className="text-neutral-light mb-6">
-                  We're here to help you with any questions about driving education or RTO services. 
-                  Reach out through any of these channels:
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <Card>
-                    <CardContent className="p-4 text-center">
-                      <Phone className="h-8 w-8 mx-auto mb-2 text-primary" />
-                      <h3 className="font-semibold">Call Us</h3>
-                      <p className="text-neutral-light mt-1">+91 1800-123-4567</p>
-                      <p className="text-sm text-neutral-light mt-1">Available 9 AM - 9 PM</p>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card>
-                    <CardContent className="p-4 text-center">
-                      <MessageCircle className="h-8 w-8 mx-auto mb-2 text-green-500" />
-                      <h3 className="font-semibold">WhatsApp</h3>
-                      <p className="text-neutral-light mt-1">+91 9876-543-210</p>
-                      <p className="text-sm text-neutral-light mt-1">24/7 Support</p>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card>
-                    <CardContent className="p-4 text-center">
-                      <Mail className="h-8 w-8 mx-auto mb-2 text-blue-500" />
-                      <h3 className="font-semibold">Email</h3>
-                      <p className="text-neutral-light mt-1">support@fixpoint.com</p>
-                      <p className="text-sm text-neutral-light mt-1">Response within 24 hours</p>
-                    </CardContent>
-                  </Card>
-                </div>
-                
-                <div className="mt-8">
-                  <h3 className="font-semibold mb-4">Send Us a Message</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Your Name</label>
-                      <Input placeholder="Enter your full name" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Email Address</label>
-                      <Input type="email" placeholder="Enter your email" />
-                    </div>
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium mb-1">Subject</label>
-                    <Input placeholder="What is your message about?" />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium mb-1">Message</label>
-                    <textarea 
-                      className="w-full min-h-[120px] rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-2"
-                      placeholder="How can we help you?"
-                    ></textarea>
-                  </div>
-                  <Button className="mt-2">
-                    Send Message
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
           </TabsContent>
         </Tabs>
         
