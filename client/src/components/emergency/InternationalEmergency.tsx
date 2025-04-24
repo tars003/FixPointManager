@@ -52,70 +52,79 @@ export default function InternationalEmergency({
     setSelectedCategory('none');
   };
 
-  // Categories with icons, colors and descriptions for international emergencies
+  // Categories with icons, colors and descriptions for international emergencies - updated with provided specifications
   const emergencyCategories = [
     {
       id: 'accident',
-      name: 'Accident/Breakdown',
+      name: 'International Vehicle Emergency',
       icon: <Car />,
       color: 'red',
-      description: 'Vehicle collision or mechanical issue'
+      description: 'Complete support for accidents or breakdowns abroad, with local protocol guidance and language assistance.',
+      actionButton: 'Vehicle Help'
     },
     {
       id: 'legal',
-      name: 'Police/Legal',
+      name: 'Global Legal Protection',
       icon: <Scale />,
       color: 'blue',
-      description: 'Legal assistance or police matter'
+      description: 'Navigate foreign police interactions, checkpoints, or legal systems with country-specific rights guidance.',
+      actionButton: 'Legal Shield'
     },
     {
       id: 'medical',
-      name: 'Medical',
+      name: 'Worldwide Medical Response',
       icon: <Heart />,
       color: 'pink',
-      description: 'Health emergency during international travel'
+      description: 'Access emergency healthcare anywhere with language support, insurance coordination, and hospital direction.',
+      actionButton: 'Medical Alert'
     },
     {
       id: 'border',
-      name: 'Border/Customs',
+      name: 'Border & Customs Navigation',
       icon: <Passport />,
       color: 'indigo',
-      description: 'Border crossing or customs issues'
+      description: 'Resolve vehicle import/export issues, documentation problems, or border crossing emergencies.',
+      actionButton: 'Border Help'
     },
     {
       id: 'document',
-      name: 'Documentation',
+      name: 'Global Document Recovery',
       icon: <FileText />,
       color: 'cyan',
-      description: 'Lost or damaged travel/vehicle documents'
+      description: 'Lost passport, license, or vehicle papers abroad? Get emergency replacements and digital verification.',
+      actionButton: 'Document SOS'
     },
     {
       id: 'transport',
-      name: 'Vehicle Transport',
+      name: 'Emergency Vehicle Shipping',
       icon: <Plane />,
       color: 'amber',
-      description: 'Vehicle shipping or transport issues'
+      description: 'Arrange emergency vehicle transport across borders or back to India with customs clearance support.',
+      actionButton: 'Transport Solution'
     },
     {
       id: 'natural',
-      name: 'Natural Disaster',
+      name: 'Global Disaster Response',
       icon: <AlertTriangle />,
       color: 'orange',
-      description: 'Weather emergency or natural disaster'
+      description: 'Navigate foreign natural disasters with real-time alerts, evacuation guidance, and embassy coordination.',
+      actionButton: 'Safety Protocol'
     },
     {
       id: 'language',
-      name: 'Language Help',
+      name: 'Emergency Translation',
       icon: <Languages />,
       color: 'green',
-      description: 'Communication assistance in foreign country'
+      description: 'Break through language barriers in any crisis with instant translation tools and emergency phrase guides.',
+      actionButton: 'Translate Now'
     },
     {
       id: 'embassy',
-      name: 'Embassy Contact',
+      name: 'Embassy Emergency Line',
       icon: <LandPlot />,
       color: 'purple',
-      description: 'Connect with Indian embassy or consulate'
+      description: 'Direct connection to Indian embassy or consulate services for any crisis situation while abroad.',
+      actionButton: 'Embassy SOS'
     }
   ];
 
@@ -170,7 +179,7 @@ export default function InternationalEmergency({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {emergencyCategories.map((category) => (
             <CategoryCard 
               key={category.id}
@@ -366,6 +375,7 @@ interface CategoryCardProps {
     icon: React.ReactNode;
     color: string;
     description: string;
+    actionButton: string;
   };
   onClick: () => void;
   theme: 'light' | 'dark';
@@ -443,26 +453,41 @@ function CategoryCard({ category, onClick, theme }: CategoryCardProps) {
 
   return (
     <Card 
-      className={`cursor-pointer transition-all overflow-hidden ${
+      className={`cursor-pointer transition-all overflow-hidden h-full flex flex-col ${
         theme === 'light' 
         ? 'border border-gray-100 hover:shadow-md' 
         : 'bg-gray-800/80 border-gray-700 hover:bg-gray-800 hover:border-gray-600'
       }`}
       onClick={onClick}
     >
-      <CardContent className="p-0">
+      <CardContent className="p-0 flex flex-col flex-grow">
         <div className={`p-4 flex flex-col items-center justify-center ${theme === 'light' ? colorClasses.bg : colorClasses.darkBg}`}>
           <div className={`p-3 rounded-full ${theme === 'light' ? 'bg-white shadow-sm' : 'bg-gray-800'} mb-2`}>
             <div className={`w-10 h-10 flex items-center justify-center ${theme === 'light' ? colorClasses.text : colorClasses.darkText}`}>
               {category.icon}
             </div>
           </div>
-          <h3 className={`font-bold text-center ${theme === 'light' ? colorClasses.text : colorClasses.darkText}`}>
+          <h3 className={`font-bold text-center text-sm ${theme === 'light' ? colorClasses.text : colorClasses.darkText}`}>
             {category.name}
           </h3>
         </div>
-        <div className={`px-3 py-2 text-xs text-center ${theme === 'light' ? 'text-gray-600 bg-white' : 'text-gray-400 bg-gray-800/50'}`}>
+        <div className={`px-3 py-3 text-xs text-center ${theme === 'light' ? 'text-gray-600 bg-white' : 'text-gray-400 bg-gray-800/50'} flex-grow`}>
           {category.description}
+        </div>
+        <div className={`px-3 pb-3 flex justify-center ${theme === 'light' ? 'bg-white' : 'bg-gray-800/50'}`}>
+          <button
+            className={`w-full py-2 rounded-full text-xs font-medium transition-colors ${
+              theme === 'light'
+                ? `${colorClasses.bg} ${colorClasses.text} hover:bg-opacity-80`
+                : `${colorClasses.darkBg.replace('/30', '/50')} ${colorClasses.darkText} hover:bg-opacity-80`
+            }`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick();
+            }}
+          >
+            {category.actionButton}
+          </button>
         </div>
       </CardContent>
     </Card>
