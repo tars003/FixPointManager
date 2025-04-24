@@ -19,6 +19,7 @@ import {
   GraduationCap,
   FileSearch,
   AlertTriangle,
+  AlertCircle,
   Truck,
   Gamepad2
 } from 'lucide-react';
@@ -192,7 +193,15 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         </nav>
       </div>
       
-      <div className="mt-auto px-3 py-4 border-t">
+      <div className="px-3 py-4 border-t">
+        <button 
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md shadow-md flex items-center justify-center mb-4 animate-pulse transition-colors"
+          onClick={() => navigate('/emergency')}
+        >
+          <AlertCircle className="h-4 w-4 mr-2" />
+          Emergency SOS
+        </button>
+        
         <p className="px-3 text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">
           Account
         </p>
