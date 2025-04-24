@@ -20,7 +20,7 @@ import { motion } from 'framer-motion';
 interface TrafficQuestion {
   id: number;
   question: string;
-  options: string[];
+  options: Array<string | { id: string; text: string }>;
   correctAnswer: number;
   explanation: string;
   imageUrl?: string;

@@ -8,7 +8,10 @@ import {
   Car, 
   Award, 
   Clipboard, 
-  Bike
+  Bike,
+  Info,
+  Volume,
+  PartyPopper
 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -18,6 +21,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { toast } from '@/hooks/use-toast';
+import DrivingTestFlow from './DrivingTestFlow';
 
 // Define types for courses, services, and tests
 type CourseType = {
@@ -338,10 +342,21 @@ const LearningServiceCards = () => {
     setShowApplicationForm(true);
   };
 
+  // New state for driving test flow
+  const [showDrivingTest, setShowDrivingTest] = useState(false);
+  const [selectedTestType, setSelectedTestType] = useState<'signs' | 'rules' | 'mock-test' | 'mock-advanced'>('signs');
+
   // Handle test selection
   const handleTestSelect = (test: TestType) => {
     setSelectedTest(test);
-    setShowTestForm(true);
+    // For practice tests, show the DrivingTestFlow directly
+    if (test.id === 'signs' || test.id === 'rules' || test.id === 'mock-test' || test.id === 'mock-advanced') {
+      setSelectedTestType(test.id as 'signs' | 'rules' | 'mock-test' | 'mock-advanced');
+      setShowDrivingTest(true);
+    } else {
+      // For other tests, show the registration form
+      setShowTestForm(true);
+    }
   };
 
   // Reset states when dialog closes
