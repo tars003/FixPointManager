@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronRight } from 'lucide-react';
+import { Menu, X, ChevronRight, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { NotificationPopover } from '@/components/notification/notification-popover';
@@ -183,6 +183,15 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ className }) => {
         </div>
         
         <div className="ml-auto flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="bg-red-600 hover:bg-red-700 text-white border-red-700 mr-2 shadow-md animate-pulse font-semibold"
+            onClick={() => navigate('/emergency')}
+          >
+            <AlertCircle className="h-4 w-4 mr-1" />
+            SOS
+          </Button>
           <NotificationPopover />
         </div>
       </div>

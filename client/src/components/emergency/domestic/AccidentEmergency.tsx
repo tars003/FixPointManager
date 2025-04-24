@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Progress } from '@/components/ui/progress';
 import {
   Car,
-  CarCrash,
+  AlertTriangle as CarCrash,
   CircleAlert, 
   FilePlus,
   Phone,

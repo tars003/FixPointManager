@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import {
-  Engine,
+  Wrench as Engine,
   Gauge,
   Battery,
   Key,
