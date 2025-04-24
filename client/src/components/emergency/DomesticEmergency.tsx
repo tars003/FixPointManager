@@ -5,6 +5,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import AccidentEmergency from './domestic/AccidentEmergency';
 import BreakdownEmergency from './domestic/BreakdownEmergency';
 import PoliceEmergency from './domestic/PoliceEmergency';
+import MedicalEmergency from './domestic/MedicalEmergency';
+import TheftEmergency from './domestic/TheftEmergency';
+import NaturalDisasterEmergency from './domestic/NaturalDisasterEmergency';
 
 import { 
   Car, 
@@ -140,7 +143,13 @@ export default function DomesticEmergency({
         return <BreakdownEmergency location={location} theme={theme} onGoBack={handleGoBack} />;
       case 'police':
         return <PoliceEmergency location={location} theme={theme} onGoBack={handleGoBack} />;
-      // Other categories would have their own components too
+      case 'medical':
+        return <MedicalEmergency location={location} theme={theme} onGoBack={handleGoBack} />;
+      case 'theft':
+        return <TheftEmergency location={location} theme={theme} onGoBack={handleGoBack} />;
+      case 'natural':
+        return <NaturalDisasterEmergency location={location} theme={theme} onGoBack={handleGoBack} />;
+      // Other categories (document, fuel, other) would have their own components too
       case 'none':
       default:
         return renderCategoryGrid();
