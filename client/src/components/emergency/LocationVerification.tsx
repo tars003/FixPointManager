@@ -62,7 +62,7 @@ export default function LocationVerification({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
-      className="space-y-6"
+      className={`space-y-6 ${theme === 'light' ? 'bg-white rounded-xl p-6 shadow-sm' : ''}`}
     >
       <div className="text-center">
         <h2 className={`text-2xl font-bold mb-2 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
@@ -73,7 +73,7 @@ export default function LocationVerification({
         </p>
       </div>
       
-      <Card className={`${theme === 'light' ? 'bg-white' : 'bg-gray-800/80 border-gray-700'}`}>
+      <Card className={`${theme === 'light' ? 'bg-gray-50 border border-gray-100 shadow-sm' : 'bg-gray-800/80 border-gray-700'}`}>
         <CardContent className="pt-6">
           <div className="space-y-4">
             <LocationMap />
@@ -83,6 +83,7 @@ export default function LocationVerification({
                 id="confirm-location" 
                 checked={locationConfirmed}
                 onCheckedChange={() => setLocationConfirmed(!locationConfirmed)}
+                className={theme === 'light' ? 'border-gray-300 data-[state=checked]:bg-blue-600' : ''}
               />
               <Label 
                 htmlFor="confirm-location" 
@@ -97,7 +98,11 @@ export default function LocationVerification({
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
         <Button
-          className={`h-20 text-lg flex flex-col items-center justify-center ${locationConfirmed ? 'bg-red-600 hover:bg-red-700' : 'bg-red-400 cursor-not-allowed'} text-white`}
+          className={`h-20 text-lg flex flex-col items-center justify-center ${
+            locationConfirmed 
+              ? 'bg-red-600 hover:bg-red-700 shadow-md' 
+              : 'bg-red-300 dark:bg-red-900/50 cursor-not-allowed'
+          } text-white font-medium`}
           onClick={onSelectDomestic}
           disabled={!locationConfirmed}
         >
@@ -106,7 +111,11 @@ export default function LocationVerification({
         </Button>
         
         <Button
-          className={`h-20 text-lg flex flex-col items-center justify-center ${locationConfirmed ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-400 cursor-not-allowed'} text-white`}
+          className={`h-20 text-lg flex flex-col items-center justify-center ${
+            locationConfirmed 
+              ? 'bg-blue-600 hover:bg-blue-700 shadow-md' 
+              : 'bg-blue-300 dark:bg-blue-900/50 cursor-not-allowed'
+          } text-white font-medium`}
           onClick={onSelectInternational}
           disabled={!locationConfirmed}
         >
@@ -115,8 +124,8 @@ export default function LocationVerification({
         </Button>
       </div>
       
-      <div className={`text-center text-sm mt-4 ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
-        <p>For immediate emergency in India, call 112</p>
+      <div className={`text-center text-sm mt-4 ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>
+        <p>For immediate emergency in India, call <span className="font-semibold text-red-600 dark:text-red-400">112</span></p>
       </div>
     </motion.div>
   );

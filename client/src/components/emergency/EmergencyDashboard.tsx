@@ -121,20 +121,25 @@ export default function EmergencyDashboard({ theme }: { theme: 'light' | 'dark' 
   // Render emergency header with critical tools
   const renderEmergencyHeader = () => {
     return (
-      <div className={`sticky top-0 z-10 py-2 px-4 ${theme === 'light' ? 'bg-white border-b border-gray-200' : 'bg-gray-900 border-b border-gray-700'}`}>
+      <div className={`sticky top-0 z-10 py-3 px-4 ${theme === 'light' 
+        ? 'bg-white border-b border-gray-100 shadow-sm' 
+        : 'bg-gray-900 border-b border-gray-800'}`}
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={handleGoBack}
-              className={theme === 'light' ? 'hover:bg-gray-100' : 'hover:bg-gray-800'}
+              className={theme === 'light' 
+                ? 'hover:bg-gray-100 text-gray-700' 
+                : 'hover:bg-gray-800 text-gray-200'}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex flex-col">
-              <h1 className="text-lg font-bold flex items-center">
-                <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
+              <h1 className={`text-lg font-bold flex items-center ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
+                <AlertTriangle className={`h-5 w-5 mr-2 ${theme === 'light' ? 'text-red-600' : 'text-red-400'}`} />
                 {emergencyState === 'domestic' 
                   ? 'Emergency Assistance - India'
                   : emergencyState === 'international'
@@ -145,7 +150,7 @@ export default function EmergencyDashboard({ theme }: { theme: 'light' | 'dark' 
                 }
               </h1>
               {location && emergencyState !== 'profile' && (
-                <p className="text-xs flex items-center text-gray-500 dark:text-gray-400">
+                <p className={`text-xs flex items-center ${theme === 'light' ? 'text-gray-600' : 'text-gray-300'}`}>
                   <MapPin className="h-3 w-3 mr-1" />
                   {location.address}
                 </p>
@@ -160,7 +165,9 @@ export default function EmergencyDashboard({ theme }: { theme: 'light' | 'dark' 
                   variant="outline"
                   size="sm"
                   onClick={handleShareLocation}
-                  className="bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600"
+                  className={theme === 'light' 
+                    ? 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 shadow-sm' 
+                    : 'bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-750'}
                 >
                   <Share2 className="h-4 w-4 mr-1" />
                   Share Location
@@ -171,7 +178,7 @@ export default function EmergencyDashboard({ theme }: { theme: 'light' | 'dark' 
                     variant="destructive"
                     size="sm"
                     onClick={() => {window.open('tel:112', '_self')}}
-                    className="bg-red-600 hover:bg-red-700"
+                    className="bg-red-600 hover:bg-red-700 text-white font-medium shadow-md"
                   >
                     <PhoneCall className="h-4 w-4 mr-1" />
                     Call 112
@@ -183,7 +190,7 @@ export default function EmergencyDashboard({ theme }: { theme: 'light' | 'dark' 
                     variant="destructive"
                     size="sm"
                     onClick={() => {window.open('tel:112', '_self')}}
-                    className="bg-red-600 hover:bg-red-700"
+                    className="bg-red-600 hover:bg-red-700 text-white font-medium shadow-md"
                   >
                     <Globe className="h-4 w-4 mr-1" />
                     Emergency Call
@@ -194,7 +201,9 @@ export default function EmergencyDashboard({ theme }: { theme: 'light' | 'dark' 
                   variant="outline"
                   size="sm"
                   onClick={handleEmergencyProfileToggle}
-                  className="bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600"
+                  className={theme === 'light' 
+                    ? 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 shadow-sm' 
+                    : 'bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-750'}
                 >
                   <Users className="h-4 w-4 mr-1" />
                   Emergency Profile
@@ -211,12 +220,13 @@ export default function EmergencyDashboard({ theme }: { theme: 'light' | 'dark' 
     <div className={`min-h-screen ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-900'}`}>
       {renderEmergencyHeader()}
       
-      <div className="container max-w-5xl mx-auto px-4 py-6">
+      <div className={`container max-w-5xl mx-auto px-4 py-6 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3 }}
+          className={theme === 'light' ? 'shadow-sm rounded-xl overflow-hidden' : ''}
         >
           {emergencyState === 'location-verification' && location && (
             <LocationVerification 
