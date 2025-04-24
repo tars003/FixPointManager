@@ -421,7 +421,7 @@ const DrivingTestQuestions: React.FC<TestProps> = ({ testType, onClose, onComple
                     <span className="text-xs">{String.fromCharCode(65 + index)}</span>
                   )}
                 </div>
-                <span>{option}</span>
+                <span>{typeof option === 'string' ? option : option.text}</span>
               </div>
             </div>
           ))}
