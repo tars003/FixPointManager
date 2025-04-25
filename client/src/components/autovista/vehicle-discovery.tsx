@@ -198,6 +198,62 @@ const VehicleDiscovery: React.FC = () => {
               </TabsTrigger>
             ))}
           </TabsList>
+          
+          {/* Add TabsContent for each fuel type */}
+          {fuelTypes.map((fuel) => (
+            <TabsContent key={fuel.id} value={fuel.id} className="mt-4 animate-in fade-in">
+              <div className="bg-neutral-50 rounded-lg p-4 border">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`p-2 rounded-full ${fuel.color}`}>
+                    <fuel.icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium">{fuel.name} Vehicles</h4>
+                    <p className="text-xs text-neutral-500">
+                      {fuel.id === 'petrol' && 'Efficient and widespread, ideal for city driving'}
+                      {fuel.id === 'diesel' && 'Great mileage, perfect for long-distance travelers'}
+                      {fuel.id === 'electric' && 'Zero emissions, lower running costs with growing charging network'}
+                      {fuel.id === 'hybrid' && 'Best of both worlds with improved fuel efficiency'}
+                      {fuel.id === 'cng' && 'Economical and eco-friendly alternative to petrol'}
+                      {fuel.id === 'lpg' && 'Affordable running costs with lower emissions than petrol'}
+                      {fuel.id === 'hydrogen' && 'Future tech with water as the only emission'}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="bg-white rounded p-3 border">
+                    <div className="text-xs text-neutral-500">Avg. Running Cost</div>
+                    <div className="font-semibold">
+                      {fuel.id === 'petrol' && '₹6-8/km'}
+                      {fuel.id === 'diesel' && '₹5-7/km'}
+                      {fuel.id === 'electric' && '₹1-2/km'}
+                      {fuel.id === 'hybrid' && '₹4-6/km'}
+                      {fuel.id === 'cng' && '₹2-3/km'}
+                      {fuel.id === 'lpg' && '₹3-4/km'}
+                      {fuel.id === 'hydrogen' && '₹7-9/km'}
+                    </div>
+                  </div>
+                  <div className="bg-white rounded p-3 border">
+                    <div className="text-xs text-neutral-500">Models Available</div>
+                    <div className="font-semibold">
+                      {fuel.id === 'petrol' && '2,500+'}
+                      {fuel.id === 'diesel' && '1,800+'}
+                      {fuel.id === 'electric' && '120+'}
+                      {fuel.id === 'hybrid' && '350+'}
+                      {fuel.id === 'cng' && '200+'}
+                      {fuel.id === 'lpg' && '80+'}
+                      {fuel.id === 'hydrogen' && '5+'}
+                    </div>
+                  </div>
+                </div>
+                
+                <Button variant="outline" size="sm" className="w-full">
+                  Browse {fuel.name} Vehicles
+                </Button>
+              </div>
+            </TabsContent>
+          ))}
         </Tabs>
       </div>
       

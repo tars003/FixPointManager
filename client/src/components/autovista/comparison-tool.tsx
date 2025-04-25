@@ -391,6 +391,67 @@ const ComparisonTool: React.FC = () => {
                                 </TableCell>
                               ))}
                             </TableRow>
+                            <TableRow>
+                              <TableCell className="font-medium">Warranty</TableCell>
+                              {selectedVehicles.map((vehicle) => (
+                                <TableCell key={vehicle.id}>
+                                  {vehicle.id === 1 ? "3 years/100,000 km" : "2 years/75,000 km"}
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="font-medium">Body Style</TableCell>
+                              {selectedVehicles.map((vehicle) => (
+                                <TableCell key={vehicle.id}>
+                                  {vehicle.id === 1 ? "SUV" : "Compact SUV"}
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="font-medium">Seating Capacity</TableCell>
+                              {selectedVehicles.map((vehicle) => (
+                                <TableCell key={vehicle.id}>
+                                  {vehicle.id === 1 ? "5 people" : "5 people"}
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="font-medium">Transmission</TableCell>
+                              {selectedVehicles.map((vehicle) => (
+                                <TableCell key={vehicle.id}>
+                                  {vehicle.id === 1 ? "6-speed automatic" : "5-speed manual"}
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="font-medium">Service Cost (annual)</TableCell>
+                              {selectedVehicles.map((vehicle) => {
+                                const value = vehicle.id === 1 ? "₹8,000" : "₹6,500";
+                                const comparison = compareValues('Price', 
+                                  value === "₹8,000" ? "8000" : "6500", 
+                                  value === "₹8,000" ? "6500" : "8000");
+                                
+                                return (
+                                  <TableCell 
+                                    key={vehicle.id}
+                                    className={`
+                                      ${comparison === 'first' && vehicle.id === 1 && value === "₹6,500" ? 'text-green-600 font-medium' : ''}
+                                      ${comparison === 'second' && vehicle.id === 2 && value === "₹6,500" ? 'text-green-600 font-medium' : ''}
+                                    `}
+                                  >
+                                    {value}
+                                  </TableCell>
+                                );
+                              })}
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="font-medium">Color Options</TableCell>
+                              {selectedVehicles.map((vehicle) => (
+                                <TableCell key={vehicle.id}>
+                                  {vehicle.id === 1 ? "7 colors" : "5 colors"}
+                                </TableCell>
+                              ))}
+                            </TableRow>
                           </>
                         ) : (
                           comparisonMetrics
