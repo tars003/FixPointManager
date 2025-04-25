@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Tabs, 
   TabsContent, 
@@ -8,6 +8,8 @@ import {
 } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import { 
   BookOpen, 
   GraduationCap, 
@@ -22,7 +24,13 @@ import {
   Users,
   MessageCircle,
   Layers,
-  Radio
+  Radio,
+  HelpCircle,
+  CheckCircle2,
+  XCircle,
+  ChevronDown,
+  Trophy,
+  Sparkles
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -30,6 +38,30 @@ import { useToast } from '@/hooks/use-toast';
 const EducationalPage: React.FC = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('courses');
+  const [showHelp, setShowHelp] = useState(false);
+  const [quizActive, setQuizActive] = useState(false);
+  const [currentQuizQuestion, setCurrentQuizQuestion] = useState(0);
+  const [quizAnswers, setQuizAnswers] = useState<string[]>([]);
+  const [showLess, setShowLess] = useState(false);
+  const [achievements, setAchievements] = useState({
+    coursesStarted: 2,
+    coursesCompleted: 1,
+    videosWatched: 5,
+    articlesRead: 3,
+    quizzesPassed: 1,
+    totalPoints: 850
+  });
+  const [animatePoints, setAnimatePoints] = useState(false);
+
+  // Use ref to track if the component is mounted
+  const isMounted = useRef(true);
+  
+  useEffect(() => {
+    // Set up cleanup when component unmounts
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   const handleFeatureClick = () => {
     toast({
@@ -38,18 +70,334 @@ const EducationalPage: React.FC = () => {
       variant: "default"
     });
   };
+  
+  const toggleHelp = () => {
+    setShowHelp(!showHelp);
+  };
+  
+  const startQuiz = () => {
+    setQuizActive(true);
+    setCurrentQuizQuestion(0);
+    setQuizAnswers([]);
+  };
+  
+  const handleQuizAnswer = (answer: string) => {
+    const newAnswers = [...quizAnswers, answer];
+    setQuizAnswers(newAnswers);
+    
+    if (currentQuizQuestion < 2) {
+      // Move to next question
+      setCurrentQuizQuestion(currentQuizQuestion + 1);
+    } else {
+      // Quiz completed
+      const correctAnswers = newAnswers.filter((ans, index) => 
+        ans === sampleQuiz.questions[index].correctAnswer
+      ).length;
+      
+      if (correctAnswers >= 2) {
+        // User passed the quiz
+        setAchievements({
+          ...achievements,
+          quizzesPassed: achievements.quizzesPassed + 1,
+          totalPoints: achievements.totalPoints + 50
+        });
+        setAnimatePoints(true);
+        setTimeout(() => {
+          if (isMounted.current) {
+            setAnimatePoints(false);
+          }
+        }, 3000);
+        
+        toast({
+          title: "Quiz Completed!",
+          description: `You got ${correctAnswers} out of 3 questions correct! +50 points`,
+          variant: "default"
+        });
+      } else {
+        toast({
+          title: "Quiz Completed",
+          description: `You got ${correctAnswers} out of 3 questions correct. Try again!`,
+          variant: "destructive"
+        });
+      }
+      
+      // Reset quiz
+      setQuizActive(false);
+    }
+  };
+
+  // Sample quiz data
+  const sampleQuiz = {
+    title: "Road Safety Quiz",
+    description: "Test your knowledge about road safety rules and regulations",
+    questions: [
+      {
+        question: "What should you do when you see a yellow traffic light?",
+        options: [
+          "Speed up to get through the intersection",
+          "Prepare to stop if it's safe to do so", 
+          "Always stop immediately",
+          "Honk your horn to alert other drivers"
+        ],
+        correctAnswer: "Prepare to stop if it's safe to do so"
+      },
+      {
+        question: "What does a solid white line between lanes mean?",
+        options: [
+          "Lane changing is prohibited",
+          "Lane changing is allowed with caution",
+          "The lane is reserved for emergency vehicles",
+          "The lane is for overtaking only"
+        ],
+        correctAnswer: "Lane changing is prohibited"
+      },
+      {
+        question: "When driving in foggy conditions, you should use:",
+        options: [
+          "High beam headlights",
+          "Hazard lights while driving",
+          "Low beam headlights",
+          "No lights to avoid reflection"
+        ],
+        correctAnswer: "Low beam headlights"
+      }
+    ]
+  };
+
+  // List of interactive enhancements as shown in the screenshot
+  const interactiveFeatures = [
+    {
+      title: "Micro-interactions for educational content engagement",
+      icon: Sparkles
+    },
+    {
+      title: "Contextual help bubbles with playful animations",
+      icon: HelpCircle
+    },
+    {
+      title: "Interactive quiz preview thumbnails",
+      icon: FileText
+    },
+    {
+      title: "Gamified achievement system for learning progress",
+      icon: Trophy
+    },
+    {
+      title: "Animated route transitions between educational pages",
+      icon: ArrowRight
+    }
+  ];
 
   return (
     <div className="container mx-auto py-6 space-y-6">
+      {/* Achievements badge in top corner */}
+      <div className="fixed top-20 right-6 z-30">
+        <motion.div 
+          className="bg-primary text-primary-foreground shadow-lg rounded-full py-1 px-3 flex items-center font-medium"
+          animate={animatePoints ? { 
+            scale: [1, 1.2, 1],
+            backgroundColor: ['hsl(var(--primary))', 'hsl(var(--success))', 'hsl(var(--primary))']
+          } : {}}
+          transition={{ duration: 0.5 }}
+        >
+          <Trophy className="w-4 h-4 mr-1" />
+          <span>{achievements.totalPoints} pts</span>
+        </motion.div>
+      </div>
+
+      {/* Help button in corner */}
+      <motion.button 
+        className="fixed bottom-20 right-20 z-30 bg-yellow-500 text-white p-3 rounded-full shadow-lg hover:bg-yellow-600"
+        whileHover={{ scale: 1.1, rotate: 5 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={toggleHelp}
+      >
+        <HelpCircle className="h-5 w-5" />
+      </motion.button>
+
+      {/* Contextual help overlay */}
+      <AnimatePresence>
+        {showHelp && (
+          <motion.div 
+            className="fixed inset-0 bg-black/40 z-40 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={toggleHelp}
+          >
+            <motion.div 
+              className="bg-white dark:bg-slate-900 rounded-lg shadow-xl max-w-2xl w-full p-6"
+              onClick={e => e.stopPropagation()}
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+            >
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-2xl font-bold">Learning Features</h2>
+                <Button variant="ghost" size="icon" onClick={toggleHelp}>
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              
+              <div className="space-y-4">
+                {interactiveFeatures.map((feature, index) => (
+                  <motion.div 
+                    key={index}
+                    className="flex items-center gap-3 p-3 rounded-md bg-slate-50 dark:bg-slate-800"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <div className="bg-primary/10 text-primary rounded-full p-2">
+                      <feature.icon className="h-5 w-5" />
+                    </div>
+                    <span>{feature.title}</span>
+                  </motion.div>
+                ))}
+              </div>
+              
+              <div className="mt-6 text-center">
+                <Button onClick={toggleHelp}>
+                  Got It
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Quiz modal */}
+      <AnimatePresence>
+        {quizActive && (
+          <motion.div 
+            className="fixed inset-0 bg-black/40 z-40 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div 
+              className="bg-white dark:bg-slate-900 rounded-lg shadow-xl max-w-2xl w-full p-6"
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+            >
+              <div className="mb-6">
+                <h2 className="text-xl font-bold">{sampleQuiz.title} - Question {currentQuizQuestion + 1}/3</h2>
+                <Progress value={(currentQuizQuestion / 3) * 100} className="mt-2" />
+              </div>
+              
+              <div className="mb-6">
+                <h3 className="text-lg font-medium mb-4">{sampleQuiz.questions[currentQuizQuestion].question}</h3>
+                <div className="space-y-3">
+                  {sampleQuiz.questions[currentQuizQuestion].options.map((option, index) => (
+                    <motion.button
+                      key={index}
+                      className="w-full text-left p-4 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleQuizAnswer(option)}
+                    >
+                      {option}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold tracking-tight">Educational Resources</h1>
-          <p className="text-muted-foreground mt-1">Explore courses, videos, and resources to enhance your knowledge</p>
+        <div className="mb-6 flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Educational Resources</h1>
+            <p className="text-muted-foreground mt-1">Explore courses, videos, and resources to enhance your knowledge</p>
+          </div>
+          
+          {/* Learning progress card */}
+          <motion.div
+            className="hidden md:block bg-white dark:bg-slate-900 shadow-md rounded-lg p-3 border min-w-60"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <h3 className="font-medium flex items-center gap-1 mb-3">
+              <Trophy className="h-4 w-4 text-yellow-500" />
+              Learning Progress
+            </h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span>Courses Started</span>
+                <span className="font-medium">{achievements.coursesStarted}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Courses Completed</span>
+                <span className="font-medium">{achievements.coursesCompleted}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Videos Watched</span>
+                <span className="font-medium">{achievements.videosWatched}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Articles Read</span>
+                <span className="font-medium">{achievements.articlesRead}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Quizzes Passed</span>
+                <span className="font-medium">{achievements.quizzesPassed}</span>
+              </div>
+            </div>
+          </motion.div>
         </div>
+        
+        {/* Interactive Features Cards */}
+        <div className="mb-6">
+          <div className="flex flex-wrap gap-2">
+            {interactiveFeatures.map((feature, index) => (
+              <motion.div
+                key={index}
+                className="border rounded-lg px-4 py-2 flex items-center gap-2 text-sm bg-white dark:bg-slate-900"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.03, backgroundColor: "rgba(var(--primary-rgb), 0.1)" }}
+              >
+                <feature.icon className="h-4 w-4 text-primary" />
+                <span>{feature.title}</span>
+              </motion.div>
+            ))}
+            
+            <motion.button
+              className="border rounded-lg px-4 py-2 flex items-center gap-2 text-sm bg-white dark:bg-slate-900"
+              whileHover={{ scale: 1.05 }}
+              onClick={() => setShowLess(!showLess)}
+            >
+              <ChevronDown className={`h-4 w-4 transition-transform ${showLess ? 'rotate-180' : ''}`} />
+              <span>{showLess ? 'Show more' : 'Show less'}</span>
+            </motion.button>
+          </div>
+        </div>
+        
+        {/* Quiz Banner */}
+        <motion.div 
+          className="mb-6 bg-gradient-to-r from-indigo-100 to-blue-100 dark:from-indigo-950/30 dark:to-blue-950/30 rounded-lg p-5 flex justify-between items-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          whileHover={{ scale: 1.01 }}
+        >
+          <div>
+            <h3 className="text-lg font-bold">Test Your Knowledge</h3>
+            <p className="text-muted-foreground">Take a quick quiz to check your understanding of road safety</p>
+          </div>
+          <Button onClick={startQuiz}>
+            Start Quiz
+          </Button>
+        </motion.div>
 
         <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid grid-cols-4 mb-6">
