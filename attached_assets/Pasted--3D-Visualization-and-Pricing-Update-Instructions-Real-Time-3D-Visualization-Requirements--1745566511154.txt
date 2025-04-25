@@ -1,0 +1,112 @@
+# 3D Visualization and Pricing Update Instructions
+
+## Real-Time 3D Visualization Requirements
+
+When implementing the Arena customization platform, the following requirements must be incorporated for the 3D visualization and pricing update functionality:
+
+1. **Instant Component Visualization**
+   - When a user selects any customization option, the 3D model must update immediately (within 0.5 seconds)
+   - The selected component should briefly highlight with a subtle glow effect to draw attention to the changed area
+   - Camera should automatically pivot to focus on the newly added/changed component for 2 seconds before returning to the previous view angle
+
+2. **Component Addition Animation**
+   - Each time a new component is selected, implement a smooth installation animation
+   - For example: wheels should appear to be mounted, exhaust systems should slide into place, body kits should fade in
+   - Animation duration should be brief (1-1.5 seconds) to maintain user engagement without causing frustration
+
+3. **Interactive 3D Controls**
+   - Users must be able to rotate the vehicle 360° horizontally using drag gestures
+   - Vertical rotation should be limited to 60° above and below the horizon line
+   - Pinch-to-zoom functionality with minimum/maximum zoom limits appropriate to the vehicle size
+   - Double-tap on a specific area should zoom in on that component for detailed viewing
+
+4. **Lighting and Environment**
+   - Dynamic lighting system that shows realistic reflections on painted surfaces, chrome, and glass
+   - Environment rotation option to view the vehicle under different lighting conditions (showroom, daylight, evening, etc.)
+   - Optional toggle for studio lighting vs. real-world environment backdrop
+
+5. **Cross-Section Views**
+   - For certain components (engine modifications, interior upgrades), provide option for cross-section or transparent views
+   - "X-ray mode" toggle to see how internal components fit together
+   - "Exploded view" option for certain customization categories to show component placement
+
+## Real-Time Pricing Update Requirements
+
+1. **Dynamic Price Display**
+   - Pricing information must update instantly when a component is added, removed or changed
+   - Price changes should be highlighted with a brief animation (fade, pulse, or highlight effect)
+   - Display both individual component price and updated total price
+
+2. **Cost Breakdown Panel**
+   - Maintain an always-visible or easily accessible breakdown of all selected modifications
+   - Organize costs by customization categories (exterior, interior, performance, etc.)
+   - Show base vehicle price separate from customization costs
+   - Include any applicable taxes, installation charges, and potential discounts
+
+3. **Budget Management Features**
+   - Optional budget setter that warns users when they approach their specified limit
+   - Visual indicator (like a progress bar) showing proportion of budget used
+   - Suggestions for alternative lower-cost options when budget is exceeded
+
+4. **Bundle Pricing**
+   - Automatically detect when selected components qualify for bundle discounts
+   - Show original price with strikethrough and new bundle price with highlight
+   - Suggest complementary items that would create a bundle discount
+
+5. **Installation Cost Integration**
+   - For each component, show separate line items for part cost and installation cost
+   - Option to toggle between "self-installation" and "professional installation" with appropriate price adjustment
+   - Combined installation discount when multiple components in the same category are selected
+
+## User Feedback System
+
+1. **Visual Confirmation**
+   - Each successful component addition should trigger a small confirmation animation and sound effect
+   - Incompatible selections should trigger a warning animation and explanation tooltip
+   - "Before and after" toggle to quickly compare modified view with stock vehicle
+
+2. **Progress Tracking**
+   - Visual indicator showing customization progress by category
+   - Suggestions for popular or recommended next components based on current selections
+   - Save point creation at important milestones with thumbnail preview of vehicle state
+
+3. **Performance Impact Meters**
+   - For performance modifications, show real-time impact on vehicle specifications
+   - Visual gauges for power, torque, fuel efficiency, etc. that update with each relevant modification
+   - Compatibility warnings when certain modifications might negatively interact
+
+## Mobile-Specific Requirements
+
+1. **Optimized Control Scheme**
+   - Simplified touch controls for rotation and zoom on smaller screens
+   - Component selection through tap-targeted hotspots on the vehicle
+   - Swipe navigation between customization categories
+
+2. **Reduced Rendering Quality Options**
+   - Automatic quality adjustment based on device capability
+   - Manual quality controls to prioritize performance on older devices
+   - Option to temporarily hide other components while focusing on current selection area
+
+3. **View Presets**
+   - Pre-configured camera angles for quick viewing of key areas (front, side, rear, interior)
+   - Option to save custom view angles for future reference
+   - Quick-toggle between exterior and interior views
+
+## Implementation Notes
+
+1. **WebGL Optimization**
+   - Implement level-of-detail (LOD) rendering to maintain performance
+   - Use texture compression appropriate for target devices
+   - Implement progressive loading of high-resolution textures
+
+2. **User Experience Consistency**
+   - Ensure that price updates and visual updates are always synchronized
+   - Maintain consistent animation timing across different device capabilities
+   - Implement a "lite mode" for users with lower-end devices or slow connections
+
+3. **Fallback Options**
+   - For devices that cannot handle real-time 3D rendering, provide high-quality 2D image alternatives
+   - Pre-rendered views from multiple angles for each customization option
+   - Clear notification to user when falling back to simplified visualization mode
+
+These instructions ensure that as users interact with the Arena customization platform, they will experience seamless visual feedback through the 3D vehicle model while receiving transparent, real-time pricing updates for every component added, creating an engaging and informative customization experience.

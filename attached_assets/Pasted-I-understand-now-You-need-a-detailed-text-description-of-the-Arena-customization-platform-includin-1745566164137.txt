@@ -1,0 +1,312 @@
+I understand now. You need a detailed text description of the Arena customization platform, including all features, flows, and requirements. Here's a comprehensive prompt and flow documentation for your Arena platform:
+
+# Arena Customization Platform - Requirements Document
+
+## Overview
+The Arena is a specialized customization module within your existing automotive service website. It allows users to visualize and customize vehicles with real-time rendering and pricing information, connecting directly with the marketplace for purchasing parts and accessories.
+
+## Main User Flow
+
+### Entry Point
+When users click on "Arena" in the main navigation, they will see two primary options:
+1. **Select from My Existing Vehicles**
+2. **Select a New Vehicle**
+
+### Path 1: Select from My Existing Vehicles
+- Users see a scrollable dashboard displaying all vehicles they've previously added to their profile.
+- Each vehicle card shows:
+  - Vehicle image
+  - Make and model
+  - Year of manufacture
+  - Vehicle registration number (partially masked)
+  - Current customization status (if any)
+- Users can filter by vehicle type (two-wheeler, three-wheeler, four-wheeler)
+- Clicking on any vehicle takes the user directly to the customization interface for that specific vehicle
+
+### Path 2: Select a New Vehicle
+This follows a step-by-step selection process:
+
+1. **Vehicle Type Selection**
+   - Grid display of three options: Two-Wheeler, Three-Wheeler, Four-Wheeler
+   - Each option has an illustrative icon and brief description
+   - Clicking an option takes the user to the brand selection screen
+
+2. **Brand Selection**
+   - Grid display of manufacturer logos relevant to the selected vehicle type
+   - For Two-Wheelers: Honda, Hero, Bajaj, TVS, Royal Enfield, Yamaha, KTM, Suzuki, etc.
+   - For Three-Wheelers: Bajaj, Piaggio, Mahindra, Atul, TVS, etc.
+   - For Four-Wheelers: Maruti Suzuki, Hyundai, Tata, Mahindra, Toyota, Honda, Kia, MG, etc.
+   - Clicking a brand takes the user to the model selection screen
+
+3. **Model Selection**
+   - Grid display of available models from the selected brand
+   - Each model has a thumbnail image, name, and brief specifications
+   - Users can filter by: price range, fuel type, body type, etc.
+   - Clicking a model takes the user to the variant selection screen
+
+4. **Variant Selection**
+   - List of variants for the selected model with key differences highlighted
+   - Each variant shows: engine specifications, transmission type, feature highlights
+   - Base price for each variant is displayed
+   - Clicking a variant takes the user to the customization interface
+
+## Customization Interface
+
+The customization interface has the following common elements across all vehicle types:
+
+- **3D Vehicle Display**: Central area showing a 360° rotatable, zoomable 3D model of the selected vehicle
+- **Real-time Visualization**: All customization changes appear on the 3D model instantly
+- **Category Tabs**: Horizontal tabs for different customization categories
+- **Price Tracker**: Running total of base vehicle price + all selected customizations
+- **Action Buttons**: Save Configuration, Share, Add to Cart, Book Service for Customization
+- **Comparison View**: Toggle to compare original vs. customized view
+- **Back/Next Navigation**: For moving between customization categories
+
+### Two-Wheeler Customization Categories and Options
+
+1. **Paint & Graphics**
+   - Base color selection (solid, metallic, matte finishes)
+   - Custom graphics patterns (racing stripes, tribal designs, camouflage)
+   - Full vinyl wraps (carbon fiber look, matte finish, chrome finish)
+   - Tank pad designs
+   - Custom decals and stickers
+   - Color-matched panels
+
+2. **Lighting System**
+   - Headlight upgrades (LED, HID, projector)
+   - Custom tail light assemblies
+   - Indicator/turn signal options (LED, sequential)
+   - Underglow lighting kits
+   - Accent lighting for instrument panel
+   - Auxiliary lights and fog lamps
+
+3. **Seat & Ergonomics**
+   - Custom seat designs (single, split, café racer style)
+   - Seat material options (leather, suede, weather-resistant)
+   - Backrest additions
+   - Custom stitching patterns and colors
+   - Handlebar options (low, high, clip-on)
+   - Footpeg repositioning options
+
+4. **Wheels & Tires**
+   - Alloy wheel designs and colors
+   - Spoke wheel options
+   - Tire brand selection (MRF, CEAT, Michelin, Pirelli)
+   - Tire type (street, off-road, all-terrain, racing)
+   - Tire size options
+   - Custom valve caps
+
+5. **Performance Parts**
+   - Exhaust system options (slip-on, full system)
+   - Air filter upgrades
+   - Engine tuning components
+   - Suspension upgrades (front forks, rear shocks)
+   - Brake system upgrades (discs, calipers, pads)
+   - Performance controllers/ECU options
+
+6. **Accessories**
+   - Storage solutions (saddlebags, tank bags, top box)
+   - Windshield options
+   - Crash protection (frame sliders, crash guards)
+   - Mobile/GPS mounts
+   - Luggage racks
+   - Security systems
+
+### Three-Wheeler Customization Categories and Options
+
+1. **Exterior Customization**
+   - Body color options (single tone, dual tone)
+   - Graphics and decals for commercial branding
+   - Body material upgrades (fiberglass, metal panels)
+   - Canopy designs and materials
+   - Hood ornaments and emblems
+   - Bumper designs (chrome, painted, reinforced)
+
+2. **Passenger Comfort**
+   - Seating layout options (bench, individual)
+   - Seat material selection (vinyl, fabric, leather)
+   - Interior lighting options
+   - Entertainment system integration
+   - Weather protection additions (side curtains, extended roof)
+   - Floor material options
+
+3. **Cargo Solutions**
+   - Cargo box designs and sizes
+   - Hydraulic tipping mechanisms
+   - Load capacity enhancements
+   - Specialized compartments (for specific goods)
+   - Cargo restraint systems
+   - Roof rack options
+
+4. **Wheels & Suspension**
+   - Wheel type options (steel, alloy)
+   - Tire options (load rating, terrain specific)
+   - Suspension upgrades for comfort and load
+   - Axle modifications
+   - Custom wheel covers
+   - Shock absorber upgrades
+
+5. **Lighting & Electrical**
+   - Headlight and tail light upgrades
+   - Interior cabin lighting
+   - Cargo area lighting
+   - Warning lights and signals
+   - Battery upgrades
+   - Alternative power options (solar panels)
+
+6. **Commercial Features**
+   - Fare meter integration
+   - Route display boards
+   - Payment system mounts
+   - Advertisement display panels
+   - PA system installation
+   - Specialized features for goods transport
+
+### Four-Wheeler Customization Categories and Options
+
+1. **Exterior Styling**
+   - Full-body paint options (custom colors, finishes)
+   - Vinyl wraps (complete, partial, roof-only)
+   - Body kits (front/rear bumpers, side skirts, spoilers)
+   - Grille designs (mesh, horizontal, vertical)
+   - Hood modifications (scoops, vents)
+   - Roof options (sunroof, panoramic, roof rails)
+
+2. **Wheels & Tires**
+   - Alloy wheel designs (multi-spoke, mesh, split-spoke)
+   - Wheel sizes (15" to 22")
+   - Wheel finishes (polished, matte, two-tone, colored)
+   - Tire brands (MRF, Apollo, Bridgestone, Michelin)
+   - Tire profiles and types (highway, all-terrain, off-road)
+   - Wheel spacers and custom offsets
+
+3. **Lighting Enhancements**
+   - Headlight assemblies (projector, LED, HID)
+   - Daytime running light designs
+   - Fog lamp options
+   - Tail light assemblies (LED, sequential, smoked)
+   - Interior ambient lighting (footwell, console, door)
+   - Underglow and accent lighting
+
+4. **Interior Customization**
+   - Seat upholstery (leather, alcantara, fabric)
+   - Custom stitching patterns and colors
+   - Dashboard trims (wood, carbon fiber, piano black)
+   - Steering wheel options (sports, executive, tech-enabled)
+   - Floor mats (custom fit, all-weather, premium carpet)
+   - Headliner materials and designs
+
+5. **Infotainment & Technology**
+   - Touchscreen head unit upgrades
+   - Speaker system enhancements
+   - Subwoofer and amplifier installations
+   - Rear seat entertainment systems
+   - Smartphone integration options
+   - Dash cam and security system additions
+
+6. **Performance Upgrades**
+   - Engine tuning options
+   - Exhaust system modifications
+   - Intake system upgrades
+   - Suspension enhancements (lowering, sport, off-road)
+   - Brake system upgrades (discs, calipers, pads)
+   - Transmission modifications
+
+7. **Utility & Comfort**
+   - Roof racks and carriers
+   - Towing solutions (hitches, electrical connections)
+   - Window tinting options (percentages, types)
+   - Seat comfort enhancements (lumbar support, heating/cooling)
+   - Advanced climate control options
+   - Cargo area organizers and protectors
+
+## Visualization Technology Requirements
+
+The Arena platform should utilize:
+
+1. **WebGL-based 3D Rendering Engine** similar to those used in automotive manufacturer configurators
+2. **Real-time Visualization** that updates instantly with each customization selection
+3. **360-degree Rotation** allowing users to inspect the vehicle from all angles
+4. **Zoom Functionality** to examine details of specific customizations
+5. **Split-screen Comparison** between stock and customized versions
+6. **Save Points** to compare between different customization sets
+7. **Mobile-optimized 3D Engine** that performs well on smartphones and tablets
+
+## Marketplace Integration
+
+The Arena platform should seamlessly integrate with your existing marketplace:
+
+1. **Direct Purchase Links** for each customization option
+2. **Parts Compatibility Verification** against selected vehicle model
+3. **Bundled Discounts** for purchasing multiple items from the same category
+4. **Installation Service Booking** option for each customization
+5. **Shipping Time Estimates** based on part availability
+6. **Alternative Options** suggested when items are out of stock
+7. **Save Configuration** feature to return later and complete purchase
+
+## User Account Features
+
+For logged-in users, the Arena platform should offer:
+
+1. **Saved Configurations Library** to store multiple customization projects
+2. **Progress Tracking** for partially completed customizations
+3. **Sharing Functionality** via social media and direct links
+4. **Price Alerts** for when customization parts go on sale
+5. **Export Options** for configuration details (PDF format)
+6. **Community Gallery** where users can showcase their customized vehicles
+7. **Financing Calculator** to estimate EMI for the customized vehicle
+
+## Technical Implementation Requirements
+
+1. **Modular Component Architecture** to allow easy addition of new customization options
+2. **Responsive Design** that works on desktop, tablet, and mobile
+3. **Progressive Loading** of 3D assets to optimize performance
+4. **Offline Mode** that caches current configuration for spotty connections
+5. **Analytics Integration** to track popular customization choices
+6. **A/B Testing Framework** for optimizing conversion rates
+7. **SEO-optimized URLs** for each vehicle configuration
+8. **Performance Optimization** for low-end devices
+
+## Target KPIs for the Arena Platform
+
+1. **User Engagement**: Average 10+ minutes spent in the Arena configurator
+2. **Conversion Rate**: 15% of Arena users make a purchase from the marketplace
+3. **Sharing Rate**: 5% of configurations are shared on social media
+4. **Return Rate**: 30% of users return to continue saved configurations
+5. **Cross-sell Success**: 25% of users add multiple categories of customization
+6. **Mobile Usage**: 60% of Arena sessions come from mobile devices
+7. **Service Bookings**: 20% of parts purchasers also book installation service
+
+## Implementation Phases
+
+### Phase 1: Core Functionality
+- Basic vehicle selection flow
+- 3D visualization engine
+- Limited customization options for popular models
+- Direct marketplace integration
+
+### Phase 2: Enhanced Customization
+- Expanded customization options across all categories
+- Improved visualization quality
+- User configuration saving and sharing
+- Installation service booking
+
+### Phase 3: Community and Engagement
+- User showcase gallery
+- Rating and review system for customizations
+- Customization contests and featured builds
+- AR visualization for mobile users
+
+## Content Requirements
+
+For each customization option, the following information should be provided:
+- High-quality product images
+- Detailed specifications
+- Compatibility information
+- Installation difficulty rating
+- Price including taxes
+- Estimated installation time
+- Warranty information
+- User reviews (if available)
+
+This detailed document outlines the complete requirements for the Arena customization platform, providing a comprehensive roadmap for implementation and a clear vision of the final product.
