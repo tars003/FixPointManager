@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import ContentReaction from '@/components/ui/content-reaction';
 import { 
   Table,
   TableBody,
@@ -523,6 +524,25 @@ const ComparisonTool: React.FC = () => {
             Add at least 2 vehicles to see a detailed side-by-side comparison of specifications
           </p>
           <Button onClick={addVehicle}>Add Vehicle</Button>
+        </div>
+      )}
+      
+      {/* Footer with feedback component */}
+      {selectedVehicles.length >= 2 && (
+        <div className="border-t p-5 bg-neutral-50">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <h4 className="text-sm font-medium">How useful was this comparison?</h4>
+              <p className="text-xs text-neutral-500">Your feedback improves our recommendations</p>
+            </div>
+            <ContentReaction 
+              contentId={`comparison-${selectedVehicles.map(v => v.id).join('-')}`}
+              contentType="comparison"
+              variant="text"
+              showCount={true}
+              className="pt-2 sm:pt-0"
+            />
+          </div>
         </div>
       )}
     </div>

@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
+import ContentReaction from '@/components/ui/content-reaction';
 
 // Vehicle category interfaces
 interface VehicleCategory {
@@ -362,6 +363,22 @@ const VehicleDiscovery: React.FC = () => {
               </span>
             ))}
           </motion.div>
+        </div>
+      </div>
+      
+      {/* Feedback section */}
+      <div className="border-t mt-8 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between">
+        <div>
+          <h3 className="font-medium text-sm">Did you find the search options helpful?</h3>
+          <p className="text-xs text-neutral-500 mt-1">Your feedback will help us improve our vehicle finder</p>
+        </div>
+        <div className="mt-3 sm:mt-0">
+          <ContentReaction
+            contentId={`vehicle-discovery-${selectedCategory}-${selectedFuel}`}
+            contentType="feature" 
+            variant="minimal"
+            enableComments={true}
+          />
         </div>
       </div>
     </div>
