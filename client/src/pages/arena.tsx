@@ -28,6 +28,8 @@ import {
   Minus,
   X,
   ArrowRightLeft,
+  Copy,
+  CheckCircle2,
   Info
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -394,36 +396,228 @@ const ArenaPage: React.FC = () => {
     }
   };
 
+  // Store saved configurations
+  const [savedConfigurations, setSavedConfigurations] = useState<{
+    id: string;
+    vehicle: string;
+    customizations: CustomizationOption[];
+    totalCost: number;
+    date: string;
+  }[]>([]);
+  
+  // Store cart items
+  const [cartItems, setCartItems] = useState<{
+    id: string;
+    item: CustomizationOption;
+    quantity: number;
+  }[]>([]);
+  
+  // Installation booking state
+  const [showBookingForm, setShowBookingForm] = useState(false);
+  const [bookingDate, setBookingDate] = useState<string>('');
+  const [bookingTime, setBookingTime] = useState<string>('');
+  const [bookingLocation, setBookingLocation] = useState<string>('');
+  
+  // Share modal state
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [shareLink, setShareLink] = useState<string>('');
+  const [copySuccess, setCopySuccess] = useState(false);
+
   const handleSaveConfiguration = () => {
+    // Create a unique ID for the configuration
+    const configId = `config-${Date.now()}`;
+    
+    // Get vehicle name
+    const vehicleName = selectedVehicle 
+      ? `${selectedVehicle.make} ${selectedVehicle.model}` 
+      : selectedVariant 
+        ? `${selectedModel?.name} ${selectedVariant.name}` 
+        : selectedModel?.name || '';
+    
+    // Create new saved configuration
+    const newConfig = {
+      id: configId,
+      vehicle: vehicleName,
+      customizations: [...selectedCustomizations],
+      totalCost: getTotalCost(),
+      date: new Date().toLocaleDateString()
+    };
+    
+    // Save configuration
+    setSavedConfigurations([...savedConfigurations, newConfig]);
+    
+    // Show success message
     toast({
       title: "Configuration Saved",
       description: "Your vehicle configuration has been saved successfully.",
       variant: "default"
     });
+    
+    // Store in localStorage (simulated persistence)
+    const storageKey = 'arena_saved_configurations';
+    try {
+      // Get existing configs from storage, if any
+      const existingConfigsStr = localStorage.getItem(storageKey);
+      const existingConfigs = existingConfigsStr ? JSON.parse(existingConfigsStr) : [];
+      
+      // Save updated configs
+      localStorage.setItem(storageKey, JSON.stringify([...existingConfigs, newConfig]));
+    } catch (error) {
+      console.error('Error saving to localStorage:', error);
+    }
   };
 
   const handleShareConfiguration = () => {
-    toast({
-      title: "Share Configuration",
-      description: "Sharing feature will be available in the next update.",
-      variant: "default"
-    });
+    // Generate a shareable link based on current configuration
+    // This would normally involve creating a deep link or calling an API to generate a shared URL
+    const vehicleName = selectedVehicle 
+      ? `${selectedVehicle.make} ${selectedVehicle.model}` 
+      : selectedVariant 
+        ? `${selectedModel?.name} ${selectedVariant.name}` 
+        : selectedModel?.name || '';
+    
+    const configParams = {
+      v: vehicleName.replace(/\s+/g, '+'),
+      c: selectedCustomizations.map(c => c.id).join('-'),
+      p: getTotalCost()
+    };
+    
+    // Create a simulated shareable link
+    const baseUrl = window.location.origin;
+    const shareableLink = `${baseUrl}/arena/shared?v=${configParams.v}&c=${configParams.c}&p=${configParams.p}`;
+    
+    // Set link and show modal
+    setShareLink(shareableLink);
+    setShowShareModal(true);
+  };
+
+  const handleCopyLink = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(shareLink)
+        .then(() => {
+          setCopySuccess(true);
+          setTimeout(() => setCopySuccess(false), 2000);
+        })
+        .catch(err => {
+          console.error('Failed to copy link: ', err);
+          toast({
+            title: "Copy Failed",
+            description: "Unable to copy link to clipboard.",
+            variant: "destructive"
+          });
+        });
+    } else {
+      // Fallback if clipboard API isn't available
+      const textArea = document.createElement('textarea');
+      textArea.value = shareLink;
+      document.body.appendChild(textArea);
+      textArea.select();
+      
+      try {
+        document.execCommand('copy');
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000);
+      } catch (err) {
+        console.error('Unable to copy to clipboard', err);
+        toast({
+          title: "Copy Failed",
+          description: "Unable to copy link to clipboard.",
+          variant: "destructive"
+        });
+      }
+      
+      document.body.removeChild(textArea);
+    }
   };
 
   const handleAddToCart = () => {
+    if (selectedCustomizations.length === 0) {
+      toast({
+        title: "No Items Selected",
+        description: "Please select customization options to add to cart.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Add each selected customization to cart
+    const newCartItems = selectedCustomizations.map(item => ({
+      id: `cart-${item.id}-${Date.now()}`,
+      item,
+      quantity: 1
+    }));
+    
+    // Update cart state
+    setCartItems([...cartItems, ...newCartItems]);
+    
+    // Show success message
     toast({
       title: "Added to Cart",
-      description: "Your customization items have been added to the marketplace cart.",
+      description: `${selectedCustomizations.length} item(s) added to your marketplace cart.`,
       variant: "default"
     });
+    
+    // Simulate updating a global cart counter (in a real application)
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) {
+      const currentCount = parseInt(cartCountElement.textContent || '0');
+      cartCountElement.textContent = (currentCount + selectedCustomizations.length).toString();
+    }
+    
+    // Store in localStorage (simulated persistence)
+    try {
+      const storageKey = 'arena_cart_items';
+      const existingItemsStr = localStorage.getItem(storageKey);
+      const existingItems = existingItemsStr ? JSON.parse(existingItemsStr) : [];
+      localStorage.setItem(storageKey, JSON.stringify([...existingItems, ...newCartItems]));
+    } catch (error) {
+      console.error('Error saving cart to localStorage:', error);
+    }
   };
 
   const handleBookInstallation = () => {
+    if (selectedCustomizations.length === 0) {
+      toast({
+        title: "No Items Selected",
+        description: "Please select customization options to book installation.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Show booking form
+    setShowBookingForm(true);
+  };
+  
+  const handleSubmitBooking = () => {
+    // Validate form fields
+    if (!bookingDate || !bookingTime || !bookingLocation) {
+      toast({
+        title: "Incomplete Form",
+        description: "Please fill all required booking information.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Process booking (in a real application, this would call an API)
     toast({
-      title: "Installation Booking",
-      description: "Redirecting to service booking for installation.",
+      title: "Installation Booked",
+      description: `Your installation has been scheduled for ${bookingDate} at ${bookingTime}.`,
       variant: "default"
     });
+    
+    // Reset form
+    setBookingDate('');
+    setBookingTime('');
+    setBookingLocation('');
+    setShowBookingForm(false);
+  };
+  
+  const closeModal = () => {
+    setShowShareModal(false);
+    setShowBookingForm(false);
+    setCopySuccess(false);
   };
 
   const handleRotateVehicle = (direction: 'left' | 'right') => {
@@ -745,7 +939,7 @@ const ArenaPage: React.FC = () => {
             {/* 3D Controls */}
             <div className="absolute top-4 right-4 flex space-x-2 z-10">
               <Button 
-                variant={view3dActive ? "primary" : "secondary"} 
+                variant={view3dActive ? "default" : "secondary"} 
                 onClick={toggle3DView}
                 className="mr-2 flex items-center gap-1 transition-all"
                 size="sm"
@@ -993,6 +1187,135 @@ const ArenaPage: React.FC = () => {
 
   return (
     <div className="container mx-auto py-6 space-y-6">
+      {/* Share Modal */}
+      {showShareModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div 
+            className="bg-white dark:bg-slate-900 rounded-lg shadow-lg max-w-md w-full overflow-hidden"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="p-4 border-b flex justify-between items-center">
+              <h3 className="font-bold text-lg">Share Your Configuration</h3>
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={closeModal}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="p-4">
+              <p className="text-sm text-muted-foreground mb-4">
+                Share this link with others to showcase your vehicle customization
+              </p>
+              
+              <div className="flex gap-2 mb-6">
+                <Input value={shareLink} readOnly className="flex-1" />
+                <Button onClick={handleCopyLink} size="sm" className={copySuccess ? "bg-green-600" : ""}>
+                  {copySuccess ? (
+                    <>
+                      <CheckCircle2 className="h-4 w-4 mr-1" />
+                      Copied
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-4 w-4 mr-1" />
+                      Copy
+                    </>
+                  )}
+                </Button>
+              </div>
+              
+              <div className="flex gap-2 justify-center">
+                <Button variant="outline" size="sm" className="flex items-center gap-1" onClick={closeModal}>
+                  Close
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+      
+      {/* Installation Booking Modal */}
+      {showBookingForm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div 
+            className="bg-white dark:bg-slate-900 rounded-lg shadow-lg max-w-md w-full overflow-hidden"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="p-4 border-b flex justify-between items-center">
+              <h3 className="font-bold text-lg">Book Installation</h3>
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={closeModal}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="p-4">
+              <div className="space-y-4">
+                <div className="mb-4">
+                  <p className="text-sm text-muted-foreground">
+                    Schedule installation for {selectedCustomizations.length} customization option(s)
+                  </p>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="booking-date">Date</Label>
+                  <Input 
+                    id="booking-date" 
+                    type="date" 
+                    value={bookingDate} 
+                    onChange={(e) => setBookingDate(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="booking-time">Time</Label>
+                  <select 
+                    id="booking-time"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={bookingTime}
+                    onChange={(e) => setBookingTime(e.target.value)}
+                  >
+                    <option value="">Select a time</option>
+                    <option value="09:00 AM">09:00 AM</option>
+                    <option value="10:00 AM">10:00 AM</option>
+                    <option value="11:00 AM">11:00 AM</option>
+                    <option value="12:00 PM">12:00 PM</option>
+                    <option value="01:00 PM">01:00 PM</option>
+                    <option value="02:00 PM">02:00 PM</option>
+                    <option value="03:00 PM">03:00 PM</option>
+                    <option value="04:00 PM">04:00 PM</option>
+                    <option value="05:00 PM">05:00 PM</option>
+                  </select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="booking-location">Service Center</Label>
+                  <select 
+                    id="booking-location"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={bookingLocation}
+                    onChange={(e) => setBookingLocation(e.target.value)}
+                  >
+                    <option value="">Select a service center</option>
+                    <option value="Main Service Center - Mumbai">Main Service Center - Mumbai</option>
+                    <option value="Downtown Workshop - Delhi">Downtown Workshop - Delhi</option>
+                    <option value="Southside Garage - Bengaluru">Southside Garage - Bengaluru</option>
+                    <option value="Express Service - Chennai">Express Service - Chennai</option>
+                    <option value="Premium Center - Hyderabad">Premium Center - Hyderabad</option>
+                  </select>
+                </div>
+                
+                <div className="pt-4 flex justify-end gap-2">
+                  <Button variant="outline" onClick={closeModal}>Cancel</Button>
+                  <Button onClick={handleSubmitBooking}>Book Now</Button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+      
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
