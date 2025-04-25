@@ -27,6 +27,7 @@ import FastagEchallan from "@/pages/fastag-echallan";
 import EducationalPage from "@/pages/educational";
 import ArenaPage from "@/pages/arena";
 import ArenaDashboard from "@/pages/arena-dashboard";
+import NewArenaDashboard from "@/pages/new-arena-dashboard";
 
 function Router() {
   const [location] = useLocation();
@@ -286,6 +287,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <ArenaDashboard />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/new-arena-dashboard">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <NewArenaDashboard />
               </motion.div>
             )}
           </Route>

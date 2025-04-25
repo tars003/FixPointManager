@@ -1,0 +1,489 @@
+# Arena Dashboard Development Specification
+
+## Overview
+This document provides comprehensive technical specifications, UI/UX guidelines, and implementation details for the Arena Dashboard—an automotive customization platform. The goal is to create a world-class, intuitive interface that streamlines the vehicle customization experience while maintaining high performance and visual appeal.
+
+## Core Architecture
+
+### 1. System Structure
+Implement a three-tiered architecture:
+- **Presentation Layer**: React-based frontend with responsive design
+- **Application Layer**: Node.js/Express middleware handling business logic
+- **Data Layer**: MongoDB for user data and PostgreSQL for product catalog
+
+### 2. Simplified Navigation System
+Restructure the navigation from five tabs to three core sections:
+
+```
+├── MY STUDIO (Primary workspace)
+│   ├── Active Projects
+│   ├── Saved Designs
+│   ├── Vehicle Profiles
+│   └── Appointments
+├── DISCOVER (Inspiration space)
+│   ├── Trending Products
+│   ├── Community Showcase
+│   ├── Staff Picks
+│   └── Seasonal Collections
+└── LEARN (Knowledge center)
+    ├── Tutorials
+    ├── DIY Guides
+    ├── Expert Tips
+    └── Installation Walkthroughs
+```
+
+### 3. Data Flow Architecture
+- Implement Redux for state management with normalized store structure
+- Use WebSockets for real-time progress updates and notifications
+- Implement local storage caching for recent designs and preferences
+- Establish offline capability for continued access to saved designs
+
+## UI/UX Specifications
+
+### 1. Visual Design System
+
+#### Color Palette
+- **Primary**: Deep Blue (#1E3A8A) with complementary Orange accent (#F97316)
+- **Secondary**: Slate Gray (#64748B) with Teal accent (#0D9488)
+- **Neutrals**: 6-step grayscale from White (#FFFFFF) to Charcoal (#1F2937)
+- **Functional**: Success Green (#10B981), Alert Red (#EF4444), Warning Amber (#F59E0B)
+
+#### Typography
+- **Primary Font**: Inter (sans-serif) for UI elements
+- **Secondary Font**: Roboto Mono for specifications and measurements
+- **Hierarchy**:
+  - Headings: 24-32px, 600 weight, 1.2 line height
+  - Subheadings: 18-20px, 500 weight, 1.4 line height
+  - Body: 16px, 400 weight, 1.5 line height
+  - Labels: 14px, 500 weight, 1.4 line height
+  - Microcopy: 12px, 400 weight, 1.4 line height
+
+#### Component Library
+- Implement a custom component library with:
+  - Button variants: Primary, Secondary, Ghost, Icon
+  - Card systems: Project, Product, Community, Tutorial cards
+  - Form components: Inputs, selectors, toggles, sliders
+  - Modals: Action, confirmation, information
+  - Feedback elements: Toast notifications, progress indicators
+
+### 2. Interaction Design
+
+#### Microinteractions
+- Implement subtle animations for state changes (200-300ms durations)
+- Use spring physics for natural-feeling transitions
+- Add hover effects that reveal additional information
+- Implement progress indicators for all loading states
+
+#### Gesture Support
+- Support touch gestures for mobile:
+  - Swipe between projects
+  - Pinch to zoom on vehicle renders
+  - Long press for context menus
+  - Double tap to favorite
+
+#### Accessibility Features
+- Implement WCAG 2.1 AA compliance
+- Support screen readers with ARIA attributes
+- Ensure keyboard navigation across all interfaces
+- Maintain minimum contrast ratios of 4.5:1
+- Add focus indicators for all interactive elements
+
+### 3. Layout System
+
+#### Responsive Grid
+- Implement a 12-column grid system
+- Breakpoints at:
+  - Mobile: 320-767px (4-column layout)
+  - Tablet: 768-1023px (8-column layout)
+  - Desktop: 1024px+ (12-column layout)
+- Maintain consistent spacing using 8px increments
+- Implement container padding that scales with viewport size
+
+#### Content Hierarchy
+- Organize information using the F-pattern for scanning
+- Implement card-based design with 3 levels of visual prominence
+- Use whitespace strategically to group related elements
+- Ensure primary actions are visually distinct and accessible
+
+## Technical Implementation Details
+
+### 1. Frontend Framework & Libraries
+
+```
+├── React (v18+)
+├── Redux Toolkit (state management)
+├── React Router (navigation)
+├── Framer Motion (animations)
+├── Tailwind CSS (styling)
+├── react-three-fiber (3D rendering)
+├── react-query (data fetching)
+├── date-fns (date handling)
+├── recharts (data visualization)
+└── react-hook-form (form validation)
+```
+
+### 2. API Integration
+
+#### Endpoints Structure
+```
+├── /api/v1/auth
+│   ├── POST /login
+│   ├── POST /register
+│   └── POST /refresh-token
+├── /api/v1/projects
+│   ├── GET /
+│   ├── GET /:id
+│   ├── POST /
+│   ├── PUT /:id
+│   └── DELETE /:id
+├── /api/v1/vehicles
+│   ├── GET /
+│   ├── GET /:id
+│   └── POST /
+├── /api/v1/products
+│   ├── GET /
+│   ├── GET /:id
+│   └── GET /trending
+├── /api/v1/community
+│   ├── GET /posts
+│   ├── GET /posts/:id
+│   ├── POST /posts
+│   └── POST /posts/:id/like
+└── /api/v1/tutorials
+    ├── GET /
+    ├── GET /:id
+    └── GET /recommended
+```
+
+#### Authentication
+- JWT-based authentication with refresh tokens
+- Role-based access control
+- Secure credential storage with HTTPOnly cookies
+- Rate limiting to prevent brute force attacks
+
+### 3. Performance Optimization
+
+#### Loading Strategies
+- Implement code splitting by route
+- Lazy load components below the fold
+- Implement resource prioritization
+- Use Service Workers for offline capabilities
+- Implement virtual scrolling for long lists
+
+#### Image Optimization
+- Implement responsive images with srcset
+- Use WebP format with fallbacks
+- Lazy load images outside viewport
+- Implement blur-up technique for image loading
+- Use image CDN for delivery optimization
+
+#### Caching Strategy
+- Implement browser caching with Cache-Control headers
+- Use IndexedDB for complex offline data storage
+- Implement optimistic UI updates
+- Cache API responses with appropriate invalidation strategies
+
+## Feature Implementation Details
+
+### 1. Studio Hub
+
+#### Project Management System
+- Implement a card-based project view with:
+  - Thumbnail preview that updates as changes are made
+  - Progress indicator showing completion percentage
+  - Last edited timestamp with relative time formatting
+  - Quick action buttons for edit, share, and delete
+
+#### Vehicle Profile Management
+- Create a unified vehicle management interface with:
+  - VIN decoder integration for automatic vehicle identification
+  - Image capture capability with make/model detection
+  - Spec sheet generator with current modifications
+  - Compatibility checker for potential upgrades
+
+#### Timeline & History Tracking
+- Implement version control for designs:
+  - Visual history browser with thumbnail previews
+  - Restore points for previous versions
+  - Change log recording all modifications
+  - Comparison tool between versions
+
+### 2. Discovery Engine
+
+#### Content Recommendation System
+- Implement an AI-powered recommendation engine:
+  - Collaborative filtering based on similar vehicles
+  - Content-based filtering using previous preferences
+  - Contextual recommendations based on season and location
+  - Surprise suggestions to introduce new possibilities
+
+#### Social Integration
+- Create a seamless social sharing system:
+  - One-tap sharing to social platforms
+  - Custom card generator for social media
+  - Deep linking to specific designs or products
+  - Analytics to track engagement with shared content
+
+#### Community Interaction Framework
+- Develop a moderated community platform:
+  - Upvoting system for popular designs
+  - Expert verification badges for quality contributions
+  - Question and answer capability tied to specific vehicles
+  - Follow system for favorite creators
+
+### 3. Learning Center
+
+#### Tutorial Engine
+- Create an interactive learning platform:
+  - Difficulty filtering based on user experience
+  - Completion tracking with progress indicators
+  - Bookmark system for saved tutorials
+  - Time estimates for each tutorial
+
+#### Interactive Guides
+- Implement step-by-step guidance:
+  - Animated demonstrations of installation procedures
+  - Interactive 3D models for complex modifications
+  - Checklist system for tracking progress
+  - Printable instruction sheets
+
+## User Flow Optimization
+
+### 1. Onboarding Flow
+- Implement a streamlined 3-step onboarding:
+  1. Vehicle selection/addition
+  2. Style preference quiz (3 questions)
+  3. Goal setting (appearance, performance, or both)
+- Skip option available with default settings
+
+### 2. Project Creation Flow
+- Simplify the project creation process:
+  1. Select vehicle from garage or add new
+  2. Choose starting point (blank or template)
+  3. Name project
+  4. Enter customization workspace
+
+### 3. Customization Workspace
+- Implement a context-aware customization interface:
+  - 3D vehicle model with interactive zones
+  - Category-based part selection
+  - Drag-and-drop placement for accessories
+  - Real-time cost calculation
+  - Compatibility verification
+
+### 4. Sharing & Export Flow
+- Create a comprehensive export system:
+  - PDF specification sheet generator
+  - Shareable links with privacy controls
+  - Parts list with pricing for workshops
+  - Quote request functionality
+
+## Data Models
+
+### 1. User Schema
+```json
+{
+  "id": "String (UUID)",
+  "email": "String",
+  "password": "String (hashed)",
+  "name": "String",
+  "profileImage": "String (URL)",
+  "createdAt": "Date",
+  "lastLogin": "Date",
+  "preferences": {
+    "theme": "String (light/dark/auto)",
+    "notifications": "Boolean",
+    "measurements": "String (metric/imperial)"
+  }
+}
+```
+
+### 2. Vehicle Schema
+```json
+{
+  "id": "String (UUID)",
+  "userId": "String (reference)",
+  "make": "String",
+  "model": "String",
+  "year": "Number",
+  "trim": "String",
+  "color": "String",
+  "vin": "String (optional)",
+  "images": ["String (URLs)"],
+  "mods": [{
+    "type": "String",
+    "productId": "String (reference)",
+    "installedDate": "Date",
+    "notes": "String"
+  }]
+}
+```
+
+### 3. Project Schema
+```json
+{
+  "id": "String (UUID)",
+  "userId": "String (reference)",
+  "vehicleId": "String (reference)",
+  "title": "String",
+  "description": "String",
+  "createdAt": "Date",
+  "updatedAt": "Date",
+  "isPublic": "Boolean",
+  "status": "String (in-progress/completed)",
+  "modifications": [{
+    "productId": "String (reference)",
+    "position": "Object {x, y, z}",
+    "color": "String (optional)",
+    "notes": "String (optional)"
+  }],
+  "totalCost": "Number",
+  "versions": [{
+    "timestamp": "Date",
+    "modifications": ["Array of modifications"],
+    "thumbnail": "String (URL)"
+  }]
+}
+```
+
+### 4. Product Schema
+```json
+{
+  "id": "String (UUID)",
+  "name": "String",
+  "description": "String",
+  "category": "String",
+  "subCategory": "String",
+  "price": "Number",
+  "currency": "String",
+  "manufacturer": "String",
+  "compatibleVehicles": [{
+    "make": "String",
+    "model": "String",
+    "yearStart": "Number",
+    "yearEnd": "Number",
+    "trims": ["String"]
+  }],
+  "images": ["String (URLs)"],
+  "rating": "Number",
+  "reviewCount": "Number",
+  "specifications": "Object (varies by product type)",
+  "installationDifficulty": "Number (1-5)",
+  "installationTime": "Number (minutes)"
+}
+```
+
+## Technical Development Approach
+
+### 1. Development Methodology
+- Implement Agile development with 2-week sprints
+- Use GitFlow branching strategy
+- Implement CI/CD pipeline with automated testing
+- Follow trunk-based development for feature implementation
+
+### 2. Testing Strategy
+- Implement unit testing with Jest (90%+ coverage)
+- E2E testing with Cypress for critical flows
+- Visual regression testing with Percy
+- A/B testing framework for UX improvements
+- Load testing for performance optimization
+
+### 3. Deployment Strategy
+- Containerize application with Docker
+- Deploy to Kubernetes cluster
+- Implement blue-green deployment
+- Set up canary releases for risky features
+- Automate rollbacks for failed deployments
+
+### 4. Monitoring & Analytics
+- Implement application performance monitoring with New Relic
+- Error tracking with Sentry
+- User analytics with Amplitude
+- Heatmap tracking with Hotjar
+- Custom event tracking for key user actions
+
+## UI/UX Enhancement Details
+
+### 1. Visual Polish Techniques
+- Implement subtle drop shadows (2-4px blur, 10-20% opacity)
+- Add micro-animations for state changes (200-300ms duration)
+- Use subtle gradient overlays for depth
+- Implement consistent corner radius (4px for small elements, 8px for cards, 12px for modals)
+- Add skeleton loading states for all content areas
+
+### 2. Consistency Checkers
+- Implement design token system for colors, spacing, typography
+- Create component prop validation
+- Establish UI review process for new features
+- Implement automated accessibility testing
+- Create comprehensive style guide documentation
+
+### 3. Mobile Optimization
+- Implement touch-first interaction patterns
+- Design for thumb zones on mobile interfaces
+- Create specialized mobile navigation with bottom tabs
+- Optimize tap targets (minimum 44×44px)
+- Implement responsive image loading
+
+## Prompt for AI Website Development
+
+```
+Create a world-class automotive customization platform called "Arena Dashboard" with the following specifications:
+
+ARCHITECTURE:
+- React frontend with Redux state management
+- Node.js/Express backend with MongoDB & PostgreSQL databases
+- WebSocket integration for real-time updates
+- Service Workers for offline capabilities
+- JWT authentication with role-based access
+
+CORE NAVIGATION:
+Implement three main sections:
+1. MY STUDIO - Personal workspace with active projects, saved designs, vehicle profiles, and appointments
+2. DISCOVER - Inspiration hub with trending products, community showcase, staff picks, and seasonal collections
+3. LEARN - Knowledge center with tutorials, DIY guides, expert tips, and installation walkthroughs
+
+UI/UX DESIGN:
+- Implement a color system with Deep Blue (#1E3A8A) primary, Orange (#F97316) accent, with supporting neutral tones
+- Use Inter font for UI and Roboto Mono for specifications
+- Create component library including buttons, cards, forms, modals and feedback elements
+- Add microinteractions with 200-300ms animations using spring physics
+- Support touch gestures including swipe, pinch, long press and double tap
+- Implement WCAG 2.1 AA accessibility compliance
+- Use 12-column responsive grid with breakpoints at 768px and 1024px
+- Organize information using F-pattern scanning with strategic whitespace
+
+PERFORMANCE OPTIMIZATION:
+- Implement code splitting, lazy loading, and resource prioritization
+- Use WebP images with responsive srcset
+- Implement virtual scrolling for long lists
+- Use browser caching with appropriate invalidation
+- Optimize initial load to under 2 seconds on 4G connections
+
+FEATURE IMPLEMENTATION:
+- Create project management system with thumbnail previews and progress tracking
+- Implement vehicle profile system with VIN decoder and compatibility checking
+- Build AI-powered recommendation engine using collaborative and content-based filtering
+- Create social sharing system with custom card generation
+- Develop interactive tutorial system with difficulty filtering and completion tracking
+- Implement 3D vehicle model with interactive customization zones
+
+DATA MODELS:
+Include schemas for users, vehicles, projects, and products with appropriate relationships and indexing
+
+The platform should prioritize simplicity and productivity using progressive disclosure of complex features, contextual actions, and personalized experiences. Focus on helping users accomplish their primary goals with minimal cognitive load.
+```
+
+## Additional Technical Notes
+
+1. **Browser Compatibility**: Ensure support for the last two versions of Chrome, Firefox, Safari, and Edge.
+
+2. **Security Measures**: Implement XSS protection, CSRF tokens, input sanitization, and content security policies.
+
+3. **Localization**: Build with i18n support from the beginning, with initial support for English and Hindi.
+
+4. **Scalability**: Design the backend to handle up to 100,000 concurrent users.
+
+5. **API Documentation**: Create comprehensive API documentation using Swagger/OpenAPI 3.0.
+
+This technical specification provides a detailed roadmap for developing a world-class Arena Dashboard that prioritizes user experience while maintaining technical excellence. By following these guidelines, the platform will deliver an intuitive, high-performance customization experience for automotive enthusiasts.
