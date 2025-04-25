@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronRight, ChevronLeft, Car, Check, Truck, Bike } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { 
+  Car, 
+  Palette, 
+  Settings, 
+  Check, 
+  ChevronRight, 
+  ChevronLeft, 
+  X 
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
+import { Textarea } from '@/components/ui/textarea';
+import { 
   Select,
   SelectContent,
   SelectItem,
@@ -12,805 +20,626 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from '@/components/ui/badge';
 
-// Type definitions
-export interface NewProjectWizardProps {
-  onClose: () => void;
-  onCreateProject: (projectData: any) => void;
-  availableVehicles: Array<{
-    id: number;
-    make: string;
-    model: string;
-    year: number;
-    licensePlate: string;
-    image: string;
-  }>;
+interface Vehicle {
+  id: number;
+  make: string;
+  model: string;
+  year: number;
+  image: string;
+  licensePlate?: string;
 }
 
-// Component definition
-const NewProjectWizard: React.FC<NewProjectWizardProps> = ({
-  onClose,
-  onCreateProject,
-  availableVehicles
-}) => {
-  // State to track current step
-  const [step, setStep] = useState<number>(1);
-  const [selectedVehicleType, setSelectedVehicleType] = useState<string | null>(null);
-  const [selectedFuelType, setSelectedFuelType] = useState<string | null>(null);
-  const [identificationMethod, setIdentificationMethod] = useState<'registration' | 'manual'>('registration');
-  const [registrationNumber, setRegistrationNumber] = useState<string>('');
-  const [otpSent, setOtpSent] = useState<boolean>(false);
-  const [otpValue, setOtpValue] = useState<string>('');
-  const [otpVerified, setOtpVerified] = useState<boolean>(false);
-  const [selectedVehicleId, setSelectedVehicleId] = useState<number | null>(null);
-  const [selectedManufacturer, setSelectedManufacturer] = useState<string>('');
-  const [selectedModel, setSelectedModel] = useState<string>('');
-  const [selectedYear, setSelectedYear] = useState<string>('');
-  const [selectedVariant, setSelectedVariant] = useState<string>('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [projectName, setProjectName] = useState<string>('');
-  const [projectDescription, setProjectDescription] = useState<string>('');
+interface NewProjectWizardProps {
+  onComplete: (projectData: any) => void;
+}
 
-  // Mock manufacturers list
-  const manufacturers = [
-    'Honda', 'Hyundai', 'Maruti Suzuki', 'Tata', 'Toyota', 'Mahindra',
-    'Kia', 'MG', 'Ford', 'Volkswagen', 'Renault', 'Nissan'
-  ];
+// Mock vehicle data
+const demoVehicles: Vehicle[] = [
+  {
+    id: 1,
+    make: 'Honda',
+    model: 'City',
+    year: 2021,
+    licensePlate: 'KA01MJ8234',
+    image: 'https://imgd.aeplcdn.com/664x374/n/cw/ec/41406/city-exterior-right-front-three-quarter-2.jpeg'
+  },
+  {
+    id: 2,
+    make: 'Hyundai',
+    model: 'Verna',
+    year: 2020,
+    licensePlate: 'MH02AB5678',
+    image: 'https://imgd.aeplcdn.com/664x374/n/cw/ec/141383/verna-exterior-right-front-three-quarter.jpeg'
+  },
+  {
+    id: 3,
+    make: 'Maruti Suzuki',
+    model: 'Swift',
+    year: 2022,
+    licensePlate: 'DL7CX5544',
+    image: 'https://imgd.aeplcdn.com/664x374/n/cw/ec/123185/swift-exterior-right-front-three-quarter-2.jpeg'
+  }
+];
 
-  // Mock models based on manufacturer
-  const getModels = (manufacturer: string) => {
-    const modelsByManufacturer: Record<string, string[]> = {
-      'Honda': ['City', 'Amaze', 'Jazz', 'WR-V', 'Civic'],
-      'Hyundai': ['i10', 'i20', 'Venue', 'Creta', 'Verna', 'Tucson'],
-      'Maruti Suzuki': ['Swift', 'Baleno', 'Dzire', 'Ertiga', 'Brezza', 'Alto'],
-      'Tata': ['Tiago', 'Nexon', 'Harrier', 'Safari', 'Punch', 'Altroz'],
-      'Toyota': ['Innova', 'Fortuner', 'Glanza', 'Urban Cruiser', 'Camry'],
-      'Mahindra': ['XUV700', 'Thar', 'Scorpio', 'XUV300', 'Bolero'],
-      'Kia': ['Seltos', 'Sonet', 'Carnival', 'Carens'],
-      'MG': ['Hector', 'Astor', 'ZS EV', 'Gloster']
-    };
-    
-    return modelsByManufacturer[manufacturer] || [];
+// Mock popular vehicle options
+const popularVehicles: Vehicle[] = [
+  {
+    id: 101,
+    make: 'Tata',
+    model: 'Nexon',
+    year: 2023,
+    image: 'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-front-three-quarter-70.jpeg'
+  },
+  {
+    id: 102,
+    make: 'Kia',
+    model: 'Seltos',
+    year: 2023,
+    image: 'https://imgd.aeplcdn.com/664x374/n/cw/ec/130583/seltos-exterior-right-front-three-quarter-2.jpeg'
+  },
+  {
+    id: 103,
+    make: 'Mahindra',
+    model: 'XUV700',
+    year: 2023,
+    image: 'https://imgd.aeplcdn.com/664x374/n/cw/ec/42355/xuv700-exterior-right-front-three-quarter.jpeg'
+  },
+  {
+    id: 104,
+    make: 'MG',
+    model: 'Hector',
+    year: 2023,
+    image: 'https://imgd.aeplcdn.com/664x374/n/cw/ec/130583/hector-exterior-right-front-three-quarter-2.jpeg'
+  }
+];
+
+// Design types
+const designTypes = [
+  {
+    id: 'exterior',
+    name: 'Exterior Design',
+    description: 'Customize exterior elements like paint, wraps, wheels, and accessories',
+    icon: <Palette className="h-5 w-5" />
+  },
+  {
+    id: 'interior',
+    name: 'Interior Design',
+    description: 'Customize interior elements like upholstery, dashboard, and lighting',
+    icon: <Settings className="h-5 w-5" />
+  },
+  {
+    id: 'comprehensive',
+    name: 'Comprehensive Design',
+    description: 'Complete customization of both exterior and interior',
+    icon: <Car className="h-5 w-5" />
+  }
+];
+
+const NewProjectWizard: React.FC<NewProjectWizardProps> = ({ onComplete }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [vehicleSource, setVehicleSource] = useState<'existing' | 'new'>('existing');
+  
+  // Form state
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    vehicleId: 0,
+    designType: '',
+    visibility: 'private',
+    collaborate: false
+  });
+  
+  // Selected vehicle data
+  const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
+  
+  // Reset wizard state
+  const resetWizard = () => {
+    setCurrentStep(1);
+    setVehicleSource('existing');
+    setFormData({
+      name: '',
+      description: '',
+      vehicleId: 0,
+      designType: '',
+      visibility: 'private',
+      collaborate: false
+    });
+    setSelectedVehicle(null);
   };
-
-  // Get years (last 20 years)
-  const years = Array.from({ length: 20 }, (_, i) => (new Date().getFullYear() - i).toString());
-
-  // Mock variants based on model
-  const getVariants = (model: string) => {
-    const variantsByModel: Record<string, string[]> = {
-      'City': ['V MT', 'V CVT', 'VX MT', 'VX CVT', 'ZX MT', 'ZX CVT'],
-      'Creta': ['E', 'EX', 'S', 'S+', 'SX', 'SX(O)'],
-      'Swift': ['LXi', 'VXi', 'ZXi', 'ZXi+', 'LXi(O)', 'VXi(O)'],
-      'Nexon': ['XE', 'XM', 'XZ', 'XZ+', 'XZ+ Lux', 'XZ+ Dark Edition'],
-    };
-    
-    // Return default variants if specific ones aren't defined
-    return variantsByModel[model] || ['Base', 'Mid', 'High', 'Premium', 'Top'];
+  
+  // Handle opening the wizard
+  const handleOpen = () => {
+    resetWizard();
+    setIsOpen(true);
   };
-
-  // Customization categories
-  const customizationCategories = [
-    {
-      id: 'exterior',
-      name: 'Exterior Modifications',
-      description: 'Body kits, wraps, paint customization',
-      icon: Car,
-      compatibility: 98
-    },
-    {
-      id: 'interior',
-      name: 'Interior Customization',
-      description: 'Seats, dashboard, lighting, upholstery',
-      icon: Car,
-      compatibility: 95
-    },
-    {
-      id: 'performance',
-      name: 'Performance Upgrades',
-      description: 'Engine mods, exhaust, intake, ECU tuning',
-      icon: Car,
-      compatibility: 85
-    },
-    {
-      id: 'wheels',
-      name: 'Wheels & Suspension',
-      description: 'Rims, tires, lowering, coilovers',
-      icon: Car,
-      compatibility: 90
-    },
-    {
-      id: 'lighting',
-      name: 'Lighting Systems',
-      description: 'Headlights, taillights, accent lighting',
-      icon: Car,
-      compatibility: 95
-    },
-    {
-      id: 'audio',
-      name: 'Audio & Electronics',
-      description: 'Sound systems, displays, gadgets',
-      icon: Car,
-      compatibility: 88
-    }
-  ];
-
-  // Toggle category selection
-  const toggleCategory = (categoryId: string) => {
-    if (selectedCategories.includes(categoryId)) {
-      setSelectedCategories(selectedCategories.filter(id => id !== categoryId));
+  
+  // Handle closing the wizard
+  const handleClose = () => {
+    setIsOpen(false);
+    resetWizard();
+  };
+  
+  // Handle form field changes
+  const handleChange = (field: string, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+  
+  // Select a vehicle
+  const handleSelectVehicle = (vehicle: Vehicle) => {
+    setSelectedVehicle(vehicle);
+    handleChange('vehicleId', vehicle.id);
+  };
+  
+  // Move to the next step
+  const handleNextStep = () => {
+    if (currentStep < 4) {
+      setCurrentStep(prev => prev + 1);
     } else {
-      setSelectedCategories([...selectedCategories, categoryId]);
+      handleFinish();
     }
   };
-
-  // Get the total estimated budget based on selected categories
-  const getEstimatedBudget = () => {
-    const baseCosts: Record<string, number[]> = {
-      'exterior': [25000, 150000],
-      'interior': [20000, 100000],
-      'performance': [35000, 200000],
-      'wheels': [40000, 120000],
-      'lighting': [15000, 60000],
-      'audio': [20000, 80000]
-    };
-    
-    if (selectedCategories.length === 0) return [0, 0];
-    
-    return selectedCategories.reduce(
-      (acc, category) => {
-        const [min, max] = baseCosts[category] || [0, 0];
-        return [acc[0] + min, acc[1] + max];
-      },
-      [0, 0]
-    );
-  };
-
-  // Get the total estimated time based on selected categories
-  const getEstimatedTime = () => {
-    const baseTimes: Record<string, number> = {
-      'exterior': 5,
-      'interior': 3,
-      'performance': 4,
-      'wheels': 2,
-      'lighting': 2,
-      'audio': 3
-    };
-    
-    if (selectedCategories.length === 0) return 0;
-    
-    // Calculate total days (with some overlap for concurrent work)
-    const totalDays = selectedCategories.reduce(
-      (acc, category) => acc + (baseTimes[category] || 0),
-      0
-    );
-    
-    return Math.ceil(totalDays * 0.7); // Apply a 30% overlap factor
-  };
-
-  // Handle OTP verification
-  const handleVerifyOTP = () => {
-    // In a real app, this would verify with backend
-    if (otpValue.length === 6) {
-      setOtpVerified(true);
-      
-      // Auto select the first vehicle for demo
-      if (availableVehicles.length > 0) {
-        setSelectedVehicleId(availableVehicles[0].id);
-      }
+  
+  // Move to the previous step
+  const handlePrevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(prev => prev - 1);
     }
   };
-
-  // Handle OTP sending
-  const handleSendOTP = () => {
-    // In a real app, this would send OTP via API
-    if (registrationNumber.length >= 8) {
-      setOtpSent(true);
+  
+  // Complete the wizard
+  const handleFinish = () => {
+    onComplete({
+      ...formData,
+      vehicleDetails: selectedVehicle
+    });
+    handleClose();
+  };
+  
+  // Check if current step is valid to proceed
+  const isStepValid = () => {
+    switch (currentStep) {
+      case 1:
+        return selectedVehicle !== null;
+      case 2:
+        return formData.designType !== '';
+      case 3:
+        return formData.name.trim() !== '';
+      case 4:
+        return true; // Always valid
+      default:
+        return false;
     }
   };
-
-  // Handle final submission
-  const handleCreateProject = () => {
-    const selectedVehicle = availableVehicles.find(v => v.id === selectedVehicleId);
-    
-    // Create project data from form
-    const projectData = {
-      name: projectName,
-      description: projectDescription,
-      vehicleId: selectedVehicleId,
-      vehicleType: selectedVehicleType,
-      fuelType: selectedFuelType,
-      registrationNumber: identificationMethod === 'registration' ? registrationNumber : null,
-      manufacturer: selectedManufacturer,
-      model: selectedModel,
-      year: selectedYear,
-      variant: selectedVariant,
-      customizationCategories: selectedCategories,
-      estimatedBudget: getEstimatedBudget(),
-      estimatedTime: getEstimatedTime(),
-      created: new Date().toISOString()
-    };
-    
-    onCreateProject(projectData);
-  };
-
-  // Go to next step
-  const goToNextStep = () => {
-    setStep(step + 1);
-  };
-
-  // Go to previous step
-  const goToPreviousStep = () => {
-    setStep(step - 1);
-  };
-
-  // Render OTP input fields
-  const renderOTPFields = () => {
+  
+  // Render step indicator
+  const renderSteps = () => {
     return (
-      <div className="flex gap-2 mt-4">
-        <Input
-          type="text"
-          placeholder="Enter 6-digit OTP"
-          value={otpValue}
-          onChange={(e) => setOtpValue(e.target.value)}
-          maxLength={6}
-          className="text-center"
-        />
-        <Button onClick={handleVerifyOTP} disabled={otpValue.length !== 6}>
-          Verify
-        </Button>
+      <div className="flex justify-between items-center mb-8">
+        {[1, 2, 3, 4].map((step) => (
+          <div key={step} className="flex flex-col items-center">
+            <div 
+              className={`
+                h-10 w-10 rounded-full flex items-center justify-center text-sm font-medium border-2
+                ${currentStep === step 
+                  ? 'border-primary bg-primary text-white' 
+                  : currentStep > step
+                    ? 'border-primary bg-primary/20 text-primary'
+                    : 'border-muted-foreground/30 text-muted-foreground'
+                }
+              `}
+            >
+              {currentStep > step ? <Check className="h-5 w-5" /> : step}
+            </div>
+            <span className={`text-xs mt-2 ${currentStep === step ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+              {step === 1 ? 'Vehicle' : 
+                step === 2 ? 'Type' : 
+                  step === 3 ? 'Details' : 'Review'}
+            </span>
+          </div>
+        ))}
       </div>
     );
   };
-
-  return (
-    <motion.div
-      className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <motion.div
-        className="bg-card border rounded-xl shadow-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
-        initial={{ scale: 0.9, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: 20 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
-          <div>
-            <h2 className="text-xl font-semibold">Start Your Customization Journey</h2>
-            <p className="text-muted-foreground text-sm">Step {step} of 4</p>
-          </div>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="h-5 w-5" />
+  
+  // Step 1: Vehicle Selection
+  const renderVehicleSelection = () => {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <Button
+            variant={vehicleSource === 'existing' ? 'default' : 'outline'}
+            className="h-auto py-3 flex flex-col items-center"
+            onClick={() => setVehicleSource('existing')}
+          >
+            <Car className="h-8 w-8 mb-2" />
+            <span className="font-medium">Select from My Vehicles</span>
+            <span className="text-xs mt-1">Use one of your registered vehicles</span>
+          </Button>
+          
+          <Button
+            variant={vehicleSource === 'new' ? 'default' : 'outline'}
+            className="h-auto py-3 flex flex-col items-center"
+            onClick={() => setVehicleSource('new')}
+          >
+            <Palette className="h-8 w-8 mb-2" />
+            <span className="font-medium">Select a New Vehicle</span>
+            <span className="text-xs mt-1">Browse popular vehicles</span>
           </Button>
         </div>
         
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
-          {/* Step 1: Vehicle Type and Fuel Type */}
-          {step === 1 && (
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-medium mb-4">Select Vehicle Type</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Card 
-                    className={`cursor-pointer transition-all ${selectedVehicleType === 'four-wheeler' ? 'border-primary ring-2 ring-primary/20' : ''}`}
-                    onClick={() => setSelectedVehicleType('four-wheeler')}
-                  >
-                    <CardHeader className="pb-2">
-                      <div className="flex justify-between items-center">
-                        <CardTitle className="text-base">Four Wheeler</CardTitle>
-                        {selectedVehicleType === 'four-wheeler' && (
-                          <Check className="h-5 w-5 text-primary" />
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex justify-center py-4">
-                        <Car className="h-16 w-16 text-muted-foreground" />
-                      </div>
-                      <CardDescription>Cars, SUVs, Trucks</CardDescription>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card 
-                    className={`cursor-pointer transition-all ${selectedVehicleType === 'two-wheeler' ? 'border-primary ring-2 ring-primary/20' : ''}`}
-                    onClick={() => setSelectedVehicleType('two-wheeler')}
-                  >
-                    <CardHeader className="pb-2">
-                      <div className="flex justify-between items-center">
-                        <CardTitle className="text-base">Two Wheeler</CardTitle>
-                        {selectedVehicleType === 'two-wheeler' && (
-                          <Check className="h-5 w-5 text-primary" />
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex justify-center py-4">
-                        <Bike className="h-16 w-16 text-muted-foreground" />
-                      </div>
-                      <CardDescription>Motorcycles, Scooters</CardDescription>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card 
-                    className={`cursor-pointer transition-all ${selectedVehicleType === 'commercial' ? 'border-primary ring-2 ring-primary/20' : ''}`}
-                    onClick={() => setSelectedVehicleType('commercial')}
-                  >
-                    <CardHeader className="pb-2">
-                      <div className="flex justify-between items-center">
-                        <CardTitle className="text-base">Commercial</CardTitle>
-                        {selectedVehicleType === 'commercial' && (
-                          <Check className="h-5 w-5 text-primary" />
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex justify-center py-4">
-                        <Truck className="h-16 w-16 text-muted-foreground" />
-                      </div>
-                      <CardDescription>Trucks, Vans, Utility Vehicles</CardDescription>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-              
-              {selectedVehicleType && (
-                <div>
-                  <h3 className="text-lg font-medium mb-4">Select Fuel Type</h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                    {['Petrol', 'Diesel', 'Electric', 'Hybrid', 'CNG/LPG'].map((fuel) => (
-                      <Button
-                        key={fuel}
-                        variant={selectedFuelType === fuel.toLowerCase() ? "default" : "outline"}
-                        onClick={() => setSelectedFuelType(fuel.toLowerCase())}
-                        className="h-auto py-2 px-4"
-                      >
-                        {fuel}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+        <ScrollArea className="h-[280px] rounded-md border p-4">
+          <h3 className="font-medium mb-4">
+            {vehicleSource === 'existing' ? 'My Vehicles' : 'Popular Vehicles'}
+          </h3>
           
-          {/* Step 2: Vehicle Identification */}
-          {step === 2 && (
-            <div className="space-y-6">
-              <Tabs
-                defaultValue={identificationMethod}
-                onValueChange={(value) => setIdentificationMethod(value as 'registration' | 'manual')}
+          <div className="grid grid-cols-1 gap-4">
+            {(vehicleSource === 'existing' ? demoVehicles : popularVehicles).map((vehicle) => (
+              <div 
+                key={vehicle.id}
+                className={`
+                  flex border rounded-lg overflow-hidden cursor-pointer transition-all
+                  ${selectedVehicle?.id === vehicle.id ? 'border-primary ring-2 ring-primary/20' : 'hover:border-primary/50'}
+                `}
+                onClick={() => handleSelectVehicle(vehicle)}
               >
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="registration">Add by Registration</TabsTrigger>
-                  <TabsTrigger value="manual">Manual Selection</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="registration" className="pt-4">
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="registration">Vehicle Registration Number</Label>
-                      <div className="flex mt-1.5">
-                        <Input
-                          id="registration"
-                          placeholder="e.g., KA01MJ8234"
-                          value={registrationNumber}
-                          onChange={(e) => setRegistrationNumber(e.target.value)}
-                          className="rounded-r-none"
-                          disabled={otpSent}
-                        />
-                        <Button 
-                          onClick={handleSendOTP} 
-                          disabled={registrationNumber.length < 8 || otpSent}
-                          className="rounded-l-none"
-                        >
-                          Verify
-                        </Button>
-                      </div>
-                    </div>
-                    
-                    {otpSent && (
-                      <div>
-                        <Label>Enter OTP sent to registered mobile</Label>
-                        {renderOTPFields()}
-                      </div>
-                    )}
-                    
-                    {otpVerified && (
-                      <div className="bg-muted p-4 rounded-lg mt-4">
-                        <h4 className="font-medium mb-2">Verified Vehicle Details</h4>
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                          <div>
-                            <span className="text-muted-foreground">Make:</span>
-                            <span className="ml-2 font-medium">Honda</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Model:</span>
-                            <span className="ml-2 font-medium">City</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Year:</span>
-                            <span className="ml-2 font-medium">2021</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Variant:</span>
-                            <span className="ml-2 font-medium">ZX CVT</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Engine:</span>
-                            <span className="ml-2 font-medium">1.5L i-VTEC</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Transmission:</span>
-                            <span className="ml-2 font-medium">CVT</span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                <div className="w-1/3 h-24">
+                  <img 
+                    src={vehicle.image} 
+                    alt={`${vehicle.make} ${vehicle.model}`} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 p-3 flex flex-col justify-between">
+                  <div>
+                    <h4 className="font-medium">{vehicle.make} {vehicle.model}</h4>
+                    <p className="text-sm text-muted-foreground">{vehicle.year}</p>
                   </div>
-                </TabsContent>
-                
-                <TabsContent value="manual" className="pt-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="manufacturer">Manufacturer</Label>
-                      <Select 
-                        value={selectedManufacturer} 
-                        onValueChange={setSelectedManufacturer}
-                      >
-                        <SelectTrigger id="manufacturer">
-                          <SelectValue placeholder="Select manufacturer" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {manufacturers.map(manufacturer => (
-                            <SelectItem key={manufacturer} value={manufacturer}>
-                              {manufacturer}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="model">Model</Label>
-                      <Select 
-                        value={selectedModel} 
-                        onValueChange={setSelectedModel}
-                        disabled={!selectedManufacturer}
-                      >
-                        <SelectTrigger id="model">
-                          <SelectValue placeholder="Select model" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {getModels(selectedManufacturer).map(model => (
-                            <SelectItem key={model} value={model}>
-                              {model}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="year">Year</Label>
-                      <Select 
-                        value={selectedYear} 
-                        onValueChange={setSelectedYear}
-                      >
-                        <SelectTrigger id="year">
-                          <SelectValue placeholder="Select year" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {years.map(year => (
-                            <SelectItem key={year} value={year}>
-                              {year}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="variant">Variant</Label>
-                      <Select 
-                        value={selectedVariant} 
-                        onValueChange={setSelectedVariant}
-                        disabled={!selectedModel}
-                      >
-                        <SelectTrigger id="variant">
-                          <SelectValue placeholder="Select variant" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {getVariants(selectedModel).map(variant => (
-                            <SelectItem key={variant} value={variant}>
-                              {variant}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  
-                  {selectedManufacturer && selectedModel && selectedYear && (
-                    <div className="mt-6">
-                      <h4 className="font-medium mb-3">Select Your Vehicle</h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {availableVehicles.filter(v => 
-                          v.make === selectedManufacturer || 
-                          v.model === selectedModel
-                        ).map(vehicle => (
-                          <Card 
-                            key={vehicle.id}
-                            className={`cursor-pointer transition-all ${selectedVehicleId === vehicle.id ? 'border-primary ring-2 ring-primary/20' : ''}`}
-                            onClick={() => setSelectedVehicleId(vehicle.id)}
-                          >
-                            <div className="aspect-video w-full overflow-hidden">
-                              <img 
-                                src={vehicle.image} 
-                                alt={`${vehicle.make} ${vehicle.model}`}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            <CardContent className="p-3">
-                              <div className="flex justify-between items-center">
-                                <div>
-                                  <h4 className="font-medium">{vehicle.make} {vehicle.model}</h4>
-                                  <p className="text-sm text-muted-foreground">{vehicle.year}</p>
-                                </div>
-                                {selectedVehicleId === vehicle.id && (
-                                  <Check className="h-5 w-5 text-primary" />
-                                )}
-                              </div>
-                            </CardContent>
-                          </Card>
-                        ))}
-                      </div>
-                    </div>
+                  {vehicle.licensePlate && (
+                    <Badge variant="outline" className="self-start">
+                      {vehicle.licensePlate}
+                    </Badge>
                   )}
-                </TabsContent>
-              </Tabs>
-            </div>
-          )}
-          
-          {/* Step 3: Customization Categories */}
-          {step === 3 && (
-            <div className="space-y-6">
-              <h3 className="text-lg font-medium">Select Customization Categories</h3>
-              <p className="text-muted-foreground">
-                Choose the areas you want to customize for your vehicle
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {customizationCategories.map(category => (
-                  <Card 
-                    key={category.id}
-                    className={`cursor-pointer transition-all hover:border-primary/50 ${
-                      selectedCategories.includes(category.id) ? 'border-primary ring-2 ring-primary/20' : ''
-                    }`}
-                    onClick={() => toggleCategory(category.id)}
+                </div>
+                {selectedVehicle?.id === vehicle.id && (
+                  <div className="w-8 flex items-center justify-center bg-primary/10 text-primary">
+                    <Check className="h-5 w-5" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
+    );
+  };
+  
+  // Step 2: Design Type Selection
+  const renderDesignTypeSelection = () => {
+    return (
+      <div className="space-y-6">
+        <ScrollArea className="h-[350px]">
+          <RadioGroup 
+            value={formData.designType} 
+            onValueChange={(value) => handleChange('designType', value)}
+            className="space-y-4"
+          >
+            {designTypes.map((type) => (
+              <div key={type.id} className="flex items-start space-x-3">
+                <RadioGroupItem value={type.id} id={type.id} className="mt-1" />
+                <div className="grid gap-1.5">
+                  <Label 
+                    htmlFor={type.id} 
+                    className="font-medium cursor-pointer flex items-center gap-2"
                   >
-                    <CardHeader className="pb-2">
-                      <div className="flex justify-between items-start">
-                        <CardTitle className="text-base">{category.name}</CardTitle>
-                        {selectedCategories.includes(category.id) && (
-                          <Check className="h-5 w-5 text-primary" />
-                        )}
-                      </div>
-                      <CardDescription>{category.description}</CardDescription>
-                    </CardHeader>
-                    <CardFooter className="pt-0 text-xs text-muted-foreground">
-                      <div className="flex items-center justify-between w-full">
-                        <span>Compatibility: {category.compatibility}%</span>
-                        <span className={
-                          category.compatibility > 90 ? 'text-green-500' : 
-                          category.compatibility > 80 ? 'text-yellow-500' : 'text-red-500'
-                        }>
-                          {category.compatibility > 90 ? 'Excellent' : 
-                           category.compatibility > 80 ? 'Good' : 'Limited'}
-                        </span>
-                      </div>
-                    </CardFooter>
-                  </Card>
-                ))}
+                    {type.icon}
+                    {type.name}
+                  </Label>
+                  <p className="text-sm text-muted-foreground">{type.description}</p>
+                </div>
+              </div>
+            ))}
+          </RadioGroup>
+          
+          <div className="mt-8 border rounded-lg p-4 bg-muted/30">
+            <h4 className="font-medium mb-2 flex items-center gap-2">
+              <Settings className="h-4 w-4 text-muted-foreground" />
+              Customization Areas
+            </h4>
+            <p className="text-sm text-muted-foreground mb-4">
+              Based on your selection, you'll be able to customize these areas:
+            </p>
+            
+            {formData.designType === 'exterior' && (
+              <div className="grid grid-cols-2 gap-3">
+                <Badge variant="outline" className="justify-start">Paint & Wrap</Badge>
+                <Badge variant="outline" className="justify-start">Wheels & Tires</Badge>
+                <Badge variant="outline" className="justify-start">Body Kits</Badge>
+                <Badge variant="outline" className="justify-start">Lighting</Badge>
+                <Badge variant="outline" className="justify-start">Accessories</Badge>
+                <Badge variant="outline" className="justify-start">Window Tint</Badge>
+              </div>
+            )}
+            
+            {formData.designType === 'interior' && (
+              <div className="grid grid-cols-2 gap-3">
+                <Badge variant="outline" className="justify-start">Upholstery</Badge>
+                <Badge variant="outline" className="justify-start">Dashboard</Badge>
+                <Badge variant="outline" className="justify-start">Center Console</Badge>
+                <Badge variant="outline" className="justify-start">Interior Lighting</Badge>
+                <Badge variant="outline" className="justify-start">Audio System</Badge>
+                <Badge variant="outline" className="justify-start">Floor Mats</Badge>
+              </div>
+            )}
+            
+            {formData.designType === 'comprehensive' && (
+              <div className="grid grid-cols-2 gap-3">
+                <Badge variant="outline" className="justify-start">Paint & Wrap</Badge>
+                <Badge variant="outline" className="justify-start">Wheels & Tires</Badge>
+                <Badge variant="outline" className="justify-start">Body Kits</Badge>
+                <Badge variant="outline" className="justify-start">Upholstery</Badge>
+                <Badge variant="outline" className="justify-start">Dashboard</Badge>
+                <Badge variant="outline" className="justify-start">Interior Lighting</Badge>
+                <Badge variant="outline" className="justify-start">Audio System</Badge>
+                <Badge variant="outline" className="justify-start">Accessories</Badge>
+              </div>
+            )}
+            
+            {!formData.designType && (
+              <p className="text-sm italic text-muted-foreground">
+                Please select a design type to see available customization areas
+              </p>
+            )}
+          </div>
+        </ScrollArea>
+      </div>
+    );
+  };
+  
+  // Step 3: Project Details
+  const renderProjectDetails = () => {
+    return (
+      <div className="space-y-6">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Project Name</Label>
+            <Input 
+              id="name" 
+              placeholder="Enter a name for your project" 
+              value={formData.name}
+              onChange={(e) => handleChange('name', e.target.value)}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="description">Project Description</Label>
+            <Textarea 
+              id="description" 
+              placeholder="Enter a description for your project" 
+              className="min-h-[100px] resize-none"
+              value={formData.description}
+              onChange={(e) => handleChange('description', e.target.value)}
+            />
+          </div>
+          
+          <div className="space-y-2 pt-2">
+            <Label htmlFor="visibility">Project Visibility</Label>
+            <Select 
+              value={formData.visibility}
+              onValueChange={(value) => handleChange('visibility', value)}
+            >
+              <SelectTrigger id="visibility">
+                <SelectValue placeholder="Select visibility" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="private">Private</SelectItem>
+                <SelectItem value="friends">Friends Only</SelectItem>
+                <SelectItem value="public">Public</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground mt-1">
+              {formData.visibility === 'private' 
+                ? 'Only you can see this project' 
+                : formData.visibility === 'friends'
+                  ? 'Only your friends can see this project'
+                  : 'Everyone can see this project'}
+            </p>
+          </div>
+          
+          <div className="pt-4 flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="collaborate"
+              className="rounded border-gray-300"
+              checked={formData.collaborate}
+              onChange={(e) => handleChange('collaborate', e.target.checked)}
+            />
+            <Label 
+              htmlFor="collaborate"
+              className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Enable collaboration (allow others to suggest changes)
+            </Label>
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
+  // Step 4: Review Project
+  const renderReviewProject = () => {
+    if (!selectedVehicle) return null;
+    
+    const designTypeObj = designTypes.find(t => t.id === formData.designType);
+    
+    return (
+      <div className="space-y-6">
+        <div className="rounded-lg overflow-hidden border">
+          <div className="h-44 bg-muted">
+            <img 
+              src={selectedVehicle.image} 
+              alt={`${selectedVehicle.make} ${selectedVehicle.model}`}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          
+          <div className="p-4 space-y-4">
+            <div>
+              <h3 className="text-xl font-bold">{formData.name}</h3>
+              <p className="text-sm text-muted-foreground">{formData.description}</p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-muted-foreground">Vehicle</p>
+                <p className="font-medium">{selectedVehicle.make} {selectedVehicle.model} ({selectedVehicle.year})</p>
               </div>
               
-              {selectedCategories.length > 0 && (
-                <Card className="mt-6">
-                  <CardHeader>
-                    <CardTitle>Quick Stats</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="space-y-1">
-                        <h4 className="text-sm font-medium text-muted-foreground">Estimated Budget</h4>
-                        <p className="text-lg font-semibold">
-                          ₹{getEstimatedBudget()[0].toLocaleString()} - ₹{getEstimatedBudget()[1].toLocaleString()}
-                        </p>
-                      </div>
-                      <div className="space-y-1">
-                        <h4 className="text-sm font-medium text-muted-foreground">Estimated Time</h4>
-                        <p className="text-lg font-semibold">{getEstimatedTime()} days</p>
-                      </div>
-                      <div className="space-y-1">
-                        <h4 className="text-sm font-medium text-muted-foreground">Parts Availability</h4>
-                        <p className="text-lg font-semibold text-green-500">In Stock</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+              <div>
+                <p className="text-muted-foreground">Design Type</p>
+                <p className="font-medium">{designTypeObj?.name}</p>
+              </div>
+              
+              <div>
+                <p className="text-muted-foreground">Visibility</p>
+                <p className="font-medium capitalize">{formData.visibility}</p>
+              </div>
+              
+              <div>
+                <p className="text-muted-foreground">Collaboration</p>
+                <p className="font-medium">{formData.collaborate ? 'Enabled' : 'Disabled'}</p>
+              </div>
+            </div>
+            
+            <div className="flex gap-2 flex-wrap">
+              <Badge variant="secondary">
+                {selectedVehicle.make}
+              </Badge>
+              <Badge variant="secondary">
+                {selectedVehicle.model}
+              </Badge>
+              <Badge variant="secondary">
+                {formData.designType}
+              </Badge>
+              {formData.visibility === 'public' && (
+                <Badge variant="secondary">
+                  Public
+                </Badge>
               )}
             </div>
-          )}
-          
-          {/* Step 4: Project Details */}
-          {step === 4 && (
-            <div className="space-y-6">
-              <h3 className="text-lg font-medium">Project Details</h3>
-              <p className="text-muted-foreground">
-                Give your project a name and description
-              </p>
-              
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="projectName">Project Name</Label>
-                  <Input
-                    id="projectName"
-                    placeholder="e.g., City Sport Edition"
-                    value={projectName}
-                    onChange={(e) => setProjectName(e.target.value)}
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="projectDescription">Project Description</Label>
-                  <textarea
-                    id="projectDescription"
-                    placeholder="Describe your customization vision..."
-                    value={projectDescription}
-                    onChange={(e) => setProjectDescription(e.target.value)}
-                    className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px]"
-                  />
-                </div>
-              </div>
-              
-              <Card className="mt-6">
-                <CardHeader>
-                  <CardTitle>Project Summary</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
-                      <div>
-                        <span className="text-sm text-muted-foreground">Vehicle Type:</span>
-                        <span className="ml-2 capitalize">
-                          {selectedVehicleType || 'Not selected'}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-sm text-muted-foreground">Fuel Type:</span>
-                        <span className="ml-2 capitalize">
-                          {selectedFuelType || 'Not selected'}
-                        </span>
-                      </div>
-                      
-                      {(identificationMethod === 'registration' && otpVerified) ? (
-                        <>
-                          <div>
-                            <span className="text-sm text-muted-foreground">Registration:</span>
-                            <span className="ml-2">{registrationNumber}</span>
-                          </div>
-                          <div>
-                            <span className="text-sm text-muted-foreground">Vehicle:</span>
-                            <span className="ml-2">Honda City (2021)</span>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div>
-                            <span className="text-sm text-muted-foreground">Make & Model:</span>
-                            <span className="ml-2">
-                              {selectedManufacturer} {selectedModel}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-sm text-muted-foreground">Year & Variant:</span>
-                            <span className="ml-2">
-                              {selectedYear} {selectedVariant}
-                            </span>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                    
-                    <div>
-                      <span className="text-sm text-muted-foreground">Customization Categories:</span>
-                      <div className="flex flex-wrap gap-2 mt-1.5">
-                        {selectedCategories.length > 0 ? (
-                          selectedCategories.map(categoryId => {
-                            const category = customizationCategories.find(c => c.id === categoryId);
-                            return (
-                              <span key={categoryId} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                                {category?.name}
-                              </span>
-                            );
-                          })
-                        ) : (
-                          <span className="text-muted-foreground">No categories selected</span>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 border-t pt-4 mt-4">
-                      <div className="space-y-1">
-                        <h4 className="text-sm font-medium text-muted-foreground">Estimated Budget</h4>
-                        <p className="text-lg font-semibold">
-                          ₹{getEstimatedBudget()[0].toLocaleString()} - ₹{getEstimatedBudget()[1].toLocaleString()}
-                        </p>
-                      </div>
-                      <div className="space-y-1">
-                        <h4 className="text-sm font-medium text-muted-foreground">Estimated Time</h4>
-                        <p className="text-lg font-semibold">{getEstimatedTime()} days</p>
-                      </div>
-                      <div className="space-y-1">
-                        <h4 className="text-sm font-medium text-muted-foreground">Start Date</h4>
-                        <p className="text-lg font-semibold">
-                          {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+          </div>
         </div>
         
-        {/* Footer */}
-        <div className="border-t p-4 flex items-center justify-between">
-          {step > 1 ? (
-            <Button variant="outline" onClick={goToPreviousStep}>
-              <ChevronLeft className="mr-2 h-4 w-4" /> Back
-            </Button>
-          ) : (
-            <div></div>
-          )}
-          
-          {step < 4 ? (
-            <Button onClick={goToNextStep} disabled={
-              (step === 1 && (!selectedVehicleType || !selectedFuelType)) ||
-              (step === 2 && (
-                (identificationMethod === 'registration' && !otpVerified) ||
-                (identificationMethod === 'manual' && !selectedVehicleId)
-              )) ||
-              (step === 3 && selectedCategories.length === 0)
-            }>
-              Next <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          ) : (
-            <Button onClick={handleCreateProject} disabled={!projectName}>
-              Create Project <Check className="ml-2 h-4 w-4" />
-            </Button>
-          )}
+        <div className="bg-muted/30 rounded-lg p-4 text-sm">
+          <h4 className="font-medium mb-2">What's Next?</h4>
+          <p className="text-muted-foreground">
+            After creating this project, you'll be taken to the customization studio where you can
+            start designing your vehicle based on the options you've selected.
+          </p>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    );
+  };
+  
+  // Render the current step content
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 1:
+        return renderVehicleSelection();
+      case 2:
+        return renderDesignTypeSelection();
+      case 3:
+        return renderProjectDetails();
+      case 4:
+        return renderReviewProject();
+      default:
+        return null;
+    }
+  };
+  
+  // Animation variants for step transitions
+  const stepVariants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -50 }
+  };
+  
+  return (
+    <>
+      <Button
+        onClick={handleOpen}
+        variant="default"
+        className="flex items-center gap-1 bg-[#25D366] hover:bg-[#22bf5b]"
+      >
+        <Plus className="h-4 w-4" />
+        <span>New Project</span>
+      </Button>
+      
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Create New Project</DialogTitle>
+            <DialogDescription>
+              Create a new vehicle customization project in {currentStep} easy steps
+            </DialogDescription>
+          </DialogHeader>
+          
+          {renderSteps()}
+          
+          <motion.div
+            key={currentStep}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={stepVariants}
+            transition={{ duration: 0.3 }}
+          >
+            {renderStepContent()}
+          </motion.div>
+          
+          <DialogFooter className="flex justify-between gap-2 sm:justify-between">
+            <Button
+              variant="outline"
+              onClick={currentStep === 1 ? handleClose : handlePrevStep}
+            >
+              {currentStep === 1 ? (
+                <X className="h-4 w-4 mr-2" />
+              ) : (
+                <ChevronLeft className="h-4 w-4 mr-2" />
+              )}
+              {currentStep === 1 ? 'Cancel' : 'Back'}
+            </Button>
+            
+            <Button
+              onClick={handleNextStep}
+              disabled={!isStepValid()}
+            >
+              {currentStep < 4 ? 'Continue' : 'Create Project'}
+              {currentStep < 4 ? (
+                <ChevronRight className="h-4 w-4 ml-2" />
+              ) : (
+                <Check className="h-4 w-4 ml-2" />
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
