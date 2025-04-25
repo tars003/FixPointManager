@@ -27,9 +27,7 @@ import {
   Undo2,
   ChevronDown,
   Calendar,
-  Navigation,
-  MessageSquare,
-  X
+  Navigation
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -44,7 +42,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import ContentReaction from '@/components/ui/content-reaction';
 import FeedbackButton from '@/components/ui/feedback-button';
-import EnhancedMapView from '@/components/nearby/enhanced-map-view';
+import MapView from '@/components/nearby/map-view';
 
 // Vehicle types
 const VEHICLE_TYPES = [
@@ -82,7 +80,7 @@ const SERVICE_CATEGORIES = [
   { id: 'insurance', name: 'Vehicle Insurance', icon: Scroll },
 ];
 
-// Emergency types for emergency service flow
+// Mock emergency types for emergency service flow
 const EMERGENCY_TYPES = [
   { id: 'breakdown', name: 'Vehicle Breakdown', icon: Car },
   { id: 'accident', name: 'Accident', icon: ShieldAlert },
@@ -92,7 +90,7 @@ const EMERGENCY_TYPES = [
   { id: 'keys', name: 'Locked Keys', icon: Car },
 ];
 
-const Nearby = () => {
+const NearbyNew = () => {
   const [, navigate] = useLocation();
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
@@ -106,7 +104,6 @@ const Nearby = () => {
   const [searchRadius, setSearchRadius] = useState<number[]>([5]);
   const [showOpenOnly, setShowOpenOnly] = useState(false);
   const [selectedEmergencyType, setSelectedEmergencyType] = useState<string | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
   
   // Get user's location on component mount
   useEffect(() => {
@@ -283,32 +280,20 @@ const Nearby = () => {
         </div>
         
         {/* Location and search */}
-        <div className="flex gap-2 mt-4">
-          <div className="relative flex-1">
-            <Input 
-              type="search" 
-              placeholder={isEmergencyMode 
-                ? "Describe your emergency or location details..." 
-                : "Search by name, service, or address..."
-              }
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <Search className="h-5 w-5 text-neutral-400" />
-            </div>
+        <div className="relative mt-4">
+          <Input 
+            type="search" 
+            placeholder={isEmergencyMode 
+              ? "Describe your emergency or location details..." 
+              : "Search by name, service, or address..."
+            }
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <Search className="h-5 w-5 text-neutral-400" />
           </div>
-          
-          {/* Filter toggle button */}
-          <Button 
-            variant="outline" 
-            size="icon"
-            onClick={() => setShowFilters(!showFilters)}
-            className="h-10 w-10"
-          >
-            <Filter className="h-5 w-5" />
-          </Button>
         </div>
       </div>
       
@@ -346,28 +331,23 @@ const Nearby = () => {
         </Card>
       )}
       
-      {/* Filter section - Only show in non-emergency mode and when filters are toggled */}
-      {!isEmergencyMode && showFilters && (
+      {/* Filter section - Only show in non-emergency mode */}
+      {!isEmergencyMode && (
         <div className="mb-6 border rounded-lg p-4">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-medium flex items-center gap-1">
               <Filter className="h-4 w-4" />
               Service Filters
             </h3>
-            <div className="flex gap-2">
-              <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={() => {
-                setSelectedVehicleType('car');
-                setSelectedFuelType('petrol');
-                setSelectedServiceCategories(['service-center']);
-                setSearchRadius([5]);
-                setShowOpenOnly(false);
-              }}>
-                Reset Filters
-              </Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setShowFilters(false)}>
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
+            <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={() => {
+              setSelectedVehicleType('car');
+              setSelectedFuelType('petrol');
+              setSelectedServiceCategories(['service-center']);
+              setSearchRadius([5]);
+              setShowOpenOnly(false);
+            }}>
+              Reset Filters
+            </Button>
           </div>
           
           {/* Vehicle type selection */}
@@ -498,11 +478,9 @@ const Nearby = () => {
               <Button onClick={() => window.location.reload()}>Try Again</Button>
             </div>
           ) : filteredProviders && filteredProviders.length > 0 ? (
-            <EnhancedMapView 
+            <MapView 
               providers={filteredProviders}
               onSelectProvider={isEmergencyMode ? handleEmergencyServiceSelect : handleSelectProvider}
-              isEmergencyMode={isEmergencyMode}
-              selectedCategories={selectedServiceCategories}
             />
           ) : (
             <div className="bg-white rounded-lg p-6 text-center">
@@ -719,4 +697,4 @@ const Nearby = () => {
   );
 };
 
-export default Nearby;
+export default NearbyNew;

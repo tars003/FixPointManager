@@ -1,0 +1,255 @@
+"VehicleAssist" - Nearby Service Providers Tab
+Tab Overview
+Create a comprehensive "Nearby Service Providers" tab dedicated to helping owners of all vehicle types (two-wheelers, three-wheelers, four-wheelers, trucks, commercial vehicles, buses, tractors, and construction vehicles) find essential services in their vicinity. This feature will support all fuel types: petrol, diesel, hybrid, CNG, electric (EV), solar, and hydrogen, with specialized service filters for each.
+Core Service Categories
+1. Fuel Stations
+All fuel type filters (petrol, diesel, CNG, hydrogen, EV charging)
+Premium fuel availability indicators
+Current fuel prices with update timestamps
+Wait time estimates during peak hours
+Amenities available (food, restrooms, convenience store)
+2. Service Centers
+Authorized vs. independent filters
+Emergency service availability
+Appointment booking option
+Service specializations (engine, electrical, body, etc.)
+Rating and review scores
+Current wait time for walk-ins
+3. Tire Services
+Puncture repair shops
+New tire retailers
+Wheel alignment centers
+Tire pressure check stations
+Specialty tire providers (off-road, performance, etc.)
+Mobile tire service options
+4. Vehicle Washing
+Basic to premium wash options
+Interior detailing availability
+Waterless wash providers
+Subscription service partners
+Wait time indicators
+Eco-friendly options
+5. RTO Offices
+Document services available
+Operating hours
+Required appointment information
+Document checklist by service type
+Estimated processing times
+Alternative service centers
+6. Roadside Assistance
+24/7 service providers
+Specialized assistance by vehicle type
+Emergency towing services
+Jump-start services
+On-site repair options
+Average response time indicators
+7. Battery Services
+Battery replacement centers
+EV charging stations with connector types
+Battery health check providers
+Jump-start service locations
+Battery recycling centers
+Mobile battery service options
+8. Emission Testing
+Certified testing centers
+Operating hours
+Test duration estimates
+Pre-test requirements
+Pricing information
+Document processing details
+9. Spare Parts Markets
+OEM parts availability
+Aftermarket options
+Specialty parts retailers
+Vintage/rare parts dealers
+Delivery options available
+Warranty information
+10. Vehicle Insurance
+Branch offices of major insurers
+Claim processing centers
+Policy renewal locations
+Insurance surveyors
+Specialized commercial vehicle insurers
+On-spot policy issuance availability
+User Flow and Functionality
+1. Location Determination
+Flow:
+User enters the "Nearby Service Providers" tab
+System requests location access with clear purpose explanation
+User can:
+Allow automatic location detection
+Enter location manually (address/landmark/pin code)
+Select from saved locations (home, work, etc.)
+Drop pin on map
+Location confirmation with address display
+Option to adjust search radius (1km to 50km)
+Functionality:
+GPS integration with permission handling
+Address auto-complete with Indian postal code database
+Location history with privacy controls
+Geofencing for accurate boundary detection
+Search radius visual indicator on map
+2. Vehicle-Specific Service Filtering
+Flow:
+User selects vehicle type from quick-access icons
+System displays relevant service categories for that vehicle
+Additional filters appear based on vehicle:
+Fuel type specific services
+Size-appropriate facilities (for larger vehicles)
+Specialized service providers
+Optional selection of specific make/model for more targeted results
+"All applicable services" default option
+Functionality:
+Dynamic filter generation based on vehicle type
+Make/model database integration
+Specialized service matching algorithm
+Filter combination logic with AND/OR operators
+Quick reset options for filter categories
+3. Map View Exploration
+Flow:
+Primary interface shows map with service locations as category-colored pins
+Service type toggle filters with single/multiple selection
+Map clusters for high-density areas
+List view alternative with single tap
+Interactive zoom with service density adaptation
+Tap on area shows service summary for that location
+Functionality:
+High-performance map rendering
+Dynamic pin clustering to prevent overcrowding
+Category-based color coding with accessibility options
+Location data caching for offline viewing
+Augmented reality direction overlay option for walking
+Satellite view toggle for unfamiliar areas
+4. Service Details View
+Flow:
+User taps on service location pin or list item
+Expanded card shows comprehensive details:
+Service name and type
+Distance and estimated travel time
+Operating hours with open/closed status
+Contact information
+Rating and review summary
+Current wait time/availability
+Service specializations
+Amenities/facilities available
+Action buttons for directions, calling, website, etc.
+Photo gallery of facility
+User reviews with filtering options
+Functionality:
+Rich information cards with collapse/expand animations
+Click-to-call integration
+Direction handoff to preferred navigation app
+Review submission and moderation system
+Wait time estimation via crowd-sourced data
+Operating hours parsing with holiday exceptions
+Service-specific detail fields
+5. Trip Planning Integration
+Flow:
+User selects "Plan Trip" option
+Enters starting point and destination
+Selects vehicle and fuel type
+System calculates:
+Total distance and estimated fuel consumption
+Recommended refueling stops
+Strategic service center locations along route
+Rest areas and convenience stops
+Alternative routes with service availability comparison
+Option to save trip plan or share with others
+Calendar integration for journey scheduling
+Functionality:
+Route optimization algorithm with service point integration
+Fuel consumption calculation based on vehicle specs
+Intelligent service stop recommendations
+Time-of-day service availability checking
+Traffic integration for realistic arrival estimates
+Weather overlay for journey planning
+Trip checkpoints with automatic reminders
+6. Service Booking and Scheduling
+Flow:
+User selects bookable service (washing, service center, etc.)
+Views available time slots with capacity indicators
+Selects preferred date and time
+Enters vehicle details if not already saved
+Specifies service requirements
+Receives booking confirmation with reminder options
+Gets QR code/reference number for service
+Option for cancellation/rescheduling
+Functionality:
+Real-time slot availability via service provider API integration
+Booking management system with confirmation
+Reminder scheduling via SMS/email/push notification
+Digital service token generation
+Cancellation policy enforcement
+Rebooking assistance with alternative suggestions
+Service history tracking
+7. Emergency Service Request
+Flow:
+User accesses SOS button in prominent position
+Selects emergency type (breakdown, accident, fuel, tire, etc.)
+System detects precise location
+Shows nearest appropriate emergency services
+Provides estimated arrival times
+One-tap contact options for immediate help
+Provides guidance for safety measures while waiting
+Tracks service provider approach in real-time
+Functionality:
+Priority routing for emergency requests
+Direct integration with roadside assistance providers
+Location sharing with approaching service
+Safety instructions database by emergency type
+Automated follow-up system post-assistance
+Emergency contact notification option
+Audio guide mode for hands-free operation
+8. Ratings and Review System
+Flow:
+User receives prompt to rate service after visit detection
+Simple 1-5 star quick rating with optional detailed review
+Specific rating categories based on service type
+Photo upload option for service documentation
+Staff recognition feature for exceptional service
+Issue reporting with structured categories
+Follow-up notification when issues are addressed
+Functionality:
+Location-based visit detection
+Intelligent review prompting at appropriate timing
+Category-specific review templates
+Photo compression and moderation
+Sentiment analysis for review highlights
+Review verification to prevent spam
+Service provider response management
+9. Service Price Comparison
+Flow:
+User selects specific service type (oil change, wash, etc.)
+Views comparison table of nearby providers
+Filters by price, distance, rating, or availability
+Sees detailed breakdown of included services
+Accesses special offers and discounts
+Views historical price trends if available
+Makes informed decision based on value assessment
+Functionality:
+Price database with regular updates
+Standardized service categorization for comparison
+Deal integration from service providers
+Price history tracking for common services
+Value algorithm considering price, rating, and distance
+Deal alert system for saved service types
+Bulk service booking for discounts
+10. Vehicle Service History
+Flow:
+User accesses vehicle service record section
+Views comprehensive service timeline
+Sees all past service locations on map
+Accesses detailed service reports and invoices
+Receives maintenance reminders based on history
+Gets personalized service recommendations
+Exports service history for resale documentation
+Functionality:
+Secure service record storage
+OCR for paper invoice digitization
+Maintenance schedule calculation
+Service interval tracking
+Integrated manufacturer service recommendations
+Exportable service documentation
+Vehicle health scoring based on maintenance history
+This comprehensive "Nearby Service Providers" tab delivers an end-to-end solution for all vehicle-related service needs, creating a seamless experience from discovery to booking to post-service review, applicable to all vehicle types and fuel systems across India.
+
