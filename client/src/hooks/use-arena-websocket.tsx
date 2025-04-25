@@ -1,23 +1,31 @@
 import { useState, useEffect, useCallback } from 'react';
 
-// Define message types
-export interface WebSocketMessage {
-  type: string;
-  payload: any;
+// User type definition
+export interface User {
+  userId: number;
+  username: string;
+  isActive: boolean;
 }
 
+// Define project update message
 export interface ProjectUpdateMessage {
   projectId: number;
-  updates: any;
+  updates: Record<string, unknown>;
   userId: number;
   timestamp: string;
+}
+
+// Message format for sending/receiving
+export interface WebSocketMessage {
+  type: string;
+  payload: unknown;
 }
 
 export function useArenaWebSocket() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [lastMessage, setLastMessage] = useState<WebSocketMessage | null>(null);
-  const [activeUsers, setActiveUsers] = useState<{ userId: number; username: string; isActive: boolean }[]>([]);
+  const [activeUsers, setActiveUsers] = useState<User[]>([]);
   const [projectUpdates, setProjectUpdates] = useState<ProjectUpdateMessage[]>([]);
 
   // Initialize WebSocket connection
@@ -37,19 +45,34 @@ export function useArenaWebSocket() {
     
     // Listen for messages
     newSocket.addEventListener('message', (event) => {
-      const message = JSON.parse(event.data) as WebSocketMessage;
-      setLastMessage(message);
-      
-      // Handle different message types
-      switch (message.type) {
-        case 'USER_PRESENCE':
-          setActiveUsers(message.payload);
-          break;
-        case 'PROJECT_UPDATE':
-          setProjectUpdates(prev => [...prev, message.payload]);
-          break;
-        default:
-          console.log('Unhandled message type:', message.type);
+      try {
+        const data = JSON.parse(event.data);
+        const message: WebSocketMessage = {
+          type: data.type,
+          payload: data.payload
+        };
+        
+        setLastMessage(message);
+        
+        // Handle different message types
+        switch (message.type) {
+          case 'USER_PRESENCE':
+            const users = message.payload as User[];
+            if (Array.isArray(users)) {
+              setActiveUsers(users);
+            }
+            break;
+          case 'PROJECT_UPDATE':
+            const update = message.payload as ProjectUpdateMessage;
+            if (update && typeof update === 'object' && 'projectId' in update) {
+              setProjectUpdates(prev => [...prev, update]);
+            }
+            break;
+          default:
+            console.log('Unhandled message type:', message.type);
+        }
+      } catch (error) {
+        console.error('Error processing WebSocket message:', error);
       }
     });
     
@@ -74,9 +97,12 @@ export function useArenaWebSocket() {
   }, []);
   
   // Send message function
-  const sendMessage = useCallback((type: string, payload: any) => {
+  const sendMessage = useCallback((type: string, payload: Record<string, unknown>) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
-      const message: WebSocketMessage = { type, payload };
+      const message: WebSocketMessage = { 
+        type, 
+        payload 
+      };
       socket.send(JSON.stringify(message));
       return true;
     }
@@ -84,10 +110,11 @@ export function useArenaWebSocket() {
   }, [socket]);
   
   // Update project function
-  const updateProject = useCallback((projectId: number, updates: any) => {
+  const updateProject = useCallback((projectId: number, updates: Record<string, unknown>) => {
     return sendMessage('PROJECT_UPDATE', {
       projectId,
       updates,
+      userId: 1, // Default to user 1 for demo purposes
       timestamp: new Date().toISOString()
     });
   }, [sendMessage]);

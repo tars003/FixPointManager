@@ -1114,7 +1114,7 @@ const NewArenaDashboard: React.FC = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {diyGuides.map(guide => (
+              {diyGuides.map((guide: DIYGuide) => (
                 <Card key={guide.id} className="overflow-hidden hover:shadow-md transition-all">
                   <div className="h-40 overflow-hidden relative">
                     <img 
