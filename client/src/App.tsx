@@ -28,6 +28,7 @@ import FastagEchallan from "@/pages/fastag-echallan";
 import EducationalPage from "@/pages/educational";
 import Marketplace from "@/pages/marketplace";
 import Arena from "@/pages/arena";
+import AutoVista from "@/pages/autovista";
 import ArenaDashboard from "@/pages/arena-dashboard";
 import NewArenaDashboard from "@/pages/new-arena-dashboard";
 import ArenaDashboardNew from "@/pages/arena-dashboard-new";
@@ -224,6 +225,11 @@ function Router() {
               <PageTransition type="complex" duration={0.6}>
                 <Marketplace />
               </PageTransition>
+            )}
+          </Route>
+          <Route path="/autovista">
+            {() => (
+              <AutoVista />
             )}
           </Route>
           <Route path="/commercial-fleet">

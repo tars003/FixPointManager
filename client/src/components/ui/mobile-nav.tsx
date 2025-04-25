@@ -47,6 +47,13 @@ const MobileNav = () => {
           </a>
         </Link>
         
+        <Link href="/autovista">
+          <a className={linkClass('/autovista')}>
+            <Car className="h-6 w-6" />
+            <span className="text-xs mt-1">AutoVista</span>
+          </a>
+        </Link>
+        
         <Link href="/profile">
           <a className={linkClass('/profile')}>
             <User className="h-6 w-6" />
