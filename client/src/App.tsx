@@ -25,6 +25,7 @@ import EmergencyServices from "@/pages/emergency-services";
 import DrivingEducation from "@/pages/driving-education";
 import FastagEchallan from "@/pages/fastag-echallan";
 import EducationalPage from "@/pages/educational";
+import Marketplace from "@/pages/marketplace";
 import Arena from "@/pages/arena";
 import ArenaDashboard from "@/pages/arena-dashboard";
 import NewArenaDashboard from "@/pages/new-arena-dashboard";
@@ -213,6 +214,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <PartsPage />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/marketplace">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <Marketplace />
               </motion.div>
             )}
           </Route>
