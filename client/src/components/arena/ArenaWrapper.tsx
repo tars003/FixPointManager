@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import {
   Alert,
   AlertTitle,
-  AlertDescription,
-  Badge,
-  Separator
-} from '@/components/ui';
+  AlertDescription
+} from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 import { 
   Wifi, 
   WifiOff, 

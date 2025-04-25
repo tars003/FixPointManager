@@ -1343,74 +1343,116 @@ const ArenaDashboardNew: React.FC = () => {
     );
   };
 
+  // State for selected vehicle
+  const [selectedVehicle, setSelectedVehicle] = useState<VehicleProfile | null>(
+    vehicles.length > 0 ? vehicles[0] : null
+  );
+
+  // Handle adding a new vehicle
+  const handleAddNewVehicle = () => {
+    toast({
+      title: "Add New Vehicle",
+      description: "Redirecting to vehicle creation page...",
+    });
+    // In a real app, would navigate to the vehicle creation page
+  };
+
+  // Handle vehicle selection
+  const handleSelectVehicle = (vehicle: any) => {
+    const foundVehicle = vehicles.find(v => v.id === vehicle.id);
+    if (foundVehicle) {
+      setSelectedVehicle(foundVehicle);
+      toast({
+        title: "Vehicle Selected",
+        description: `Selected ${foundVehicle.year} ${foundVehicle.make} ${foundVehicle.model}`,
+      });
+    }
+  };
+
   // Main render
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="flex flex-col space-y-4">
-        {/* Header with navigation and status */}
-        <div className="flex justify-between items-center mb-2">
-          <h1 className="text-3xl font-bold">Arena Dashboard</h1>
-          <div className="flex items-center gap-2">
-            <div className="hidden md:flex items-center mr-2">
-              <div className={`w-2 h-2 rounded-full mr-1 ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-              <span className="text-xs text-muted-foreground">
-                {isConnected ? 'Connected' : 'Disconnected'}
-              </span>
+    <ArenaWrapper projectId={1}>
+      <div className="container mx-auto px-4 py-6">
+        <div className="flex flex-col space-y-4">
+          {/* Header with navigation and status */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h1 className="text-3xl font-bold">Arena Dashboard</h1>
+              <p className="text-muted-foreground">Customize and enhance your vehicle's performance and appearance</p>
             </div>
-            {activeUsers.length > 0 && (
-              <div className="hidden md:flex -space-x-2 mr-2">
-                {activeUsers.slice(0, 3).map((user, index) => (
-                  <Avatar key={index} className="h-8 w-8 border-2 border-background">
-                    <AvatarFallback>{user.username?.charAt(0) || 'U'}</AvatarFallback>
-                  </Avatar>
-                ))}
-                {activeUsers.length > 3 && (
-                  <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-xs font-medium border-2 border-background">
-                    +{activeUsers.length - 3}
-                  </div>
-                )}
+            <div className="flex items-center gap-2">
+              <VehicleSelector 
+                onSelectVehicle={handleSelectVehicle} 
+                onAddNewVehicle={handleAddNewVehicle}
+              />
+              <div className="hidden md:flex items-center ml-2">
+                <div className={`w-2 h-2 rounded-full mr-1 ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                <span className="text-xs text-muted-foreground">
+                  {isConnected ? 'Connected' : 'Disconnected'}
+                </span>
               </div>
-            )}
-            <Button variant="outline" size="sm" onClick={() => handleNewProject()}>
-              <Plus className="h-4 w-4 mr-2" />
-              New Project
+              {activeUsers.length > 0 && (
+                <div className="hidden md:flex -space-x-2 mr-2">
+                  {activeUsers.slice(0, 3).map((user, index) => (
+                    <Avatar key={index} className="h-8 w-8 border-2 border-background">
+                      <AvatarFallback>{user.username?.charAt(0) || 'U'}</AvatarFallback>
+                    </Avatar>
+                  ))}
+                  {activeUsers.length > 3 && (
+                    <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-xs font-medium border-2 border-background">
+                      +{activeUsers.length - 3}
+                    </div>
+                  )}
+                </div>
+              )}
+              <Button variant="outline" size="sm" onClick={() => handleNewProject()}>
+                <Plus className="h-4 w-4 mr-2" />
+                New Project
+              </Button>
+            </div>
+          </div>
+          
+          {/* Main navigation */}
+          <div className="flex rounded-lg overflow-hidden border">
+            <Button
+              variant={activeSection === 'my-studio' ? 'default' : 'ghost'}
+              className={`flex-1 rounded-none h-12 ${activeSection === 'my-studio' ? '' : 'text-muted-foreground'}`}
+              onClick={() => setActiveSection('my-studio')}
+            >
+              MY STUDIO
+            </Button>
+            <Button
+              variant={activeSection === 'discover' ? 'default' : 'ghost'}
+              className={`flex-1 rounded-none h-12 ${activeSection === 'discover' ? '' : 'text-muted-foreground'}`}
+              onClick={() => setActiveSection('discover')}
+            >
+              DISCOVER
+            </Button>
+            <Button
+              variant={activeSection === 'learn' ? 'default' : 'ghost'}
+              className={`flex-1 rounded-none h-12 ${activeSection === 'learn' ? '' : 'text-muted-foreground'}`}
+              onClick={() => setActiveSection('learn')}
+            >
+              LEARN
             </Button>
           </div>
+          
+          {/* Content section */}
+          <div className="mt-4">
+            {activeSection === 'my-studio' && renderMyStudio()}
+            {activeSection === 'discover' && renderDiscover()}
+            {activeSection === 'learn' && renderLearn()}
+          </div>
         </div>
-        
-        {/* Main navigation */}
-        <div className="flex rounded-lg overflow-hidden border">
-          <Button
-            variant={activeSection === 'my-studio' ? 'default' : 'ghost'}
-            className={`flex-1 rounded-none h-12 ${activeSection === 'my-studio' ? '' : 'text-muted-foreground'}`}
-            onClick={() => setActiveSection('my-studio')}
-          >
-            MY STUDIO
-          </Button>
-          <Button
-            variant={activeSection === 'discover' ? 'default' : 'ghost'}
-            className={`flex-1 rounded-none h-12 ${activeSection === 'discover' ? '' : 'text-muted-foreground'}`}
-            onClick={() => setActiveSection('discover')}
-          >
-            DISCOVER
-          </Button>
-          <Button
-            variant={activeSection === 'learn' ? 'default' : 'ghost'}
-            className={`flex-1 rounded-none h-12 ${activeSection === 'learn' ? '' : 'text-muted-foreground'}`}
-            onClick={() => setActiveSection('learn')}
-          >
-            LEARN
-          </Button>
-        </div>
-        
-        {/* Content section */}
-        <div className="mt-4">
-          {activeSection === 'my-studio' && renderMyStudio()}
-          {activeSection === 'discover' && renderDiscover()}
-          {activeSection === 'learn' && renderLearn()}
-        </div>
+
+        {/* New Project Wizard */}
+        <NewProjectWizard
+          isOpen={showNewProjectWizard}
+          onClose={() => setShowNewProjectWizard(false)}
+          onComplete={handleProjectComplete}
+        />
       </div>
-    </div>
+    </ArenaWrapper>
   );
 };
 

@@ -37,7 +37,7 @@ import {
   Car, 
   Bike, 
   Truck, 
-  GasPump, 
+  Droplet, 
   Zap, 
   CloudLightning, 
   Fuel, 
@@ -54,11 +54,11 @@ type Step = 'vehicle-type' | 'vehicle-details' | 'location-finalization';
 
 // Fuel types
 const fuelTypes = [
-  { id: 'petrol', label: 'Petrol', icon: GasPump },
+  { id: 'petrol', label: 'Petrol', icon: Droplet },
   { id: 'diesel', label: 'Diesel', icon: Fuel },
   { id: 'electric', label: 'Electric', icon: Zap },
   { id: 'hydrogen', label: 'Hydrogen', icon: CloudLightning },
-  { id: 'cng', label: 'CNG', icon: GasPump },
+  { id: 'cng', label: 'CNG', icon: Droplet },
   { id: 'solar', label: 'Solar', icon: Wind },
 ];
 
