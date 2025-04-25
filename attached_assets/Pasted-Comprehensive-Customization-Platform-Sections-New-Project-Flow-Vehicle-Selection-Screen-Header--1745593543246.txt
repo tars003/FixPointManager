@@ -1,0 +1,420 @@
+Comprehensive Customization Platform Sections
++ New Project Flow
+Vehicle Selection Screen
+Header: "Start Your Customization Journey"
+Subheader: "Select vehicle details or import existing vehicle"
+Vehicle Type Selection
+Display large, clear icons for:
+Two-Wheeler (motorcycles, scooters)
+Three-Wheeler (auto rickshaws, commercial carriers)
+Four-Wheeler (cars, SUVs, trucks)
+Each with hover state showing popular examples
+Fuel Type Selection
+Once vehicle type is selected, show fuel options:
+Petrol/Gasoline
+Diesel
+Electric (EV)
+Hybrid
+CNG/LPG
+Include small efficiency/environmental impact indicators
+Vehicle Identification
+Option 1: Add by Registration
+Input field for license plate number
+"Verify" button that sends OTP to registered mobile
+OTP verification field
+After verification, system auto-populates:
+Make and Model
+Manufacturing Year
+Engine Specifications
+Current Modifications (if any)
+Service History
+Option 2: Manual Selection
+Dropdown fields for:
+Manufacturer
+Model
+Year
+Variant
+Preview image updates with selections
+Customization Categories
+After vehicle details are confirmed, present customization categories:
+Exterior Modifications (body kits, wraps, paint)
+Interior Customization (seats, dashboard, lighting)
+Performance Upgrades (engine, exhaust, intake)
+Wheels & Suspension (rims, tires, lowering)
+Lighting Systems (headlights, indicators, accent lighting)
+Audio & Electronics (sound system, displays, accessories)
+Quick Stats Panel
+Shows compatibility percentage of selected categories with vehicle
+Estimated total customization budget range
+Installation time estimates
+Parts availability indicators
+Action Buttons
+"Create Project" (primary action)
+"Save as Draft"
+"Import Previous Design"
+Wheels & Suspension Customization
+Wheel Selection Interface
+Header: "Wheel Customization Studio"
+Visualization: Central 3D model of vehicle with focus on wheels
+Wheel Type Categories
+Alloy Wheels
+Sport/Performance (lightweight racing designs)
+Luxury (chrome and polished finishes)
+Off-Road (reinforced for durability)
+Custom Design (personalized patterns)
+Wheel Specifications
+Size options (15" to 24")
+Width options (6J to 12J)
+Offset/ET values (-15 to +45)
+Bolt pattern compatibility check
+Weight indicators
+Material options (aluminum, forged, carbon fiber)
+Finish Selection
+Color picker with presets (black, silver, bronze, custom)
+Finish type (matte, gloss, brushed, polished)
+Accent color options for multi-tone wheels
+Special finishes (chrome, powder-coated)
+Tire Selection
+Brand filter (Michelin, Pirelli, Bridgestone, etc.)
+Type categories (all-season, performance, off-road)
+Size compatibility checker
+Tread pattern viewer
+Weather rating indicators
+Noise level indicators
+Fuel efficiency impact
+Real-Time Visualization Features
+Wheel rotation animation
+Zoom controls for detailed inspection
+Split screen before/after comparison
+Vehicle movement simulation showing wheels in motion
+Different viewing angles (front wheel, rear wheel, side profile)
+Lighting condition changes to see appearance at different times
+Installation Information
+DIY difficulty rating: 3/5
+Professional installation time: 1-2 hours
+Required tools list (if DIY)
+Special considerations for this vehicle
+Compatibility warnings if applicable
+Nearby Installation Options
+Map view of service centers within 25km
+Filtered by availability and expertise
+Price comparison table
+Reviews and ratings
+Appointment availability calendar
+"Book Now" direct scheduling option
+Pricing Breakdown
+Individual wheel cost: ₹15,000 x 4
+Tire cost: ₹8,500 x 4
+Installation labor: ₹2,000
+Balancing and alignment: ₹1,500
+Total package cost: ₹94,500
+EMI options starting at: ₹4,975/month
+Warranty information: 2 years manufacturer + 1 year extended
+Recommendations
+"Users who selected these wheels also added:"
+Lowering springs
+Wheel spacers
+Brake caliper color kits
+Locking wheel nuts
+Interior Customization
+Interior Studio Interface
+Header: "Interior Customization Studio"
+Visualization: Interactive 3D cabin view with selectable zones
+Seat Upholstery Options
+Material Selection
+Premium leather (multiple grain patterns)
+Alcantara/suede
+Sports fabric
+Eco-friendly alternatives
+Color Palettes
+Single-tone options
+Two-tone combinations
+Contrast stitching colors
+Pattern Designer
+Diamond stitching
+Horizontal/vertical channels
+Custom embroidery placement
+Perforation patterns
+Dashboard & Trim Customization
+Material Options
+Carbon fiber (glossy/matte)
+Wood veneer (multiple species)
+Brushed aluminum
+Soft-touch materials
+Accent Lighting Integration
+Ambient light positioning
+Color selection with preview
+Brightness control simulation
+Animation patterns
+Steering Wheel Customization
+Grip Material
+Perforated leather
+Alcantara
+Wood accents
+Carbon fiber elements
+Button Customization
+Custom button layouts
+Backlight color options
+Extended control functions
+Floor & Cargo Area
+Floor Mat Designer
+Material selection (carpet, rubber, all-weather)
+Custom text/logo placement
+Color selection
+Weather resistance options
+Cargo Solutions
+Organizational systems
+Protection liners
+Custom compartments
+Installation Information
+DIY difficulty rating: 4/5
+Professional installation time: 3-5 days
+Required expertise level: High
+Special considerations for electrical components
+Nearby Installation Specialists
+Map showing interior customization experts
+Portfolio examples of previous work
+Specialty certifications
+"Premium Installer" badges for top-rated shops
+Video showcase of workshop facilities
+Pricing Breakdown
+Seat upholstery: ₹45,000
+Dashboard & trim: ₹28,000
+Steering wheel: ₹12,000
+Floor & cargo: ₹15,000
+Ambient lighting: ₹18,000
+Installation: ₹25,000
+Total package: ₹143,000
+Financing options available
+Customer Inspiration Gallery
+User-submitted photos of similar interior customizations
+Before/after comparisons
+Owner testimonials and satisfaction ratings
+Body Wrap & Paint Customization
+External Finish Studio
+Header: "Exterior Finish Customization"
+Visualization: Rotating 3D model with dynamic lighting conditions
+Paint Options
+Factory Colors
+Original manufacturer paints
+Special/limited editions
+Custom Paint
+Color mixer with RGB/Hex values
+Finish types (gloss, matte, satin, metallic, pearl)
+Multi-tone designs
+Gradient effects
+Vinyl Wrap Selection
+Full Wraps
+Solid colors
+Carbon fiber patterns
+Metallic finishes
+Matte textures
+Chrome options
+Partial Wraps
+Roof wraps
+Hood designs
+Side stripe patterns
+Mirror covers
+Custom Graphics
+Design Categories
+Racing stripes
+Geometric patterns
+Artistic designs
+Corporate/promotional
+Customization Tools
+Scale and position adjustment
+Color variation options
+Opacity settings
+Placement preview
+Paint Protection Options
+Ceramic coating simulation
+Hydrophobic effect demonstration
+Gloss enhancement preview
+Longevity information
+Protection film placement
+High-impact areas highlighting
+Transparency/visibility preview
+Self-healing demonstration
+Real-Time Environmental Simulation
+Daylight appearance
+Night/street light viewing
+Rainy condition simulation
+Showroom lighting
+Natural sunlight variations
+Application Information
+DIY difficulty rating: 5/5 (Not Recommended)
+Professional installation time: 3-7 days
+Curing/settling period required
+Maintenance instructions
+Certified Application Centers
+Map view of wrap/paint specialists
+Portfolio galleries of previous work
+Paint booth specifications
+Quality certifications
+Warranty offered by installer
+Pricing Breakdown
+Full body paint: ₹85,000-150,000
+Full vinyl wrap: ₹45,000-65,000
+Partial wraps: ₹15,000-30,000
+Custom graphics: ₹8,000-25,000
+Ceramic coating: ₹15,000-30,000
+Paint correction (if needed): ₹10,000-25,000
+Total package (customizable): ₹45,000-150,000+
+Expected Results Timeline
+Visual timeline showing:
+Preparation stage (1-2 days)
+Application process (2-3 days)
+Curing time (1-2 days)
+Final inspection
+Before/after comparison slider
+Performance Upgrades
+Engine Performance Studio
+Header: "Performance Enhancement Center"
+Visualization: Transparent engine view with highlighted components
+Engine Upgrades
+Air Intake Systems
+Cold air intake designs
+Ram air systems
+Performance filters
+Airbox modifications
+Exhaust Systems
+Catback systems
+Headers/manifolds
+Muffler options
+Tip design and material
+Sound profile preview (audio samples)
+ECU Tuning Options
+Power Levels
+Stage 1 (Software only)
+Stage 2 (Software + basic hardware)
+Stage 3 (Complete performance package)
+Tuning Parameters
+Horsepower gains graph
+Torque improvements chart
+Fuel efficiency impact
+Throttle response simulation
+Drivetrain Enhancements
+Transmission Upgrades
+Short shifter kits
+Clutch upgrades
+Differential options
+Suspension Components
+Coilovers
+Lowering springs
+Sway bars
+Bushing replacements
+Adjustability options
+Braking System Improvements
+Brake Kits
+Caliper options (4-piston, 6-piston)
+Rotor selection (slotted, drilled, two-piece)
+Pad compounds for different uses
+Brake line upgrades
+Color customization
+Performance Metrics Simulator
+Interactive graph showing:
+0-100 km/h time improvements
+Quarter-mile estimates
+Braking distance reduction
+Handling G-force increases
+Before/after comparison sliders
+Installation Requirements
+DIY difficulty rating: 4/5
+Professional installation time: 1-5 days (depending on package)
+Specialized tools required
+Tuning equipment needed
+Post-installation break-in procedures
+Performance Specialists Map
+Tuning shops with dyno facilities
+Performance certification badges
+Specialist ratings and reviews
+Video testimonials from customers
+"Factory authorized" indicators
+Pricing Breakdown
+Air intake system: ₹15,000-35,000
+Exhaust system: ₹45,000-85,000
+ECU tune: ₹25,000-45,000
+Suspension package: ₹65,000-120,000
+Brake system upgrade: ₹45,000-95,000
+Labor and dyno tuning: ₹25,000-45,000
+Total performance package: ₹85,000-350,000+
+Legal and Warranty Information
+Emissions compliance status
+Track use vs. street-legal indicators
+Warranty impact warnings
+Insurance considerations
+Registration/certification requirements
+Lighting Customization
+Lighting Design Studio
+Header: "Illuminate Your Ride"
+Visualization: Night-mode vehicle model with lighting system highlights
+Headlight Options
+Technology Types
+LED replacements
+HID conversion kits
+Projector retrofits
+Halo/Angel eye designs
+Color Temperature
+Kelvin scale selection (3000K-8000K)
+Visual warmth/coolness demonstration
+Road visibility simulation
+Legal compliance indicators
+Tail Light Customization
+Style Categories
+LED conversions
+Smoked/tinted options
+Sequential signal patterns
+Light bar designs
+Animation Preview
+Brake light effect
+Turn signal patterns
+Welcome/goodbye sequences
+Custom animation designer
+Accent Lighting Systems
+Exterior Placement
+Underglow positioning
+Wheel well lighting
+Grille illumination
+Door puddle lights
+Interior Ambient
+Footwell lighting
+Dashboard accents
+Door panel contours
+Ceiling star lights
+App-controlled RGB systems
+Functional Add-ons
+Fog light upgrades
+Auxiliary driving lights
+Off-road light bars
+Specialty lighting (rock lights, emergency, utility)
+Night Simulation Environment
+City street visualization
+Highway driving scenario
+Off-road environment
+Show vehicle appearance
+Practical visibility demonstration
+Installation Complexity
+DIY difficulty rating: 3-5/5 (varies by component)
+Professional installation time: 2-8 hours
+Electrical system requirements
+Programming needs for advanced features
+Lighting Specialists
+Map of certified lighting installation centers
+Portfolio of lighting projects
+Specialized in complex electrical work
+Custom programming capabilities
+Waterproofing certification
+Pricing Breakdown
+Headlight upgrade: ₹18,000-45,000
+Tail light customization: ₹12,000-28,000
+Accent lighting package: ₹15,000-35,000
+Underglow system: ₹8,000-18,000
+Interior ambient lighting: ₹5,000-25,000
+Installation and programming: ₹5,000-15,000
+Total lighting package: ₹25,000-120,000+
+Legal Information Center
+Road-legal status indicators
+Color restrictions by region
+Required certification for modified lighting
+On-road vs. off-road/show use designations
+

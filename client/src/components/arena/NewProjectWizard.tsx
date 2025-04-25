@@ -8,7 +8,18 @@ import {
   ChevronRight, 
   ChevronLeft, 
   X,
-  Plus
+  Plus,
+  Bike,
+  TruckIcon,
+  Droplets,
+  Fuel,
+  Zap,
+  FlaskConical,
+  Combine,
+  ScanLine,
+  ListFilter,
+  CheckCircle,
+  Image as ImageIcon
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -143,12 +154,20 @@ const NewProjectWizard: React.FC<NewProjectWizardProps> = ({
   const [isOpen, setIsOpen] = useState(propIsOpen || false);
   const [currentStep, setCurrentStep] = useState(1);
   const [vehicleSource, setVehicleSource] = useState<'existing' | 'new'>('existing');
+  const [vehicleType, setVehicleType] = useState<'two-wheeler' | 'three-wheeler' | 'four-wheeler' | ''>('');
+  const [fuelType, setFuelType] = useState<'petrol' | 'diesel' | 'electric' | 'hybrid' | 'cng-lpg' | ''>('');
+  const [registrationVerified, setRegistrationVerified] = useState(false);
   
   // Form state
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     vehicleId: 0,
+    manufacturer: '',
+    model: '',
+    year: '',
+    variant: '',
+    plateNumber: '',
     designType: '',
     visibility: 'private',
     collaborate: false
@@ -161,10 +180,18 @@ const NewProjectWizard: React.FC<NewProjectWizardProps> = ({
   const resetWizard = () => {
     setCurrentStep(1);
     setVehicleSource('existing');
+    setVehicleType('');
+    setFuelType('');
+    setRegistrationVerified(false);
     setFormData({
       name: '',
       description: '',
       vehicleId: 0,
+      manufacturer: '',
+      model: '',
+      year: '',
+      variant: '',
+      plateNumber: '',
       designType: '',
       visibility: 'private',
       collaborate: false
