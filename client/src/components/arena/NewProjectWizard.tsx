@@ -267,7 +267,11 @@ const NewProjectWizard: React.FC<NewProjectWizardProps> = ({
   const isStepValid = () => {
     switch (currentStep) {
       case 1:
-        return selectedVehicle !== null;
+        if (!vehicleType) return false;
+        if (!fuelType) return false;
+        if (vehicleSource === 'existing' && !selectedVehicle) return false;
+        if (vehicleSource === 'new' && !selectedVehicle) return false;
+        return true;
       case 2:
         return formData.designType !== '';
       case 3:
@@ -313,70 +317,327 @@ const NewProjectWizard: React.FC<NewProjectWizardProps> = ({
   const renderVehicleSelection = () => {
     return (
       <div className="space-y-6">
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <Button
-            variant={vehicleSource === 'existing' ? 'default' : 'outline'}
-            className="h-auto py-3 flex flex-col items-center"
-            onClick={() => setVehicleSource('existing')}
-          >
-            <Car className="h-8 w-8 mb-2" />
-            <span className="font-medium">Select from My Vehicles</span>
-            <span className="text-xs mt-1">Use one of your registered vehicles</span>
-          </Button>
-          
-          <Button
-            variant={vehicleSource === 'new' ? 'default' : 'outline'}
-            className="h-auto py-3 flex flex-col items-center"
-            onClick={() => setVehicleSource('new')}
-          >
-            <Palette className="h-8 w-8 mb-2" />
-            <span className="font-medium">Select a New Vehicle</span>
-            <span className="text-xs mt-1">Browse popular vehicles</span>
-          </Button>
+        <div className="text-center mb-6">
+          <h2 className="text-xl font-bold">Start Your Customization Journey</h2>
+          <p className="text-sm text-muted-foreground">Select vehicle details or import existing vehicle</p>
         </div>
         
-        <ScrollArea className="h-[280px] rounded-md border p-4">
-          <h3 className="font-medium mb-4">
-            {vehicleSource === 'existing' ? 'My Vehicles' : 'Popular Vehicles'}
-          </h3>
-          
-          <div className="grid grid-cols-1 gap-4">
-            {(vehicleSource === 'existing' ? demoVehicles : popularVehicles).map((vehicle) => (
-              <div 
-                key={vehicle.id}
-                className={`
-                  flex border rounded-lg overflow-hidden cursor-pointer transition-all
-                  ${selectedVehicle?.id === vehicle.id ? 'border-primary ring-2 ring-primary/20' : 'hover:border-primary/50'}
-                `}
-                onClick={() => handleSelectVehicle(vehicle)}
+        {/* Vehicle Type Selection */}
+        <div className="mb-6">
+          <p className="text-sm font-medium mb-2">Vehicle Type</p>
+          <div className="grid grid-cols-3 gap-4">
+            <Button
+              variant={vehicleType === 'two-wheeler' ? 'default' : 'outline'}
+              className="h-auto py-4 flex flex-col items-center"
+              onClick={() => setVehicleType('two-wheeler')}
+              title="Motorcycles, scooters"
+            >
+              <Bike className="h-8 w-8 mb-2" />
+              <span className="font-medium">Two-Wheeler</span>
+              <span className="text-xs mt-1 text-muted-foreground">Motorcycles, scooters</span>
+            </Button>
+            
+            <Button
+              variant={vehicleType === 'three-wheeler' ? 'default' : 'outline'}
+              className="h-auto py-4 flex flex-col items-center"
+              onClick={() => setVehicleType('three-wheeler')}
+              title="Auto rickshaws, commercial carriers"
+            >
+              <TruckIcon className="h-8 w-8 mb-2" />
+              <span className="font-medium">Three-Wheeler</span>
+              <span className="text-xs mt-1 text-muted-foreground">Auto rickshaws, carriers</span>
+            </Button>
+            
+            <Button
+              variant={vehicleType === 'four-wheeler' ? 'default' : 'outline'}
+              className="h-auto py-4 flex flex-col items-center"
+              onClick={() => setVehicleType('four-wheeler')}
+              title="Cars, SUVs, trucks"
+            >
+              <Car className="h-8 w-8 mb-2" />
+              <span className="font-medium">Four-Wheeler</span>
+              <span className="text-xs mt-1 text-muted-foreground">Cars, SUVs, trucks</span>
+            </Button>
+          </div>
+        </div>
+        
+        {/* Fuel Type Selection */}
+        {vehicleType && (
+          <div className="mb-6">
+            <p className="text-sm font-medium mb-2">Fuel Type</p>
+            <div className="grid grid-cols-5 gap-2">
+              <Button
+                variant={fuelType === 'petrol' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFuelType('petrol')}
+                className="h-auto py-2 flex flex-col items-center"
               >
-                <div className="w-1/3 h-24">
-                  <img 
-                    src={vehicle.image} 
-                    alt={`${vehicle.make} ${vehicle.model}`} 
-                    className="w-full h-full object-cover"
+                <Droplets className="h-4 w-4 mb-1" />
+                <span className="text-xs">Petrol</span>
+              </Button>
+              
+              <Button
+                variant={fuelType === 'diesel' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFuelType('diesel')}
+                className="h-auto py-2 flex flex-col items-center"
+              >
+                <Fuel className="h-4 w-4 mb-1" />
+                <span className="text-xs">Diesel</span>
+              </Button>
+              
+              <Button
+                variant={fuelType === 'electric' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFuelType('electric')}
+                className="h-auto py-2 flex flex-col items-center"
+              >
+                <Zap className="h-4 w-4 mb-1" />
+                <span className="text-xs">Electric</span>
+              </Button>
+              
+              <Button
+                variant={fuelType === 'hybrid' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFuelType('hybrid')}
+                className="h-auto py-2 flex flex-col items-center"
+              >
+                <Combine className="h-4 w-4 mb-1" />
+                <span className="text-xs">Hybrid</span>
+              </Button>
+              
+              <Button
+                variant={fuelType === 'cng-lpg' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFuelType('cng-lpg')}
+                className="h-auto py-2 flex flex-col items-center"
+              >
+                <FlaskConical className="h-4 w-4 mb-1" />
+                <span className="text-xs">CNG/LPG</span>
+              </Button>
+            </div>
+          </div>
+        )}
+        
+        {/* Vehicle Identification Methods */}
+        {fuelType && (
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <Button
+              variant={vehicleSource === 'existing' ? 'default' : 'outline'}
+              className="h-auto py-3 flex flex-col items-center"
+              onClick={() => setVehicleSource('existing')}
+            >
+              <ScanLine className="h-8 w-8 mb-2" />
+              <span className="font-medium">Add by Registration</span>
+              <span className="text-xs mt-1">Import using license plate</span>
+            </Button>
+            
+            <Button
+              variant={vehicleSource === 'new' ? 'default' : 'outline'}
+              className="h-auto py-3 flex flex-col items-center"
+              onClick={() => setVehicleSource('new')}
+            >
+              <ListFilter className="h-8 w-8 mb-2" />
+              <span className="font-medium">Manual Selection</span>
+              <span className="text-xs mt-1">Choose make, model and year</span>
+            </Button>
+          </div>
+        )}
+        
+        {/* Registration or Manual Selection */}
+        {vehicleSource === 'existing' && fuelType ? (
+          <div className="space-y-4 border rounded-lg p-4">
+            <h3 className="font-medium">Add by Registration</h3>
+            <div className="space-y-3">
+              <div>
+                <Label htmlFor="license-plate">License Plate Number</Label>
+                <div className="flex gap-2 mt-1">
+                  <Input 
+                    id="license-plate" 
+                    placeholder="Enter license plate" 
+                    className="flex-1"
+                    value={formData.plateNumber}
+                    onChange={(e) => handleChange('plateNumber', e.target.value)}
                   />
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setRegistrationVerified(true)}
+                  >
+                    Verify
+                  </Button>
                 </div>
-                <div className="flex-1 p-3 flex flex-col justify-between">
-                  <div>
-                    <h4 className="font-medium">{vehicle.make} {vehicle.model}</h4>
-                    <p className="text-sm text-muted-foreground">{vehicle.year}</p>
+                <p className="text-xs text-muted-foreground mt-1">We'll send an OTP to the registered mobile number</p>
+              </div>
+              
+              {registrationVerified && (
+                <div>
+                  <Label htmlFor="otp">OTP Verification</Label>
+                  <div className="flex gap-2 mt-1">
+                    <Input id="otp" placeholder="Enter OTP" className="flex-1" />
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        // Simulate vehicle found by registration
+                        const foundVehicle = demoVehicles[0];
+                        if (foundVehicle) {
+                          handleSelectVehicle(foundVehicle);
+                        }
+                      }}
+                    >
+                      Verify OTP
+                    </Button>
                   </div>
-                  {vehicle.licensePlate && (
-                    <Badge variant="outline" className="self-start">
-                      {vehicle.licensePlate}
-                    </Badge>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : vehicleSource === 'new' && fuelType ? (
+          <div className="space-y-4 border rounded-lg p-4">
+            <h3 className="font-medium">Manual Selection</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="manufacturer">Manufacturer</Label>
+                <Select 
+                  value={formData.manufacturer}
+                  onValueChange={(value) => handleChange('manufacturer', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select manufacturer" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="honda">Honda</SelectItem>
+                    <SelectItem value="toyota">Toyota</SelectItem>
+                    <SelectItem value="maruti">Maruti Suzuki</SelectItem>
+                    <SelectItem value="tata">Tata Motors</SelectItem>
+                    <SelectItem value="mahindra">Mahindra</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="model">Model</Label>
+                <Select 
+                  disabled={!formData.manufacturer}
+                  value={formData.model}
+                  onValueChange={(value) => handleChange('model', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select model" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="city">City</SelectItem>
+                    <SelectItem value="civic">Civic</SelectItem>
+                    <SelectItem value="nexon">Nexon</SelectItem>
+                    <SelectItem value="xuv700">XUV700</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="year">Year</Label>
+                <Select 
+                  disabled={!formData.model}
+                  value={formData.year}
+                  onValueChange={(value) => handleChange('year', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select year" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="2024">2024</SelectItem>
+                    <SelectItem value="2023">2023</SelectItem>
+                    <SelectItem value="2022">2022</SelectItem>
+                    <SelectItem value="2021">2021</SelectItem>
+                    <SelectItem value="2020">2020</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="variant">Variant</Label>
+                <Select 
+                  disabled={!formData.year}
+                  value={formData.variant}
+                  onValueChange={(value) => {
+                    handleChange('variant', value);
+                    
+                    // Simulate vehicle selection when all fields are filled
+                    if (formData.manufacturer && formData.model && formData.year && value) {
+                      // Find a matching vehicle from our demo data
+                      const matchingVehicle = popularVehicles.find(v => 
+                        v.make.toLowerCase().includes(formData.manufacturer) ||
+                        v.model.toLowerCase().includes(formData.model)
+                      );
+                      
+                      if (matchingVehicle) {
+                        handleSelectVehicle(matchingVehicle);
+                      }
+                    }
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select variant" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="base">Base</SelectItem>
+                    <SelectItem value="mid">Mid</SelectItem>
+                    <SelectItem value="top">Top</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+        ) : null}
+        
+        {/* Vehicle Preview and Stats */}
+        {selectedVehicle && (
+          <div className="rounded-lg border p-4 mt-4">
+            <div className="flex items-center">
+              <div className="w-24 h-20 rounded overflow-hidden mr-4">
+                <img 
+                  src={selectedVehicle.image} 
+                  alt={`${selectedVehicle.make} ${selectedVehicle.model}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium">{selectedVehicle.make} {selectedVehicle.model}</h3>
+                <div className="flex flex-wrap items-center text-sm text-muted-foreground gap-3 mt-1">
+                  <span>{selectedVehicle.year}</span>
+                  <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
+                  <span>{fuelType || 'Petrol'}</span>
+                  {selectedVehicle.licensePlate && (
+                    <>
+                      <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
+                      <span>{selectedVehicle.licensePlate}</span>
+                    </>
                   )}
                 </div>
-                {selectedVehicle?.id === vehicle.id && (
-                  <div className="w-8 flex items-center justify-center bg-primary/10 text-primary">
-                    <Check className="h-5 w-5" />
-                  </div>
-                )}
               </div>
-            ))}
+            </div>
+            
+            <div className="mt-4 grid grid-cols-4 gap-2 text-center">
+              <div className="rounded bg-muted p-2">
+                <p className="text-xs text-muted-foreground">Compatibility</p>
+                <p className="font-medium">95%</p>
+              </div>
+              <div className="rounded bg-muted p-2">
+                <p className="text-xs text-muted-foreground">Budget Range</p>
+                <p className="font-medium">₹45K-120K</p>
+              </div>
+              <div className="rounded bg-muted p-2">
+                <p className="text-xs text-muted-foreground">Est. Time</p>
+                <p className="font-medium">3-7 days</p>
+              </div>
+              <div className="rounded bg-muted p-2">
+                <p className="text-xs text-muted-foreground">Parts</p>
+                <p className="font-medium">Available</p>
+              </div>
+            </div>
           </div>
-        </ScrollArea>
+        )}
       </div>
     );
   };
