@@ -31,6 +31,7 @@ import NewArenaDashboard from "@/pages/new-arena-dashboard";
 import ArenaDashboardNew from "@/pages/arena-dashboard-new";
 import ArenaDashboardEnhanced from "@/pages/arena-dashboard-enhanced";
 import ArenaMain from "@/pages/arena-main";
+import ProjectCustomization from "@/pages/project-customization";
 
 function Router() {
   const [location] = useLocation();
@@ -342,6 +343,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <ArenaMain />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/project/:projectId/:studio?">
+            {(params) => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <ProjectCustomization />
               </motion.div>
             )}
           </Route>
