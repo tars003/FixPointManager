@@ -32,6 +32,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 interface Vehicle {
   id: number;
@@ -43,7 +44,11 @@ interface Vehicle {
 }
 
 interface NewProjectWizardProps {
-  onComplete: (projectData: any) => void;
+  onComplete?: (projectData: any) => void;
+  onCreateProject?: (projectData: any) => void;
+  onClose?: () => void;
+  availableVehicles?: Vehicle[];
+  isOpen?: boolean;
 }
 
 // Mock vehicle data
@@ -128,8 +133,14 @@ const designTypes = [
   }
 ];
 
-const NewProjectWizard: React.FC<NewProjectWizardProps> = ({ onComplete }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const NewProjectWizard: React.FC<NewProjectWizardProps> = ({ 
+  onComplete, 
+  onCreateProject, 
+  onClose, 
+  availableVehicles,
+  isOpen: propIsOpen
+}) => {
+  const [isOpen, setIsOpen] = useState(propIsOpen || false);
   const [currentStep, setCurrentStep] = useState(1);
   const [vehicleSource, setVehicleSource] = useState<'existing' | 'new'>('existing');
   
@@ -205,11 +216,24 @@ const NewProjectWizard: React.FC<NewProjectWizardProps> = ({ onComplete }) => {
   
   // Complete the wizard
   const handleFinish = () => {
-    onComplete({
+    const projectData = {
       ...formData,
       vehicleDetails: selectedVehicle
-    });
-    handleClose();
+    };
+    
+    if (onComplete) {
+      onComplete(projectData);
+    }
+    
+    if (onCreateProject) {
+      onCreateProject(projectData);
+    }
+    
+    if (onClose) {
+      onClose();
+    } else {
+      handleClose();
+    }
   };
   
   // Check if current step is valid to proceed
