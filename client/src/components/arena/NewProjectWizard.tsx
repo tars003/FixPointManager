@@ -616,28 +616,136 @@ const NewProjectWizard: React.FC<NewProjectWizardProps> = ({
       </Button>
       
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[800px] max-h-[85vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>Create New Project</DialogTitle>
             <DialogDescription>
-              Create a new vehicle customization project in {currentStep} easy steps
+              Create a new vehicle customization project
             </DialogDescription>
           </DialogHeader>
           
-          {renderSteps()}
-          
-          <motion.div
-            key={currentStep}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            variants={stepVariants}
-            transition={{ duration: 0.3 }}
+          <Tabs 
+            defaultValue="vehicle" 
+            value={
+              currentStep === 1 ? "vehicle" :
+              currentStep === 2 ? "type" :
+              currentStep === 3 ? "details" : "review"
+            }
+            onValueChange={(value) => {
+              switch(value) {
+                case "vehicle": setCurrentStep(1); break;
+                case "type": setCurrentStep(2); break;
+                case "details": setCurrentStep(3); break;
+                case "review": setCurrentStep(4); break;
+              }
+            }}
+            className="w-full"
           >
-            {renderStepContent()}
-          </motion.div>
+            <TabsList className="grid grid-cols-4 h-auto p-1 mb-6">
+              <TabsTrigger
+                value="vehicle"
+                className="flex flex-col items-center py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+              >
+                <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium
+                  ${currentStep >= 1 ? "bg-primary text-white" : "bg-muted-foreground/20"}`}>
+                  {currentStep > 1 ? <Check className="h-4 w-4" /> : "1"}
+                </div>
+                <span className="mt-1 text-xs">Vehicle</span>
+              </TabsTrigger>
+              
+              <TabsTrigger
+                value="type"
+                className="flex flex-col items-center py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+                disabled={!selectedVehicle}
+              >
+                <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium
+                  ${currentStep >= 2 ? "bg-primary text-white" : "bg-muted-foreground/20"}`}>
+                  {currentStep > 2 ? <Check className="h-4 w-4" /> : "2"}
+                </div>
+                <span className="mt-1 text-xs">Type</span>
+              </TabsTrigger>
+              
+              <TabsTrigger
+                value="details"
+                className="flex flex-col items-center py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+                disabled={formData.designType === ''}
+              >
+                <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium
+                  ${currentStep >= 3 ? "bg-primary text-white" : "bg-muted-foreground/20"}`}>
+                  {currentStep > 3 ? <Check className="h-4 w-4" /> : "3"}
+                </div>
+                <span className="mt-1 text-xs">Details</span>
+              </TabsTrigger>
+              
+              <TabsTrigger
+                value="review"
+                className="flex flex-col items-center py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+                disabled={formData.name.trim() === ''}
+              >
+                <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium
+                  ${currentStep >= 4 ? "bg-primary text-white" : "bg-muted-foreground/20"}`}>
+                  4
+                </div>
+                <span className="mt-1 text-xs">Review</span>
+              </TabsTrigger>
+            </TabsList>
+            
+            <div className="max-h-[400px] overflow-y-auto">
+              <TabsContent value="vehicle" className="mt-0 border-0 p-0">
+                <motion.div
+                  key="vehicle-step"
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  variants={stepVariants}
+                  transition={{ duration: 0.3 }}
+                >
+                  {renderVehicleSelection()}
+                </motion.div>
+              </TabsContent>
+              
+              <TabsContent value="type" className="mt-0 border-0 p-0">
+                <motion.div
+                  key="type-step"
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  variants={stepVariants}
+                  transition={{ duration: 0.3 }}
+                >
+                  {renderDesignTypeSelection()}
+                </motion.div>
+              </TabsContent>
+              
+              <TabsContent value="details" className="mt-0 border-0 p-0">
+                <motion.div
+                  key="details-step"
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  variants={stepVariants}
+                  transition={{ duration: 0.3 }}
+                >
+                  {renderProjectDetails()}
+                </motion.div>
+              </TabsContent>
+              
+              <TabsContent value="review" className="mt-0 border-0 p-0">
+                <motion.div
+                  key="review-step"
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  variants={stepVariants}
+                  transition={{ duration: 0.3 }}
+                >
+                  {renderReviewProject()}
+                </motion.div>
+              </TabsContent>
+            </div>
+          </Tabs>
           
-          <DialogFooter className="flex justify-between gap-2 sm:justify-between">
+          <DialogFooter className="flex justify-between gap-2 sm:justify-between mt-6 pt-4 border-t">
             <Button
               variant="outline"
               onClick={currentStep === 1 ? handleClose : handlePrevStep}
