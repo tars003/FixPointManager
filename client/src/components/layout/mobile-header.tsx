@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronRight, AlertCircle } from 'lucide-react';
+import { Menu, X, ChevronRight, AlertCircle, Receipt } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { NotificationPopover } from '@/components/notification/notification-popover';
@@ -26,7 +26,8 @@ import {
   FileSearch,
   AlertTriangle,
   Truck,
-  Gamepad2
+  Gamepad2,
+  BookOpen
 } from 'lucide-react';
 
 const navItems = [
@@ -53,7 +54,7 @@ const navItems = [
   },
   {
     title: 'FASTag & E-Challan',
-    icon: CreditCard,
+    icon: Receipt,
     href: '/fastag-echallan',
     color: 'text-indigo-500',
     bgColor: 'bg-indigo-50',
@@ -106,6 +107,13 @@ const navItems = [
     href: '/driving-education',
     color: 'text-amber-500',
     bgColor: 'bg-amber-50',
+  },
+  {
+    title: 'Educational',
+    icon: BookOpen,
+    href: '/educational',
+    color: 'text-emerald-500',
+    bgColor: 'bg-emerald-50',
   },
   {
     title: 'Arena',

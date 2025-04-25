@@ -23,7 +23,8 @@ import {
   Truck,
   Gamepad2,
   Tag,
-  Receipt
+  Receipt,
+  BookOpen
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -104,6 +105,13 @@ const navItems = [
     href: '/driving-education',
     color: 'text-amber-500',
     bgColor: 'bg-amber-50',
+  },
+  {
+    title: 'Educational',
+    icon: BookOpen,
+    href: '/educational',
+    color: 'text-emerald-500',
+    bgColor: 'bg-emerald-50',
   },
   {
     title: 'Arena',
