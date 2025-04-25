@@ -42,7 +42,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import ContentReaction from '@/components/ui/content-reaction';
 import FeedbackButton from '@/components/ui/feedback-button';
-import MapView from '@/components/nearby/map-view';
+import EnhancedMapView from '@/components/nearby/enhanced-map-view';
 
 // Vehicle types
 const VEHICLE_TYPES = [

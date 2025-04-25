@@ -64,40 +64,8 @@ interface EnhancedMapViewProps {
   selectedCategories?: string[];
 }
 
-// Extend ServiceProvider with additional fields
-interface EnhancedServiceProvider {
-  id: number;
-  name: string;
-  description: string | null;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  phone: string;
-  email: string;
-  website: string | null;
-  latitude: string;
-  longitude: string;
-  services: string[];
-  supportedVehicleTypes: string[];
-  supportedFuelTypes: string[];
-  amenities: string[] | null; // Changed from string[] | undefined to string[] | null to match schema
-  operatingHours: any;
-  images: string[] | null;
-  logoUrl: string | null;
-  isVerified: boolean;
-  isPremium: boolean;
-  acceptsOnlineBooking: boolean;
-  acceptsEmergencyService: boolean;
-  turnaroundTimeHours: number | null;
-  rating: number;
-  reviewCount: number;
-  averagePrice: number | null;
-  tags: string[] | null;
-  createdAt: Date;
-  updatedAt: Date;
-  
-  // Additional enhanced fields
+// Combine ServiceProvider type with enhanced fields
+type EnhancedServiceProvider = ServiceProvider & {
   category?: MarkerCategory;
   isOpen?: boolean;
   distance?: number;
@@ -236,15 +204,16 @@ const EnhancedMapView = ({
     // Enhance providers with additional data
     const enhancedProviders = providers.map(provider => {
       const category = getMarkerCategory(provider);
-      // Add mock data that would come from the backend
+      // Add extended data that would come from the backend
       const enhancedProvider: EnhancedServiceProvider = {
         ...provider,
         category,
-        isOpen: Math.random() > 0.2, // Mock data
+        isOpen: Math.random() > 0.2, // Sample data for demonstration
         waitTime: ['No wait', '5-10 mins', '15-20 mins', '30+ mins'][Math.floor(Math.random() * 4)],
-        amenities: ['Restrooms', 'Food', 'Wi-Fi', 'Coffee', 'Parking', 'Air conditioning'].filter(() => Math.random() > 0.5),
+        // Use provider's actual amenities if available, or provide sample data
+        amenities: provider.amenities || ['Restrooms', 'Food', 'Wi-Fi', 'Coffee', 'Parking', 'Air conditioning'].filter(() => Math.random() > 0.5),
         specializations: ['Engine repair', 'Electrical', 'Transmission', 'Suspension', 'Brakes', 'A/C Service'].filter(() => Math.random() > 0.6),
-        operatingHours: [
+        formattedOperatingHours: [
           { day: 'Monday', hours: '9:00 AM - 6:00 PM' },
           { day: 'Tuesday', hours: '9:00 AM - 6:00 PM' },
           { day: 'Wednesday', hours: '9:00 AM - 6:00 PM' },
@@ -491,7 +460,7 @@ const EnhancedMapView = ({
                   </div>
                 )}
                 
-                {selectedProvider.operatingHours && (
+                {selectedProvider.formattedOperatingHours && (
                   <Accordion type="single" collapsible>
                     <AccordionItem value="hours">
                       <AccordionTrigger className="text-sm py-2">
@@ -499,7 +468,7 @@ const EnhancedMapView = ({
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="text-xs space-y-1">
-                          {selectedProvider.operatingHours.map((item, i) => (
+                          {selectedProvider.formattedOperatingHours.map((item: {day: string, hours: string}, i: number) => (
                             <div key={i} className="flex justify-between">
                               <span className="font-medium">{item.day}</span>
                               <span>{item.hours}</span>

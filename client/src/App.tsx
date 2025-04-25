@@ -14,7 +14,8 @@ import PageTransition from "@/components/transitions/page-transition";
 import MyVehicles from "@/pages/my-vehicles-updated";
 import AddVehicle from "@/pages/add-vehicle";
 import BookService from "@/pages/book-service";
-import Nearby from "@/pages/nearby";
+// Import the new enhanced nearby services page
+import Nearby from "@/pages/nearby-new";
 import Explore from "@/pages/explore";
 import LearnDriving from "@/pages/learn-driving";
 import Dashboard from "@/pages/dashboard";
