@@ -337,12 +337,91 @@ const FinancialCalculator: React.FC = () => {
             </div>
           </TabsContent>
           
-          <TabsContent value="affordability" className="pt-3">
-            <div className="p-8 text-center">
-              <p className="text-neutral-500 mb-4">
-                Tell us your monthly budget, and we'll show you vehicles you can afford.
-              </p>
-              <Button className="w-full">Calculate Affordability</Button>
+          <TabsContent value="affordability" className="pt-3 space-y-4">
+            {/* Income and Expenses */}
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <label className="text-sm font-medium">Monthly Income</label>
+                <span className="text-sm">₹80,000</span>
+              </div>
+              <Slider
+                value={[80000]}
+                min={25000}
+                max={500000}
+                step={5000}
+                onValueChange={() => {}}
+              />
+              <div className="flex justify-between text-xs text-neutral-500">
+                <span>₹25K</span>
+                <span>₹5L</span>
+              </div>
+            </div>
+            
+            {/* Existing EMIs */}
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <label className="text-sm font-medium">Existing EMIs</label>
+                <span className="text-sm">₹15,000</span>
+              </div>
+              <Slider
+                value={[15000]}
+                min={0}
+                max={100000}
+                step={1000}
+                onValueChange={() => {}}
+              />
+              <div className="flex justify-between text-xs text-neutral-500">
+                <span>₹0</span>
+                <span>₹1L</span>
+              </div>
+            </div>
+            
+            {/* Credit Score */}
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <label className="text-sm font-medium">Credit Score</label>
+                <span className="text-sm">750</span>
+              </div>
+              <Slider
+                value={[750]}
+                min={300}
+                max={900}
+                step={10}
+                onValueChange={() => {}}
+              />
+              <div className="flex justify-between text-xs text-neutral-500">
+                <span>300</span>
+                <span>900</span>
+              </div>
+            </div>
+            
+            {/* Results */}
+            <div className="bg-neutral-50 rounded-lg p-4 border mt-6">
+              <h4 className="font-medium mb-3">Your Affordability Results</h4>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white p-3 rounded border">
+                  <div className="text-sm text-neutral-500">Max Loan Amount</div>
+                  <div className="font-semibold mt-1">₹25,00,000</div>
+                </div>
+                
+                <div className="bg-white p-3 rounded border">
+                  <div className="text-sm text-neutral-500">Recommended EMI</div>
+                  <div className="font-semibold mt-1">₹32,500/mo</div>
+                </div>
+                
+                <div className="bg-white p-3 rounded border">
+                  <div className="text-sm text-neutral-500">Vehicle Budget</div>
+                  <div className="font-semibold mt-1">₹30,00,000</div>
+                </div>
+                
+                <div className="bg-white p-3 rounded border">
+                  <div className="text-sm text-neutral-500">Down Payment</div>
+                  <div className="font-semibold mt-1">₹5,00,000</div>
+                </div>
+              </div>
+              
+              <Button variant="outline" className="w-full mt-4">Find Vehicles in My Budget</Button>
             </div>
           </TabsContent>
         </Tabs>
