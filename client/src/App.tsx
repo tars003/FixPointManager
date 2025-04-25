@@ -25,7 +25,7 @@ import EmergencyServices from "@/pages/emergency-services";
 import DrivingEducation from "@/pages/driving-education";
 import FastagEchallan from "@/pages/fastag-echallan";
 import EducationalPage from "@/pages/educational";
-import ArenaPage from "@/pages/arena";
+import Arena from "@/pages/arena";
 import ArenaDashboard from "@/pages/arena-dashboard";
 import NewArenaDashboard from "@/pages/new-arena-dashboard";
 import ArenaDashboardNew from "@/pages/arena-dashboard-new";
@@ -315,7 +315,7 @@ function Router() {
                 variants={pageVariants}
                 transition={{ duration: 0.3 }}
               >
-                <ArenaDashboardNew />
+                <Arena />
               </motion.div>
             )}
           </Route>
