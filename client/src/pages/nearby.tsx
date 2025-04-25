@@ -3,12 +3,14 @@ import { useQuery } from '@tanstack/react-query';
 import { ServiceProvider } from '@shared/schema';
 import { useLocation } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
-import { MapPin, List, MapIcon } from 'lucide-react';
+import { MapPin, List, MapIcon, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import MapView from '@/components/nearby/map-view';
+import ContentReaction from '@/components/ui/content-reaction';
+import FeedbackButton from '@/components/ui/feedback-button';
 
 const Nearby = () => {
   const [, navigate] = useLocation();
@@ -161,12 +163,27 @@ const Nearby = () => {
                       )}
                     </div>
                     
-                    <Button 
-                      className="w-full mt-4" 
-                      onClick={() => handleSelectProvider(provider)}
-                    >
-                      Select Provider
-                    </Button>
+                    <div className="flex flex-col space-y-4 mt-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-neutral-light flex items-center">
+                          <MessageSquare className="h-3.5 w-3.5 mr-1" />
+                          Give feedback on this provider
+                        </span>
+                        <ContentReaction
+                          contentId={`provider-${provider.id}`}
+                          contentType="provider"
+                          variant="minimal"
+                          enableComments={true}
+                        />
+                      </div>
+                      
+                      <Button 
+                        className="w-full" 
+                        onClick={() => handleSelectProvider(provider)}
+                      >
+                        Select Provider
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
@@ -179,6 +196,65 @@ const Nearby = () => {
           )}
         </TabsContent>
       </Tabs>
+      
+      {/* Service Provider Feedback Section */}
+      {!isLoading && !isError && filteredProviders && filteredProviders.length > 0 && (
+        <div className="mt-8 bg-white rounded-xl p-6 border shadow-sm">
+          <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
+            <div>
+              <h3 className="font-semibold text-lg">How was your experience with our service finder?</h3>
+              <p className="text-neutral-light">Your feedback helps us improve our nearby services feature</p>
+            </div>
+            <ContentReaction 
+              contentId="nearby-service-finder"
+              contentType="feature"
+              variant="standard"
+              showCount={true}
+              className="pt-2 sm:pt-0"
+            />
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-neutral-50 rounded-lg p-4 border">
+              <h4 className="font-medium mb-2">Location Accuracy</h4>
+              <p className="text-sm text-neutral-light mb-3">Were the service providers accurately located on the map?</p>
+              <ContentReaction 
+                contentId="nearby-location-accuracy"
+                contentType="feature"
+                variant="minimal"
+              />
+            </div>
+            
+            <div className="bg-neutral-50 rounded-lg p-4 border">
+              <h4 className="font-medium mb-2">Search Experience</h4>
+              <p className="text-sm text-neutral-light mb-3">How easy was it to find the services you were looking for?</p>
+              <ContentReaction 
+                contentId="nearby-search-experience"
+                contentType="feature"
+                variant="minimal"
+              />
+            </div>
+            
+            <div className="bg-neutral-50 rounded-lg p-4 border">
+              <h4 className="font-medium mb-2">Provider Information</h4>
+              <p className="text-sm text-neutral-light mb-3">Was the information about service providers helpful?</p>
+              <ContentReaction 
+                contentId="nearby-provider-info"
+                contentType="feature"
+                variant="minimal"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Add a floating feedback button */}
+      <FeedbackButton 
+        contentId="vehicleassist-nearby"
+        contentType="feature"
+        position="bottom-right"
+        variant="pill"
+      />
     </div>
   );
 };

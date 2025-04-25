@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { ServiceProvider } from '@shared/schema';
-import { MapPin, Navigation } from 'lucide-react';
+import { MapPin, Navigation, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import ContentReaction from '@/components/ui/content-reaction';
 
 interface MapViewProps {
   providers: ServiceProvider[];
@@ -81,7 +82,7 @@ const MapView = ({ providers, onSelectProvider }: MapViewProps) => {
 
     // Clear existing markers
     markers.forEach(marker => marker.setMap(null));
-    const newMarkers = [];
+    const newMarkers: any[] = [];
 
     // Add markers for each provider
     for (const provider of providers) {
@@ -192,7 +193,20 @@ const MapView = ({ providers, onSelectProvider }: MapViewProps) => {
               )}
             </div>
             
-            <div className="mt-4 flex gap-2">
+            <div className="flex justify-between items-center mt-4 mb-3">
+              <span className="text-xs text-neutral-light flex items-center">
+                <MessageSquare className="h-3.5 w-3.5 mr-1" />
+                Rate this provider
+              </span>
+              <ContentReaction
+                contentId={`provider-map-${selectedProvider.id}`}
+                contentType="provider"
+                variant="minimal"
+                enableComments={true}
+              />
+            </div>
+            
+            <div className="flex gap-2">
               <Button onClick={handleSelectProvider} className="flex-1">
                 Select Provider
               </Button>
