@@ -1,0 +1,96 @@
+# Arena Dashboard Development Prompt
+
+## Overview
+Create the main dashboard for the Arena vehicle customization platform as described below. This dashboard serves as the central hub for all customization activities, showcasing user's vehicles, inspiration content, and quick access to all platform features.
+
+## Dashboard Header Requirements
+
+The main header should contain:
+- Arena logo (left-aligned)
+- Primary navigation with: HOME, MY VEHICLES, MARKETPLACE, SERVICES, ARENA
+- User action icons for: SEARCH, NOTIFICATIONS, USER PROFILE
+- Secondary navigation specific to Arena with tabs for: MY DASHBOARD, SAVED DESIGNS, TRENDING, COMMUNITY, TUTORIALS
+
+## Main Content Sections
+
+### Hero Section
+Create a prominent hero banner with the headline "CUSTOMIZE YOUR RIDE" and subheading "Transform your vehicle with professional-grade customizations". Include two primary call-to-action buttons: "START NEW PROJECT" and "CONTINUE SAVED PROJECT".
+
+### Quick Actions Panel
+Implement a quick access panel with icon-based shortcuts to:
+- My Vehicles
+- Recent Designs
+- Saved Favorites
+- Installation Appointments
+
+### Featured Customization Projects
+Display a section titled "INSPIRATION GALLERY" containing 3-4 featured customization projects. Each project card should display:
+- Before/after vehicle images
+- Project title
+- Number of modifications
+- Total cost
+- View project button
+
+### Trending Categories
+Create a section titled "POPULAR RIGHT NOW" showcasing 4 trending customization categories:
+- Alloy Wheels (Starting at ₹12,000, 300+ Options)
+- Body Wraps (Starting at ₹18,000, 150+ Designs)
+- Performance Upgrades (Starting at ₹8,000, 200+ Parts)
+- Interior Customization (Starting at ₹5,000, 250+ Options)
+
+### Vehicle Type Shortcuts
+Include a section titled "SELECT YOUR VEHICLE TYPE" with visual shortcuts to:
+- Two-Wheelers
+- Three-Wheelers
+- Four-Wheelers
+Add a descriptive text: "Customize any vehicle with our extensive catalog of parts and accessories"
+
+### Community Showcase
+Create a "COMMUNITY HIGHLIGHTS" section displaying a grid of 6 user-submitted customization projects. Each entry should show:
+- Vehicle image
+- Owner username
+- Vehicle details
+- Like/vote count
+Include text: "Join 25,000+ vehicle enthusiasts sharing their custom builds" with a "JOIN COMMUNITY" button.
+
+### Recent Activity Feed
+Implement a "YOUR RECENT ACTIVITY" section in timeline format showing the user's latest interactions with the platform, such as:
+- Saved items
+- Viewed vehicles/accessories
+- Completed customizations
+- Scheduled appointments
+Include a "VIEW FULL HISTORY" button.
+
+### Service Integration Section
+Create a "COMPLETE YOUR CUSTOMIZATION" section with service shortcuts:
+- Find Nearby Installation Centers
+- Book Professional Installation
+- DIY Installation Guides
+- Maintenance Tips
+Include text: "We partner with 200+ certified installation centers nationwide"
+
+### Featured Brands
+Add a "TOP BRANDS" section showing a horizontally scrollable row of partner brand logos.
+Include text: "All parts come with manufacturer warranty and quality assurance"
+
+### Promotional Banner
+Include a promotional section with text "FIRST-TIME CUSTOMIZER? Get 10% off on your first customization project" with a "CLAIM OFFER" button and validity period.
+
+## Technical Requirements
+- Dashboard must be fully responsive for desktop, tablet and mobile screens
+- Implement lazy loading for image-heavy sections
+- User activity and saved projects must be pulled from user account data
+- Community showcase should display the most popular recent submissions
+- Trending categories should be dynamically updated based on platform analytics
+- Vehicle selection shortcuts should directly lead to the appropriate vehicle selection flow
+- All numerical data (projects count, pricing, options available) should be pulled from live database
+
+## User Experience Notes
+- Primary actions should be highly visible and accessible
+- Emphasize visual content - high-quality images of customized vehicles
+- Incorporate subtle animations for section transitions and hover states
+- Ensure the dashboard loads quickly with appropriate placeholder content during data fetch
+- Navigation should be intuitive with clear visual hierarchy
+- Include onboarding tooltips for first-time users
+
+This prompt provides complete guidance for developers to implement the main dashboard of the Arena platform, incorporating all necessary sections while allowing for technical implementation details to be determined by the development team.
