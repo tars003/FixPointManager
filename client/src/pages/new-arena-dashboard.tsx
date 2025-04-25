@@ -57,6 +57,92 @@ const formatRelativeTime = (dateString: string) => {
   return `${Math.floor(diffInSeconds / 604800)} weeks ago`;
 };
 
+// Define interfaces for our data structures
+interface Project {
+  id: number;
+  title: string;
+  vehicle?: string;
+  vehicleId?: number;
+  userId?: number;
+  image?: string;
+  progress: number;
+  lastEdited: string;
+  totalCost: number;
+  isPublic?: boolean;
+  status?: string;
+}
+
+interface VehicleProfile {
+  id: number;
+  make: string;
+  model: string;
+  year: number;
+  trim: string;
+  color: string;
+  image: string;
+  modifications: number;
+}
+
+interface Appointment {
+  id: number;
+  service: string;
+  vehicle: string;
+  date: string;
+  provider: string;
+  status: string;
+  cost: number;
+}
+
+interface Product {
+  id: number;
+  name: string;
+  category: string;
+  price: number;
+  image: string;
+  rating: number;
+  reviewCount: number;
+  compatibility: string[];
+}
+
+interface CommunityProject {
+  id: number;
+  title: string;
+  user: {
+    name: string;
+    avatar: string;
+    isVerified: boolean;
+  };
+  vehicle: string;
+  image: string;
+  likes: number;
+  comments: number;
+  totalCost: number;
+  difficulty: string;
+}
+
+interface Tutorial {
+  id: number;
+  title: string;
+  type: string;
+  image: string;
+  duration: string;
+  level: string;
+  instructor: string;
+  views: number;
+  category: string;
+}
+
+interface DIYGuide {
+  id: number;
+  title: string;
+  image: string;
+  difficulty: string;
+  time: string;
+  tools: number;
+  steps: number;
+  category: string;
+}
+
 const NewArenaDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("studio");
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
@@ -149,7 +235,7 @@ const NewArenaDashboard: React.FC = () => {
   };
   
   // Handle project update
-  const handleUpdateProject = (projectId: number, updates: any) => {
+  const handleUpdateProject = (projectId: number, updates: Record<string, unknown>) => {
     updateProject(projectId, updates);
   };
   
@@ -536,7 +622,7 @@ const NewArenaDashboard: React.FC = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {activeProjects.map(project => (
+              {activeProjects.map((project: Project) => (
                 <Card key={project.id} className="overflow-hidden hover:shadow-md transition-all">
                   <div className="h-40 overflow-hidden relative">
                     <img 
@@ -642,7 +728,7 @@ const NewArenaDashboard: React.FC = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {vehicles.map(vehicle => (
+              {vehicles.map((vehicle: VehicleProfile) => (
                 <Card key={vehicle.id} className="overflow-hidden hover:shadow-md transition-all">
                   <div className="h-36 overflow-hidden">
                     <img 
@@ -679,7 +765,7 @@ const NewArenaDashboard: React.FC = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {appointments.map(appointment => (
+              {appointments.map((appointment: Appointment) => (
                 <Card key={appointment.id} className="overflow-hidden hover:shadow-md transition-all">
                   <div className="flex">
                     <div className="bg-[#1E3A8A] text-white p-4 flex flex-col items-center justify-center min-w-[80px]">
@@ -772,7 +858,7 @@ const NewArenaDashboard: React.FC = () => {
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {trendingProducts.map(product => (
+              {trendingProducts.map((product: Product) => (
                 <Card key={product.id} className="overflow-hidden hover:shadow-md transition-all">
                   <div className="h-40 overflow-hidden">
                     <img 
@@ -815,7 +901,7 @@ const NewArenaDashboard: React.FC = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {communityProjects.map(project => (
+              {communityProjects.map((project: CommunityProject) => (
                 <Card key={project.id} className="overflow-hidden hover:shadow-md transition-all">
                   <div className="h-48 overflow-hidden relative">
                     <img 
@@ -969,7 +1055,7 @@ const NewArenaDashboard: React.FC = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {tutorials.map(tutorial => (
+              {tutorials.map((tutorial: Tutorial) => (
                 <Card key={tutorial.id} className="overflow-hidden hover:shadow-md transition-all">
                   <div className="h-48 overflow-hidden relative">
                     <img 
