@@ -27,7 +27,6 @@ import DrivingEducation from "@/pages/driving-education";
 import FastagEchallan from "@/pages/fastag-echallan";
 import EducationalPage from "@/pages/educational";
 import Marketplace from "@/pages/marketplace";
-import ExploreNewVehicles from "@/pages/explore-new-vehicles";
 import Arena from "@/pages/arena";
 import ArenaDashboard from "@/pages/arena-dashboard";
 import NewArenaDashboard from "@/pages/new-arena-dashboard";
@@ -154,13 +153,7 @@ function Router() {
               </motion.div>
             )}
           </Route>
-          <Route path="/explore-vehicles">
-            {() => (
-              <PageTransition type="complex" duration={0.6}>
-                <ExploreNewVehicles />
-              </PageTransition>
-            )}
-          </Route>
+
           <Route path="/learn-driving">
             {() => (
               <motion.div
