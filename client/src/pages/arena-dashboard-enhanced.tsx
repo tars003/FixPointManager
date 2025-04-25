@@ -52,7 +52,7 @@ import LoadingSkeleton from '@/components/arena/LoadingSkeleton';
 import EnhancedBackground from '@/components/arena/EnhancedBackground';
 
 import { useToast } from '@/hooks/use-toast';
-import { useArenaWebSocket } from '@/hooks/use-arena-websocket';
+import { useArenaWebSocketMock } from '@/hooks/use-arena-websocket-mock';
 
 // Demo data
 const demoVehicles = [
@@ -138,7 +138,7 @@ const ArenaDashboardEnhanced: React.FC = () => {
     sendMessage, 
     lastMessage, 
     readyState 
-  } = useArenaWebSocket();
+  } = useArenaWebSocketMock();
   
   const [activeTab, setActiveTab] = useState<'my-studio' | 'discover' | 'learn'>('my-studio');
   const [showNewProjectWizard, setShowNewProjectWizard] = useState(false);
