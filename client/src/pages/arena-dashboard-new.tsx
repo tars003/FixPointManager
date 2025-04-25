@@ -42,6 +42,15 @@ import { useToast } from '@/hooks/use-toast';
 import { useArenaWebSocket } from '@/hooks/use-arena-websocket';
 import { formatDistanceToNow } from 'date-fns';
 
+// Import Arena components
+import ArenaWrapper from '@/components/arena/ArenaWrapper';
+import NewProjectWizard from '@/components/arena/NewProjectWizard';
+import VehicleSelector from '@/components/arena/VehicleSelector';
+import Vehicle3DViewer from '@/components/arena/Vehicle3DViewer';
+import CustomizationCategories from '@/components/arena/CustomizationCategories';
+import VehicleWrappingSystem from '@/components/arena/VehicleWrappingSystem';
+import MultiVehicleComparison from '@/components/arena/MultiVehicleComparison';
+
 // Type definitions
 interface Project {
   id: number;
@@ -333,14 +342,26 @@ const ArenaDashboardNew: React.FC = () => {
     }).format(amount);
   };
 
+  // State for new project wizard
+  const [showNewProjectWizard, setShowNewProjectWizard] = useState(false);
+
   // Handle creating a new project
   const handleNewProject = () => {
+    setShowNewProjectWizard(true);
+  };
+  
+  // Handle project creation
+  const handleProjectComplete = (projectData: any) => {
     toast({
-      title: "Creating new project",
-      description: "Redirecting to vehicle selection...",
+      title: "Project Created",
+      description: `Your project "${projectData.projectName}" has been created.`,
     });
-    // Redirect to vehicle selection page (would use navigate in a real app)
-    window.location.href = '/arena';
+    
+    // In a real app, we would save the project data to the server
+    console.log("New project data:", projectData);
+    
+    // Close the wizard
+    setShowNewProjectWizard(false);
   };
 
   // Render MY STUDIO section

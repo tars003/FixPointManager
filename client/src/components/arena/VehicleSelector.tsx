@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Button,
-  Card,
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-  Separator,
+  PopoverTrigger
+} from '@/components/ui/popover';
+import { Separator } from '@/components/ui/separator';
+import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
-  SelectItem,
-} from '@/components/ui';
+  SelectItem
+} from '@/components/ui/select';
 import { ChevronDown, Plus, Car, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 
