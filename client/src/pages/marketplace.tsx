@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
+import { motion } from 'framer-motion';
 import { 
   Search, 
   ShoppingCart, 
@@ -16,6 +17,7 @@ import {
   Minus,
   Clock
 } from 'lucide-react';
+import BannerSlider from '@/components/marketplace/banner-slider';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -38,7 +40,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { motion } from 'framer-motion';
 
 // Types
 interface Vehicle {
