@@ -639,7 +639,10 @@ const ArenaMain: React.FC = () => {
                             <h2 className="text-3xl font-bold text-white mb-2">{projects[0]?.name || 'City Sport Edition'}</h2>
                             <p className="text-white/90 max-w-2xl">{projects[0]?.description || 'Racing inspired design with matte black wrap and red accents'}</p>
                             <div className="flex gap-3 mt-4">
-                              <Button size="sm">
+                              <Button 
+                                size="sm"
+                                onClick={() => window.location.href = `/project/${projects[0]?.id || 1}`}
+                              >
                                 Continue Design
                               </Button>
                               <Button size="sm" variant="outline" className="bg-white/20 text-white border-white/30">
@@ -746,7 +749,12 @@ const ArenaMain: React.FC = () => {
                                     <Button variant="ghost" size="sm" className="h-8 px-2">
                                       <Share className="h-4 w-4" />
                                     </Button>
-                                    <Button variant="ghost" size="sm" className="h-8 px-2">
+                                    <Button 
+                                      variant="ghost" 
+                                      size="sm" 
+                                      className="h-8 px-2"
+                                      onClick={() => window.location.href = `/project/${project.id}`}
+                                    >
                                       <ChevronRight className="h-4 w-4" />
                                     </Button>
                                   </div>
@@ -898,7 +906,12 @@ const ArenaMain: React.FC = () => {
                               </CardContent>
                               <CardFooter className="p-4 pt-2">
                                 <div className="flex w-full gap-2">
-                                  <Button variant="default" size="sm" className="flex-1">
+                                  <Button 
+                                    variant="default" 
+                                    size="sm" 
+                                    className="flex-1"
+                                    onClick={() => window.location.href = `/project/${project.id}`}
+                                  >
                                     Continue
                                   </Button>
                                   <Button variant="outline" size="sm">
@@ -1007,7 +1020,16 @@ const ArenaMain: React.FC = () => {
                                   </div>
                                   
                                   <div className="flex gap-2 mt-3">
-                                    <Button variant="default" size="sm" className="flex-1">
+                                    <Button 
+                                      variant="default" 
+                                      size="sm" 
+                                      className="flex-1"
+                                      onClick={() => {
+                                        // Create new project for this vehicle
+                                        const newProjectId = projects.length + 1;
+                                        window.location.href = `/project/${newProjectId}`;
+                                      }}
+                                    >
                                       Customize
                                     </Button>
                                     <Button variant="outline" size="sm">
@@ -1085,7 +1107,16 @@ const ArenaMain: React.FC = () => {
                               </CardContent>
                               <CardFooter className="p-4 pt-2">
                                 <div className="flex w-full gap-2">
-                                  <Button variant="default" size="sm" className="flex-1">
+                                  <Button 
+                                    variant="default" 
+                                    size="sm" 
+                                    className="flex-1"
+                                    onClick={() => {
+                                      // Create new project based on this design
+                                      const newProjectId = projects.length + 1;
+                                      window.location.href = `/project/${newProjectId}`;
+                                    }}
+                                  >
                                     Create Similar
                                   </Button>
                                   <Button variant="outline" size="sm">
