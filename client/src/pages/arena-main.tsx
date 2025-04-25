@@ -754,7 +754,10 @@ const ArenaMain: React.FC = () => {
                               </Card>
                             ))}
                             
-                            <Card className="border-dashed flex flex-col items-center justify-center p-6 h-full">
+                            <Card 
+                              className="border-dashed flex flex-col items-center justify-center p-6 h-full cursor-pointer hover:bg-gray-50"
+                              onClick={() => setShowNewProjectWizard(true)}
+                            >
                               <div className="rounded-full bg-gray-100 p-3 mb-3">
                                 <Plus className="h-6 w-6 text-[#25D366]" />
                               </div>
@@ -766,7 +769,10 @@ const ArenaMain: React.FC = () => {
                                 size="sm"
                                 variant="default"
                                 className="bg-[#25D366] hover:bg-[#22bf5b]"
-                                onClick={() => setShowNewProjectWizard(true)}
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent double triggering
+                                  setShowNewProjectWizard(true);
+                                }}
                               >
                                 New Project
                               </Button>
@@ -906,7 +912,10 @@ const ArenaMain: React.FC = () => {
                             </Card>
                           ))}
                           
-                          <Card className="border-dashed flex flex-col items-center justify-center p-6 h-full">
+                          <Card 
+                            className="border-dashed flex flex-col items-center justify-center p-6 h-full cursor-pointer hover:bg-gray-50"
+                            onClick={() => setShowNewProjectWizard(true)}
+                          >
                             <div className="rounded-full bg-gray-100 p-3 mb-3">
                               <Plus className="h-6 w-6 text-[#25D366]" />
                             </div>
@@ -918,7 +927,10 @@ const ArenaMain: React.FC = () => {
                               size="sm"
                               variant="default"
                               className="bg-[#25D366] hover:bg-[#22bf5b]"
-                              onClick={() => setShowNewProjectWizard(true)}
+                              onClick={(e) => {
+                                e.stopPropagation(); // Prevent double triggering
+                                setShowNewProjectWizard(true);
+                              }}
                             >
                               New Project
                             </Button>
