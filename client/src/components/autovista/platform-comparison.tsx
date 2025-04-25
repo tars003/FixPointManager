@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import { Trophy, Check, Star } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 

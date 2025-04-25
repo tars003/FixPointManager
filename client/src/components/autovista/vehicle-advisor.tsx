@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, X, Send, User, Bot, ArrowRight } from 'lucide-react';
+import { Sparkles, X, Send, User, Bot, ArrowRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 // Sample questions for the advisor
 const advisorQuestions = [
@@ -66,7 +67,7 @@ const VehicleAdvisor: React.FC = () => {
           {
             id: Date.now(),
             sender: 'advisor',
-            content: 'Hi there! I'm your AutoVista Vehicle Advisor. I'll help you find the perfect vehicle based on your needs. Let's start with a few questions to understand your requirements better.'
+            content: "Hi there! I'm your AutoVista Vehicle Advisor. I'll help you find the perfect vehicle based on your needs. Let's start with a few questions to understand your requirements better."
           }
         ]);
         setIsTyping(false);

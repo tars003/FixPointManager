@@ -7,7 +7,7 @@ import VehicleAdvisor from '@/components/autovista/vehicle-advisor';
 import ComparisonTool from '@/components/autovista/comparison-tool';
 import SalesElements from '@/components/autovista/sales-elements';
 import PlatformComparison from '@/components/autovista/platform-comparison';
-import { PageTransition } from '@/components/transitions/page-transition';
+import PageTransition from '@/components/transitions/page-transition';
 
 const AutoVista: React.FC = () => {
   return (

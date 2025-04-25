@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Car, Truck, Bike, Zap, 
-  Droplet, Fan, Atom, Gas, 
+  Droplet, Fan, Atom, Fuel, 
   Search, Gauge, Filter, LucideIcon 
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -71,10 +71,10 @@ const vehicleCategories: VehicleCategory[] = [
 
 const fuelTypes: FuelType[] = [
   { id: 'all', name: 'All Fuels', icon: Filter, color: 'bg-neutral-500' },
-  { id: 'petrol', name: 'Petrol', icon: Gas, color: 'bg-red-500' },
+  { id: 'petrol', name: 'Petrol', icon: Fuel, color: 'bg-red-500' },
   { id: 'diesel', name: 'Diesel', icon: Droplet, color: 'bg-blue-500' },
   { id: 'electric', name: 'Electric', icon: Zap, color: 'bg-emerald-500' },
-  { id: 'cng', name: 'CNG', icon: Gas, color: 'bg-green-500' },
+  { id: 'cng', name: 'CNG', icon: Fuel, color: 'bg-green-500' },
   { id: 'hybrid', name: 'Hybrid', icon: Fan, color: 'bg-purple-500' },
   { id: 'hydrogen', name: 'Hydrogen', icon: Atom, color: 'bg-cyan-500' },
 ];
