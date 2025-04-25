@@ -1,0 +1,454 @@
+Arena Dashboard 2.0 Development Specification
+Overview
+This document provides comprehensive technical specifications, UI/UX guidelines, and implementation details for Arena Dashboard 2.0—an advanced automotive customization platform. Building on the foundation of version 1.0, this specification incorporates expanded functionality, enhanced user workflows, and additional features to create a seamless vehicle customization experience.
+Core Architecture Enhancements
+1. Extended System Structure
+Maintain the three-tiered architecture with additional services:
+Presentation Layer: React-based frontend with advanced 3D rendering capabilities
+Application Layer: Node.js/Express middleware with specialized microservices
+Data Layer: MongoDB for user data, PostgreSQL for product catalog, and Vector DB for AI features
+New: Real-time rendering service for vehicle visualization
+New: AI analysis engine for customization recommendations
+2. Enhanced Navigation System
+Maintain the three core sections with extended functionality:
+├── MY STUDIO (Primary workspace)
+│   ├── Active Projects
+│   │   └── New Project Wizard (3-step vehicle setup)
+│   ├── Saved Designs
+│   │   └── Multi-media gallery (images, videos, notes)
+│   ├── Vehicle Profiles
+│   │   ├── Maintenance Tab
+│   │   └── Customization Tab
+│   └── Appointments
+│       ├── Schedule Installation
+│       ├── Reschedule
+│       └── View Details
+├── DISCOVER (Inspiration space)
+│   ├── Trending Products
+│   │   ├── Filter by Vehicle
+│   │   ├── Save to Favorites
+│   │   └── Add to Cart
+│   ├── Community Showcase
+│   │   ├── View Project
+│   │   └── Save Button
+│   ├── Staff Picks
+│   │   ├── View Details
+│   │   └── Start Customization
+│   └── Seasonal Collections
+│       ├── View All Seasons
+│       ├── Explore Collection
+│       └── Add to Cart
+└── LEARN (Knowledge center)
+    ├── Tutorials
+    │   ├── Beginner Tab
+    │   ├── Intermediate Tab
+    │   ├── Advanced Tab
+    │   ├── Sort by Time
+    │   ├── Sort by Difficulty
+    │   └── Save for Later
+    ├── DIY Guides
+    │   ├── Save
+    │   └── Read Guidelines
+    ├── Expert Tips
+    │   ├── Save for Later
+    │   └── Read Full Articles
+    └── Installation Walkthroughs
+        ├── Recent Tab
+        ├── Popular Tab
+        ├── Checklist Tab
+        └── Start Walkthrough
+New Project Workflow Implementation
+1. New Project Wizard
+Implement a 3-step vehicle setup process:
+Step 1: Vehicle Type Selection
+Categories: 2-wheeler, 3-wheeler, 4-wheeler
+Fuel type: Petrol, Diesel, Electric, Hydrogen, CNG, Solar
+Purpose: Personal, Commercial, Off-road, Racing
+Step 2: Vehicle Details
+Make selection (with brand logos)
+Model selection (with thumbnails)
+Year selection (with visual timeline)
+Color selection (with swatches)
+License plate number entry
+Step 3: Location & Finalization
+Pincode entry with auto-location detection
+Address verification
+Nearby service centers mapping
+Project name entry
+Optional: Upload current vehicle photos
+2. Vehicle Selection Header
+Implement persistent vehicle selector in header
+Show current vehicle with thumbnail
+Dropdown for quick vehicle switching
+"Add New Vehicle" shortcut option
+Last used vehicle remembered between sessions
+Comprehensive Customization Environment
+1. 3D Vehicle Customization Studio
+Implement WebGL-based 3D rendering engine
+Support 360° vehicle rotation
+Implement zoom and pan controls
+Add hotspots for interactive customization zones
+Real-time lighting simulation for accurate visualization
+2. Customization Categories
+├── Exterior Modifications
+│   ├── Body Kits
+│   ├── Wraps & Paints
+│   ├── Decals & Graphics
+│   ├── Lighting
+│   ├── Wheels & Rims
+│   └── Aerodynamics
+├── Interior Modifications
+│   ├── Seats & Upholstery
+│   ├── Dashboard
+│   ├── Audio Systems
+│   ├── Lighting
+│   ├── Gauges & Displays
+│   └── Accessories
+├── Performance Upgrades
+│   ├── Engine
+│   ├── Exhaust Systems
+│   ├── Suspension
+│   ├── Brakes
+│   ├── Drivetrain
+│   └── Electronics
+└── Vehicle Protection
+    ├── Paint Protection Film
+    ├── Ceramic Coating
+    ├── Security Systems
+    ├── Weather Protection
+    └── Interior Protection
+3. Vehicle Wrapping System
+Implement texture mapping for vehicle wraps
+Support custom image upload for wrapping visualization
+Provide pre-designed wrap templates
+Add pattern generation capability
+Real-time preview of wrapping application
+Cost estimation based on surface area
+4. Multiple Vehicle Support
+Support profiles for multiple vehicles per user
+Individual customization history for each vehicle
+Shared parts catalog with compatibility filtering
+Favorites that can be applied across vehicles when compatible
+Vehicle comparison tool for side-by-side customization
+Enhanced Functionality Details
+1. Active Projects Enhancements
+Add progress tracking with checklist
+Implement sharing options:
+Social media with custom cards
+Direct link with privacy controls
+Professional printable spec sheet
+Add "Continue" button functionality:
+Resume at last editing position
+Show brief summary of last changes
+Highlight new recommended products
+2. Saved Designs Multimedia Gallery
+Implement multimedia storage:
+Vehicle photos from multiple angles
+Tutorial videos saved for reference
+Voice notes for ideas and reminders
+Text notes with formatting
+Add AI analysis capability:
+Automatic categorization of saved content
+Customization roadmap generator
+Cost estimation and timeline creation
+Compatible parts identification from images
+3. Vehicle Profiles Enhancement
+Create dual-tab interface:
+Maintenance Tab:
+Service history logging
+Upcoming maintenance alerts
+Part replacement tracking
+Fluid level monitoring
+Warranty information storage
+Customization Tab:
+Installed modifications list
+Before/after comparisons
+Investment tracking
+Performance impact estimates
+Resale value calculator
+4. Appointment System
+Implement full-featured scheduling:
+Available time slots from partner workshops
+Multiple service booking
+Parts availability checking
+Estimated completion time
+Cost breakdown preview
+Add reschedule functionality:
+Calendar interface for date selection
+Availability checking in real-time
+Notification system for shop and user
+Cancellation with reason tracking
+5. Discovery Enhancements
+Implement vehicle-specific filtering:
+Filter by current vehicle automatically
+Compatible parts highlighting
+Warning for incompatible selections
+Add smart cart functionality:
+One-click add to cart
+Bundle suggestions
+Installation service pairing
+Availability checking
+Delivery time estimation
+6. Community Integration
+Implement project viewing:
+Step-by-step build walkthroughs
+Parts list with links
+Cost breakdown
+Time investment details
+Difficulty rating
+Add save functionality:
+Save to inspiration board
+Save specific parts only
+Save entire build with variations
+A7. Learning Center Upgrades
+Implement difficulty-based filtering:
+Beginner: No tools required
+Intermediate: Basic tools required
+Advanced: Specialized tools required
+Add sorting options:
+By time (shortest to longest)
+By difficulty (easiest to hardest)
+By relevance to current vehicle
+By popularity
+Implement interactive walkthroughs:
+Step-by-step guided instructions
+Interactive 3D demonstrations
+Checklist for progress tracking
+Tool requirements list
+Safety precautions
+Two New Major Features
+1. Augmented Reality Customization Previewer
+Functionality: Allow users to visualize customizations in real-world context using AR
+Implementation Details:
+Mobile camera integration for capturing vehicle
+Real-time 3D overlay of modifications
+Accurate scaling and positioning
+Lighting adaptation based on environment
+Shareable AR screenshots and videos
+Support for iOS (ARKit) and Android (ARCore)
+User Flow:
+Select vehicle and customizations in studio
+Click "View in AR" button
+Point camera at actual vehicle or parking space
+App automatically scales and positions 3D model
+Walk around to view from different angles
+Take screenshots or record video of AR preview
+Apply modifications directly from AR view
+2. Social Marketplace for Custom Parts
+Functionality: Enable community members to sell custom-made or used parts
+Implementation Details:
+Peer-to-peer marketplace integration
+Seller verification system
+Secure payment processing
+Shipping calculation and tracking
+Rating and review system for sellers
+Compatibility verification with buyer's vehicle
+Report system for counterfeit parts
+User Flow:
+Seller lists part with details, photos, compatibility
+Item appears in marketplace section
+Buyers can filter by vehicle compatibility
+Secure messaging system for questions
+In-app payment processing
+Shipping arrangement and tracking
+Post-delivery rating and feedback
+Data Models Enhancements
+1. Extended Vehicle Schema
+json
+{
+  "id": "String (UUID)",
+  "userId": "String (reference)",
+  "make": "String",
+  "model": "String",
+  "year": "Number",
+  "trim": "String",
+  "vehicleType": "String (2-wheeler, 3-wheeler, 4-wheeler)",
+  "fuelType": "String (Petrol, Diesel, Electric, Hydrogen, CNG, Solar)",
+  "color": "String",
+  "licensePlate": "String",
+  "vin": "String (optional)",
+  "location": {
+    "pincode": "String",
+    "city": "String",
+    "state": "String",
+    "country": "String",
+    "coordinates": {
+      "latitude": "Number",
+      "longitude": "Number"
+    }
+  },
+  "images": ["String (URLs)"],
+  "mods": [{
+    "type": "String",
+    "productId": "String (reference)",
+    "installedDate": "Date",
+    "installedBy": "String (DIY or shop name)",
+    "cost": "Number",
+    "notes": "String",
+    "beforeImages": ["String (URLs)"],
+    "afterImages": ["String (URLs)"]
+  }],
+  "maintenance": [{
+    "type": "String",
+    "date": "Date",
+    "mileage": "Number",
+    "service": "String",
+    "cost": "Number",
+    "provider": "String",
+    "notes": "String",
+    "attachments": ["String (URLs)"]
+  }]
+}
+2. Enhanced Project Schema
+json
+{
+  "id": "String (UUID)",
+  "userId": "String (reference)",
+  "vehicleId": "String (reference)",
+  "title": "String",
+  "description": "String",
+  "createdAt": "Date",
+  "updatedAt": "Date",
+  "isPublic": "Boolean",
+  "status": "String (planning/in-progress/completed)",
+  "progress": "Number (percentage)",
+  "goal": "String (appearance/performance/protection/mixed)",
+  "budget": {
+    "total": "Number",
+    "spent": "Number",
+    "remaining": "Number"
+  },
+  "timeline": {
+    "startDate": "Date",
+    "targetCompletionDate": "Date",
+    "actualCompletionDate": "Date"
+  },
+  "modifications": [{
+    "productId": "String (reference)",
+    "position": "Object {x, y, z}",
+    "color": "String (optional)",
+    "status": "String (planned/ordered/installed)",
+    "price": "Number",
+    "notes": "String (optional)"
+  }],
+  "mediaGallery": [{
+    "type": "String (image/video/audio/note)",
+    "url": "String",
+    "title": "String",
+    "description": "String",
+    "createdAt": "Date",
+    "tags": ["String"]
+  }],
+  "aiAnalysis": {
+    "suggestedNextSteps": ["String"],
+    "estimatedCompletionTime": "String",
+    "recommendedParts": ["String (product IDs)"],
+    "estimatedBudgetRemaining": "Number",
+    "compatibilityIssues": ["String"]
+  },
+  "versions": [{
+    "timestamp": "Date",
+    "modifications": ["Array of modifications"],
+    "thumbnail": "String (URL)"
+  }]
+}
+3. New Appointment Schema
+json
+{
+  "id": "String (UUID)",
+  "userId": "String (reference)",
+  "vehicleId": "String (reference)",
+  "shopId": "String (reference)",
+  "services": [{
+    "serviceId": "String",
+    "name": "String",
+    "price": "Number",
+    "duration": "Number (minutes)"
+  }],
+  "parts": [{
+    "productId": "String",
+    "name": "String",
+    "quantity": "Number",
+    "price": "Number"
+  }],
+  "scheduledDate": "Date",
+  "scheduledTimeSlot": {
+    "start": "String (HH:MM)",
+    "end": "String (HH:MM)"
+  },
+  "status": "String (scheduled/completed/cancelled/rescheduled)",
+  "totalPrice": "Number",
+  "estimatedDuration": "Number (minutes)",
+  "notes": "String",
+  "history": [{
+    "action": "String (created/rescheduled/cancelled/completed)",
+    "timestamp": "Date",
+    "notes": "String"
+  }]
+}
+Prompt for AI Website Development
+Create a comprehensive automotive customization platform called "Arena Dashboard 2.0" with the following specifications:
+
+ARCHITECTURE:
+- React frontend with Redux state management and Three.js for 3D rendering
+- Node.js/Express backend with MongoDB, PostgreSQL, and Vector DB
+- WebSocket integration for real-time updates and collaborative customization
+- AI analysis engine for customization recommendations
+- AR capabilities for mobile applications
+
+CORE NAVIGATION:
+Implement three main sections with enhanced functionality:
+
+1. MY STUDIO
+   - Active Projects with progress tracking and sharing options
+   - New Project Wizard (3-step vehicle setup)
+   - Multi-media gallery for Saved Designs (images, videos, notes)
+   - Vehicle Profiles with Maintenance and Customization tabs
+   - Appointment scheduling with reschedule functionality
+
+2. DISCOVER
+   - Trending Products with vehicle-specific filtering
+   - Community Showcase with detailed project viewing
+   - Staff Picks with view details and customization options
+   - Seasonal Collections with exploration and shopping features
+   - Smart cart functionality for seamless purchasing
+
+3. LEARN
+   - Tutorials with difficulty-based filtering (Beginner/Intermediate/Advanced)
+   - Time and difficulty sorting options
+   - DIY Guides with save and read functionality
+   - Expert Tips with article saving
+   - Interactive Installation Walkthroughs with checklists
+
+NEW VEHICLE CUSTOMIZATION FEATURES:
+- Support for all vehicle types (2-wheeler, 3-wheeler, 4-wheeler)
+- Multiple fuel types (Petrol, Diesel, Electric, Hydrogen, CNG, Solar)
+- Complete 3D customization environment with 360° rotation
+- Real-time vehicle wrapping visualization with custom image upload
+- Comprehensive customization categories (Exterior, Interior, Performance, Protection)
+- Multiple vehicle profiles with individual customization histories
+
+SPECIAL FEATURES:
+1. Augmented Reality Customization Previewer
+   - Mobile camera integration for real-world visualization
+   - Real-time 3D overlay of modifications
+   - Shareable AR screenshots and videos
+
+2. Social Marketplace for Custom Parts
+   - Peer-to-peer marketplace for custom and used parts
+   - Seller verification system
+   - Compatibility verification with buyer's vehicle
+
+DATA MODELS:
+Include enhanced schemas for users, vehicles, projects, appointments, and marketplace listings with comprehensive relationship tracking
+
+UI/UX DESIGN:
+- Implement intuitive 3D controls for vehicle customization
+- Create seamless transitions between 2D interface and 3D environment
+- Ensure mobile-friendly design with touch optimization
+- Implement AR mode for real-world visualization
+- Use visual cues for compatibility and installation difficulty
+- Create interactive tutorials with 3D demonstrations
+
+The platform should create a seamless bridge between virtual customization and real-world implementation, allowing users to visualize, plan, purchase, and schedule installation of vehicle modifications through an integrated ecosystem.
+
