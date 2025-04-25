@@ -481,6 +481,45 @@ const MarketplacePage: React.FC = () => {
           </div>
         </div>
       </header>
+
+      {/* Banner Slider */}
+      <div className="container mx-auto px-4 py-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <BannerSlider
+            slides={[
+              {
+                id: 1,
+                image: 'https://images.unsplash.com/photo-1558980394-34764db076b4',
+                title: 'Premium Parts Collection',
+                description: 'Discover our exclusive range of high-quality OEM and aftermarket parts for all vehicle makes and models.',
+                buttonText: 'Shop Now',
+                buttonLink: '/marketplace?category=engine'
+              },
+              {
+                id: 2,
+                image: 'https://images.unsplash.com/photo-1567808291548-fc3ee04dbcf0',
+                title: 'Special Offer on Brake Systems',
+                description: 'Get up to 25% off on premium brake pads, rotors, and complete brake kits. Limited time offer!',
+                buttonText: 'View Deals',
+                buttonLink: '/marketplace?category=suspension'
+              },
+              {
+                id: 3,
+                image: 'https://images.unsplash.com/photo-1517026575980-3e1e2dedeab4',
+                title: 'Performance Upgrades',
+                description: 'Transform your vehicle with our performance enhancement parts. Engineered for maximum power and efficiency.',
+                buttonText: 'Upgrade Now',
+                buttonLink: '/marketplace?category=performance'
+              }
+            ]}
+            className="h-[300px] md:h-[400px] mb-6 rounded-xl overflow-hidden"
+          />
+        </motion.div>
+      </div>
       
       {/* Main Content */}
       <main className="container mx-auto py-6 px-4">

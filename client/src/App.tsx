@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import { AnimatePresence, motion } from "framer-motion";
 import Layout from "@/components/layout/layout";
 import NotFound from "@/pages/not-found";
+import PageTransition from "@/components/transitions/page-transition";
 
 // Pages
 import MyVehicles from "@/pages/my-vehicles-updated";
@@ -219,15 +220,9 @@ function Router() {
           </Route>
           <Route path="/marketplace">
             {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
+              <PageTransition type="complex" duration={0.6}>
                 <Marketplace />
-              </motion.div>
+              </PageTransition>
             )}
           </Route>
           <Route path="/commercial-fleet">
