@@ -3,16 +3,17 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
-  Card,
-  CardContent,
-  Button,
-  Badge,
-  Separator,
+  AccordionTrigger
+} from '@/components/ui/accordion';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import {
   Tabs,
   TabsList,
-  TabsTrigger,
-} from '@/components/ui';
+  TabsTrigger
+} from '@/components/ui/tabs';
 import { ChevronRight, ShoppingCart, Star, Sparkles, Info, DollarSign } from 'lucide-react';
 import { motion } from 'framer-motion';
 

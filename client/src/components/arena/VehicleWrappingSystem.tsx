@@ -1,28 +1,34 @@
 import React, { useState, useRef } from 'react';
+import { Button } from '@/components/ui/button';
 import { 
-  Button,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
+  CardDescription 
+} from '@/components/ui/card';
+import {
   Tabs,
   TabsList,
   TabsTrigger,
-  TabsContent,
+  TabsContent
+} from '@/components/ui/tabs';
+import {
   RadioGroup,
-  RadioGroupItem,
-  Label,
-  Slider,
-  Input,
+  RadioGroupItem
+} from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
+import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
-  SelectItem,
-  Progress,
-  Separator,
-} from '@/components/ui';
+  SelectItem
+} from '@/components/ui/select';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
 import { 
   Upload, 
   Image, 

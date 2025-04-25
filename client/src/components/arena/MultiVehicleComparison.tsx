@@ -4,26 +4,32 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
-  Button,
-  Separator,
+  CardDescription
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import {
   Tabs,
   TabsList,
   TabsTrigger,
-  TabsContent,
-  Badge,
+  TabsContent
+} from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
-  SelectItem,
+  SelectItem
+} from '@/components/ui/select';
+import {
   Table,
   TableHeader,
   TableRow,
   TableHead,
   TableBody,
-  TableCell,
-} from '@/components/ui';
+  TableCell
+} from '@/components/ui/table';
 import { 
   PlusCircle, 
   Car, 
