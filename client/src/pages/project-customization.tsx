@@ -109,6 +109,15 @@ const ProjectCustomization: React.FC = () => {
     }
   }, [projectId]);
   
+  // Update URL when active studio changes
+  useEffect(() => {
+    if (projectId && activeStudio && activeStudio !== 'overview') {
+      setLocation(`/project/${projectId}/${activeStudio}`, { replace: true });
+    } else if (projectId) {
+      setLocation(`/project/${projectId}`, { replace: true });
+    }
+  }, [activeStudio, projectId, setLocation]);
+  
   // Handle navigation back to main arena
   const handleBackToArena = () => {
     setLocation('/arena-main');
