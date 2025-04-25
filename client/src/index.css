@@ -2,6 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom 3D animation for Arena page */
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotateX(15deg) rotateY(var(--rotation-y));
+  }
+  50% {
+    transform: translateY(-10px) rotateX(20deg) rotateY(calc(var(--rotation-y) + 5deg));
+  }
+  100% {
+    transform: translateY(0px) rotateX(15deg) rotateY(var(--rotation-y));
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Custom 3D styles */
+.transform-gpu {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
+}
+
 @layer base {
   :root {
     /* Light theme variables with high contrast for accessibility */

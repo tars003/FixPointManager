@@ -235,7 +235,7 @@ const EducationalPage: React.FC = () => {
               <div className="flex justify-between items-start mb-4">
                 <h2 className="text-2xl font-bold">Learning Features</h2>
                 <Button variant="ghost" size="icon" onClick={toggleHelp}>
-                  <X className="h-5 w-5" />
+                  <ChevronDown className="h-5 w-5" />
                 </Button>
               </div>
               
@@ -354,33 +354,7 @@ const EducationalPage: React.FC = () => {
           </motion.div>
         </div>
         
-        {/* Interactive Features Cards */}
-        <div className="mb-6">
-          <div className="flex flex-wrap gap-2">
-            {interactiveFeatures.map((feature, index) => (
-              <motion.div
-                key={index}
-                className="border rounded-lg px-4 py-2 flex items-center gap-2 text-sm bg-white dark:bg-slate-900"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.03, backgroundColor: "rgba(var(--primary-rgb), 0.1)" }}
-              >
-                <feature.icon className="h-4 w-4 text-primary" />
-                <span>{feature.title}</span>
-              </motion.div>
-            ))}
-            
-            <motion.button
-              className="border rounded-lg px-4 py-2 flex items-center gap-2 text-sm bg-white dark:bg-slate-900"
-              whileHover={{ scale: 1.05 }}
-              onClick={() => setShowLess(!showLess)}
-            >
-              <ChevronDown className={`h-4 w-4 transition-transform ${showLess ? 'rotate-180' : ''}`} />
-              <span>{showLess ? 'Show more' : 'Show less'}</span>
-            </motion.button>
-          </div>
-        </div>
+
         
         {/* Quiz Banner */}
         <motion.div 

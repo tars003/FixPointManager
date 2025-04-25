@@ -744,6 +744,15 @@ const ArenaPage: React.FC = () => {
           <div className="lg:col-span-2 bg-slate-100 dark:bg-slate-900 relative flex flex-col">
             {/* 3D Controls */}
             <div className="absolute top-4 right-4 flex space-x-2 z-10">
+              <Button 
+                variant={view3dActive ? "primary" : "secondary"} 
+                onClick={toggle3DView}
+                className="mr-2 flex items-center gap-1 transition-all"
+                size="sm"
+              >
+                <Rotate3d className="h-4 w-4" />
+                {view3dActive ? "Exit 3D" : "View in 3D"}
+              </Button>
               <Button variant="secondary" size="icon" onClick={() => handleRotateVehicle('left')}>
                 <ChevronLeft className="h-4 w-4" />
               </Button>
@@ -755,11 +764,15 @@ const ArenaPage: React.FC = () => {
               </Button>
             </div>
             
-            {/* Vehicle Image */}
+            {/* Vehicle Image - 3D View */}
             <div className="flex-1 flex items-center justify-center p-4">
               <div 
-                className="relative transition-transform duration-500"
-                style={{ transform: `rotateY(${rotationAngle}deg)` }}
+                className={`relative transition-all duration-500 ${view3dActive ? 'animate-float transform-gpu' : ''}`}
+                style={{ 
+                  transform: view3dActive ? `rotateY(${rotationAngle}deg) rotateX(15deg)` : `rotateY(${rotationAngle}deg)`,
+                  perspective: '1000px',
+                  boxShadow: view3dActive ? '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' : 'none'
+                }}
               >
                 <motion.img 
                   src={vehicleToCustomize.image} 
