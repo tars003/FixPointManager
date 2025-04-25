@@ -1,145 +1,104 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-// Mock WebSocket implementation for demo purposes
-export function useArenaWebSocketMock() {
+interface Message {
+  data: string;
+}
+
+interface MockWebSocketHook {
+  isConnected: boolean;
+  sendMessage: (message: string) => void;
+  lastMessage: Message | null;
+}
+
+// Mock implementation of websocket
+export function useArenaWebSocketMock(): MockWebSocketHook {
   const [isConnected, setIsConnected] = useState(false);
-  const [lastMessage, setLastMessage] = useState<{ data: string } | null>(null);
-  
-  // Mock connect function
-  const connect = useCallback(() => {
+  const [lastMessage, setLastMessage] = useState<Message | null>(null);
+
+  // Connect on mount
+  useEffect(() => {
     console.log('Mock WebSocket: Connecting...');
+    
     // Simulate connection delay
-    setTimeout(() => {
+    const connectTimer = setTimeout(() => {
       setIsConnected(true);
       console.log('Mock WebSocket: Connected');
+      console.log('WebSocket connection established');
       
-      // Simulate a connection message
-      const joinMessage = {
-        type: 'SYSTEM',
-        payload: {
-          message: 'Connection established',
-          timestamp: new Date().toISOString()
-        }
-      };
+      // Send connection message
+      setLastMessage({
+        data: JSON.stringify({
+          type: 'CONNECTED',
+          payload: {
+            timestamp: new Date().toISOString()
+          }
+        })
+      });
       
-      setLastMessage({ data: JSON.stringify(joinMessage) });
-    }, 1000);
+      // Simulate other users in the system
+      simulateUsers();
+    }, 500);
+    
+    return () => {
+      clearTimeout(connectTimer);
+      console.log('Mock WebSocket: Disconnecting...');
+      console.log('WebSocket connection closed');
+      setIsConnected(false);
+    };
   }, []);
   
-  // Mock disconnect function
-  const disconnect = useCallback(() => {
-    console.log('Mock WebSocket: Disconnecting...');
-    setIsConnected(false);
-  }, []);
+  // Simulate other users sending cursor updates
+  const simulateUsers = () => {
+    const usernames = ['Alex', 'Priya', 'Raj'];
+    
+    // Simulate random cursor movements for each user
+    usernames.forEach((username, index) => {
+      // Start after a random delay
+      setTimeout(() => {
+        const interval = setInterval(() => {
+          if (Math.random() > 0.7) {
+            // Generate a random cursor position
+            const position = {
+              x: Math.floor(Math.random() * 500),
+              y: Math.floor(Math.random() * 300)
+            };
+            
+            const action = Math.random() > 0.3 ? 'viewing' : 'editing';
+            
+            const cursorUpdate = {
+              username,
+              position,
+              action,
+              timestamp: new Date().toISOString()
+            };
+            
+            console.log('Cursor position update:', cursorUpdate);
+          }
+        }, 10000 + (index * 5000)); // Different interval for each user
+        
+        return () => clearInterval(interval);
+      }, 1000 * (index + 1));
+    });
+  };
   
-  // Mock send function
+  // Send a message
   const sendMessage = useCallback((message: string) => {
     if (!isConnected) {
-      console.warn('Mock WebSocket: Cannot send message, not connected');
+      console.warn('Cannot send message, WebSocket is not connected');
       return;
     }
     
-    console.log('Mock WebSocket: Sending message', message);
+    console.log('Sending message:', message);
     
-    // For demo purposes, we'll echo the message back
-    const data = JSON.parse(message);
-    
-    // Simulate server response
+    // Echo the message back after a delay to simulate response
     setTimeout(() => {
-      if (data.type === 'PROJECT_CREATED') {
-        const response = {
-          type: 'PROJECT_CREATED_ACK',
-          payload: {
-            ...data.payload,
-            status: 'success',
-            message: 'Project created successfully',
-            timestamp: new Date().toISOString()
-          }
-        };
-        
-        setLastMessage({ data: JSON.stringify(response) });
-      } else if (data.type === 'CURSOR_POSITION') {
-        // Just acknowledge receipt for cursor positions
-        console.log('Mock WebSocket: Received cursor position', data.payload);
-      } else {
-        // Generic acknowledgement
-        const response = {
-          type: `${data.type}_ACK`,
-          payload: {
-            ...data.payload,
-            status: 'received',
-            timestamp: new Date().toISOString()
-          }
-        };
-        
-        setLastMessage({ data: JSON.stringify(response) });
-      }
-    }, 300);
-    
-    return true;
+      setLastMessage({ data: message });
+    }, 200);
   }, [isConnected]);
-  
-  // Simulate occasional user activity
-  useEffect(() => {
-    if (!isConnected) return;
-    
-    const userNames = ['Alex', 'Priya', 'Raj', 'Sofia'];
-    const actionTypes = ['joined', 'left', 'updated'];
-    
-    const interval = setInterval(() => {
-      // Only send occasional messages (20% chance)
-      if (Math.random() > 0.8) {
-        const userName = userNames[Math.floor(Math.random() * userNames.length)];
-        const actionType = actionTypes[Math.floor(Math.random() * actionTypes.length)];
-        
-        let message;
-        
-        if (actionType === 'joined') {
-          message = {
-            type: 'USER_JOINED',
-            payload: {
-              username: userName,
-              timestamp: new Date().toISOString()
-            }
-          };
-        } else if (actionType === 'left') {
-          message = {
-            type: 'USER_LEFT',
-            payload: {
-              username: userName,
-              timestamp: new Date().toISOString()
-            }
-          };
-        } else {
-          message = {
-            type: 'CURSOR_POSITION',
-            payload: {
-              username: userName,
-              position: {
-                x: Math.floor(Math.random() * 500),
-                y: Math.floor(Math.random() * 300)
-              },
-              action: Math.random() > 0.5 ? 'editing' : 'viewing',
-              timestamp: new Date().toISOString()
-            }
-          };
-        }
-        
-        setLastMessage({ data: JSON.stringify(message) });
-      }
-    }, 10000); // Send a message every 10 seconds
-    
-    return () => clearInterval(interval);
-  }, [isConnected]);
-  
+
   return {
-    connect,
-    disconnect,
+    isConnected,
     sendMessage,
-    lastMessage,
-    readyState: isConnected ? 1 : 0,
-    isConnected
+    lastMessage
   };
 }
-
-export default useArenaWebSocketMock;

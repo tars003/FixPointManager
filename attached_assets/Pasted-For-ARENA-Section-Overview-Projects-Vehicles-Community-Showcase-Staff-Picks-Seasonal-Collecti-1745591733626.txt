@@ -1,0 +1,194 @@
+For ARENA Section:
+Overview
+Projects
+Vehicles
+Community Showcase
+Staff Picks
+Seasonal Collections
+DIY Guides
+Expert Tips
+Installation Walkthroughs
+Saved Designs
+Appointments
+Page Content Guidelines
+Projects Page
+Header: "Your Customization Projects"
+Content: Grid layout of user's customization projects
+Each project card should display:
+Vehicle image with customizations applied
+Project name
+Last modified date
+Completion status indicator
+Quick action buttons: Continue, Share, Duplicate
+Filtering options: All, In Progress, Completed, Shared
+Sorting options: Recent, Oldest, Cost (High-Low)
+"New Project" button prominently displayed (use bright accent color)
+Vehicles Page
+Header: "Your Vehicle Garage"
+Content: List/grid toggle view of all user vehicles
+Each vehicle card should display:
+Vehicle image
+Make/Model/Year
+Registration/VIN (partially masked)
+Service status indicator
+Customization status (if any)
+Quick action buttons: Customize, Service History, Share
+"Add New Vehicle" button with clear visual priority
+Vehicle grouping options: All, Recently Modified, By Type
+Community Showcase Page
+Header: "Community Masterpieces"
+Content: Curated grid of outstanding community customization projects
+Each showcase item should display:
+Large, high-quality vehicle image
+Creator username and avatar
+Project title
+Brief description
+Like/Save buttons
+Tags for customization categories
+Filtering by: Vehicle Type, Customization Category, Trending
+Submission button for users to submit their projects
+Staff Picks Page
+Header: "Staff Favorites"
+Content: Expert-selected customization projects
+Each pick should include:
+Featured image
+Staff comment highlighting why it was selected
+Creator details
+Customization highlights
+"Get Inspired" button to create similar project
+Seasonal Collections Page
+Header: "Seasonal Inspiration"
+Content: Themed collections based on seasons/events
+Current featured seasonal section at top
+Archive of past seasonal collections
+Each collection should include:
+Theme banner image
+Description of the theme
+4-6 example customizations
+Related parts/accessories from marketplace
+Limited-time offers if applicable
+DIY Guides Page
+Header: "Do It Yourself"
+Content: Step-by-step customization tutorials
+Each guide should include:
+Difficulty level indicator
+Time estimate
+Tools required
+Parts required with direct links to marketplace
+Step-by-step instructions with images
+Video tutorial when available
+Community comments section
+Filtering by: Difficulty, Vehicle Type, Time Required, Tools Required
+Expert Tips Page
+Header: "Pro Insights"
+Content: Professional advice from automotive experts
+Article format with:
+Expert profile and credentials
+Topic overview
+Detailed explanation with visuals
+Common mistakes to avoid
+Recommended tools/products
+Related guides/articles
+Installation Walkthroughs Page
+Header: "Installation Guides"
+Content: Detailed installation instructions for specific parts
+Each walkthrough should include:
+Part compatibility information
+Required tools list
+Estimated installation time
+Step-by-step visual guide
+Troubleshooting section
+Safety precautions
+Professional installation option with booking button
+Saved Designs Page
+Header: "Your Saved Inspirations"
+Content: Collection of designs saved from community/staff picks
+Organization options: Folders, Tags, Vehicle Type
+Comparison view to compare multiple saved designs
+"Create Similar" button for each saved design
+Notes section for user's thoughts on each design
+Appointments Page
+Header: "Your Service Schedule"
+Content: Calendar view of booked installation/service appointments
+Each appointment should show:
+Date and time
+Service center details
+Service type/customization being installed
+Estimated completion time
+Status (Confirmed, Pending, Completed)
+Reschedule/Cancel options
+Upcoming appointments highlighted at top
+Past appointments with completion status
+"Book New Appointment" button prominently displayed
+Visual Design Requirements
+Color Scheme
+
+
+Primary brand color: #25D366 (bright green as shown in examples)
+Secondary colors: #FFFFFF (white), #F0F2F5 (light gray), #1877F2 (blue)
+Limited accent colors used consistently throughout
+Maintain high contrast for all text elements
+Typography
+
+
+Clean, modern sans-serif font family
+Clear hierarchy with consistent heading sizes
+Body text minimum 16px for readability
+Consistent line height and spacing
+Component Design
+
+
+Cards with subtle shadows and rounded corners (8px radius)
+Buttons with clear states (default, hover, active, disabled)
+Toggle switches and selectors with visible states
+Consistent iconography style throughout
+Progress indicators for multi-step processes
+Layout Structure
+
+
+Responsive grid system with 12 columns
+Adequate whitespace between sections (minimum 24px)
+Consistent container padding (24px)
+Mobile-first approach with appropriate breakpoints
+No horizontal scrolling on any viewport above 320px width
+Technical Implementation Notes
+Navigation Management
+
+
+Use a router system that updates URL without page reload
+Maintain scroll position when navigating back
+Implement breadcrumbs for deep navigation paths
+Save user's last visited tab within each section
+Performance Optimization
+
+
+Lazy load images and heavy content
+Implement progressive loading for 3D models
+Cache frequently accessed data
+Optimize for initial load speed (target under 2 seconds)
+Accessibility Requirements
+
+
+WCAG 2.1 AA compliance minimum
+Keyboard navigation support
+Screen reader compatibility
+Sufficient color contrast
+Focus indicators for interactive elements
+User Flow Smoothing
+
+
+Implement subtle transitions between pages (150-300ms)
+Include loading states for all asynchronous operations
+Provide clear feedback for all user actions
+Use tooltips for explaining complex features
+Implement system for guiding new users (optional walkthroughs)
+Examples and References
+Refer to the provided Canva screenshots for:
+Clean tab separation techniques
+Effective use of color for navigation
+Card layout and styling
+Button design and placement
+User profile integration
+Modal dialog implementations
+This development prompt provides comprehensive instructions for creating a cohesive, non-overlapping interface across all sections of the AutoCraft Arena platform, with detailed content specifications for each page and consistent design patterns throughout the application.
+

@@ -30,6 +30,7 @@ import ArenaDashboard from "@/pages/arena-dashboard";
 import NewArenaDashboard from "@/pages/new-arena-dashboard";
 import ArenaDashboardNew from "@/pages/arena-dashboard-new";
 import ArenaDashboardEnhanced from "@/pages/arena-dashboard-enhanced";
+import ArenaMain from "@/pages/arena-main";
 
 function Router() {
   const [location] = useLocation();
@@ -328,6 +329,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <ArenaDashboardEnhanced />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/arena-main">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <ArenaMain />
               </motion.div>
             )}
           </Route>
