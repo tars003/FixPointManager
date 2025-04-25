@@ -32,7 +32,8 @@ import {
   Layers,
   Zap,
   CircleEllipsis,
-  Share2
+  Share2,
+  Clock as ClockIcon
 } from 'lucide-react';
 
 // Import components
@@ -51,7 +52,7 @@ import LoadingSkeleton from '@/components/arena/LoadingSkeleton';
 import EnhancedBackground from '@/components/arena/EnhancedBackground';
 
 import { useToast } from '@/hooks/use-toast';
-import { useArenaWebsocket } from '@/hooks/use-arena-websocket';
+import { useArenaWebSocket } from '@/hooks/use-arena-websocket';
 
 // Demo data
 const demoVehicles = [
@@ -137,7 +138,7 @@ const ArenaDashboardEnhanced: React.FC = () => {
     sendMessage, 
     lastMessage, 
     readyState 
-  } = useArenaWebsocket();
+  } = useArenaWebSocket();
   
   const [activeTab, setActiveTab] = useState<'my-studio' | 'discover' | 'learn'>('my-studio');
   const [showNewProjectWizard, setShowNewProjectWizard] = useState(false);
@@ -834,7 +835,7 @@ const ArenaDashboardEnhanced: React.FC = () => {
                                 </p>
                                 <div className="flex justify-between items-center">
                                   <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                    <Clock className="h-3.5 w-3.5" />
+                                    <ClockIcon className="h-3.5 w-3.5" />
                                     <span>{10 + index * 5} min</span>
                                   </div>
                                   <Button variant="ghost" size="sm">Watch Now</Button>
@@ -916,7 +917,7 @@ const ArenaDashboardEnhanced: React.FC = () => {
 
 // For TypeScript errors in the demo
 const Filter = CircleEllipsis;
-const Users = Users;
+const UsersIcon = Users;
 const Heart = Star;
 const Bookmark = Star;
 
