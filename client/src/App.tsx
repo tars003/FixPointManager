@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import { AnimatePresence, motion } from "framer-motion";
+import { FeedbackProvider } from "@/hooks/use-feedback";
 import Layout from "@/components/layout/layout";
 import NotFound from "@/pages/not-found";
 import PageTransition from "@/components/transitions/page-transition";
@@ -422,7 +423,9 @@ function App() {
       <ThemeProvider>
         <TooltipProvider>
           <Toaster />
-          <Router />
+          <FeedbackProvider>
+            <Router />
+          </FeedbackProvider>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
