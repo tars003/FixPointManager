@@ -28,6 +28,7 @@ import EducationalPage from "@/pages/educational";
 import ArenaPage from "@/pages/arena";
 import ArenaDashboard from "@/pages/arena-dashboard";
 import NewArenaDashboard from "@/pages/new-arena-dashboard";
+import ArenaDashboardNew from "@/pages/arena-dashboard-new";
 
 function Router() {
   const [location] = useLocation();
@@ -312,7 +313,7 @@ function Router() {
                 variants={pageVariants}
                 transition={{ duration: 0.3 }}
               >
-                <ArenaPage />
+                <ArenaDashboardNew />
               </motion.div>
             )}
           </Route>
