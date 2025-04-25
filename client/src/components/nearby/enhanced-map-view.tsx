@@ -468,12 +468,14 @@ const EnhancedMapView = ({
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="text-xs space-y-1">
-                          {selectedProvider.formattedOperatingHours.map((item: {day: string, hours: string}, i: number) => (
-                            <div key={i} className="flex justify-between">
-                              <span className="font-medium">{item.day}</span>
-                              <span>{item.hours}</span>
-                            </div>
-                          ))}
+                          {Array.isArray(selectedProvider.formattedOperatingHours) && 
+                            selectedProvider.formattedOperatingHours.map((item: {day: string, hours: string}, i: number) => (
+                              <div key={i} className="flex justify-between">
+                                <span className="font-medium">{item.day}</span>
+                                <span>{item.hours}</span>
+                              </div>
+                            ))
+                          }
                         </div>
                       </AccordionContent>
                     </AccordionItem>

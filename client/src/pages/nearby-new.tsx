@@ -42,6 +42,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import ContentReaction from '@/components/ui/content-reaction';
 import FeedbackButton from '@/components/ui/feedback-button';
+import MapView from '@/components/nearby/map-view';
 import EnhancedMapView from '@/components/nearby/enhanced-map-view';
 
 // Vehicle types
@@ -478,9 +479,11 @@ const NearbyNew = () => {
               <Button onClick={() => window.location.reload()}>Try Again</Button>
             </div>
           ) : filteredProviders && filteredProviders.length > 0 ? (
-            <MapView 
+            <EnhancedMapView 
               providers={filteredProviders}
               onSelectProvider={isEmergencyMode ? handleEmergencyServiceSelect : handleSelectProvider}
+              isEmergencyMode={isEmergencyMode}
+              selectedCategories={selectedServiceCategories}
             />
           ) : (
             <div className="bg-white rounded-lg p-6 text-center">
