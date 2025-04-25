@@ -52,9 +52,9 @@ const navItems = [
     bgColor: 'bg-accent/10',
   },
   {
-    title: 'FASTag & e-Challan',
+    title: 'FASTag & E-Challan',
     icon: CreditCard,
-    href: '/fastag',
+    href: '/fastag-echallan',
     color: 'text-indigo-500',
     bgColor: 'bg-indigo-50',
   },
@@ -101,9 +101,9 @@ const navItems = [
     bgColor: 'bg-emerald-50',
   },
   {
-    title: 'Education',
+    title: 'Learn Driving & RTO',
     icon: GraduationCap,
-    href: '/education',
+    href: '/driving-education',
     color: 'text-amber-500',
     bgColor: 'bg-amber-50',
   },
