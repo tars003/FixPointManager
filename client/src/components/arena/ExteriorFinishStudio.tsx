@@ -9,6 +9,7 @@ import {
   Droplets, 
   Info, 
   Layers, 
+  MapPin,
   Moon, 
   PaintBucket, 
   Palette, 
