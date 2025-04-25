@@ -1,5 +1,6 @@
 import express, { type Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
+import { WebSocketServer, WebSocket } from 'ws';
 import { storage } from "./storage";
 import { 
   insertVehicleSchema, 
@@ -346,6 +347,294 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.use("/api", apiRouter);
 
+  // Arena Dashboard API Routes
+  apiRouter.get("/arena/projects", async (req, res) => {
+    // Mock projects for demo
+    const projects = [
+      {
+        id: 1,
+        title: "Honda City Sport Package",
+        vehicleId: 1,
+        userId: 1,
+        progress: 65,
+        lastEdited: new Date().toISOString(),
+        totalCost: 85000,
+        isPublic: true,
+        status: "in-progress"
+      },
+      {
+        id: 2,
+        title: "Royal Enfield Classic Overhaul",
+        vehicleId: 2,
+        userId: 1,
+        progress: 30,
+        lastEdited: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+        totalCost: 42000,
+        isPublic: false,
+        status: "in-progress"
+      }
+    ];
+    
+    res.json(projects);
+  });
+  
+  apiRouter.get("/arena/trending", async (req, res) => {
+    // Mock trending products for demo
+    const products = [
+      {
+        id: 1,
+        name: "Borla Performance Exhaust System",
+        category: "Performance",
+        price: 45000,
+        rating: 4.9,
+        reviewCount: 328,
+        compatibility: ["Honda City", "Honda Civic"]
+      },
+      {
+        id: 2,
+        name: "Momo Revenge Alloy Wheels 17\"",
+        category: "Exterior",
+        price: 32000,
+        rating: 4.8,
+        reviewCount: 215,
+        compatibility: ["Most Sedans and SUVs"]
+      }
+    ];
+    
+    res.json(products);
+  });
+  
+  apiRouter.get("/arena/community", async (req, res) => {
+    // Mock community posts for demo
+    const posts = [
+      {
+        id: 1,
+        title: "Ultimate City Transformation",
+        userId: 2,
+        user: {
+          name: "RacingLegend",
+          isVerified: true
+        },
+        vehicle: "2022 Honda City ZX",
+        likes: 342,
+        comments: 56,
+        totalCost: 215000,
+        difficulty: "Advanced"
+      },
+      {
+        id: 2,
+        title: "Vintage Revival Project",
+        userId: 3,
+        user: {
+          name: "CruiserFan",
+          isVerified: false
+        },
+        vehicle: "2021 Royal Enfield Classic 350",
+        likes: 285,
+        comments: 42,
+        totalCost: 78000,
+        difficulty: "Intermediate"
+      }
+    ];
+    
+    res.json(posts);
+  });
+  
+  apiRouter.get("/arena/tutorials", async (req, res) => {
+    // Mock tutorials for demo
+    const tutorials = [
+      {
+        id: 1,
+        title: "Complete Guide to Wheel Selection",
+        type: "Video",
+        duration: "25:45",
+        level: "Beginner",
+        instructor: "Alex Chen",
+        views: 12584,
+        category: "Exterior"
+      },
+      {
+        id: 2,
+        title: "Professional Vinyl Wrap Techniques",
+        type: "Video",
+        duration: "38:12",
+        level: "Intermediate",
+        instructor: "Samantha Wright",
+        views: 8456,
+        category: "Exterior"
+      }
+    ];
+    
+    res.json(tutorials);
+  });
+
+  // Create server
   const httpServer = createServer(app);
+  
+  // Set up WebSocket server
+  const wss = new WebSocketServer({ 
+    server: httpServer,
+    path: '/ws'
+  });
+  
+  // Active connections and project-user mapping
+  const clients = new Map<WebSocket, { userId: number, projectId?: number }>();
+  const projectUsers = new Map<number, Set<WebSocket>>();
+  
+  // Handle WebSocket connections
+  wss.on('connection', (ws: WebSocket) => {
+    console.log('WebSocket client connected');
+    
+    // Initialize client with a temporary user ID
+    clients.set(ws, { userId: -1 });
+    
+    // Handle messages
+    ws.on('message', (message: string) => {
+      try {
+        const data = JSON.parse(message);
+        console.log('Received message:', data);
+        
+        switch (data.type) {
+          case 'AUTHENTICATE':
+            // Store user ID with connection
+            const userId = data.payload.userId;
+            const existingData = clients.get(ws);
+            if (existingData) {
+              clients.set(ws, { ...existingData, userId });
+            }
+            break;
+            
+          case 'JOIN_PROJECT':
+            // Add user to project room
+            const projectId = data.payload.projectId;
+            const clientData = clients.get(ws);
+            
+            if (clientData) {
+              // Update client data with projectId
+              clients.set(ws, { ...clientData, projectId });
+              
+              // Add client to project users
+              if (!projectUsers.has(projectId)) {
+                projectUsers.set(projectId, new Set());
+              }
+              projectUsers.get(projectId)?.add(ws);
+              
+              // Notify all clients in this project about the new user
+              broadcastToProject(projectId, {
+                type: 'USER_PRESENCE',
+                payload: getProjectUsers(projectId)
+              });
+            }
+            break;
+            
+          case 'LEAVE_PROJECT':
+            // Remove user from project room
+            const leaveProjectId = data.payload.projectId;
+            const currentClientData = clients.get(ws);
+            
+            if (currentClientData) {
+              // Update client data
+              clients.set(ws, { ...currentClientData, projectId: undefined });
+              
+              // Remove from project users
+              projectUsers.get(leaveProjectId)?.delete(ws);
+              
+              // Notify all clients in this project
+              broadcastToProject(leaveProjectId, {
+                type: 'USER_PRESENCE',
+                payload: getProjectUsers(leaveProjectId)
+              });
+            }
+            break;
+            
+          case 'PROJECT_UPDATE':
+            // Broadcast project updates to all users in the project
+            const updateProjectId = data.payload.projectId;
+            broadcastToProject(updateProjectId, {
+              type: 'PROJECT_UPDATE',
+              payload: data.payload
+            });
+            break;
+            
+          default:
+            console.log('Unknown message type:', data.type);
+        }
+      } catch (error) {
+        console.error('Error parsing WebSocket message:', error);
+      }
+    });
+    
+    // Handle disconnection
+    ws.on('close', () => {
+      console.log('WebSocket client disconnected');
+      
+      // Get client data
+      const clientData = clients.get(ws);
+      
+      // If client was in a project, notify others
+      if (clientData?.projectId) {
+        const projectId = clientData.projectId;
+        
+        // Remove from project
+        projectUsers.get(projectId)?.delete(ws);
+        
+        // Notify all clients in this project
+        broadcastToProject(projectId, {
+          type: 'USER_PRESENCE',
+          payload: getProjectUsers(projectId)
+        });
+      }
+      
+      // Remove from clients
+      clients.delete(ws);
+    });
+    
+    // Send initial message to client
+    ws.send(JSON.stringify({
+      type: 'CONNECTED',
+      payload: {
+        message: 'Connected to Arena WebSocket Server',
+        timestamp: new Date().toISOString()
+      }
+    }));
+  });
+  
+  // Helper function to broadcast to all clients in a project
+  function broadcastToProject(projectId: number, message: any) {
+    const projectClients = projectUsers.get(projectId);
+    
+    if (projectClients) {
+      const messageStr = JSON.stringify(message);
+      
+      projectClients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(messageStr);
+        }
+      });
+    }
+  }
+  
+  // Helper function to get all users in a project
+  function getProjectUsers(projectId: number) {
+    const result: {userId: number, username: string, isActive: boolean}[] = [];
+    const projectClients = projectUsers.get(projectId);
+    
+    if (projectClients) {
+      projectClients.forEach(client => {
+        const clientData = clients.get(client);
+        if (clientData && clientData.userId !== -1) {
+          // In a real app, you would fetch the username from the database
+          result.push({
+            userId: clientData.userId,
+            username: `User${clientData.userId}`,
+            isActive: client.readyState === WebSocket.OPEN
+          });
+        }
+      });
+    }
+    
+    return result;
+  }
+  
   return httpServer;
 }

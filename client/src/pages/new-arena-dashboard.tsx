@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'wouter';
+import { useArenaWebSocket } from '@/hooks/use-arena-websocket';
+import { useQuery } from '@tanstack/react-query';
 import { 
   Car, 
   Heart, 
@@ -57,9 +59,102 @@ const formatRelativeTime = (dateString: string) => {
 
 const NewArenaDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("studio");
-
-  // Active Projects data
-  const activeProjects = [
+  const [selectedProject, setSelectedProject] = useState<number | null>(null);
+  const [collaborators, setCollaborators] = useState<{ userId: number; username: string; isActive: boolean }[]>([]);
+  
+  // Set up WebSocket connection
+  const { 
+    isConnected, 
+    activeUsers, 
+    projectUpdates,
+    sendMessage,
+    updateProject,
+    updatePresence
+  } = useArenaWebSocket();
+  
+  // Initialize connection status display
+  useEffect(() => {
+    if (isConnected) {
+      toast({
+        title: "Connected to Arena Server",
+        description: "Real-time collaboration is now active",
+        variant: "default"
+      });
+      
+      // Authenticate with demo user ID (1)
+      sendMessage('AUTHENTICATE', { userId: 1 });
+    }
+  }, [isConnected, sendMessage]);
+  
+  // Monitor active project users
+  useEffect(() => {
+    if (activeUsers.length > 0) {
+      setCollaborators(activeUsers);
+    }
+  }, [activeUsers]);
+  
+  // Monitor project updates
+  useEffect(() => {
+    if (projectUpdates.length > 0) {
+      const latestUpdate = projectUpdates[projectUpdates.length - 1];
+      
+      toast({
+        title: "Project Update",
+        description: `Changes made to project ${latestUpdate.projectId} by User ${latestUpdate.userId}`,
+        variant: "default"
+      });
+    }
+  }, [projectUpdates]);
+  
+  // Fetch projects from API
+  const { data: apiProjects, isLoading: isLoadingProjects } = useQuery({
+    queryKey: ['/api/arena/projects'],
+    queryFn: async () => {
+      const res = await fetch('/api/arena/projects');
+      if (!res.ok) throw new Error('Failed to fetch projects');
+      return res.json();
+    },
+    enabled: activeTab === 'studio'
+  });
+  
+  // Fetch trending products from API
+  const { data: apiTrendingProducts, isLoading: isLoadingTrending } = useQuery({
+    queryKey: ['/api/arena/trending'],
+    queryFn: async () => {
+      const res = await fetch('/api/arena/trending');
+      if (!res.ok) throw new Error('Failed to fetch trending products');
+      return res.json();
+    },
+    enabled: activeTab === 'discover'
+  });
+  
+  // Handle joining a project collaboration
+  const handleJoinProject = (projectId: number) => {
+    if (selectedProject !== projectId) {
+      // Leave previous project if any
+      if (selectedProject) {
+        sendMessage('LEAVE_PROJECT', { projectId: selectedProject });
+      }
+      
+      // Join new project
+      sendMessage('JOIN_PROJECT', { projectId });
+      setSelectedProject(projectId);
+      
+      toast({
+        title: "Collaboration Started",
+        description: `You've joined the collaboration for Project #${projectId}`,
+        variant: "default"
+      });
+    }
+  };
+  
+  // Handle project update
+  const handleUpdateProject = (projectId: number, updates: any) => {
+    updateProject(projectId, updates);
+  };
+  
+  // Active Projects data - use API data if available
+  const activeProjects = apiProjects || [
     {
       id: 1,
       title: 'Honda City Sport Package',
@@ -482,12 +577,55 @@ const NewArenaDashboard: React.FC = () => {
                         <Trash2 size={14} />
                       </Button>
                     </div>
-                    <Button variant="default" size="sm">Continue Editing</Button>
+                    <Button 
+                      variant="default" 
+                      size="sm"
+                      onClick={() => handleJoinProject(project.id)}
+                      className={selectedProject === project.id ? "bg-green-700 hover:bg-green-800" : ""}
+                    >
+                      {selectedProject === project.id ? "Collaborating" : "Continue Editing"}
+                    </Button>
                   </CardFooter>
                 </Card>
               ))}
             </div>
           </motion.section>
+          
+          {/* Collaboration Panel - Only show when a project is selected */}
+          {selectedProject && collaborators.length > 0 && (
+            <motion.section
+              className="pt-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+            >
+              <Card className="bg-[#1E3A8A]/5 border-[#1E3A8A]/20">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Users size={18} /> Real-time Collaboration
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {collaborators.map((collaborator) => (
+                      <div 
+                        key={collaborator.userId} 
+                        className="flex items-center gap-2 bg-background p-2 rounded-lg"
+                      >
+                        <div className={`h-2 w-2 rounded-full ${collaborator.isActive ? 'bg-green-500' : 'bg-gray-400'}`} />
+                        <Avatar className="h-6 w-6">
+                          <AvatarFallback className="text-xs bg-[#1E3A8A] text-white">
+                            {collaborator.username.substring(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="text-sm font-medium">{collaborator.username}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.section>
+          )}
           
           {/* Vehicle Profiles */}
           <motion.section
