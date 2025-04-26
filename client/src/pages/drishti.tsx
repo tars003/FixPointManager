@@ -1,122 +1,323 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { Eye, BarChart3, Camera, Settings2, AlertTriangle, Check, Clock } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
+import { 
+  Eye, 
+  BarChart3, 
+  Camera, 
+  Settings2, 
+  AlertTriangle, 
+  Check, 
+  Clock, 
+  Heart, 
+  Wrench, 
+  MapPin, 
+  TrendingUp, 
+  Bell, 
+  Droplet, 
+  Thermometer, 
+  Battery, 
+  Gauge, 
+  Activity, 
+  Calendar, 
+  Search, 
+  Route, 
+  StretchHorizontal
+} from 'lucide-react';
 
 const Drishti: React.FC = () => {
   return (
-    <div className="container px-4 py-8 mx-auto">
+    <div className="container px-4 py-6 mx-auto">
       <motion.div 
         initial={{ opacity: 0, y: 20 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.5 }}
-        className="mb-8"
+        className="mb-6"
       >
-        <div className="flex items-center gap-2 mb-2">
-          <Eye className="h-8 w-8 text-indigo-600" />
+        <div className="flex items-center gap-3 mb-2">
+          <div className="bg-[#0056B3] p-2 rounded-lg">
+            <Eye className="h-6 w-6 text-white" />
+          </div>
           <h1 className="text-3xl font-bold tracking-tight">Drishti</h1>
         </div>
         <p className="text-muted-foreground max-w-3xl">
-          Advanced vision-based analytics and insights for your vehicle. Monitor road conditions, 
-          detect potential hazards, and receive real-time alerts for safer driving.
+          Advanced Universal OBD2+GPS Device - Spatiotemporal intelligence system for vehicle 
+          maintenance and optimization with edge AI computing.
         </p>
       </motion.div>
 
       <Tabs defaultValue="dashboard" className="space-y-6">
-        <TabsList className="grid grid-cols-4 w-full max-w-2xl">
+        <TabsList className="grid grid-cols-5 w-full max-w-3xl">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="cameras">Cameras</TabsTrigger>
+          <TabsTrigger value="vehicle-health">Vehicle Health</TabsTrigger>
+          <TabsTrigger value="predictive">Predictive</TabsTrigger>
+          <TabsTrigger value="location">Location</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
+        {/* DASHBOARD TAB */}
         <TabsContent value="dashboard" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <DrishtiStatusCard 
-              title="System Status" 
-              status="Active" 
-              statusColor="text-green-500" 
-              icon={<Check className="h-5 w-5 text-green-500" />}
-              description="All systems are functioning properly"
-            />
-            
-            <DrishtiStatusCard 
-              title="Last Scan" 
-              status="10 minutes ago" 
-              statusColor="text-blue-500" 
-              icon={<Clock className="h-5 w-5 text-blue-500" />}
-              description="Regular scanning intervals active"
-            />
-            
-            <DrishtiStatusCard 
-              title="Alerts" 
-              status="2 New" 
-              statusColor="text-amber-500" 
-              icon={<AlertTriangle className="h-5 w-5 text-amber-500" />}
-              description="Minor alerts detected, tap to view"
-            />
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Detections</CardTitle>
-              <CardDescription>Objects and conditions detected in your recent drives</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentDetections.map((detection, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 rounded-lg border">
-                    <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-full ${detection.bgColor}`}>
-                        {detection.icon}
+            {/* Vehicle Health Score KPI */}
+            <Card className="md:col-span-3 bg-gradient-to-r from-[#F8F9FA] to-[#F0F8FF]">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2">
+                  <Heart className="h-5 w-5 text-[#0056B3]" />
+                  Vehicle Health Score
+                </CardTitle>
+                <CardDescription>Overall vehicle condition index combining all systems</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col md:flex-row items-center gap-6">
+                  <div className="relative h-36 w-36 flex items-center justify-center">
+                    <svg className="w-full h-full" viewBox="0 0 120 120">
+                      <circle
+                        cx="60"
+                        cy="60"
+                        r="54"
+                        fill="none"
+                        stroke="#e6e6e6"
+                        strokeWidth="12"
+                      />
+                      <circle
+                        cx="60"
+                        cy="60"
+                        r="54"
+                        fill="none"
+                        stroke="#28A745"
+                        strokeWidth="12"
+                        strokeDasharray="339.292"
+                        strokeDashoffset="84.823" // 25% from full (339.292 * (1 - 0.75))
+                        transform="rotate(-90 60 60)"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center flex-col">
+                      <span className="text-3xl font-bold">87</span>
+                      <span className="text-xs text-muted-foreground">out of 100</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1 space-y-3">
+                    <div>
+                      <div className="flex justify-between mb-1">
+                        <span className="text-sm font-medium">Engine</span>
+                        <span className="text-sm font-medium text-[#28A745]">92%</span>
                       </div>
-                      <div>
-                        <p className="font-medium">{detection.name}</p>
-                        <p className="text-sm text-muted-foreground">{detection.time}</p>
+                      <Progress value={92} className="h-2 bg-gray-100" indicatorClassName="bg-[#28A745]" />
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-1">
+                        <span className="text-sm font-medium">Transmission</span>
+                        <span className="text-sm font-medium text-[#88C34A]">86%</span>
+                      </div>
+                      <Progress value={86} className="h-2 bg-gray-100" indicatorClassName="bg-[#88C34A]" />
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-1">
+                        <span className="text-sm font-medium">Brakes</span>
+                        <span className="text-sm font-medium text-[#FFC107]">74%</span>
+                      </div>
+                      <Progress value={74} className="h-2 bg-gray-100" indicatorClassName="bg-[#FFC107]" />
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-1">
+                        <span className="text-sm font-medium">Battery</span>
+                        <span className="text-sm font-medium text-[#FF9800]">68%</span>
+                      </div>
+                      <Progress value={68} className="h-2 bg-gray-100" indicatorClassName="bg-[#FF9800]" />
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button variant="outline" size="sm" className="ml-auto">View Full Report</Button>
+              </CardFooter>
+            </Card>
+            
+            {/* Three KPI Cards */}
+            <Card className="border-l-4 border-l-[#FFC107]">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4 text-[#FFC107]" />
+                  Predictive Failure Timeline
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-bold">6 months</p>
+                <p className="text-sm text-muted-foreground">Until brake pad replacement recommended</p>
+                <div className="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-green-400 to-yellow-400" style={{ width: '65%' }}></div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-l-4 border-l-[#00A3A3]">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Droplet className="h-4 w-4 text-[#00A3A3]" />
+                  Efficiency Optimization
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-bold">12.4%</p>
+                <p className="text-sm text-muted-foreground">Potential fuel efficiency improvement</p>
+                <div className="mt-3 flex items-center gap-2">
+                  <div className="h-6 w-6 rounded-full bg-[#00A3A3]/10 flex items-center justify-center">
+                    <Check className="h-3 w-3 text-[#00A3A3]" />
+                  </div>
+                  <span className="text-xs text-muted-foreground">3 optimization recommendations</span>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-l-4 border-l-[#28A745]">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Activity className="h-4 w-4 text-[#28A745]" />
+                  Maintenance Cost Avoidance
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-bold">₹12,450</p>
+                <p className="text-sm text-muted-foreground">Estimated savings year-to-date</p>
+                <div className="mt-3 flex items-center gap-2">
+                  <div className="h-6 w-6 rounded-full bg-[#28A745]/10 flex items-center justify-center">
+                    <TrendingUp className="h-3 w-3 text-[#28A745]" />
+                  </div>
+                  <span className="text-xs text-muted-foreground">28% increase from last year</span>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Recent Alerts */}
+            <Card className="md:col-span-3">
+              <CardHeader>
+                <CardTitle>Recent Alerts</CardTitle>
+                <CardDescription>System notifications requiring attention</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentAlerts.map((alert, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 rounded-lg border">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-full ${alert.bgColor}`}>
+                          {alert.icon}
+                        </div>
+                        <div>
+                          <p className="font-medium">{alert.name}</p>
+                          <p className="text-sm text-muted-foreground">{alert.time}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm font-medium ${alert.severityColor}`}>
+                          {alert.severity}
+                        </span>
+                        <Button variant="ghost" size="sm">
+                          View
+                        </Button>
                       </div>
                     </div>
-                    <span className={`text-sm font-medium ${detection.statusColor}`}>
-                      {detection.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
-        <TabsContent value="analytics" className="space-y-6">
+        {/* VEHICLE HEALTH TAB */}
+        <TabsContent value="vehicle-health" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Diagnostic Overview</CardTitle>
+                <CardDescription>Comprehensive system-by-system analysis</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {vehicleSystemStatus.map((system, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-full ${system.bgColor}`}>
+                          {system.icon}
+                        </div>
+                        <span>{system.name}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Progress value={system.health} className="w-24 h-2" 
+                          indicatorClassName={`${getHealthColorClass(system.health)}`} />
+                        <span className={`text-sm font-medium ${getHealthTextClass(system.health)}`}>
+                          {system.health}%
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button variant="outline" className="w-full">Run Comprehensive Scan</Button>
+              </CardFooter>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Error Logs</CardTitle>
+                <CardDescription>Detected issues and diagnostic codes</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {errorLogs.map((log, index) => (
+                    <div key={index} className="p-3 rounded-lg border">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className={`h-2 w-2 rounded-full ${getSeverityBgColor(log.severity)}`}></div>
+                          <span className="font-medium">{log.code}</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground">{log.date}</span>
+                      </div>
+                      <p className="text-sm mb-1">{log.description}</p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <Button variant="outline" size="sm">Details</Button>
+                        <Button variant="ghost" size="sm">Clear</Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
           <Card>
             <CardHeader>
-              <CardTitle>Drive Analytics</CardTitle>
-              <CardDescription>Visual data insights from your recent journeys</CardDescription>
+              <CardTitle>Historical Health Trends</CardTitle>
+              <CardDescription>Track your vehicle's health over time</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-80 flex items-center justify-center border rounded-md bg-muted/20">
                 <div className="text-center">
                   <BarChart3 className="h-12 w-12 mx-auto text-muted-foreground/60" />
-                  <p className="mt-2 text-muted-foreground">Analytics visualization will appear here</p>
+                  <p className="mt-2 text-muted-foreground">Historical health data visualization will appear here</p>
                 </div>
               </div>
 
               <div className="mt-6 space-y-3">
-                <h3 className="font-medium text-lg">Analysis Period</h3>
-                <RadioGroup defaultValue="week" className="flex space-x-4">
+                <h3 className="font-medium text-lg">Time Period</h3>
+                <RadioGroup defaultValue="6month" className="flex space-x-4">
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="day" id="day" />
-                    <Label htmlFor="day">Day</Label>
+                    <RadioGroupItem value="30day" id="30day" />
+                    <Label htmlFor="30day">30 Days</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="week" id="week" />
-                    <Label htmlFor="week">Week</Label>
+                    <RadioGroupItem value="6month" id="6month" />
+                    <Label htmlFor="6month">6 Months</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="month" id="month" />
-                    <Label htmlFor="month">Month</Label>
+                    <RadioGroupItem value="1year" id="1year" />
+                    <Label htmlFor="1year">1 Year</Label>
                   </div>
                 </RadioGroup>
               </div>
@@ -124,80 +325,378 @@ const Drishti: React.FC = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="cameras" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
+        {/* PREDICTIVE MAINTENANCE TAB */}
+        <TabsContent value="predictive" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="md:col-span-3">
               <CardHeader>
-                <CardTitle>Front Camera</CardTitle>
-                <CardDescription>Forward-facing camera feed and analytics</CardDescription>
+                <CardTitle>Component Longevity Forecast</CardTitle>
+                <CardDescription>AI-generated predictions for critical components</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="aspect-video bg-muted rounded-md flex items-center justify-center">
-                  <Camera className="h-12 w-12 text-muted-foreground/60" />
+                <div className="relative h-32 overflow-hidden my-6">
+                  <div className="absolute w-full h-1 bg-gray-200 top-1/2 transform -translate-y-1/2"></div>
+                  {/* Timeline markers */}
+                  {componentPredictions.map((component, index) => (
+                    <div 
+                      key={index}
+                      className="absolute top-1/2 transform -translate-y-1/2"
+                      style={{ left: `${component.timelinePosition}%` }}
+                    >
+                      <div className="flex flex-col items-center">
+                        <div className={`w-4 h-4 rounded-full ${getSeverityBgColor(component.urgency)} mb-2`}></div>
+                        <div className="whitespace-nowrap text-sm font-medium -ml-10 w-20 text-center">
+                          {component.name}
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {component.timeFrame}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {/* Current time marker */}
+                  <div className="absolute top-0 left-5 h-full flex items-center">
+                    <div className="h-full w-px bg-gray-400 relative">
+                      <div className="absolute -left-[9px] top-1/2 transform -translate-y-1/2 h-5 w-5 rounded-full bg-white border-2 border-gray-400 flex items-center justify-center">
+                        <span className="text-xs">Now</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-4 flex justify-between">
-                  <Button variant="outline" size="sm">Live View</Button>
-                  <Button variant="outline" size="sm">Recorded Clips</Button>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                  {componentPredictions.slice(0, 2).map((component, index) => (
+                    <Card key={index} className="bg-gray-50">
+                      <CardHeader className="py-3 px-4">
+                        <CardTitle className="text-base">{component.name}</CardTitle>
+                      </CardHeader>
+                      <CardContent className="py-3 px-4">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <p className="text-sm mb-1">Estimated replacement: <span className="font-medium">{component.timeFrame}</span></p>
+                            <p className="text-sm text-muted-foreground">Confidence: {component.confidence}%</p>
+                          </div>
+                          <Button size="sm">Schedule</Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button variant="outline" className="ml-auto">View All Components</Button>
+              </CardFooter>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Upcoming Maintenance</CardTitle>
+                <CardDescription>Recommended service schedule</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {upcomingMaintenance.map((item, index) => (
+                    <div key={index} className="flex gap-4 pb-4 border-b last:border-b-0 last:pb-0">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                        <Calendar className="h-5 w-5 text-gray-500" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-medium">{item.name}</h4>
+                        <p className="text-sm text-muted-foreground">Due in {item.dueIn}</p>
+                      </div>
+                      <div className="flex-shrink-0">
+                        <Button variant="outline" size="sm">Schedule</Button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
-
-            <Card>
+            
+            <Card className="md:col-span-2">
               <CardHeader>
-                <CardTitle>Cabin Camera</CardTitle>
-                <CardDescription>Interior monitoring and driver assistance</CardDescription>
+                <CardTitle>Maintenance Cost Projections</CardTitle>
+                <CardDescription>Estimated expenses and ROI analysis</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="aspect-video bg-muted rounded-md flex items-center justify-center">
-                  <Camera className="h-12 w-12 text-muted-foreground/60" />
+                <div className="h-60 flex items-center justify-center border rounded-md bg-muted/20 mb-4">
+                  <div className="text-center">
+                    <BarChart3 className="h-10 w-10 mx-auto text-muted-foreground/60" />
+                    <p className="mt-2 text-muted-foreground">Cost projections visualization will appear here</p>
+                  </div>
                 </div>
-                <div className="mt-4 flex justify-between">
-                  <Button variant="outline" size="sm">Live View</Button>
-                  <Button variant="outline" size="sm">Recorded Clips</Button>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm text-muted-foreground mb-1">Projected Annual Savings</p>
+                    <p className="text-xl font-bold">₹24,800</p>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm text-muted-foreground mb-1">ROI on Drishti Device</p>
+                    <p className="text-xl font-bold">428%</p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
         </TabsContent>
 
+        {/* LOCATION INTELLIGENCE TAB */}
+        <TabsContent value="location" className="space-y-6">
+          <Card className="md:col-span-3">
+            <CardHeader>
+              <CardTitle>Geo-Contextual Performance</CardTitle>
+              <CardDescription>Location-based vehicle performance assessment</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="aspect-video bg-muted rounded-md relative">
+                <div className="absolute inset-0 bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=28.644800,77.216721&zoom=11&size=800x400&maptype=roadmap&key=AIzaSyCkxx')]
+                  bg-cover bg-center rounded-md">
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="p-4 bg-white/90 rounded-lg shadow-md">
+                    <MapPin className="h-12 w-12 mx-auto text-[#0056B3]" />
+                    <p className="mt-2 text-center">Interactive map visualization will appear here</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Route className="h-4 w-4 text-[#0056B3]" />
+                    <h3 className="font-medium">Route Analysis</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Identify high-stress zones for your vehicle</p>
+                </div>
+                
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Activity className="h-4 w-4 text-[#0056B3]" />
+                    <h3 className="font-medium">Performance Heatmap</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Visualize performance variations by location</p>
+                </div>
+                
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <StretchHorizontal className="h-4 w-4 text-[#0056B3]" />
+                    <h3 className="font-medium">Route Optimization</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Find optimal routes based on vehicle health</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Trip Analytics</CardTitle>
+                <CardDescription>Journey logging and analysis</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentTrips.map((trip, index) => (
+                    <div key={index} className="flex justify-between items-center p-3 rounded-lg border">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-[#0056B3]" />
+                          <p className="font-medium">{trip.route}</p>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">{trip.date} • {trip.distance}</p>
+                      </div>
+                      <Button variant="ghost" size="sm">View</Button>
+                    </div>
+                  ))}
+                </div>
+                <Button variant="outline" className="w-full mt-4">View All Trips</Button>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Driver Behavior Insights</CardTitle>
+                <CardDescription>Efficiency optimization based on driving patterns</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h3 className="font-medium mb-2">Driving Score</h3>
+                    <div className="flex items-center gap-4">
+                      <div className="relative h-16 w-16">
+                        <svg className="w-full h-full" viewBox="0 0 120 120">
+                          <circle
+                            cx="60"
+                            cy="60"
+                            r="54"
+                            fill="none"
+                            stroke="#e6e6e6"
+                            strokeWidth="12"
+                          />
+                          <circle
+                            cx="60"
+                            cy="60"
+                            r="54"
+                            fill="none"
+                            stroke="#28A745"
+                            strokeWidth="12"
+                            strokeDasharray="339.292"
+                            strokeDashoffset="84.823" // 25% from full (339.292 * (1 - 0.75))
+                            transform="rotate(-90 60 60)"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-lg font-bold">82</span>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-sm mb-1">Good driving habits</p>
+                        <p className="text-xs text-muted-foreground">Recommendation: Reduce hard braking</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium mb-2">Key Metrics</h3>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="p-3 rounded-lg border">
+                        <p className="text-sm text-muted-foreground">Avg. Speed</p>
+                        <p className="font-medium">42 km/h</p>
+                      </div>
+                      <div className="p-3 rounded-lg border">
+                        <p className="text-sm text-muted-foreground">Harsh Braking</p>
+                        <p className="font-medium">3.2 / 100km</p>
+                      </div>
+                      <div className="p-3 rounded-lg border">
+                        <p className="text-sm text-muted-foreground">Idle Time</p>
+                        <p className="font-medium">8%</p>
+                      </div>
+                      <div className="p-3 rounded-lg border">
+                        <p className="text-sm text-muted-foreground">Eco Score</p>
+                        <p className="font-medium">76/100</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* SETTINGS TAB */}
         <TabsContent value="settings" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>System Settings</CardTitle>
-              <CardDescription>Configure Drishti vision system parameters</CardDescription>
+              <CardTitle>Device Configuration</CardTitle>
+              <CardDescription>Manage OBD2+GPS device settings</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-medium">Automatic Recording</h3>
-                    <p className="text-sm text-muted-foreground">Record video clips when incidents are detected</p>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-full bg-[#0056B3]/10">
+                      <Settings2 className="h-5 w-5 text-[#0056B3]" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium">Device Pairing</h3>
+                      <p className="text-sm text-muted-foreground">Connect and configure your OBD2+GPS device</p>
+                    </div>
                   </div>
                   <Button variant="outline">Configure</Button>
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-medium">Detection Sensitivity</h3>
-                    <p className="text-sm text-muted-foreground">Adjust how sensitively the system responds to events</p>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-full bg-[#00A3A3]/10">
+                      <Bell className="h-5 w-5 text-[#00A3A3]" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium">Notification Preferences</h3>
+                      <p className="text-sm text-muted-foreground">Manage alerts and notification settings</p>
+                    </div>
                   </div>
                   <Button variant="outline">Configure</Button>
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-medium">Alert Preferences</h3>
-                    <p className="text-sm text-muted-foreground">Choose which events trigger notifications</p>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-full bg-[#DC3545]/10">
+                      <AlertTriangle className="h-5 w-5 text-[#DC3545]" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium">Alert Thresholds</h3>
+                      <p className="text-sm text-muted-foreground">Customize when you receive critical alerts</p>
+                    </div>
                   </div>
                   <Button variant="outline">Configure</Button>
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-medium">Camera Calibration</h3>
-                    <p className="text-sm text-muted-foreground">Adjust camera positioning and field of view</p>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-full bg-[#FFC107]/10">
+                      <Search className="h-5 w-5 text-[#FFC107]" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium">Scan Frequency</h3>
+                      <p className="text-sm text-muted-foreground">Set how often the device scans vehicle systems</p>
+                    </div>
                   </div>
                   <Button variant="outline">Configure</Button>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-full bg-[#28A745]/10">
+                      <Battery className="h-5 w-5 text-[#28A745]" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium">Power Management</h3>
+                      <p className="text-sm text-muted-foreground">Optimize device power consumption settings</p>
+                    </div>
+                  </div>
+                  <Button variant="outline">Configure</Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Data Management</CardTitle>
+              <CardDescription>Control your vehicle data storage and sharing</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <h3 className="font-medium mb-2">Storage Usage</h3>
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1">
+                      <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-[#0056B3]" style={{ width: '42%' }}></div>
+                      </div>
+                      <div className="flex justify-between mt-1">
+                        <span className="text-xs text-muted-foreground">0 GB</span>
+                        <span className="text-xs text-muted-foreground">2.1/5 GB</span>
+                      </div>
+                    </div>
+                    <Button variant="outline" size="sm">Manage</Button>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 border rounded-lg">
+                    <h3 className="font-medium mb-2">Export Data</h3>
+                    <p className="text-sm text-muted-foreground mb-3">Download your vehicle data for external analysis</p>
+                    <Button variant="outline" size="sm">Export</Button>
+                  </div>
+                  
+                  <div className="p-4 border rounded-lg">
+                    <h3 className="font-medium mb-2">Clear History</h3>
+                    <p className="text-sm text-muted-foreground mb-3">Remove historical vehicle data from storage</p>
+                    <Button variant="outline" size="sm">Clear Data</Button>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -208,72 +707,197 @@ const Drishti: React.FC = () => {
   );
 };
 
-interface DrishtiStatusCardProps {
-  title: string;
-  status: string;
-  statusColor: string;
-  icon: React.ReactNode;
-  description: string;
-}
-
-const DrishtiStatusCard: React.FC<DrishtiStatusCardProps> = ({
-  title,
-  status,
-  statusColor,
-  icon,
-  description
-}) => {
-  return (
-    <Card>
-      <CardContent className="p-6">
-        <div className="flex justify-between items-start">
-          <div>
-            <h3 className="font-medium text-lg">{title}</h3>
-            <p className={`text-xl font-bold ${statusColor}`}>{status}</p>
-          </div>
-          <div className="p-2 rounded-full bg-muted">
-            {icon}
-          </div>
-        </div>
-        <p className="text-sm text-muted-foreground mt-2">{description}</p>
-      </CardContent>
-    </Card>
-  );
+// Helper functions for conditional styling
+const getHealthColorClass = (health: number) => {
+  if (health >= 85) return 'bg-[#28A745]';
+  if (health >= 70) return 'bg-[#88C34A]';
+  if (health >= 50) return 'bg-[#FFC107]';
+  if (health >= 30) return 'bg-[#FF9800]';
+  return 'bg-[#DC3545]';
 };
 
-// Sample data for the recent detections
-const recentDetections = [
+const getHealthTextClass = (health: number) => {
+  if (health >= 85) return 'text-[#28A745]';
+  if (health >= 70) return 'text-[#88C34A]';
+  if (health >= 50) return 'text-[#FFC107]';
+  if (health >= 30) return 'text-[#FF9800]';
+  return 'text-[#DC3545]';
+};
+
+type SeverityLevel = 'low' | 'medium' | 'high' | 'critical';
+
+const getSeverityBgColor = (severity: SeverityLevel | string) => {
+  switch (severity as SeverityLevel) {
+    case 'low': return 'bg-[#28A745]';
+    case 'medium': return 'bg-[#FFC107]';
+    case 'high': return 'bg-[#FF9800]';
+    case 'critical': return 'bg-[#DC3545]';
+    default: return 'bg-gray-400';
+  }
+};
+
+// Sample data for the vehicle health systems
+const vehicleSystemStatus = [
   {
-    name: "Pothole Detected",
+    name: 'Engine System',
+    health: 92,
+    icon: <Gauge className="h-4 w-4 text-[#28A745]" />,
+    bgColor: 'bg-[#28A745]/10',
+  },
+  {
+    name: 'Transmission',
+    health: 86,
+    icon: <Activity className="h-4 w-4 text-[#88C34A]" />,
+    bgColor: 'bg-[#88C34A]/10',
+  },
+  {
+    name: 'Fuel System',
+    health: 88,
+    icon: <Droplet className="h-4 w-4 text-[#28A745]" />,
+    bgColor: 'bg-[#28A745]/10',
+  },
+  {
+    name: 'Brake System',
+    health: 74,
+    icon: <AlertTriangle className="h-4 w-4 text-[#FFC107]" />,
+    bgColor: 'bg-[#FFC107]/10',
+  },
+  {
+    name: 'Battery/Charging',
+    health: 68,
+    icon: <Battery className="h-4 w-4 text-[#FF9800]" />,
+    bgColor: 'bg-[#FF9800]/10',
+  },
+  {
+    name: 'Exhaust System',
+    health: 81,
+    icon: <Activity className="h-4 w-4 text-[#88C34A]" />,
+    bgColor: 'bg-[#88C34A]/10',
+  },
+];
+
+// Sample data for error logs
+const errorLogs = [
+  {
+    code: 'P0420',
+    description: 'Catalyst System Efficiency Below Threshold',
+    date: '2 days ago',
+    severity: 'medium',
+  },
+  {
+    code: 'P0300',
+    description: 'Random/Multiple Cylinder Misfire Detected',
+    date: '1 week ago',
+    severity: 'high',
+  },
+  {
+    code: 'B1000',
+    description: 'Driver\'s Airbag Igniter Circuit Resistance High',
+    date: '2 weeks ago',
+    severity: 'critical',
+  },
+];
+
+// Sample data for component predictions
+const componentPredictions = [
+  {
+    name: 'Brake Pads',
+    timeFrame: '6 months',
+    confidence: 86,
+    urgency: 'medium',
+    timelinePosition: 30, // position on timeline (%)
+  },
+  {
+    name: 'Fuel Pump',
+    timeFrame: '14 months',
+    confidence: 72,
+    urgency: 'low',
+    timelinePosition: 70, // position on timeline (%)
+  },
+  {
+    name: 'Air Filter',
+    timeFrame: '3 months',
+    confidence: 92,
+    urgency: 'medium',
+    timelinePosition: 15, // position on timeline (%)
+  },
+  {
+    name: 'Battery',
+    timeFrame: '18 months',
+    confidence: 65,
+    urgency: 'low',
+    timelinePosition: 90, // position on timeline (%)
+  },
+];
+
+// Sample data for upcoming maintenance
+const upcomingMaintenance = [
+  {
+    name: 'Oil Change',
+    dueIn: '2 weeks',
+  },
+  {
+    name: 'Air Filter Replacement',
+    dueIn: '3 months',
+  },
+  {
+    name: 'Brake Inspection',
+    dueIn: '4 months',
+  },
+];
+
+// Sample data for recent trips
+const recentTrips = [
+  {
+    route: 'Home to Office',
+    date: 'Today, 9:15 AM',
+    distance: '12.4 km',
+  },
+  {
+    route: 'Office to Shopping Mall',
+    date: 'Yesterday, 6:30 PM',
+    distance: '5.7 km',
+  },
+  {
+    route: 'Home to Airport',
+    date: 'May 24, 11:20 AM',
+    distance: '28.3 km',
+  },
+];
+
+// Sample data for the recent alerts
+const recentAlerts = [
+  {
+    name: "Brake Pad Wear",
     time: "Today, 2:30 PM",
-    status: "Moderate",
-    statusColor: "text-amber-500",
+    severity: "Warning",
+    severityColor: "text-amber-500",
     icon: <AlertTriangle className="h-4 w-4 text-amber-500" />,
     bgColor: "bg-amber-100",
   },
   {
-    name: "Lane Departure",
+    name: "Oil Change Due",
     time: "Today, 1:45 PM",
-    status: "Minor",
-    statusColor: "text-blue-500",
-    icon: <AlertTriangle className="h-4 w-4 text-blue-500" />,
+    severity: "Reminder",
+    severityColor: "text-blue-500",
+    icon: <Clock className="h-4 w-4 text-blue-500" />,
     bgColor: "bg-blue-100",
   },
   {
-    name: "Traffic Sign Recognition",
-    time: "Today, 12:15 PM",
-    status: "Normal",
-    statusColor: "text-green-500",
-    icon: <Check className="h-4 w-4 text-green-500" />,
-    bgColor: "bg-green-100",
+    name: "Battery Voltage Low",
+    time: "Yesterday, 6:20 PM",
+    severity: "Warning",
+    severityColor: "text-amber-500",
+    icon: <Battery className="h-4 w-4 text-amber-500" />,
+    bgColor: "bg-amber-100",
   },
   {
-    name: "Vehicle Proximity Alert",
-    time: "Yesterday, 6:20 PM",
-    status: "Caution",
-    statusColor: "text-amber-500",
-    icon: <AlertTriangle className="h-4 w-4 text-amber-500" />,
-    bgColor: "bg-amber-100",
+    name: "Coolant Temperature High",
+    time: "May 22, 3:15 PM",
+    severity: "Critical",
+    severityColor: "text-red-500",
+    icon: <Thermometer className="h-4 w-4 text-red-500" />,
+    bgColor: "bg-red-100",
   },
 ];
 
