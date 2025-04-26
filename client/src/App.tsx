@@ -16,7 +16,6 @@ import AddVehicle from "@/pages/add-vehicle";
 import BookService from "@/pages/book-service";
 // Import the new enhanced nearby services page
 import Nearby from "@/pages/nearby-new";
-import Explore from "@/pages/explore";
 import LearnDriving from "@/pages/learn-driving";
 import Dashboard from "@/pages/dashboard";
 import Inspection from "@/pages/inspection";
@@ -140,19 +139,6 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <Nearby />
-              </motion.div>
-            )}
-          </Route>
-          <Route path="/explore">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <Explore />
               </motion.div>
             )}
           </Route>

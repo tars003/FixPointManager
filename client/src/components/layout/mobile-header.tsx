@@ -74,13 +74,6 @@ const navItems = [
     bgColor: 'bg-green-50',
   },
   {
-    title: 'Explore New Vehicle',
-    icon: Search,
-    href: '/explore',
-    color: 'text-orange-500',
-    bgColor: 'bg-orange-50',
-  },
-  {
     title: 'Marketplace',
     icon: ShoppingBag,
     href: '/marketplace',
