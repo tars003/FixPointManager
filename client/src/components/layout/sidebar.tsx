@@ -24,7 +24,8 @@ import {
   Gamepad2,
   Tag,
   Receipt,
-  BookOpen
+  BookOpen,
+  Eye
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -70,6 +71,13 @@ const navItems = [
     href: '/nearby',
     color: 'text-green-500',
     bgColor: 'bg-green-50',
+  },
+  {
+    title: 'Drishti',
+    icon: Eye,
+    href: '/drishti',
+    color: 'text-indigo-600',
+    bgColor: 'bg-indigo-50',
   },
   {
     title: 'TestBeforeBuy',

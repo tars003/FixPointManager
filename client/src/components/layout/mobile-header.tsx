@@ -27,7 +27,8 @@ import {
   AlertTriangle,
   Truck,
   Gamepad2,
-  BookOpen
+  BookOpen,
+  Eye
 } from 'lucide-react';
 
 const navItems = [
@@ -72,6 +73,13 @@ const navItems = [
     href: '/nearby',
     color: 'text-green-500',
     bgColor: 'bg-green-50',
+  },
+  {
+    title: 'Drishti',
+    icon: Eye,
+    href: '/drishti',
+    color: 'text-indigo-600',
+    bgColor: 'bg-indigo-50',
   },
   {
     title: 'TestBeforeBuy',
