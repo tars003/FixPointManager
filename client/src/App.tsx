@@ -286,6 +286,19 @@ function Router() {
               </motion.div>
             )}
           </Route>
+          <Route path="/drishti">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <Drishti />
+              </motion.div>
+            )}
+          </Route>
           <Route path="/arena-dashboard">
             {() => (
               <motion.div
