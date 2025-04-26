@@ -27,7 +27,7 @@ const TestBeforeBuy: React.FC = () => {
                 TestBeforeBuy
               </h1>
               <p className="text-neutral-500 mt-2">
-                India's largest vehicle discovery & comparison platform
+                Discover, compare & book test drives for your next perfect vehicle
               </p>
             </div>
           </div>
@@ -93,8 +93,8 @@ const TestBeforeBuy: React.FC = () => {
         <div className="mt-12 border-t border-neutral-200 pt-8">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
             <div>
-              <h3 className="text-xl font-semibold mb-1">How was your experience with AutoVista?</h3>
-              <p className="text-neutral-500">Your feedback helps us improve our platform.</p>
+              <h3 className="text-xl font-semibold mb-1">How was your experience with TestBeforeBuy?</h3>
+              <p className="text-neutral-500">Your feedback helps us improve our vehicle discovery platform.</p>
             </div>
             <ContentReaction 
               contentId="autovista-overall"
