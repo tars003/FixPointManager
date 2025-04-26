@@ -39,7 +39,7 @@ const navItems = [
     bgColor: 'bg-blue-50',
   },
   {
-    title: 'My Vehicles',
+    title: 'VehicleVault',
     icon: Car,
     href: '/vehicles',
     color: 'text-primary',

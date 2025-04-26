@@ -90,7 +90,7 @@ const statusCardsData = [
 // COLORS
 const COLORS = ['#3B82F6', '#10B981', '#F59E0B'];
 
-const MyVehicles = () => {
+const VehicleVault = () => {
   const [, navigate] = useLocation();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTab, setSelectedTab] = useState('all');
@@ -248,7 +248,7 @@ const MyVehicles = () => {
     <div className="container px-4 py-6 max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
         <div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 text-transparent bg-clip-text">My Vehicles</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 text-transparent bg-clip-text">VehicleVault</h1>
           <p className="text-gray-400 mt-1">Manage and maintain your vehicle fleet in one place.</p>
         </div>
         
@@ -529,4 +529,4 @@ const MyVehicles = () => {
   );
 };
 
-export default MyVehicles;
+export default VehicleVault;
