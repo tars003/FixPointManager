@@ -217,7 +217,7 @@ function Router() {
           </Route>
           <Route path="/autovista">
             {() => (
-              <AutoVista />
+              <TestBeforeBuy />
             )}
           </Route>
           <Route path="/commercial-fleet">
