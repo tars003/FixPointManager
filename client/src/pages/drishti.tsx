@@ -45,7 +45,7 @@ import CollaborativeAnnotations from '@/components/drishti/collaborative-annotat
 import GamifiedDriverPerformance from '@/components/drishti/gamified-driver-performance';
 import MaintenanceTimeline from '@/components/drishti/maintenance-timeline';
 import AIRouteRecommendation from '@/components/drishti/ai-route-recommendation';
-import SocialSharingAchievements from '@/components/drishti/social-sharing-achievements';
+import DriverAchievements from '@/components/drishti/driver-achievements';
 import PredictiveBatteryHealth from '@/components/drishti/predictive-battery-health';
 
 const Drishti: React.FC = () => {
@@ -625,10 +625,6 @@ const Drishti: React.FC = () => {
                 <MessageSquare className="h-4 w-4" />
                 <span className="hidden sm:inline-block">Collaborate</span>
               </TabsTrigger>
-              <TabsTrigger value="gamified" className="gap-1">
-                <Trophy className="h-4 w-4" />
-                <span className="hidden sm:inline-block">Performance</span>
-              </TabsTrigger>
               <TabsTrigger value="maintenance" className="gap-1">
                 <ScrollText className="h-4 w-4" />
                 <span className="hidden sm:inline-block">Timeline</span>
@@ -645,10 +641,6 @@ const Drishti: React.FC = () => {
             
             <TabsContent value="collaboration" className="pt-6">
               <CollaborativeAnnotations />
-            </TabsContent>
-            
-            <TabsContent value="gamified" className="pt-6">
-              <GamifiedDriverPerformance />
             </TabsContent>
             
             <TabsContent value="maintenance" className="pt-6">
@@ -681,9 +673,9 @@ const Drishti: React.FC = () => {
                 <span className="inline-block sm:hidden">Routes</span>
               </TabsTrigger>
               <TabsTrigger value="social" className="gap-1">
-                <Share2 className="h-4 w-4" />
-                <span className="hidden sm:inline-block">Social Platform</span>
-                <span className="inline-block sm:hidden">Social</span>
+                <Trophy className="h-4 w-4" />
+                <span className="hidden sm:inline-block">Achievements</span>
+                <span className="inline-block sm:hidden">Achieve</span>
               </TabsTrigger>
               <TabsTrigger value="battery" className="gap-1">
                 <BatteryCharging className="h-4 w-4" />
@@ -697,7 +689,7 @@ const Drishti: React.FC = () => {
             </TabsContent>
             
             <TabsContent value="social" className="pt-6">
-              <SocialSharingAchievements />
+              <DriverAchievements />
             </TabsContent>
             
             <TabsContent value="battery" className="pt-6">
