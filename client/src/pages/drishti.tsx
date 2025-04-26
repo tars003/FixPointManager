@@ -30,7 +30,12 @@ import {
   StretchHorizontal,
   MessageSquare,
   Trophy,
-  ScrollText
+  ScrollText,
+  BatteryCharging,
+  Share2,
+  Brain,
+  Globe,
+  UserCog
 } from 'lucide-react';
 
 // Import custom components
@@ -39,10 +44,14 @@ import EfficiencyHeatMap from '@/components/drishti/efficiency-heat-map';
 import CollaborativeAnnotations from '@/components/drishti/collaborative-annotations';
 import GamifiedDriverPerformance from '@/components/drishti/gamified-driver-performance';
 import MaintenanceTimeline from '@/components/drishti/maintenance-timeline';
+import AIRouteRecommendation from '@/components/drishti/ai-route-recommendation';
+import SocialSharingAchievements from '@/components/drishti/social-sharing-achievements';
+import PredictiveBatteryHealth from '@/components/drishti/predictive-battery-health';
 
 const Drishti: React.FC = () => {
   const [mainTab, setMainTab] = useState<string>('dashboard');
   const [advancedFeatureTab, setAdvancedFeatureTab] = useState<string>('energy');
+  const [advancedAIFeatureTab, setAdvancedAIFeatureTab] = useState<string>('route');
   
   return (
     <div className="container px-4 py-6 mx-auto">
@@ -65,12 +74,13 @@ const Drishti: React.FC = () => {
       </motion.div>
 
       <Tabs value={mainTab} onValueChange={setMainTab} className="space-y-6">
-        <TabsList className="grid grid-cols-5 w-full max-w-3xl">
+        <TabsList className="grid grid-cols-6 w-full max-w-4xl">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="vehicle-health">Vehicle Health</TabsTrigger>
           <TabsTrigger value="predictive">Predictive</TabsTrigger>
           <TabsTrigger value="location">Location</TabsTrigger>
-          <TabsTrigger value="advanced">Advanced</TabsTrigger>
+          <TabsTrigger value="advanced">Core Features</TabsTrigger>
+          <TabsTrigger value="ai-features">AI Features</TabsTrigger>
         </TabsList>
 
         {/* DASHBOARD TAB */}
@@ -598,7 +608,7 @@ const Drishti: React.FC = () => {
           </div>
         </TabsContent>
 
-        {/* ADVANCED FEATURES TAB */}
+        {/* CORE FEATURES TAB */}
         <TabsContent value="advanced" className="space-y-6">
           {/* Advanced Features Tabs */}
           <Tabs value={advancedFeatureTab} onValueChange={setAdvancedFeatureTab} className="w-full">
@@ -645,6 +655,99 @@ const Drishti: React.FC = () => {
               <MaintenanceTimeline />
             </TabsContent>
           </Tabs>
+        </TabsContent>
+
+        {/* ADVANCED AI FEATURES TAB */}
+        <TabsContent value="ai-features" className="space-y-6">
+          <Card className="bg-gradient-to-r from-indigo-50 to-transparent border-indigo-100 mb-6">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-indigo-100 rounded-lg">
+                  <Brain className="h-6 w-6 text-indigo-600" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-medium">Advanced AI-Driven Features</h2>
+                  <p className="text-sm text-muted-foreground">Cutting-edge machine learning technologies to enhance your driving experience</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Tabs value={advancedAIFeatureTab} onValueChange={setAdvancedAIFeatureTab} className="w-full">
+            <TabsList className="grid grid-cols-3 w-full">
+              <TabsTrigger value="route" className="gap-1">
+                <Brain className="h-4 w-4" />
+                <span className="hidden sm:inline-block">AI Route Planning</span>
+                <span className="inline-block sm:hidden">Routes</span>
+              </TabsTrigger>
+              <TabsTrigger value="social" className="gap-1">
+                <Share2 className="h-4 w-4" />
+                <span className="hidden sm:inline-block">Social Platform</span>
+                <span className="inline-block sm:hidden">Social</span>
+              </TabsTrigger>
+              <TabsTrigger value="battery" className="gap-1">
+                <BatteryCharging className="h-4 w-4" />
+                <span className="hidden sm:inline-block">Battery Health</span>
+                <span className="inline-block sm:hidden">Battery</span>
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="route" className="pt-6">
+              <AIRouteRecommendation />
+            </TabsContent>
+            
+            <TabsContent value="social" className="pt-6">
+              <SocialSharingAchievements />
+            </TabsContent>
+            
+            <TabsContent value="battery" className="pt-6">
+              <PredictiveBatteryHealth />
+            </TabsContent>
+          </Tabs>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Globe className="h-5 w-5 text-[#6366F1]" />
+                  Predictive Collision Avoidance
+                </CardTitle>
+                <CardDescription>
+                  Early warning system based on driving patterns and environmental conditions
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-48 flex items-center justify-center border bg-muted/20 rounded-md">
+                  <div className="text-center">
+                    <AlertTriangle className="h-12 w-12 mx-auto text-amber-500 opacity-50" />
+                    <p className="mt-2 text-sm text-muted-foreground">Advanced collision detection system coming soon</p>
+                  </div>
+                </div>
+                <Button variant="outline" className="w-full mt-4">Learn More</Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <UserCog className="h-5 w-5 text-purple-600" />
+                  Emotional Intelligence Feedback
+                </CardTitle>
+                <CardDescription>
+                  Personalized coaching based on driver emotional states
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-48 flex items-center justify-center border bg-muted/20 rounded-md">
+                  <div className="text-center">
+                    <UserCog className="h-12 w-12 mx-auto text-purple-600 opacity-50" />
+                    <p className="mt-2 text-sm text-muted-foreground">Voice pattern analysis system coming soon</p>
+                  </div>
+                </div>
+                <Button variant="outline" className="w-full mt-4">Learn More</Button>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
