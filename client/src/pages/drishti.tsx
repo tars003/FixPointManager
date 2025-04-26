@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -27,10 +27,23 @@ import {
   Calendar, 
   Search, 
   Route, 
-  StretchHorizontal
+  StretchHorizontal,
+  MessageSquare,
+  Trophy,
+  ScrollText
 } from 'lucide-react';
 
+// Import custom components
+import RealtimeEnergyMonitor from '@/components/drishti/realtime-energy-monitor';
+import EfficiencyHeatMap from '@/components/drishti/efficiency-heat-map';
+import CollaborativeAnnotations from '@/components/drishti/collaborative-annotations';
+import GamifiedDriverPerformance from '@/components/drishti/gamified-driver-performance';
+import MaintenanceTimeline from '@/components/drishti/maintenance-timeline';
+
 const Drishti: React.FC = () => {
+  const [mainTab, setMainTab] = useState<string>('dashboard');
+  const [advancedFeatureTab, setAdvancedFeatureTab] = useState<string>('energy');
+  
   return (
     <div className="container px-4 py-6 mx-auto">
       <motion.div 
@@ -51,13 +64,13 @@ const Drishti: React.FC = () => {
         </p>
       </motion.div>
 
-      <Tabs defaultValue="dashboard" className="space-y-6">
+      <Tabs value={mainTab} onValueChange={setMainTab} className="space-y-6">
         <TabsList className="grid grid-cols-5 w-full max-w-3xl">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="vehicle-health">Vehicle Health</TabsTrigger>
           <TabsTrigger value="predictive">Predictive</TabsTrigger>
           <TabsTrigger value="location">Location</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="advanced">Advanced</TabsTrigger>
         </TabsList>
 
         {/* DASHBOARD TAB */}
@@ -585,122 +598,53 @@ const Drishti: React.FC = () => {
           </div>
         </TabsContent>
 
-        {/* SETTINGS TAB */}
-        <TabsContent value="settings" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Device Configuration</CardTitle>
-              <CardDescription>Manage OBD2+GPS device settings</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-full bg-[#0056B3]/10">
-                      <Settings2 className="h-5 w-5 text-[#0056B3]" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium">Device Pairing</h3>
-                      <p className="text-sm text-muted-foreground">Connect and configure your OBD2+GPS device</p>
-                    </div>
-                  </div>
-                  <Button variant="outline">Configure</Button>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-full bg-[#00A3A3]/10">
-                      <Bell className="h-5 w-5 text-[#00A3A3]" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium">Notification Preferences</h3>
-                      <p className="text-sm text-muted-foreground">Manage alerts and notification settings</p>
-                    </div>
-                  </div>
-                  <Button variant="outline">Configure</Button>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-full bg-[#DC3545]/10">
-                      <AlertTriangle className="h-5 w-5 text-[#DC3545]" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium">Alert Thresholds</h3>
-                      <p className="text-sm text-muted-foreground">Customize when you receive critical alerts</p>
-                    </div>
-                  </div>
-                  <Button variant="outline">Configure</Button>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-full bg-[#FFC107]/10">
-                      <Search className="h-5 w-5 text-[#FFC107]" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium">Scan Frequency</h3>
-                      <p className="text-sm text-muted-foreground">Set how often the device scans vehicle systems</p>
-                    </div>
-                  </div>
-                  <Button variant="outline">Configure</Button>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-full bg-[#28A745]/10">
-                      <Battery className="h-5 w-5 text-[#28A745]" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium">Power Management</h3>
-                      <p className="text-sm text-muted-foreground">Optimize device power consumption settings</p>
-                    </div>
-                  </div>
-                  <Button variant="outline">Configure</Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader>
-              <CardTitle>Data Management</CardTitle>
-              <CardDescription>Control your vehicle data storage and sharing</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <h3 className="font-medium mb-2">Storage Usage</h3>
-                  <div className="flex items-center gap-4">
-                    <div className="flex-1">
-                      <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                        <div className="h-full bg-[#0056B3]" style={{ width: '42%' }}></div>
-                      </div>
-                      <div className="flex justify-between mt-1">
-                        <span className="text-xs text-muted-foreground">0 GB</span>
-                        <span className="text-xs text-muted-foreground">2.1/5 GB</span>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm">Manage</Button>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 border rounded-lg">
-                    <h3 className="font-medium mb-2">Export Data</h3>
-                    <p className="text-sm text-muted-foreground mb-3">Download your vehicle data for external analysis</p>
-                    <Button variant="outline" size="sm">Export</Button>
-                  </div>
-                  
-                  <div className="p-4 border rounded-lg">
-                    <h3 className="font-medium mb-2">Clear History</h3>
-                    <p className="text-sm text-muted-foreground mb-3">Remove historical vehicle data from storage</p>
-                    <Button variant="outline" size="sm">Clear Data</Button>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        {/* ADVANCED FEATURES TAB */}
+        <TabsContent value="advanced" className="space-y-6">
+          {/* Advanced Features Tabs */}
+          <Tabs value={advancedFeatureTab} onValueChange={setAdvancedFeatureTab} className="w-full">
+            <TabsList className="grid grid-cols-5 w-full">
+              <TabsTrigger value="energy" className="gap-1">
+                <Droplet className="h-4 w-4" />
+                <span className="hidden sm:inline-block">Energy</span>
+              </TabsTrigger>
+              <TabsTrigger value="heatmap" className="gap-1">
+                <MapPin className="h-4 w-4" />
+                <span className="hidden sm:inline-block">Heatmap</span>
+              </TabsTrigger>
+              <TabsTrigger value="collaboration" className="gap-1">
+                <MessageSquare className="h-4 w-4" />
+                <span className="hidden sm:inline-block">Collaborate</span>
+              </TabsTrigger>
+              <TabsTrigger value="gamified" className="gap-1">
+                <Trophy className="h-4 w-4" />
+                <span className="hidden sm:inline-block">Performance</span>
+              </TabsTrigger>
+              <TabsTrigger value="maintenance" className="gap-1">
+                <ScrollText className="h-4 w-4" />
+                <span className="hidden sm:inline-block">Timeline</span>
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="energy" className="pt-6">
+              <RealtimeEnergyMonitor />
+            </TabsContent>
+            
+            <TabsContent value="heatmap" className="pt-6">
+              <EfficiencyHeatMap />
+            </TabsContent>
+            
+            <TabsContent value="collaboration" className="pt-6">
+              <CollaborativeAnnotations />
+            </TabsContent>
+            
+            <TabsContent value="gamified" className="pt-6">
+              <GamifiedDriverPerformance />
+            </TabsContent>
+            
+            <TabsContent value="maintenance" className="pt-6">
+              <MaintenanceTimeline />
+            </TabsContent>
+          </Tabs>
         </TabsContent>
       </Tabs>
     </div>
