@@ -25,6 +25,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { formatDate } from '@/lib/format';
 import { NotificationPopover } from '@/components/notification/notification-popover';
+import FeatureShowcase from '@/components/dashboard/feature-showcase';
 
 const Dashboard = () => {
   const [, navigate] = useLocation();
