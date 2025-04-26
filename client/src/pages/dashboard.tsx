@@ -276,8 +276,9 @@ const Dashboard = () => {
         transition={{ duration: 0.5, delay: 0.3 }}
       >
         <Tabs defaultValue="dashboard" className="w-full">
-          <TabsList className="grid w-full md:w-auto grid-cols-3 h-auto p-1">
+          <TabsList className="grid w-full md:w-auto grid-cols-4 h-auto p-1">
             <TabsTrigger value="dashboard" className="py-2">Dashboard</TabsTrigger>
+            <TabsTrigger value="new-features" className="py-2">New Features</TabsTrigger>
             <TabsTrigger value="services" className="py-2">Services</TabsTrigger>
             <TabsTrigger value="calculators" className="py-2">Calculators</TabsTrigger>
           </TabsList>
@@ -376,6 +377,12 @@ const Dashboard = () => {
                   </Button>
                 </div>
               )}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="new-features" className="mt-4">
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <FeatureShowcase />
             </div>
           </TabsContent>
           
