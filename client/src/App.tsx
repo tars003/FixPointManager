@@ -29,7 +29,7 @@ import FastagEchallan from "@/pages/fastag-echallan";
 import EducationalPage from "@/pages/educational";
 import Marketplace from "@/pages/marketplace";
 import Arena from "@/pages/arena";
-import AutoVista from "@/pages/autovista";
+import TestBeforeBuy from "@/pages/autovista";
 import ArenaDashboard from "@/pages/arena-dashboard";
 import NewArenaDashboard from "@/pages/new-arena-dashboard";
 import ArenaDashboardNew from "@/pages/arena-dashboard-new";

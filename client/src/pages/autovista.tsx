@@ -11,7 +11,7 @@ import PageTransition from '@/components/transitions/page-transition';
 import ContentReaction from '@/components/ui/content-reaction';
 import FeedbackButton from '@/components/ui/feedback-button';
 
-const AutoVista: React.FC = () => {
+const TestBeforeBuy: React.FC = () => {
   return (
     <PageTransition type="fade">
       <div className="w-full max-w-7xl mx-auto px-4 py-6">
@@ -24,7 +24,7 @@ const AutoVista: React.FC = () => {
           <div className="flex justify-between items-center mb-6">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-800 bg-clip-text text-transparent">
-                AutoVista
+                TestBeforeBuy
               </h1>
               <p className="text-neutral-500 mt-2">
                 India's largest vehicle discovery & comparison platform
@@ -149,4 +149,4 @@ const AutoVista: React.FC = () => {
   );
 };
 
-export default AutoVista;
+export default TestBeforeBuy;

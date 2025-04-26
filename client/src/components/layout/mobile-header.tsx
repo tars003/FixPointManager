@@ -74,6 +74,13 @@ const navItems = [
     bgColor: 'bg-green-50',
   },
   {
+    title: 'TestBeforeBuy',
+    icon: Car,
+    href: '/autovista',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50',
+  },
+  {
     title: 'Marketplace',
     icon: ShoppingBag,
     href: '/marketplace',
