@@ -29,6 +29,9 @@ import FastagEchallan from "@/pages/fastag-echallan";
 import EducationalPage from "@/pages/educational";
 import Marketplace from "@/pages/marketplace";
 import Arena from "@/pages/arena";
+import ArenaHome from "@/pages/arena/index";
+import ArenaVehicleSelection from "@/pages/arena/vehicle-selection";
+import ArenaCustomize from "@/pages/arena/customize";
 import TestBeforeBuy from "@/pages/autovista";
 import ArenaDashboard from "@/pages/arena-dashboard";
 import NewArenaDashboard from "@/pages/new-arena-dashboard";
@@ -334,7 +337,33 @@ function Router() {
                 variants={pageVariants}
                 transition={{ duration: 0.3 }}
               >
-                <Arena />
+                <ArenaHome />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/arena/vehicle-selection">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <ArenaVehicleSelection />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/arena/customize/:id">
+            {(params) => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <ArenaCustomize />
               </motion.div>
             )}
           </Route>
