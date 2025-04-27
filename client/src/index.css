@@ -2,6 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Pre-owned vehicle styles */
+.preowned-theme h2 {
+  @apply bg-gradient-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent;
+}
+
+.preowned-theme .border {
+  @apply border-amber-100;
+}
+
+.preowned-theme button[data-state="active"] {
+  @apply bg-amber-500 text-white hover:bg-amber-600;
+}
+
+.preowned-theme .bg-primary {
+  @apply bg-amber-500;
+}
+
+.preowned-theme .border-primary {
+  @apply border-amber-500;
+}
+
+.preowned-theme .text-primary {
+  @apply text-amber-500;
+}
+
 /* Custom 3D animation for Arena page */
 @keyframes float {
   0% {

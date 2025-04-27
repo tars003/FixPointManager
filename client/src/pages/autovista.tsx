@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import HeroSlider from '@/components/autovista/hero-slider';
 import CatalogShowcase from '@/components/autovista/catalog-showcase';
@@ -10,11 +10,17 @@ import PlatformComparison from '@/components/autovista/platform-comparison';
 import PageTransition from '@/components/transitions/page-transition';
 import ContentReaction from '@/components/ui/content-reaction';
 import FeedbackButton from '@/components/ui/feedback-button';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { CarFront, CarIcon } from 'lucide-react';
 
 const TestBeforeBuy: React.FC = () => {
+  const [vehicleType, setVehicleType] = useState<'new' | 'preowned'>('new');
+  
   return (
     <PageTransition type="fade">
-      <div className="w-full max-w-7xl mx-auto px-4 py-6">
+      <div className={`w-full max-w-7xl mx-auto px-4 py-6 ${vehicleType === 'preowned' ? 'preowned-theme' : ''}`}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -23,16 +29,39 @@ const TestBeforeBuy: React.FC = () => {
         >
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-800 bg-clip-text text-transparent">
+              <h1 className={`text-3xl md:text-4xl font-bold ${
+                vehicleType === 'new' 
+                  ? 'bg-gradient-to-r from-blue-600 to-indigo-800 bg-clip-text text-transparent'
+                  : 'bg-gradient-to-r from-amber-600 to-orange-700 bg-clip-text text-transparent'
+              }`}>
                 TestBeforeBuy
               </h1>
               <p className="text-neutral-500 mt-2">
                 Discover, compare & book test drives for your next perfect vehicle
               </p>
             </div>
+            
+            <div className="flex items-center space-x-2">
+              <Tabs 
+                value={vehicleType} 
+                onValueChange={(v) => setVehicleType(v as 'new' | 'preowned')}
+                className="border rounded-lg p-1 bg-white"
+              >
+                <TabsList className="grid grid-cols-2 h-9">
+                  <TabsTrigger value="new" className="flex items-center gap-2 text-xs">
+                    <CarFront className="h-3.5 w-3.5" />
+                    <span>New</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="preowned" className="flex items-center gap-2 text-xs">
+                    <CarIcon className="h-3.5 w-3.5" />
+                    <span>Pre-owned</span>
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
           </div>
           
-          <HeroSlider />
+          <HeroSlider isPreowned={vehicleType === 'preowned'} />
         </motion.div>
         
         <div className="space-y-8">
@@ -41,7 +70,9 @@ const TestBeforeBuy: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <CatalogShowcase />
+            <CatalogShowcase 
+              isPreowned={vehicleType === 'preowned'} 
+            />
           </motion.div>
           
           <motion.div
@@ -49,7 +80,9 @@ const TestBeforeBuy: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <VehicleDiscovery />
+            <VehicleDiscovery 
+              isPreowned={vehicleType === 'preowned'}
+            />
           </motion.div>
           
           <motion.div
@@ -57,7 +90,9 @@ const TestBeforeBuy: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <ComparisonTool />
+            <ComparisonTool 
+              isPreowned={vehicleType === 'preowned'}
+            />
           </motion.div>
           
           <motion.div
@@ -65,8 +100,16 @@ const TestBeforeBuy: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
           >
-            <h2 className="text-2xl font-bold mb-6">Ownership & Purchase Support</h2>
-            <SalesElements />
+            <h2 className={`text-2xl font-bold mb-6 ${
+              vehicleType === 'new'
+                ? 'text-blue-700'
+                : 'text-amber-700'
+            }`}>
+              {vehicleType === 'new' ? 'Ownership & Purchase Support' : 'Pre-owned Vehicle Assurance'}
+            </h2>
+            <SalesElements 
+              isPreowned={vehicleType === 'preowned'}
+            />
           </motion.div>
           
           <motion.div
@@ -74,7 +117,9 @@ const TestBeforeBuy: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <PlatformComparison />
+            <PlatformComparison 
+              isPreowned={vehicleType === 'preowned'}
+            />
           </motion.div>
         </div>
         

@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Zap, Percent, Car, Award } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Zap, Percent, Car, Award, Shield, Clock, Medal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-type SlideType = 'newLaunches' | 'seasonalOffers' | 'electricRevolution' | 'categorySpotlight';
+interface HeroSliderProps {
+  isPreowned?: boolean;
+}
+
+type SlideType = 'newLaunches' | 'seasonalOffers' | 'electricRevolution' | 'categorySpotlight' | 'certifiedPreowned' | 'warrantySpecials' | 'budgetFriendly';
 
 interface Slide {
   type: SlideType;
@@ -59,9 +63,56 @@ const sliderData: Slide[] = [
   },
 ];
 
-const HeroSlider: React.FC = () => {
+// Pre-owned vehicle slides
+const preownedSliderData: Slide[] = [
+  {
+    type: 'certifiedPreowned',
+    title: 'Certified Pre-owned Collection',
+    subtitle: 'Quality assured',
+    description: 'Browse our collection of certified pre-owned vehicles that undergo rigorous inspections and come with extended warranties.',
+    bgColor: 'from-amber-500 to-orange-700',
+    icon: <Shield size={48} className="text-white" />,
+    ctaText: 'View Certified Vehicles',
+    ctaAction: () => console.log('Viewing certified pre-owned vehicles'),
+  },
+  {
+    type: 'warrantySpecials',
+    title: 'Extended Warranty Offers',
+    subtitle: 'Peace of mind ownership',
+    description: 'Exclusive extended warranty packages available on select pre-owned vehicles for worry-free ownership experience.',
+    bgColor: 'from-orange-500 to-red-600',
+    icon: <Clock size={48} className="text-white" />,
+    ctaText: 'Explore Warranty Options',
+    ctaAction: () => console.log('Exploring warranty options'),
+  },
+  {
+    type: 'budgetFriendly',
+    title: 'Budget-Friendly Options',
+    subtitle: 'Value that exceeds price',
+    description: 'Discover high-value pre-owned vehicles across all price ranges with complete history and maintenance records.',
+    bgColor: 'from-amber-600 to-amber-900',
+    icon: <Medal size={48} className="text-white" />,
+    ctaText: 'Find Your Match',
+    ctaAction: () => console.log('Finding budget-friendly options'),
+  },
+  {
+    type: 'seasonalOffers',
+    title: 'Seasonal Pre-owned Deals',
+    subtitle: 'Limited time specials',
+    description: 'Take advantage of exclusive seasonal discounts and financing options on select pre-owned vehicles.',
+    bgColor: 'from-yellow-500 to-orange-700',
+    icon: <Percent size={48} className="text-white" />,
+    ctaText: 'View Deals',
+    ctaAction: () => console.log('Viewing pre-owned deals'),
+  },
+];
+
+const HeroSlider: React.FC<HeroSliderProps> = ({ isPreowned = false }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  
+  // Select the appropriate slider data based on isPreowned prop
+  const activeSliderData = isPreowned ? preownedSliderData : sliderData;
 
   useEffect(() => {
     const timer = setInterval(() => {
