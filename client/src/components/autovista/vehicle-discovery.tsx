@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { 
   Car, Truck, Bike, Zap, 
   Droplet, Fan, Atom, Fuel, 
-  Search, Gauge, Filter, LucideIcon 
+  Search, Gauge, Filter, Clock,
+  ShieldCheck, History, LucideIcon 
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
@@ -11,6 +12,10 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
 import ContentReaction from '@/components/ui/content-reaction';
+
+interface VehicleDiscoveryProps {
+  isPreowned?: boolean;
+}
 
 // Vehicle category interfaces
 interface VehicleCategory {
@@ -126,10 +131,55 @@ const trendingSearches = [
   "Luxury cars under 50 lakhs"
 ];
 
-const VehicleDiscovery: React.FC = () => {
+// Pre-owned trending searches
+const preownedTrendingSearches = [
+  "Certified pre-owned cars under 5 lakhs",
+  "Best pre-owned SUVs",
+  "Single-owner vehicles",
+  "Pre-owned electric vehicles",
+  "Vehicles with service history",
+  "Pre-owned cars with warranty",
+  "Low mileage used motorcycles",
+  "Pre-owned luxury cars"
+];
+
+// Pre-owned specific categories
+const preownedSpecificCategories = [
+  { 
+    id: 'certified', 
+    name: 'Certified', 
+    icon: ShieldCheck, 
+    description: 'Thoroughly inspected with warranty',
+    count: 5350
+  },
+  { 
+    id: 'single-owner', 
+    name: 'Single Owner', 
+    icon: History, 
+    description: 'First-owner vehicles with complete records',
+    count: 8700
+  },
+  { 
+    id: 'under-3-years', 
+    name: 'Under 3 Years', 
+    icon: Clock, 
+    description: 'Recent models with modern features',
+    count: 4800
+  },
+  { 
+    id: 'luxury', 
+    name: 'Luxury', 
+    icon: Car, 
+    description: 'Premium brands at affordable prices',
+    count: 2200
+  },
+];
+
+const VehicleDiscovery: React.FC<VehicleDiscoveryProps> = ({ isPreowned = false }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedFuel, setSelectedFuel] = useState<string>('all');
-  const [priceRange, setPriceRange] = useState<number[]>([500000]);
+  const [priceRange, setPriceRange] = useState<number[]>([isPreowned ? 300000 : 500000]);
+  const [condition, setCondition] = useState<string>(isPreowned ? 'excellent' : '');
   
   // Handle budget slider change
   const handlePriceRangeChange = (value: number[]) => {
@@ -149,13 +199,13 @@ const VehicleDiscovery: React.FC = () => {
       <h2 className="text-2xl font-bold mb-8">Find Your Perfect Vehicle</h2>
       
       {/* Category selection */}
-      <div className="mb-8">
+      <div className={`mb-8 ${isPreowned ? 'preowned-theme' : ''}`}>
         <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wider mb-4">
-          Choose Vehicle Type
+          {isPreowned ? 'Choose Pre-owned Type' : 'Choose Vehicle Type'}
         </h3>
         
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {vehicleCategories.map((category) => (
+          {(isPreowned ? preownedSpecificCategories : vehicleCategories).map((category) => (
             <motion.div
               key={category.id}
               whileHover={{ scale: 1.03 }}

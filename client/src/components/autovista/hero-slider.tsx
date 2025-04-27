@@ -123,17 +123,22 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ isPreowned = false }) => {
     return () => clearInterval(timer);
   }, [currentSlide, isAnimating]);
 
+  // Reset currentSlide when switching between new and pre-owned
+  useEffect(() => {
+    setCurrentSlide(0);
+  }, [isPreowned]);
+
   const nextSlide = () => {
     if (isAnimating) return;
     setIsAnimating(true);
-    setCurrentSlide((prev) => (prev === sliderData.length - 1 ? 0 : prev + 1));
+    setCurrentSlide((prev) => (prev === activeSliderData.length - 1 ? 0 : prev + 1));
     setTimeout(() => setIsAnimating(false), 500);
   };
 
   const prevSlide = () => {
     if (isAnimating) return;
     setIsAnimating(true);
-    setCurrentSlide((prev) => (prev === 0 ? sliderData.length - 1 : prev - 1));
+    setCurrentSlide((prev) => (prev === 0 ? activeSliderData.length - 1 : prev - 1));
     setTimeout(() => setIsAnimating(false), 500);
   };
 
@@ -148,8 +153,8 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ isPreowned = false }) => {
     <div className="relative overflow-hidden rounded-xl h-[450px] w-full">
       <AnimatePresence mode="wait">
         <motion.div
-          key={currentSlide}
-          className={`absolute inset-0 bg-gradient-to-r ${sliderData[currentSlide].bgColor} p-8 md:p-12 flex flex-col justify-center`}
+          key={`${isPreowned ? 'preowned' : 'new'}-${currentSlide}`}
+          className={`absolute inset-0 bg-gradient-to-r ${activeSliderData[currentSlide].bgColor} p-8 md:p-12 flex flex-col justify-center`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -162,7 +167,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ isPreowned = false }) => {
               transition={{ delay: 0.1 }}
               className="mb-4"
             >
-              {sliderData[currentSlide].icon}
+              {activeSliderData[currentSlide].icon}
             </motion.div>
             
             <motion.h3
@@ -171,7 +176,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ isPreowned = false }) => {
               transition={{ delay: 0.2 }}
               className="text-white text-sm font-medium uppercase tracking-wider mb-2"
             >
-              {sliderData[currentSlide].subtitle}
+              {activeSliderData[currentSlide].subtitle}
             </motion.h3>
             
             <motion.h2
@@ -180,7 +185,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ isPreowned = false }) => {
               transition={{ delay: 0.3 }}
               className="text-white text-4xl md:text-5xl font-bold mb-4"
             >
-              {sliderData[currentSlide].title}
+              {activeSliderData[currentSlide].title}
             </motion.h2>
             
             <motion.p
@@ -189,7 +194,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ isPreowned = false }) => {
               transition={{ delay: 0.4 }}
               className="text-white/90 text-lg mb-8 max-w-2xl"
             >
-              {sliderData[currentSlide].description}
+              {activeSliderData[currentSlide].description}
             </motion.p>
             
             <motion.div
@@ -201,9 +206,9 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ isPreowned = false }) => {
                 size="lg" 
                 variant="secondary"
                 className="font-medium"
-                onClick={sliderData[currentSlide].ctaAction}
+                onClick={activeSliderData[currentSlide].ctaAction}
               >
-                {sliderData[currentSlide].ctaText}
+                {activeSliderData[currentSlide].ctaText}
               </Button>
             </motion.div>
           </div>
@@ -260,7 +265,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ isPreowned = false }) => {
 
       {/* Slide indicators */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
-        {sliderData.map((_, index) => (
+        {activeSliderData.map((_, index) => (
           <button
             key={index}
             className={`w-2.5 h-2.5 rounded-full transition-all ${
