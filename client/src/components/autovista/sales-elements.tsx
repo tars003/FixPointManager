@@ -7,13 +7,30 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
 
-const SalesElements: React.FC = () => {
+interface SalesElementsProps {
+  isPreowned?: boolean;
+}
+
+const SalesElements: React.FC<SalesElementsProps> = ({ isPreowned = false }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <DealershipConnect />
-      <LimitedTimeOffers />
-      <FinancialCalculator />
-      <ExtendedWarranty />
+    <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 ${isPreowned ? 'preowned-theme' : ''}`}>
+      {isPreowned ? (
+        // Pre-owned vehicle components
+        <>
+          <CertifiedPreowned />
+          <VehicleHistory />
+          <FinancialCalculator />
+          <ExtendedWarranty />
+        </>
+      ) : (
+        // New vehicle components
+        <>
+          <DealershipConnect />
+          <LimitedTimeOffers />
+          <FinancialCalculator />
+          <ExtendedWarranty />
+        </>
+      )}
     </div>
   );
 };

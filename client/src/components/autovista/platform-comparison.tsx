@@ -68,7 +68,11 @@ const testimonials = [
   }
 ];
 
-const PlatformComparison: React.FC = () => {
+interface PlatformComparisonProps {
+  isPreowned?: boolean;
+}
+
+const PlatformComparison: React.FC<PlatformComparisonProps> = ({ isPreowned = false }) => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [ref, inView] = useInView({
     threshold: 0.1,
@@ -122,7 +126,9 @@ const PlatformComparison: React.FC = () => {
           
           <div>
             <h2 className="text-2xl font-bold text-center md:text-left">
-              Why AutoVista is India's #1 Vehicle Discovery Platform
+              {isPreowned 
+                ? "Why AutoVista is India's #1 Pre-owned Vehicle Platform" 
+                : "Why AutoVista is India's #1 Vehicle Discovery Platform"}
             </h2>
           </div>
         </div>
