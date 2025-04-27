@@ -1,37 +1,187 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Clock, Calculator, Shield, Check } from 'lucide-react';
+import { 
+  MapPin, Clock, Calculator, Shield, Check, 
+  FileCheck, History, Award, ShieldCheck, Car, Calendar,
+  Gauge
+} from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
 
-interface SalesElementsProps {
-  isPreowned?: boolean;
-}
-
-const SalesElements: React.FC<SalesElementsProps> = ({ isPreowned = false }) => {
+// CertifiedPreowned Component
+const CertifiedPreowned: React.FC = () => {
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 ${isPreowned ? 'preowned-theme' : ''}`}>
-      {isPreowned ? (
-        // Pre-owned vehicle components
-        <>
-          <CertifiedPreowned />
-          <VehicleHistory />
-          <FinancialCalculator />
-          <ExtendedWarranty />
-        </>
-      ) : (
-        // New vehicle components
-        <>
-          <DealershipConnect />
-          <LimitedTimeOffers />
-          <FinancialCalculator />
-          <ExtendedWarranty />
-        </>
-      )}
-    </div>
+    <Card className="overflow-hidden">
+      <CardHeader className="bg-amber-50 pb-2">
+        <div className="flex items-center gap-2">
+          <div className="bg-amber-100 p-1.5 rounded-md">
+            <ShieldCheck className="h-5 w-5 text-amber-600" />
+          </div>
+          <CardTitle className="text-lg">Certified Pre-owned</CardTitle>
+        </div>
+      </CardHeader>
+      <CardContent className="pt-4 space-y-4">
+        <div className="bg-white border rounded-lg p-4">
+          <h3 className="font-medium text-base mb-2">AutoVista Certification Process</h3>
+          <p className="text-sm text-neutral-600 mb-4">
+            Every certified pre-owned vehicle undergoes a rigorous 150+ point inspection process.
+          </p>
+          
+          <div className="space-y-3">
+            {[
+              { 
+                title: 'Mechanical Inspection',
+                description: 'Engine, transmission, steering, brakes, and suspension systems thoroughly tested',
+                icon: <Gauge className="h-4 w-4 text-amber-600" />
+              },
+              { 
+                title: 'Interior & Exterior',
+                description: 'Comprehensive assessment of body condition, paint quality, and interior components',
+                icon: <Car className="h-4 w-4 text-amber-600" />
+              },
+              { 
+                title: 'History Verification',
+                description: 'Detailed accident history, ownership records, and service documentation verified',
+                icon: <FileCheck className="h-4 w-4 text-amber-600" />
+              },
+              { 
+                title: 'Road Test Performance',
+                description: 'Extensive road testing under various conditions to ensure reliability',
+                icon: <Calendar className="h-4 w-4 text-amber-600" />
+              },
+            ].map((item, index) => (
+              <div key={index} className="flex gap-3">
+                <div className="bg-amber-50 rounded-full p-1.5 h-fit">
+                  {item.icon}
+                </div>
+                <div>
+                  <h4 className="font-medium text-sm">{item.title}</h4>
+                  <p className="text-xs text-neutral-500">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <div className="bg-amber-50 border border-amber-100 rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Award className="h-5 w-5 text-amber-600" />
+            <h3 className="font-medium">AutoVista Certification Benefits</h3>
+          </div>
+          
+          <ul className="space-y-2 mb-4">
+            {[
+              '12-month/20,000 km comprehensive warranty',
+              '7-day money-back guarantee',
+              'Free 3 maintenance services within 1 year',
+              '24/7 roadside assistance for 12 months',
+              'Verified service history documentation',
+            ].map((benefit, index) => (
+              <li key={index} className="flex items-start gap-2 text-sm">
+                <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>{benefit}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button className="w-full">View Certified Vehicles</Button>
+      </CardFooter>
+    </Card>
+  );
+};
+
+// VehicleHistory Component
+const VehicleHistory: React.FC = () => {
+  return (
+    <Card className="overflow-hidden">
+      <CardHeader className="bg-blue-50 pb-2">
+        <div className="flex items-center gap-2">
+          <div className="bg-blue-100 p-1.5 rounded-md">
+            <History className="h-5 w-5 text-blue-600" />
+          </div>
+          <CardTitle className="text-lg">Vehicle History Report</CardTitle>
+        </div>
+      </CardHeader>
+      <CardContent className="pt-4 space-y-4">
+        <div className="bg-neutral-50 border rounded-lg p-4">
+          <h3 className="font-medium mb-3">Comprehensive History Analysis</h3>
+          
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-white p-3 rounded border">
+                <div className="text-xs text-neutral-500">Accident Records</div>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <Shield className="h-4 w-4 text-green-600" />
+                  <span className="font-medium">Clean Record</span>
+                </div>
+              </div>
+              
+              <div className="bg-white p-3 rounded border">
+                <div className="text-xs text-neutral-500">Ownership</div>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <Award className="h-4 w-4 text-amber-600" />
+                  <span className="font-medium">Single Owner</span>
+                </div>
+              </div>
+              
+              <div className="bg-white p-3 rounded border">
+                <div className="text-xs text-neutral-500">Service Records</div>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <FileCheck className="h-4 w-4 text-blue-600" />
+                  <span className="font-medium">Complete</span>
+                </div>
+              </div>
+              
+              <div className="bg-white p-3 rounded border">
+                <div className="text-xs text-neutral-500">Odometer</div>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <Gauge className="h-4 w-4 text-purple-600" />
+                  <span className="font-medium">Verified</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white p-3 rounded border">
+              <div className="text-sm font-medium mb-2">Timeline Visualization</div>
+              <div className="relative">
+                <div className="absolute left-2 top-0 bottom-0 w-0.5 bg-neutral-200"></div>
+                
+                {[
+                  { date: 'Jan 2020', event: 'Original Purchase', description: 'First registration with manufacturer warranty' },
+                  { date: 'Jul 2020', event: 'Service at 10,000 km', description: 'Regular maintenance at authorized service center' },
+                  { date: 'Feb 2021', event: 'Service at 20,000 km', description: 'Regular maintenance + brake pads replacement' },
+                  { date: 'Dec 2021', event: 'Service at 30,000 km', description: 'Regular maintenance + air filter replacement' },
+                  { date: 'Jul 2022', event: 'Service at 40,000 km', description: 'Major service including timing belt' },
+                ].map((item, index) => (
+                  <div key={index} className="flex mb-4 relative">
+                    <div className="w-4 h-4 rounded-full bg-blue-100 border-2 border-blue-500 z-10 mt-1 mr-3"></div>
+                    <div>
+                      <div className="flex flex-wrap gap-2 items-center">
+                        <span className="text-xs font-semibold bg-neutral-100 px-1.5 py-0.5 rounded">
+                          {item.date}
+                        </span>
+                        <span className="text-sm font-medium">{item.event}</span>
+                      </div>
+                      <p className="text-xs text-neutral-500 mt-0.5">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button variant="outline" className="w-full">Download Full Report</Button>
+      </CardFooter>
+    </Card>
   );
 };
 
@@ -339,124 +489,92 @@ const FinancialCalculator: React.FC = () => {
                 onValueChange={setTenure}
               />
               <div className="flex justify-between text-xs text-neutral-500">
-                <span>1 year</span>
-                <span>7 years</span>
+                <span>1 Year</span>
+                <span>7 Years</span>
               </div>
             </div>
             
             {/* EMI Result */}
             <div className="bg-neutral-50 p-3 rounded-lg border text-center">
               <div className="text-sm text-neutral-500 mb-1">Your Monthly EMI</div>
-              <div className="text-2xl font-bold text-purple-600">{formatCurrency(calculateEMI())}</div>
+              <div className="text-2xl font-bold text-primary">
+                {formatCurrency(calculateEMI())}
+              </div>
               <div className="text-xs text-neutral-500 mt-1">
                 Total amount: {formatCurrency(calculateEMI() * tenure[0])}
               </div>
             </div>
           </TabsContent>
           
-          <TabsContent value="affordability" className="pt-3 space-y-4">
-            {/* Income and Expenses */}
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <label className="text-sm font-medium">Monthly Income</label>
-                <span className="text-sm">₹80,000</span>
-              </div>
-              <Slider
-                value={[80000]}
-                min={25000}
-                max={500000}
-                step={5000}
-                onValueChange={() => {}}
-              />
-              <div className="flex justify-between text-xs text-neutral-500">
-                <span>₹25K</span>
-                <span>₹5L</span>
-              </div>
-            </div>
-            
-            {/* Existing EMIs */}
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <label className="text-sm font-medium">Existing EMIs</label>
-                <span className="text-sm">₹15,000</span>
-              </div>
-              <Slider
-                value={[15000]}
-                min={0}
-                max={100000}
-                step={1000}
-                onValueChange={() => {}}
-              />
-              <div className="flex justify-between text-xs text-neutral-500">
-                <span>₹0</span>
-                <span>₹1L</span>
-              </div>
-            </div>
-            
-            {/* Credit Score */}
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <label className="text-sm font-medium">Credit Score</label>
-                <span className="text-sm">750</span>
-              </div>
-              <Slider
-                value={[750]}
-                min={300}
-                max={900}
-                step={10}
-                onValueChange={() => {}}
-              />
-              <div className="flex justify-between text-xs text-neutral-500">
-                <span>300</span>
-                <span>900</span>
-              </div>
-            </div>
-            
-            {/* Results */}
-            <div className="bg-neutral-50 rounded-lg p-4 border mt-6">
-              <h4 className="font-medium mb-3">Your Affordability Results</h4>
+          <TabsContent value="affordability" className="space-y-4 pt-3">
+            <div className="bg-neutral-50 p-3 rounded-lg border mb-4">
+              <h4 className="text-sm font-medium mb-2">How much car can you afford?</h4>
+              <p className="text-xs text-neutral-500 mb-3">
+                Based on your monthly budget, we'll calculate an ideal vehicle price range
+              </p>
               
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white p-3 rounded border">
-                  <div className="text-sm text-neutral-500">Max Loan Amount</div>
-                  <div className="font-semibold mt-1">₹25,00,000</div>
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <label className="text-sm font-medium">Monthly Budget</label>
+                    <span className="text-sm">₹15,000</span>
+                  </div>
+                  <Slider
+                    value={[15000]}
+                    min={5000}
+                    max={50000}
+                    step={1000}
+                    onValueChange={() => {}}
+                  />
                 </div>
                 
-                <div className="bg-white p-3 rounded border">
-                  <div className="text-sm text-neutral-500">Recommended EMI</div>
-                  <div className="font-semibold mt-1">₹32,500/mo</div>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <label className="text-sm font-medium">Down Payment</label>
+                    <span className="text-sm">₹2,00,000</span>
+                  </div>
+                  <Slider
+                    value={[200000]}
+                    min={50000}
+                    max={1000000}
+                    step={10000}
+                    onValueChange={() => {}}
+                  />
                 </div>
                 
-                <div className="bg-white p-3 rounded border">
-                  <div className="text-sm text-neutral-500">Vehicle Budget</div>
-                  <div className="font-semibold mt-1">₹30,00,000</div>
-                </div>
-                
-                <div className="bg-white p-3 rounded border">
-                  <div className="text-sm text-neutral-500">Down Payment</div>
-                  <div className="font-semibold mt-1">₹5,00,000</div>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <label className="text-sm font-medium">Loan Tenure</label>
+                    <span className="text-sm">60 months</span>
+                  </div>
+                  <Slider
+                    value={[60]}
+                    min={12}
+                    max={84}
+                    step={12}
+                    onValueChange={() => {}}
+                  />
                 </div>
               </div>
-              
-              <Button variant="outline" className="w-full mt-4">Find Vehicles in My Budget</Button>
+            </div>
+            
+            <div className="bg-green-50 p-3 rounded-lg border border-green-100">
+              <div className="flex items-center gap-2 mb-2">
+                <Check className="h-5 w-5 text-green-600" />
+                <h4 className="font-medium">You can afford vehicles priced up to:</h4>
+              </div>
+              <div className="text-2xl font-bold text-green-700 text-center my-2">
+                ₹10,50,000
+              </div>
+              <Button variant="outline" className="w-full mt-2">
+                View vehicles in this range
+              </Button>
             </div>
           </TabsContent>
         </Tabs>
       </CardContent>
-      <CardFooter className="pt-0">
-        <div className="w-full text-center">
-          <p className="text-xs text-neutral-500 mb-2">Powered by leading banks with lowest rates</p>
-          <div className="flex justify-center gap-3">
-            {['HDFC', 'ICICI', 'SBI', 'Axis'].map((bank) => (
-              <div 
-                key={bank} 
-                className="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center text-xs font-bold text-neutral-600"
-              >
-                {bank}
-              </div>
-            ))}
-          </div>
-        </div>
+      <CardFooter>
+        <Button className="w-full">Get personalized loan offers</Button>
       </CardFooter>
     </Card>
   );
@@ -561,20 +679,13 @@ const ExtendedWarranty: React.FC = () => {
                 </div>
               </div>
               
-              <div className="text-xs text-neutral-600 mb-2">{plan.coverage}</div>
+              <p className="text-xs text-neutral-500 mb-2">{plan.coverage}</p>
               
-              <ul className="text-xs space-y-1">
+              <ul className="space-y-1">
                 {plan.features.map((feature, i) => (
-                  <li key={i} className="flex items-center gap-1.5">
-                    <motion.div 
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: index * 0.1 + i * 0.1 }}
-                      className="w-3 h-3 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0"
-                    >
-                      <Check className="h-2 w-2 text-emerald-600" />
-                    </motion.div>
-                    <span className="text-neutral-600">{feature}</span>
+                  <li key={i} className="flex items-center gap-1.5 text-xs">
+                    <Check className="h-3 w-3 text-emerald-500" />
+                    <span>{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -583,9 +694,39 @@ const ExtendedWarranty: React.FC = () => {
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full">Explore Warranty Options</Button>
+        <Button className="w-full">Select warranty plan</Button>
       </CardFooter>
     </Card>
+  );
+};
+
+// Interface for the main component
+interface SalesElementsProps {
+  isPreowned?: boolean;
+}
+
+// Main component
+const SalesElements: React.FC<SalesElementsProps> = ({ isPreowned = false }) => {
+  return (
+    <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 ${isPreowned ? 'preowned-theme' : ''}`}>
+      {isPreowned ? (
+        // Pre-owned vehicle components
+        <>
+          <CertifiedPreowned />
+          <VehicleHistory />
+          <FinancialCalculator />
+          <ExtendedWarranty />
+        </>
+      ) : (
+        // New vehicle components
+        <>
+          <DealershipConnect />
+          <LimitedTimeOffers />
+          <FinancialCalculator />
+          <ExtendedWarranty />
+        </>
+      )}
+    </div>
   );
 };
 
