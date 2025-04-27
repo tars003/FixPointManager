@@ -17,7 +17,7 @@ import BookService from "@/pages/book-service";
 // Import the new enhanced nearby services page
 import Nearby from "@/pages/nearby-new";
 import LearnDriving from "@/pages/learn-driving";
-import Dashboard from "@/pages/dashboard-new";
+import Dashboard from "@/pages/dashboard-enhanced";
 import Inspection from "@/pages/inspection";
 import Energy from "@/pages/energy";
 import PartsPage from "@/pages/parts";
