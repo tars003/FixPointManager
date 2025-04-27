@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Info, Check, X, Share2, Download, BarChart3 } from 'lucide-react';
+import { Plus, Info, Check, X, Share2, Download, BarChart3, Shield, Clock, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import ContentReaction from '@/components/ui/content-reaction';
+
+interface ComparisonToolProps {
+  isPreowned?: boolean;
+}
 import { 
   Table,
   TableBody,
@@ -26,8 +30,8 @@ interface ComparisonVehicle {
   imageUrl: string;
 }
 
-// Sample vehicle data
-const sampleVehicles: ComparisonVehicle[] = [
+// Sample vehicle data for new vehicles
+const sampleNewVehicles: ComparisonVehicle[] = [
   {
     id: 1,
     name: 'Hyundai Creta',
@@ -45,6 +49,30 @@ const sampleVehicles: ComparisonVehicle[] = [
     model: 'Nexon',
     year: 2023,
     price: 900000,
+    fuelType: 'Diesel',
+    imageUrl: 'https://images.unsplash.com/photo-1609089783094-51498e2f29c8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3'
+  }
+];
+
+// Sample vehicle data for pre-owned vehicles 
+const samplePreOwnedVehicles: ComparisonVehicle[] = [
+  {
+    id: 101,
+    name: 'Hyundai Creta (Pre-owned)',
+    manufacturer: 'Hyundai',
+    model: 'Creta',
+    year: 2020,
+    price: 850000,
+    fuelType: 'Petrol',
+    imageUrl: 'https://images.unsplash.com/photo-1605515298946-d730802e22e1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3'
+  },
+  {
+    id: 102,
+    name: 'Tata Harrier (Pre-owned)',
+    manufacturer: 'Tata',
+    model: 'Harrier',
+    year: 2021,
+    price: 1200000,
     fuelType: 'Diesel',
     imageUrl: 'https://images.unsplash.com/photo-1609089783094-51498e2f29c8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3'
   }
@@ -94,8 +122,21 @@ const comparisonMetrics = [
   }
 ];
 
+// Pre-owned specific comparison metrics
+const preOwnedMetrics = { 
+  category: 'Pre-owned Metrics',
+  metrics: [
+    { name: 'Service History', unit: '' },
+    { name: 'Ownership Count', unit: '' },
+    { name: 'Accident History', unit: '' },
+    { name: 'Odometer Reading', unit: 'km' },
+    { name: 'Inspection Score', unit: '/100' }
+  ]
+};
+
 // Sample comparison data
 const comparisonData: Record<string, any> = {
+  // New vehicles
   1: {
     // Performance
     'Engine Displacement': '1497',
@@ -153,11 +194,85 @@ const comparisonData: Record<string, any> = {
     'Airbags': '6',
     'Parking Sensors': 'Rear only',
     'Sunroof': 'Single-pane',
+  },
+
+  // Pre-owned vehicles
+  101: {
+    // Performance
+    'Engine Displacement': '1497',
+    'Max Power': '115',
+    'Max Torque': '250',
+    '0-100 kmph': '10.5', // Slight performance decrease due to age
+    'Top Speed': '168',
+    
+    // Efficiency
+    'Mileage (City)': '14.8', // Slight efficiency decrease due to age
+    'Mileage (Highway)': '18.2',
+    'Fuel Tank Capacity': '50',
+    'Range': '910',
+    'Emission Rating': 'BS6',
+    
+    // Dimensions
+    'Length': '4300',
+    'Width': '1790',
+    'Height': '1635',
+    'Wheelbase': '2610',
+    'Boot Space': '433',
+    
+    // Features
+    'Infotainment': '10.25-inch touchscreen',
+    'Safety Rating': '5',
+    'Airbags': '6',
+    'Parking Sensors': 'Front & Rear',
+    'Sunroof': 'Panoramic',
+
+    // Pre-owned Metrics
+    'Service History': 'Complete',
+    'Ownership Count': 'Single Owner',
+    'Accident History': 'None',
+    'Odometer Reading': '32,450',
+    'Inspection Score': '92'
+  },
+  102: {
+    // Performance
+    'Engine Displacement': '1956',
+    'Max Power': '170',
+    'Max Torque': '350',
+    '0-100 kmph': '10.8',
+    'Top Speed': '180',
+    
+    // Efficiency
+    'Mileage (City)': '13.5',
+    'Mileage (Highway)': '16.8',
+    'Fuel Tank Capacity': '50',
+    'Range': '840',
+    'Emission Rating': 'BS6',
+    
+    // Dimensions
+    'Length': '4598',
+    'Width': '1894',
+    'Height': '1706',
+    'Wheelbase': '2741',
+    'Boot Space': '425',
+    
+    // Features
+    'Infotainment': '8.8-inch touchscreen',
+    'Safety Rating': '5',
+    'Airbags': '6',
+    'Parking Sensors': 'Front & Rear',
+    'Sunroof': 'Panoramic',
+
+    // Pre-owned Metrics
+    'Service History': 'Partial',
+    'Ownership Count': 'Second Owner',
+    'Accident History': 'Minor (Repaired)',
+    'Odometer Reading': '28,750',
+    'Inspection Score': '87'
   }
 };
 
-const ComparisonTool: React.FC = () => {
-  const [selectedVehicles, setSelectedVehicles] = useState<ComparisonVehicle[]>(sampleVehicles);
+const ComparisonTool: React.FC<ComparisonToolProps> = ({ isPreowned = false }) => {
+  const [selectedVehicles, setSelectedVehicles] = useState<ComparisonVehicle[]>(isPreowned ? samplePreOwnedVehicles : sampleNewVehicles);
   const [selectedCategory, setSelectedCategory] = useState('Performance');
   
   // Format price to Indian format
@@ -234,9 +349,9 @@ const ComparisonTool: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+    <div className={`bg-white rounded-xl shadow-sm overflow-hidden ${isPreowned ? 'preowned-theme' : ''}`}>
       <div className="p-6 md:p-8 border-b">
-        <h2 className="text-2xl font-bold mb-6">Vehicle Comparison</h2>
+        <h2 className="text-2xl font-bold mb-6">{isPreowned ? 'Pre-owned Vehicle Comparison' : 'Vehicle Comparison'}</h2>
         
         <div className="flex flex-wrap gap-4">
           {/* Vehicle cards */}
@@ -322,12 +437,23 @@ const ComparisonTool: React.FC = () => {
                     <TabsTrigger 
                       key={category.category}
                       value={category.category}
-                      className="px-4"
+                      className={`px-4 ${isPreowned ? 'data-[state=active]:bg-amber-500 data-[state=active]:text-white' : ''}`}
                     >
                       {category.category}
                     </TabsTrigger>
                   ))}
-                  <TabsTrigger value="Overview">
+                  {isPreowned && (
+                    <TabsTrigger 
+                      value="Pre-owned Metrics" 
+                      className="px-4 data-[state=active]:bg-amber-500 data-[state=active]:text-white"
+                    >
+                      Pre-owned Metrics
+                    </TabsTrigger>
+                  )}
+                  <TabsTrigger 
+                    value="Overview"
+                    className={isPreowned ? 'data-[state=active]:bg-amber-500 data-[state=active]:text-white' : ''}
+                  >
                     Overview
                   </TabsTrigger>
                 </TabsList>
@@ -354,7 +480,64 @@ const ComparisonTool: React.FC = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {selectedCategory === 'Overview' ? (
+                        {selectedCategory === 'Pre-owned Metrics' && isPreowned ? (
+                          preOwnedMetrics.metrics.map((metric) => (
+                            <TableRow key={metric.name}>
+                              <TableCell className="font-medium">
+                                {metric.name}
+                                {metric.unit && <span className="text-neutral-400 ml-1">({metric.unit})</span>}
+                              </TableCell>
+                              
+                              {selectedVehicles.map((vehicle) => {
+                                const value = comparisonData[vehicle.id][metric.name] || '-';
+                                
+                                // For two vehicle comparison, show which is better
+                                let comparison = 'equal';
+                                if (selectedVehicles.length === 2) {
+                                  const otherVehicle = selectedVehicles.find(v => v.id !== vehicle.id);
+                                  const otherValue = otherVehicle ? comparisonData[otherVehicle.id][metric.name] || '-' : '-';
+                                  
+                                  // Pre-owned specific logic for which is better
+                                  if (metric.name === 'Inspection Score' || metric.name === 'Service History') {
+                                    comparison = compareValues(metric.name, value, otherValue);
+                                  } else if (metric.name === 'Ownership Count') {
+                                    // Lower ownership count is better
+                                    if (value.includes('Single') && !otherValue.includes('Single')) {
+                                      comparison = 'first';
+                                    } else if (!value.includes('Single') && otherValue.includes('Single')) {
+                                      comparison = 'second';
+                                    }
+                                  } else if (metric.name === 'Accident History') {
+                                    // No accidents is better
+                                    if (value.includes('None') && !otherValue.includes('None')) {
+                                      comparison = 'first';
+                                    } else if (!value.includes('None') && otherValue.includes('None')) {
+                                      comparison = 'second';
+                                    }
+                                  } else if (metric.name === 'Odometer Reading') {
+                                    // Lower reading is better
+                                    const val1 = parseInt(value.replace(/,/g, ''));
+                                    const val2 = parseInt(otherValue.replace(/,/g, ''));
+                                    if (val1 < val2) comparison = 'first';
+                                    if (val1 > val2) comparison = 'second';
+                                  }
+                                }
+                                
+                                return (
+                                  <TableCell 
+                                    key={vehicle.id}
+                                    className={`
+                                      ${comparison === 'first' && vehicle.id === selectedVehicles[0].id ? 'text-amber-600 font-medium' : ''}
+                                      ${comparison === 'second' && vehicle.id === selectedVehicles[1].id ? 'text-amber-600 font-medium' : ''}
+                                    `}
+                                  >
+                                    {value}
+                                  </TableCell>
+                                );
+                              })}
+                            </TableRow>
+                          ))
+                        ) : selectedCategory === 'Overview' ? (
                           <>
                             <TableRow>
                               <TableCell className="font-medium">Price</TableCell>
@@ -363,12 +546,14 @@ const ComparisonTool: React.FC = () => {
                                   ? compareValues('Price', formatPrice(vehicle.price), formatPrice(selectedVehicles.find(v => v.id !== vehicle.id)?.price || 0))
                                   : 'equal';
                                 
+                                const textColor = isPreowned ? 'text-amber-600' : 'text-green-600';
+                                
                                 return (
                                   <TableCell 
                                     key={vehicle.id}
                                     className={`
-                                      ${comparison === 'first' && vehicle.id === selectedVehicles[0].id ? 'text-green-600 font-medium' : ''}
-                                      ${comparison === 'second' && vehicle.id === selectedVehicles[1].id ? 'text-green-600 font-medium' : ''}
+                                      ${comparison === 'first' && vehicle.id === selectedVehicles[0].id ? `${textColor} font-medium` : ''}
+                                      ${comparison === 'second' && vehicle.id === selectedVehicles[1].id ? `${textColor} font-medium` : ''}
                                     `}
                                   >
                                     {formatPrice(vehicle.price)}

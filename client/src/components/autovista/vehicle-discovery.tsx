@@ -4,7 +4,7 @@ import {
   Car, Truck, Bike, Zap, 
   Droplet, Fan, Atom, Fuel, 
   Search, Gauge, Filter, Clock,
-  ShieldCheck, History, LucideIcon 
+  ShieldCheck, History, Shield, Award, LucideIcon 
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
@@ -379,10 +379,69 @@ const VehicleDiscovery: React.FC<VehicleDiscoveryProps> = ({ isPreowned = false 
         </div>
       </div>
       
+      {/* Pre-owned condition selector - only shown for pre-owned vehicles */}
+      {isPreowned && (
+        <div className="mb-8">
+          <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wider mb-4">
+            Vehicle Condition
+          </h3>
+          
+          <Tabs value={condition} onValueChange={setCondition} className="w-full">
+            <TabsList className="grid grid-cols-3 h-auto">
+              <TabsTrigger value="excellent" className="data-[state=active]:bg-amber-500 data-[state=active]:text-white">
+                Excellent
+              </TabsTrigger>
+              <TabsTrigger value="good" className="data-[state=active]:bg-amber-500 data-[state=active]:text-white">
+                Good
+              </TabsTrigger>
+              <TabsTrigger value="fair" className="data-[state=active]:bg-amber-500 data-[state=active]:text-white">
+                Fair
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="excellent" className="mt-4 bg-amber-50 p-4 rounded-lg border-amber-200 border">
+              <div className="flex items-center gap-3">
+                <Shield className="h-5 w-5 text-amber-600" />
+                <div>
+                  <h4 className="font-medium text-amber-800">Excellent Condition</h4>
+                  <p className="text-xs text-amber-700">
+                    Vehicles in pristine condition with minimal wear, complete service history, and like-new appearance
+                  </p>
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="good" className="mt-4 bg-amber-50 p-4 rounded-lg border-amber-200 border">
+              <div className="flex items-center gap-3">
+                <Award className="h-5 w-5 text-amber-600" />
+                <div>
+                  <h4 className="font-medium text-amber-800">Good Condition</h4>
+                  <p className="text-xs text-amber-700">
+                    Well-maintained vehicles with normal wear and tear, regular service history, and all systems functioning properly
+                  </p>
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="fair" className="mt-4 bg-amber-50 p-4 rounded-lg border-amber-200 border">
+              <div className="flex items-center gap-3">
+                <Clock className="h-5 w-5 text-amber-600" />
+                <div>
+                  <h4 className="font-medium text-amber-800">Fair Condition</h4>
+                  <p className="text-xs text-amber-700">
+                    Vehicles with visible wear that may require minor repairs but have been inspected for safety and functionality
+                  </p>
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      )}
+      
       {/* Trending searches ticker */}
-      <div>
+      <div className={isPreowned ? 'preowned-theme' : ''}>
         <div className="flex items-center mb-3">
-          <Search className="w-4 h-4 text-primary mr-2" />
+          <Search className={`w-4 h-4 mr-2 ${isPreowned ? 'text-amber-600' : 'text-primary'}`} />
           <h3 className="text-sm font-medium text-neutral-500">
             Trending Searches
           </h3>
@@ -403,12 +462,12 @@ const VehicleDiscovery: React.FC<VehicleDiscoveryProps> = ({ isPreowned = false 
               },
             }}
           >
-            {trendingSearches.concat(trendingSearches).map((search, i) => (
+            {(isPreowned ? preownedTrendingSearches : trendingSearches).concat(isPreowned ? preownedTrendingSearches : trendingSearches).map((search, i) => (
               <span 
                 key={i} 
                 className="text-sm text-neutral-600 flex items-center"
               >
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary mr-2"></span>
+                <span className={`inline-block h-1.5 w-1.5 rounded-full mr-2 ${isPreowned ? 'bg-amber-500' : 'bg-primary'}`}></span>
                 {search}
               </span>
             ))}
