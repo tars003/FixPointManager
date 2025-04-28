@@ -148,7 +148,7 @@ function Router() {
               </motion.div>
             )}
           </Route>
-          <Route path="/vehicle-vault">
+          <Route path="/vehicle-vault-community">
             {() => (
               <motion.div
                 initial="initial"
