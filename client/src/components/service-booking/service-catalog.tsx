@@ -519,13 +519,75 @@ const ServiceCatalog: React.FC = () => {
     serviceCategories[0].subCategories.length > 0 ? serviceCategories[0].subCategories[0].id : null
   );
   const [selectedVehicleType, setSelectedVehicleType] = useState<VehicleType>('four-wheeler');
-  const [priceRange, setPriceRange] = useState<[number, number]>([500, 10000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([1, 100000]);
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
   const [selectedVehicle, setSelectedVehicle] = useState<UserVehicle | null>(userVehicles[0]);
   const [cartDialogOpen, setCartDialogOpen] = useState<boolean>(false);
+  const [selectedPriceRange, setSelectedPriceRange] = useState<string | null>(null);
+  const [selectedOffer, setSelectedOffer] = useState<string | null>(null);
+  
+  // Color palettes for different vehicle types
+  const vehicleColorPalettes = {
+    'two-wheeler': {
+      primary: 'bg-emerald-600',
+      secondary: 'bg-emerald-100',
+      text: 'text-emerald-700',
+      border: 'border-emerald-200',
+      hover: 'hover:bg-emerald-50',
+      badge: 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200'
+    },
+    'three-wheeler': {
+      primary: 'bg-amber-600',
+      secondary: 'bg-amber-100',
+      text: 'text-amber-700',
+      border: 'border-amber-200',
+      hover: 'hover:bg-amber-50',
+      badge: 'bg-amber-100 text-amber-800 hover:bg-amber-200'
+    },
+    'four-wheeler': {
+      primary: 'bg-blue-600',
+      secondary: 'bg-blue-100',
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-50',
+      badge: 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+    },
+    'heavy-vehicle': {
+      primary: 'bg-purple-600',
+      secondary: 'bg-purple-100',
+      text: 'text-purple-700',
+      border: 'border-purple-200',
+      hover: 'hover:bg-purple-50',
+      badge: 'bg-purple-100 text-purple-800 hover:bg-purple-200'
+    }
+  };
+  
+  // Price categories for shop by price
+  const priceCategories = [
+    { label: 'Under ₹49', min: 1, max: 49 },
+    { label: '₹49 - ₹99', min: 49, max: 99 },
+    { label: '₹99 - ₹249', min: 99, max: 249 },
+    { label: '₹249 - ₹499', min: 249, max: 499 },
+    { label: '₹499 - ₹699', min: 499, max: 699 },
+    { label: '₹699 - ₹999', min: 699, max: 999 },
+    { label: '₹999 - ₹1,999', min: 999, max: 1999 },
+    { label: '₹2,000 - ₹4,999', min: 2000, max: 4999 },
+    { label: '₹5,000 - ₹9,999', min: 5000, max: 9999 },
+    { label: '₹10,000 - ₹19,999', min: 10000, max: 19999 },
+    { label: '₹20,000 - ₹49,999', min: 20000, max: 49999 },
+    { label: 'Above ₹50,000', min: 50000, max: 100000 }
+  ];
+  
+  // Seasonal offers
+  const seasonalOffers = [
+    { id: 'monsoon-special', name: 'Monsoon Special', discount: '20% Off' },
+    { id: 'summer-service', name: 'Summer Service Deals', discount: '15% Off' },
+    { id: 'diwali-offer', name: 'Diwali Special', discount: '25% Off' },
+    { id: 'new-year-special', name: 'New Year Special', discount: '30% Off' }
+  ];
 
   // Find the current category and subcategory objects
   const currentCategory = serviceCategories.find(c => c.id === selectedCategory);
@@ -705,10 +767,10 @@ const ServiceCatalog: React.FC = () => {
                 <h3 className="font-medium mb-2">Price Range</h3>
                 <div className="px-1">
                   <Slider 
-                    defaultValue={[500, 10000]} 
-                    min={500} 
-                    max={30000} 
-                    step={500} 
+                    defaultValue={[1, 100000]} 
+                    min={1} 
+                    max={100000} 
+                    step={100} 
                     value={priceRange}
                     onValueChange={(value) => setPriceRange(value as [number, number])}
                   />
@@ -716,6 +778,34 @@ const ServiceCatalog: React.FC = () => {
                     <span>{formatPrice(priceRange[0])}</span>
                     <span>{formatPrice(priceRange[1])}</span>
                   </div>
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="font-medium mb-2">Shop by Price</h3>
+                <div className="space-y-1">
+                  {priceCategories.map((category, index) => (
+                    <div 
+                      key={index} 
+                      className={`flex items-center space-x-2 p-2 rounded-md cursor-pointer hover:bg-gray-100 transition-colors ${selectedPriceRange === category.label ? 'bg-blue-50' : ''}`}
+                      onClick={() => {
+                        if (selectedPriceRange === category.label) {
+                          setSelectedPriceRange(null);
+                          setPriceRange([1, 100000]);
+                        } else {
+                          setSelectedPriceRange(category.label);
+                          setPriceRange([category.min, category.max]);
+                        }
+                      }}
+                    >
+                      <div className="flex items-center">
+                        <span className="text-sm">{category.label}</span>
+                      </div>
+                      {selectedPriceRange === category.label && (
+                        <Check className="h-4 w-4 text-blue-500 ml-auto" />
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -853,26 +943,85 @@ const ServiceCatalog: React.FC = () => {
             </div>
             
             {selectedVehicle && (
-              <div className="bg-blue-50 p-3 rounded-md flex items-center justify-between">
+              <div className={`${vehicleColorPalettes[selectedVehicle.type].secondary} p-3 rounded-md flex items-center justify-between`}>
                 <div className="flex items-center gap-2">
-                  <div className="bg-blue-100 p-2 rounded-full">
-                    {selectedVehicle.type === 'four-wheeler' && <Car className="h-4 w-4 text-blue-700" />}
-                    {selectedVehicle.type === 'two-wheeler' && <Bike className="h-4 w-4 text-blue-700" />}
-                    {selectedVehicle.type === 'three-wheeler' && <span className="text-sm">🛺</span>}
-                    {selectedVehicle.type === 'heavy-vehicle' && <Truck className="h-4 w-4 text-blue-700" />}
+                  <div className={`${vehicleColorPalettes[selectedVehicle.type].primary} p-2 rounded-full`}>
+                    {selectedVehicle.type === 'four-wheeler' && <Car className="h-4 w-4 text-white" />}
+                    {selectedVehicle.type === 'two-wheeler' && <Bike className="h-4 w-4 text-white" />}
+                    {selectedVehicle.type === 'three-wheeler' && <span className="text-sm text-white">🛺</span>}
+                    {selectedVehicle.type === 'heavy-vehicle' && <Truck className="h-4 w-4 text-white" />}
                   </div>
                   <div>
-                    <div className="font-medium text-blue-900">{selectedVehicle.make} {selectedVehicle.model}</div>
-                    <div className="text-xs text-blue-700">{selectedVehicle.registrationNumber}</div>
+                    <div className={`font-medium ${vehicleColorPalettes[selectedVehicle.type].text}`}>{selectedVehicle.make} {selectedVehicle.model}</div>
+                    <div className={`text-xs ${vehicleColorPalettes[selectedVehicle.type].text}`}>{selectedVehicle.registrationNumber}</div>
                   </div>
                 </div>
                 <div>
-                  <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200">
+                  <Badge className={vehicleColorPalettes[selectedVehicle.type].badge}>
                     Showing services for {selectedVehicle.type.replace('-', ' ')}
                   </Badge>
                 </div>
               </div>
             )}
+            
+            {/* Seasonal Offers Banner */}
+            <div className="mb-6">
+              <h2 className="text-xl font-bold mb-3">Seasonal Offers</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                {seasonalOffers.map(offer => (
+                  <div
+                    key={offer.id}
+                    className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                      selectedOffer === offer.id 
+                        ? 'border-primary bg-primary/5 shadow-md' 
+                        : 'border-gray-200 hover:border-primary/50 hover:shadow-sm'
+                    }`}
+                    onClick={() => setSelectedOffer(selectedOffer === offer.id ? null : offer.id)}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-medium">{offer.name}</h3>
+                      {selectedOffer === offer.id && (
+                        <Check className="h-4 w-4 text-primary" />
+                      )}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Limited Time</span>
+                      <Badge className="bg-primary/10 text-primary hover:bg-primary/20">
+                        {offer.discount}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Shop by Price Catalog Cards */}
+            <div className="mb-6">
+              <h2 className="text-xl font-bold mb-3">Shop by Price</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+                {priceCategories.slice(0, 6).map((category, index) => (
+                  <div
+                    key={index}
+                    className={`rounded-lg p-3 text-center cursor-pointer transition-all ${
+                      selectedPriceRange === category.label 
+                        ? 'bg-primary text-white shadow-md' 
+                        : 'bg-gray-100 hover:bg-gray-200'
+                    }`}
+                    onClick={() => {
+                      if (selectedPriceRange === category.label) {
+                        setSelectedPriceRange(null);
+                        setPriceRange([1, 100000]);
+                      } else {
+                        setSelectedPriceRange(category.label);
+                        setPriceRange([category.min, category.max]);
+                      }
+                    }}
+                  >
+                    <div className="font-medium">{category.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Navigation path and cart summary */}
