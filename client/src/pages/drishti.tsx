@@ -62,7 +62,8 @@ import {
   ChevronRight,
   CheckCircle,
   Cog,
-  RotateCcw
+  RotateCcw,
+  Bluetooth
 } from 'lucide-react';
 
 // Custom icons are defined below
@@ -107,6 +108,49 @@ const CableIcon = (props: any) => (
   </svg>
 );
 
+const BluetoothIcon = (props: any) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="m7 7 10 10-5 5V2l5 5L7 17" />
+  </svg>
+);
+
+const SimCardIcon = (props: any) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <rect x="4" y="4" width="16" height="16" rx="2" />
+    <path d="M7 7h4v4H7z" />
+    <path d="M7 13h.01" />
+    <path d="M10 13h.01" />
+    <path d="M13 13h.01" />
+    <path d="M16 13h.01" />
+    <path d="M7 16h.01" />
+    <path d="M10 16h.01" />
+    <path d="M13 16h.01" />
+    <path d="M16 16h.01" />
+  </svg>
+);
+
 // Define feature configuration dialog type
 type ConfigDialogProps = {
   isOpen: boolean;
@@ -128,6 +172,26 @@ type TroubleshootingIssue = {
   description: string;
   solutions: string[];
   severity: SeverityLevel;
+};
+
+// Helper function to get severity background color
+const getSeverityBgColor = (severity: SeverityLevel | string): string => {
+  switch (severity as SeverityLevel) {
+    case 'critical':
+      return 'bg-red-500';
+    case 'high':
+      return 'bg-orange-500';
+    case 'medium':
+      return 'bg-amber-500';
+    case 'low':
+      return 'bg-blue-500';
+    default:
+      // Handle custom colors for non-standard severities
+      if (severity === 'Warning') return 'bg-amber-500';
+      if (severity === 'Critical') return 'bg-red-500';
+      if (severity === 'Reminder') return 'bg-blue-500';
+      return 'bg-gray-400';
+  }
 };
 
 const Drishti: React.FC = () => {
@@ -276,6 +340,114 @@ const Drishti: React.FC = () => {
       ]
     }
   ];
+  
+  // Troubleshooting Dialog
+  const TroubleshootingDialog = () => {
+    const [selectedIssue, setSelectedIssue] = useState<string | null>(null);
+    
+    const getSelectedIssue = () => {
+      return troubleshootingIssues.find(issue => issue.id === selectedIssue);
+    };
+    
+    return (
+      <Dialog open={troubleshootingOpen} onOpenChange={setTroubleshootingOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Wrench className="h-5 w-5 text-blue-500" />
+              Troubleshooting Guide
+            </DialogTitle>
+            <DialogDescription>
+              Identify and resolve common issues with your OBD2 connection.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-4">
+            <div className="space-y-4 md:col-span-1">
+              <div className="font-medium text-sm mb-2">Common Issues</div>
+              <div className="space-y-2">
+                {troubleshootingIssues.map((issue) => (
+                  <div
+                    key={issue.id}
+                    onClick={() => setSelectedIssue(issue.id)}
+                    className={`p-3 border rounded-md cursor-pointer transition-colors ${
+                      selectedIssue === issue.id
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-start gap-2">
+                      <div className={`w-2 h-2 mt-1.5 rounded-full ${getSeverityBgColor(issue.severity)}`}></div>
+                      <div>
+                        <div className="font-medium text-sm">{issue.title}</div>
+                        <div className="text-xs text-gray-500">{issue.severity.charAt(0).toUpperCase() + issue.severity.slice(1)} Severity</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="md:col-span-2 bg-gray-50 p-4 rounded-md">
+              {selectedIssue ? (
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-lg font-medium">{getSelectedIssue()?.title}</h3>
+                    <p className="text-sm text-gray-600 mt-1">{getSelectedIssue()?.description}</p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Recommended Solutions:</h4>
+                    <div className="space-y-2">
+                      {getSelectedIssue()?.solutions.map((solution, index) => (
+                        <div key={index} className="flex gap-2">
+                          <div className="flex-shrink-0 mt-0.5">
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                          </div>
+                          <p className="text-sm">{solution}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="p-3 bg-blue-50 rounded-md mt-4">
+                    <div className="flex gap-2">
+                      <div className="flex-shrink-0">
+                        <Info className="h-4 w-4 text-blue-500" />
+                      </div>
+                      <p className="text-sm text-blue-700">
+                        If these solutions don't resolve the issue, try restarting both your device and the OBD2 scanner, or contact support.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="h-full flex flex-col items-center justify-center text-center py-8">
+                  <AlertCircle className="h-10 w-10 text-gray-400 mb-2" />
+                  <h3 className="text-lg font-medium">Select an issue</h3>
+                  <p className="text-sm text-gray-500 max-w-xs mx-auto mt-1">
+                    Choose a common issue from the left panel to view troubleshooting steps.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <DialogFooter className="flex justify-between">
+            <div>
+              <Button variant="link" onClick={() => window.open('https://support.fixpoint.com', '_blank')} className="text-sm px-0">
+                Contact Support
+                <ExternalLink className="h-3 w-3 ml-1" />
+              </Button>
+            </div>
+            <Button variant="outline" onClick={() => setTroubleshootingOpen(false)}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  };
   
   return (
     <div className="container px-4 py-6 mx-auto">
@@ -1760,16 +1932,7 @@ const getHealthTextClass = (health: number) => {
   return 'text-[#DC3545]';
 };
 
-// Reference the SeverityLevel type defined above
-const getSeverityBgColor = (severity: SeverityLevel | string) => {
-  switch (severity as SeverityLevel) {
-    case 'low': return 'bg-[#28A745]';
-    case 'medium': return 'bg-[#FFC107]';
-    case 'high': return 'bg-[#FF9800]';
-    case 'critical': return 'bg-[#DC3545]';
-    default: return 'bg-gray-400';
-  }
-};
+// Use the getSeverityBgColor function defined at the top of the file
 
 // Sample data for the vehicle health systems
 const vehicleSystemStatus = [
