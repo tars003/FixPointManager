@@ -39,7 +39,12 @@ import {
   UserCog,
   Smartphone,
   RefreshCw,
-  Wifi
+  Wifi,
+  Power,
+  Target,
+  Zap,
+  HistoryIcon,
+  AlertCircle
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -122,10 +127,16 @@ const Drishti: React.FC = () => {
   const [advancedAIFeatureTab, setAdvancedAIFeatureTab] = useState<string>('route');
   const [connectionMethod, setConnectionMethod] = useState<string>('bluetooth');
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [engineOn, setEngineOn] = useState<boolean>(false);
   
   // Handle connect button click
   const handleConnect = () => {
     setIsConnected(true);
+  };
+  
+  // Handle engine power toggle
+  const toggleEngine = () => {
+    setEngineOn(!engineOn);
   };
   
   return (
@@ -459,6 +470,333 @@ const Drishti: React.FC = () => {
                            'with Wire'}
                 </Button>
               </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Vehicle Control Center */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="mb-6"
+      >
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle>Vehicle Control Center</CardTitle>
+            <CardDescription>Monitor and control your vehicle remotely</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Remote Engine Control */}
+              <Card className="border shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Power className="h-5 w-5 text-gray-500" />
+                    Remote Engine Control
+                  </CardTitle>
+                  <CardDescription>Remotely turn your vehicle's engine on/off</CardDescription>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <div className={`w-28 h-28 rounded-full ${engineOn ? 'bg-green-100' : 'bg-gray-100'} flex items-center justify-center mx-auto mb-4`}>
+                    <Power className={`h-12 w-12 ${engineOn ? 'text-green-500' : 'text-gray-400'}`} />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-1">{engineOn ? 'Engine On' : 'Engine Off'}</h3>
+                  <p className="text-sm text-gray-500 mb-4">
+                    {engineOn 
+                      ? 'Vehicle engine is currently running' 
+                      : 'Vehicle engine is currently turned off'}
+                  </p>
+                  <Button 
+                    className={`${engineOn ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white`}
+                    onClick={toggleEngine}
+                  >
+                    <Power className="h-4 w-4 mr-2" />
+                    {engineOn ? 'Turn Off Engine' : 'Turn On Engine'}
+                  </Button>
+                </CardContent>
+              </Card>
+              
+              {/* Live Speed Monitoring */}
+              <Card className="border shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <svg 
+                      className="h-5 w-5 text-blue-500" 
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 2v2" />
+                      <path d="M12 20v2" />
+                      <path d="M20 12h2" />
+                      <path d="M2 12h2" />
+                      <path d="m16 8-4 4" />
+                    </svg>
+                    Live Speed Monitoring
+                  </CardTitle>
+                  <CardDescription>Current vehicle speed and tracking</CardDescription>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <div className="w-32 h-32 rounded-full border-4 border-gray-100 flex items-center justify-center mx-auto mb-2 relative">
+                    <div>
+                      <span className="text-3xl font-bold">0</span>
+                      <span className="text-sm">km/h</span>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4 w-full mb-4">
+                    <div className="text-center">
+                      <p className="text-sm text-gray-500">Max Speed</p>
+                      <p className="font-semibold">120 km/h</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm text-gray-500">Average</p>
+                      <p className="font-semibold">45 km/h</p>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>Speed Limit Alert</span>
+                      <span className="font-medium">80 km/h</span>
+                    </div>
+                    <div className="w-full h-2 bg-blue-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-blue-500" style={{ width: '80%' }}></div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Geofencing Control */}
+              <Card className="border shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Target className="h-5 w-5 text-purple-500" />
+                    Geofencing Control
+                  </CardTitle>
+                  <CardDescription>Set location boundaries for your vehicle</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between mb-3">
+                    <Label htmlFor="geofence-toggle">Enable Geofencing</Label>
+                    <div className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white data-[state=checked]:bg-green-500">
+                      <span className="inline-block h-4 w-4 translate-x-1 rounded-full bg-white transition-transform data-[state=checked]:translate-x-6" style={{ transform: 'translateX(20px)' }}></span>
+                    </div>
+                  </div>
+                  
+                  <div className="mb-3">
+                    <div className="flex justify-between mb-1">
+                      <Label htmlFor="geofence-radius">Geofence Radius</Label>
+                      <span className="text-sm font-medium">3 km</span>
+                    </div>
+                    <div className="w-full h-2 bg-green-100 rounded-full">
+                      <div className="h-full bg-green-500 rounded-full" style={{ width: '40%' }}></div>
+                    </div>
+                  </div>
+                  
+                  <div className="p-2 mb-4 rounded-md bg-gray-50 flex items-center gap-3">
+                    <div className="bg-purple-100 p-2 rounded-full">
+                      <MapPin className="h-4 w-4 text-purple-500" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">Current Center</p>
+                      <p className="text-xs text-gray-500">Mumbai, Maharashtra, India</p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button variant="outline" size="sm">
+                      Set Current Location
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      View on Map
+                    </Button>
+                  </div>
+                  
+                  <div className="flex items-center justify-between mt-3 text-sm">
+                    <span className="text-gray-500">Alerts received</span>
+                    <Badge variant="outline">3</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+      
+      {/* Advanced OBD2+GPS Features */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+        className="mb-6"
+      >
+        <Card>
+          <CardHeader className="pb-2">
+            <div className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-amber-500" />
+              <CardTitle>Advanced OBD2+GPS Features</CardTitle>
+            </div>
+            <CardDescription>Enhanced monitoring and analytics capabilities</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Realtime Vehicle Tracking */}
+              <Card className="border shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <svg 
+                      className="h-5 w-5 text-blue-500" 
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="3" />
+                      <path d="M12 3v2" />
+                      <path d="M12 19v2" />
+                      <path d="M3 12h2" />
+                      <path d="M19 12h2" />
+                      <path d="m18.364 5.636-.707.707" />
+                      <path d="m6.343 17.657-.707.707" />
+                      <path d="m5.636 5.636.707.707" />
+                      <path d="m17.657 17.657.707.707" />
+                    </svg>
+                    Realtime Vehicle Tracking
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500 mb-3">Live location tracking with 5-second intervals</p>
+                  <div className="flex items-center justify-between">
+                    <Badge
+                      variant="outline"
+                      className="bg-emerald-50 text-emerald-600 border-emerald-200"
+                    >
+                      Active
+                    </Badge>
+                    <Button size="sm" variant="ghost">Configure</Button>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Driving Behavior Analysis */}
+              <Card className="border shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Activity className="h-5 w-5 text-emerald-500" />
+                    Driving Behavior Analysis
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500 mb-3">AI analysis of acceleration, braking, and cornering patterns</p>
+                  <div className="flex items-center justify-between">
+                    <Badge
+                      variant="outline"
+                      className="bg-emerald-50 text-emerald-600 border-emerald-200"
+                    >
+                      Active
+                    </Badge>
+                    <Button size="sm" variant="ghost">Configure</Button>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Trip History Replay */}
+              <Card className="border shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <HistoryIcon className="h-5 w-5 text-indigo-500" />
+                    Trip History Replay
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500 mb-3">Visualize past trips with detailed route information</p>
+                  <div className="flex items-center justify-between">
+                    <Badge
+                      variant="outline"
+                      className="bg-emerald-50 text-emerald-600 border-emerald-200"
+                    >
+                      Active
+                    </Badge>
+                    <Button size="sm" variant="ghost">Configure</Button>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Fuel Consumption Analytics */}
+              <Card className="border shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <svg 
+                      className="h-5 w-5 text-green-500" 
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5z" />
+                      <path d="M10 10v11" />
+                      <path d="M7 13h6" />
+                    </svg>
+                    Fuel Consumption Analytics
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500 mb-3">Track fuel levels, consumption rates, and efficiency patterns</p>
+                  <div className="flex items-center justify-between">
+                    <Badge
+                      variant="outline"
+                      className="bg-emerald-50 text-emerald-600 border-emerald-200"
+                    >
+                      Active
+                    </Badge>
+                    <Button size="sm" variant="ghost">Configure</Button>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Integrated Dashcam */}
+              <Card className="border shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <svg 
+                      className="h-5 w-5 text-gray-400" 
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="m22 8-6 4 6 4V8Z" />
+                      <rect width="14" height="12" x="2" y="6" rx="2" ry="2" />
+                    </svg>
+                    Integrated Dashcam
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500 mb-3">Event-triggered video recording with cloud storage</p>
+                  <div className="flex items-center justify-between">
+                    <Badge
+                      variant="outline"
+                      className="bg-gray-50 text-gray-500 border-gray-200"
+                    >
+                      Inactive
+                    </Badge>
+                    <Button size="sm" variant="ghost">Configure</Button>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </CardContent>
         </Card>
