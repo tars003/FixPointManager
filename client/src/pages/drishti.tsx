@@ -44,9 +44,36 @@ import {
   Target,
   Zap,
   HistoryIcon,
-  AlertCircle
+  AlertCircle,
+  HelpCircle,
+  X,
+  Cpu,
+  Upload,
+  Download,
+  LineChart,
+  Sliders,
+  SwitchCamera,
+  Radio,
+  Info,
+  Play,
+  ExternalLink,
+  Lightbulb,
+  Save,
+  ChevronRight,
+  CheckCircle,
+  Cog,
+  RotateCcw
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 // Import custom components
 import RealtimeEnergyMonitor from '@/components/drishti/realtime-energy-monitor';
@@ -121,6 +148,25 @@ const SimCardIcon = (props: any) => (
   </svg>
 );
 
+// Define feature configuration dialog type
+type ConfigDialogProps = {
+  isOpen: boolean;
+  title: string;
+  description: string;
+  onClose: () => void;
+  featureId: string;
+  isActive: boolean;
+  toggleActive: (id: string) => void;
+};
+
+// Define troubleshooting issue type
+type TroubleshootingIssue = {
+  id: string;
+  title: string;
+  description: string;
+  solutions: string[];
+};
+
 const Drishti: React.FC = () => {
   const [mainTab, setMainTab] = useState<string>('dashboard');
   const [advancedFeatureTab, setAdvancedFeatureTab] = useState<string>('energy');
@@ -128,16 +174,142 @@ const Drishti: React.FC = () => {
   const [connectionMethod, setConnectionMethod] = useState<string>('bluetooth');
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [engineOn, setEngineOn] = useState<boolean>(false);
+  const [connectionStatus, setConnectionStatus] = useState<'idle' | 'connecting' | 'connected' | 'error'>('idle');
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+  const [configDialogOpen, setConfigDialogOpen] = useState<boolean>(false);
+  const [currentFeature, setCurrentFeature] = useState<string>('');
+  const [activeFeatures, setActiveFeatures] = useState<{[key: string]: boolean}>({
+    'realtime-tracking': true,
+    'driving-behavior': true,
+    'trip-history': true,
+    'fuel-consumption': true,
+    'dashcam': false
+  });
+  const [troubleshootingOpen, setTroubleshootingOpen] = useState<boolean>(false);
+  const [networkTestOpen, setNetworkTestOpen] = useState<boolean>(false);
+  const [networkSpeed, setNetworkSpeed] = useState<number | null>(null);
+  const [tutorialOpen, setTutorialOpen] = useState<boolean>(false);
+  const [recommendationOpen, setRecommendationOpen] = useState<boolean>(false);
   
-  // Handle connect button click
+  // Handle connect button click with animated status changes
   const handleConnect = () => {
-    setIsConnected(true);
+    setConnectionStatus('connecting');
+    setConnectionError(null);
+    
+    // Simulate connection process
+    setTimeout(() => {
+      const success = Math.random() > 0.2; // 80% success rate for demo
+      if (success) {
+        setConnectionStatus('connected');
+        setIsConnected(true);
+      } else {
+        setConnectionStatus('error');
+        setConnectionError('Connection failed. Please check your device and try again.');
+      }
+    }, 2000);
   };
   
   // Handle engine power toggle
   const toggleEngine = () => {
     setEngineOn(!engineOn);
   };
+  
+  // Toggle feature active status
+  const toggleFeatureActive = (featureId: string) => {
+    setActiveFeatures(prev => ({
+      ...prev,
+      [featureId]: !prev[featureId]
+    }));
+  };
+  
+  // Open configuration dialog for a feature
+  const openConfigDialog = (featureId: string) => {
+    setCurrentFeature(featureId);
+    setConfigDialogOpen(true);
+  };
+  
+  // Get feature details by ID
+  const getFeatureDetails = (featureId: string) => {
+    const details = {
+      'realtime-tracking': {
+        title: 'Realtime Vehicle Tracking',
+        description: 'Configure live location tracking settings including refresh interval and precision level.'
+      },
+      'driving-behavior': {
+        title: 'Driving Behavior Analysis',
+        description: 'Adjust sensitivity levels for acceleration, braking, and cornering detection.'
+      },
+      'trip-history': {
+        title: 'Trip History Replay',
+        description: 'Set recording parameters and storage options for your trip data.'
+      },
+      'fuel-consumption': {
+        title: 'Fuel Consumption Analytics',
+        description: 'Configure fuel monitoring parameters and reporting intervals.'
+      },
+      'dashcam': {
+        title: 'Integrated Dashcam',
+        description: 'Set recording quality, event triggers, and storage options for video capture.'
+      }
+    };
+    return details[featureId as keyof typeof details];
+  };
+  
+  // Run network speed test
+  const runNetworkTest = () => {
+    setNetworkSpeed(null);
+    // Simulate network test
+    setTimeout(() => {
+      setNetworkSpeed(Math.floor(Math.random() * 50) + 10); // 10-60 Mbps
+    }, 1500);
+  };
+  
+  // Get recommended connection method based on device
+  const getRecommendedConnection = () => {
+    const options = [
+      { method: 'bluetooth', reason: 'Best for quick connections with minimal setup' },
+      { method: 'wifi', reason: 'Recommended for stable, high-bandwidth data transfer' },
+      { method: 'wire', reason: 'Most reliable connection for diagnostic operations' }
+    ];
+    return options[Math.floor(Math.random() * options.length)];
+  };
+  
+  // Common troubleshooting issues
+  const troubleshootingIssues: TroubleshootingIssue[] = [
+    {
+      id: 'connection-failed',
+      title: 'Connection Failed',
+      description: 'Unable to establish connection with the OBD2 device',
+      solutions: [
+        'Ensure the device is powered on and within range',
+        'Restart the device and try connecting again',
+        'Check if device is paired with another phone or tablet',
+        'Try a different connection method (e.g., wire instead of Bluetooth)'
+      ]
+    },
+    {
+      id: 'data-error',
+      title: 'Incorrect Data Reading',
+      description: 'Device is connected but showing incorrect or no data',
+      solutions: [
+        'Make sure the vehicle ignition is on',
+        'Verify the OBD2 port is compatible with your vehicle',
+        'Try selecting a specific OBD protocol instead of Auto-detect',
+        'Update the device firmware if available'
+      ]
+    },
+    {
+      id: 'disconnects',
+      title: 'Frequent Disconnections',
+      description: 'Device keeps disconnecting during usage',
+      solutions: [
+        'Move closer to the OBD2 device if using Bluetooth or WiFi',
+        'Check for interference from other electronic devices',
+        'Ensure the device has sufficient battery power',
+        'Try switching to a wired connection for more stability'
+      ]
+    }
+  ];
   
   return (
     <div className="container px-4 py-6 mx-auto">
@@ -1668,5 +1840,584 @@ const recentAlerts = [
     bgColor: "bg-red-100",
   },
 ];
+
+// Feature Configuration Dialog
+const FeatureConfigDialog: React.FC<ConfigDialogProps> = ({
+  isOpen,
+  title,
+  description,
+  onClose,
+  featureId,
+  isActive,
+  toggleActive
+}) => {
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Cog className="h-5 w-5 text-blue-500" />
+            {title} Configuration
+          </DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        
+        <div className="space-y-5 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={isActive}
+                onCheckedChange={() => toggleActive(featureId)}
+                id={`${featureId}-switch`}
+              />
+              <Label htmlFor={`${featureId}-switch`} className="font-medium">
+                {isActive ? 'Active' : 'Inactive'}
+              </Label>
+            </div>
+            
+            <Badge 
+              variant="outline"
+              className={isActive ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-600'}
+            >
+              {isActive ? 'Enabled' : 'Disabled'}
+            </Badge>
+          </div>
+          
+          {featureId === 'realtime-tracking' && (
+            <>
+              <div className="space-y-2">
+                <Label>Update Frequency</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  {['Every 5s', 'Every 15s', 'Every 30s'].map((option) => (
+                    <Button 
+                      key={option} 
+                      variant={option === 'Every 5s' ? 'default' : 'outline'}
+                      size="sm"
+                    >
+                      {option}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label>Location Precision</Label>
+                <Select defaultValue="high">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select precision" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low (±10m)</SelectItem>
+                    <SelectItem value="medium">Medium (±5m)</SelectItem>
+                    <SelectItem value="high">High (±2m)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </>
+          )}
+          
+          {featureId === 'driving-behavior' && (
+            <>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label>Acceleration Sensitivity</Label>
+                  <span className="text-sm font-medium">Medium</span>
+                </div>
+                <div className="relative pt-1">
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    defaultValue="60"
+                    className="w-full"
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label>Braking Sensitivity</Label>
+                  <span className="text-sm font-medium">High</span>
+                </div>
+                <div className="relative pt-1">
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    defaultValue="80"
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </>
+          )}
+          
+          {featureId === 'trip-history' && (
+            <>
+              <div className="space-y-2">
+                <Label>Recording Options</Label>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="record-location" defaultChecked />
+                    <Label htmlFor="record-location">GPS Location</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="record-speed" defaultChecked />
+                    <Label htmlFor="record-speed">Vehicle Speed</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="record-fuel" defaultChecked />
+                    <Label htmlFor="record-fuel">Fuel Consumption</Label>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label>Storage Duration</Label>
+                <RadioGroup defaultValue="90days">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="30days" id="30days" />
+                    <Label htmlFor="30days">30 days</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="90days" id="90days" />
+                    <Label htmlFor="90days">90 days</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="365days" id="365days" />
+                    <Label htmlFor="365days">1 year</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            </>
+          )}
+          
+          {featureId === 'fuel-consumption' && (
+            <>
+              <div className="space-y-2">
+                <Label>Fuel Type</Label>
+                <Select defaultValue="petrol">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select fuel type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="petrol">Petrol</SelectItem>
+                    <SelectItem value="diesel">Diesel</SelectItem>
+                    <SelectItem value="cng">CNG</SelectItem>
+                    <SelectItem value="electric">Electric</SelectItem>
+                    <SelectItem value="hybrid">Hybrid</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label>Measurement Units</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="default" size="sm">Metric (L/100km)</Button>
+                  <Button variant="outline" size="sm">Imperial (MPG)</Button>
+                </div>
+              </div>
+            </>
+          )}
+          
+          {featureId === 'dashcam' && (
+            <>
+              <div className="space-y-2">
+                <Label>Video Quality</Label>
+                <Select defaultValue="720p">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select quality" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="480p">480p (SD)</SelectItem>
+                    <SelectItem value="720p">720p (HD)</SelectItem>
+                    <SelectItem value="1080p">1080p (Full HD)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label>Recording Triggers</Label>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="trigger-collision" defaultChecked />
+                    <Label htmlFor="trigger-collision">Collision Detection</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="trigger-manual" defaultChecked />
+                    <Label htmlFor="trigger-manual">Manual Recording</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="trigger-parking" />
+                    <Label htmlFor="trigger-parking">Parking Mode</Label>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+        
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={onClose}>
+            <Save className="h-4 w-4 mr-2" />
+            Save Settings
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// Troubleshooting Guide Dialog
+const TroubleshootingDialog: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  issues: TroubleshootingIssue[];
+}> = ({ isOpen, onClose, issues }) => {
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[550px]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <HelpCircle className="h-5 w-5 text-blue-500" />
+            Connection Troubleshooting Guide
+          </DialogTitle>
+          <DialogDescription>
+            Step-by-step solutions for common connection issues
+          </DialogDescription>
+        </DialogHeader>
+        
+        <div className="py-4 space-y-6">
+          {issues.map((issue, index) => (
+            <div key={issue.id} className="space-y-3">
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-full bg-blue-100">
+                  <AlertCircle className="h-5 w-5 text-blue-500" />
+                </div>
+                <div>
+                  <h3 className="font-medium">{issue.title}</h3>
+                  <p className="text-sm text-gray-500">{issue.description}</p>
+                </div>
+              </div>
+              
+              <div className="ml-12 space-y-2">
+                <p className="text-sm font-medium">Solutions:</p>
+                <div className="space-y-2">
+                  {issue.solutions.map((solution, sIndex) => (
+                    <div key={sIndex} className="flex items-start gap-2">
+                      <ChevronRight className="h-4 w-4 text-blue-500 mt-0.5" />
+                      <p className="text-sm">{solution}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {index < issues.length - 1 && <hr className="mt-4" />}
+            </div>
+          ))}
+        </div>
+        
+        <DialogFooter>
+          <Button onClick={onClose}>
+            Got It
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// Network Speed Test Dialog
+const NetworkTestDialog: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  runTest: () => void;
+  speed: number | null;
+}> = ({ isOpen, onClose, runTest, speed }) => {
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[450px]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <LineChart className="h-5 w-5 text-blue-500" />
+            Network Speed Test
+          </DialogTitle>
+          <DialogDescription>
+            Test your connection speed for optimal device performance
+          </DialogDescription>
+        </DialogHeader>
+        
+        <div className="py-4 space-y-6">
+          {speed === null ? (
+            <div className="text-center py-10">
+              <div className="mb-4">
+                <RefreshCw className="h-12 w-12 mx-auto text-blue-500 animate-spin" />
+              </div>
+              <p>Testing network speed...</p>
+              <p className="text-sm text-gray-500 mt-2">Please wait a moment</p>
+            </div>
+          ) : (
+            <div className="text-center py-6">
+              <div className="mb-4 flex items-center justify-center gap-3">
+                <div className="flex flex-col items-center">
+                  <Upload className="h-6 w-6 text-blue-500 mb-1" />
+                  <span className="text-xl font-bold">{Math.round(speed * 0.7)} Mbps</span>
+                  <span className="text-xs text-gray-500">Upload</span>
+                </div>
+                
+                <div className="h-16 border-r border-gray-200"></div>
+                
+                <div className="flex flex-col items-center">
+                  <Download className="h-6 w-6 text-green-500 mb-1" />
+                  <span className="text-xl font-bold">{speed} Mbps</span>
+                  <span className="text-xs text-gray-500">Download</span>
+                </div>
+              </div>
+              
+              <div className="mt-6 text-left">
+                <p className="text-sm font-medium mb-2">Connection Quality:</p>
+                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full ${
+                      speed > 40 ? 'bg-green-500' : 
+                      speed > 20 ? 'bg-blue-500' : 
+                      speed > 10 ? 'bg-amber-500' : 
+                      'bg-red-500'
+                    }`} 
+                    style={{ width: `${Math.min(speed * 1.5, 100)}%` }}
+                  ></div>
+                </div>
+                <div className="flex justify-between mt-1">
+                  <span className="text-xs text-gray-500">Poor</span>
+                  <span className="text-xs text-gray-500">Excellent</span>
+                </div>
+              </div>
+              
+              <div className="mt-4 p-3 bg-blue-50 rounded-md text-sm text-blue-700 text-left">
+                <p className="flex items-start gap-2">
+                  <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                  <span>
+                    {speed > 20 
+                      ? 'Your connection is excellent for OBD2 data transmission.' 
+                      : 'Your connection may be slow for real-time data. Consider using a different connection method or reducing update frequency.'}
+                  </span>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        <DialogFooter>
+          {speed !== null && (
+            <Button variant="outline" onClick={runTest}>
+              <RotateCcw className="h-4 w-4 mr-2" />
+              Run Again
+            </Button>
+          )}
+          <Button onClick={onClose}>
+            {speed === null ? 'Cancel' : 'Close'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// Connection Tutorial Dialog
+const TutorialDialog: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  connectionMethod: string;
+}> = ({ isOpen, onClose, connectionMethod }) => {
+  // Tutorial steps for each connection method
+  const tutorialSteps = {
+    wire: [
+      'Locate the OBD2 port in your vehicle (usually under the dashboard)',
+      'Connect the Drishti device directly to the OBD2 port',
+      'Ensure the connection is secure and the device powers on',
+      'Select "Wire" connection in the app and click "Connect"'
+    ],
+    bluetooth: [
+      'Plug the Drishti device into your vehicle\'s OBD2 port',
+      'Turn on Bluetooth on your phone or tablet',
+      'Select "Bluetooth" connection in the app',
+      'Choose "Drishti OBD2 Scanner" from the device list',
+      'Enter the pairing code (usually 1234 or 0000)'
+    ],
+    wifi: [
+      'Connect the Drishti device to your vehicle\'s OBD2 port',
+      'Wait for the device LED to turn solid blue (about 10 seconds)',
+      'Go to your device WiFi settings and connect to "Drishti_WiFi"',
+      'Return to the app and select "WiFi" connection',
+      'Click "Connect" to establish the connection'
+    ],
+    esim: [
+      'Ensure your Drishti device has an active eSIM subscription',
+      'Connect the device to your vehicle\'s OBD2 port',
+      'Select "eSIM" connection in the app',
+      'Choose your provider and data plan',
+      'Click "Connect" to establish connection via cellular network'
+    ],
+    simcard: [
+      'Insert your SIM card into the Drishti device',
+      'Connect the device to your vehicle\'s OBD2 port',
+      'Select "SIM Card" connection in the app',
+      'Enter the required SIM details and APN settings',
+      'Click "Connect" to establish connection via cellular network'
+    ]
+  };
+  
+  const steps = tutorialSteps[connectionMethod as keyof typeof tutorialSteps] || tutorialSteps.bluetooth;
+  
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[450px]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Play className="h-5 w-5 text-blue-500" />
+            Connection Tutorial
+          </DialogTitle>
+          <DialogDescription>
+            {connectionMethod === 'wire' ? 'Wired Connection Guide' :
+             connectionMethod === 'bluetooth' ? 'Bluetooth Connection Guide' :
+             connectionMethod === 'wifi' ? 'WiFi Connection Guide' :
+             connectionMethod === 'esim' ? 'eSIM Connection Guide' :
+             'SIM Card Connection Guide'}
+          </DialogDescription>
+        </DialogHeader>
+        
+        <div className="py-4 space-y-6">
+          <div className="space-y-4">
+            {steps.map((step, index) => (
+              <div key={index} className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium text-sm">
+                  {index + 1}
+                </div>
+                <p className="text-sm">{step}</p>
+              </div>
+            ))}
+          </div>
+          
+          <div className="p-3 bg-amber-50 rounded-md text-sm text-amber-700">
+            <p className="flex items-start gap-2">
+              <Lightbulb className="h-4 w-4 mt-0.5 flex-shrink-0" />
+              <span>
+                For optimal performance, ensure your vehicle's engine is running during the connection process.
+              </span>
+            </p>
+          </div>
+          
+          <div className="text-center">
+            <Button variant="outline" className="text-blue-600" size="sm">
+              <ExternalLink className="h-4 w-4 mr-2" />
+              View Video Tutorial
+            </Button>
+          </div>
+        </div>
+        
+        <DialogFooter>
+          <Button onClick={onClose}>
+            Got It
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// Connection Recommendation Dialog
+const RecommendationDialog: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  setMethod: (method: string) => void;
+}> = ({ isOpen, onClose, setMethod }) => {
+  const recommendation = {
+    method: 'bluetooth',
+    reason: 'Best for quick connections with minimal setup',
+    benefits: [
+      'No cables required',
+      'Works with most modern vehicles',
+      'Easy to set up in under 60 seconds'
+    ]
+  };
+  
+  const handleApply = () => {
+    setMethod(recommendation.method);
+    onClose();
+  };
+  
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[450px]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Cpu className="h-5 w-5 text-blue-500" />
+            Intelligent Connection Recommendation
+          </DialogTitle>
+          <DialogDescription>
+            Based on your device and vehicle compatibility
+          </DialogDescription>
+        </DialogHeader>
+        
+        <div className="py-4 space-y-6">
+          <div className="p-4 border rounded-lg bg-blue-50 border-blue-100">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="p-2 bg-white rounded-full">
+                {recommendation.method === 'bluetooth' ? (
+                  <BluetoothIcon className="h-6 w-6 text-blue-500" />
+                ) : recommendation.method === 'wifi' ? (
+                  <Wifi className="h-6 w-6 text-blue-500" />
+                ) : (
+                  <CableIcon className="h-6 w-6 text-blue-500" />
+                )}
+              </div>
+              <div>
+                <h3 className="font-medium">
+                  {recommendation.method === 'bluetooth' ? 'Bluetooth Connection' :
+                   recommendation.method === 'wifi' ? 'WiFi Connection' :
+                   'Wired Connection'}
+                </h3>
+                <p className="text-sm text-gray-600">{recommendation.reason}</p>
+              </div>
+            </div>
+            
+            <div className="ml-12 space-y-2">
+              <p className="text-sm font-medium">Benefits:</p>
+              <div className="space-y-1">
+                {recommendation.benefits.map((benefit, index) => (
+                  <div key={index} className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                    <p className="text-sm">{benefit}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          <div className="p-3 bg-gray-50 rounded-md text-sm">
+            <p className="flex items-start gap-2">
+              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-gray-500" />
+              <span className="text-gray-600">
+                This recommendation is based on your device model and previous connection history.
+              </span>
+            </p>
+          </div>
+        </div>
+        
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={handleApply}>
+            Apply Recommendation
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 export default Drishti;
