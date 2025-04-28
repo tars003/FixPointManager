@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Car, 
@@ -12,7 +12,18 @@ import {
   ChevronRight,
   Check,
   Search,
-  Clock
+  Clock,
+  Gift,
+  Sparkles,
+  Award,
+  Zap,
+  ArrowRight,
+  ArrowLeft,
+  Calendar,
+  Flame,
+  Gauge,
+  Wrench,
+  Settings
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -54,6 +65,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useToast } from "@/hooks/use-toast";
 
 // Types for our service items
 type VehicleType = 'two-wheeler' | 'three-wheeler' | 'four-wheeler' | 'heavy-vehicle';
@@ -528,6 +540,10 @@ const ServiceCatalog: React.FC = () => {
   const [cartDialogOpen, setCartDialogOpen] = useState<boolean>(false);
   const [selectedPriceRange, setSelectedPriceRange] = useState<string | null>(null);
   const [selectedOffer, setSelectedOffer] = useState<string | null>(null);
+  const [carouselIndex, setCarouselIndex] = useState<number>(0);
+  const [showRewardsDialog, setShowRewardsDialog] = useState<boolean>(false);
+  const [userPoints, setUserPoints] = useState<number>(450);
+  const [serviceRecommendations, setServiceRecommendations] = useState<Service[]>([]);
   
   // Color palettes for different vehicle types
   const vehicleColorPalettes = {
@@ -713,6 +729,51 @@ const ServiceCatalog: React.FC = () => {
         <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>
       </div>
     );
+  };
+  
+  // Generate contextual service recommendations based on vehicle type
+  useEffect(() => {
+    // Gather all services that match the selected vehicle type
+    const allMatchingServices = serviceCategories
+      .flatMap(category => category.subCategories)
+      .flatMap(subCategory => subCategory.services)
+      .filter(service => service.vehicleTypes.includes(selectedVehicleType));
+    
+    // Filter to services with recommended providers
+    const servicesWithRecommendedProviders = allMatchingServices
+      .filter(service => service.providers.some(provider => provider.recommended));
+    
+    // Pick up to 4 recommended services
+    setServiceRecommendations(servicesWithRecommendedProviders.slice(0, 4));
+  }, [selectedVehicleType]);
+  
+  // Handle rewards dialog and point earning/redeeming
+  const handleAddPoints = (amount: number) => {
+    setUserPoints(prev => prev + amount);
+  };
+  
+  const handleRedeemPoints = (amount: number) => {
+    if (userPoints >= amount) {
+      setUserPoints(prev => prev - amount);
+      return true;
+    }
+    return false;
+  };
+  
+  // Calculate rewards points to be earned for the current cart
+  const calculateRewardsPoints = () => {
+    const totalPrice = calculateCartTotalPrice();
+    // 10 points for every ₹1000 spent
+    return Math.floor(totalPrice / 1000) * 10;
+  };
+  
+  // Calculate the carousel index for next/prev items
+  const handlePrevCarousel = () => {
+    setCarouselIndex(prev => (prev === 0 ? seasonalOffers.length - 1 : prev - 1));
+  };
+  
+  const handleNextCarousel = () => {
+    setCarouselIndex(prev => (prev === seasonalOffers.length - 1 ? 0 : prev + 1));
   };
 
   return (
@@ -964,36 +1025,164 @@ const ServiceCatalog: React.FC = () => {
               </div>
             )}
             
-            {/* Seasonal Offers Banner */}
+            {/* Gamified Rewards Banner */}
             <div className="mb-6">
-              <h2 className="text-xl font-bold mb-3">Seasonal Offers</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                {seasonalOffers.map(offer => (
-                  <div
-                    key={offer.id}
-                    className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                      selectedOffer === offer.id 
-                        ? 'border-primary bg-primary/5 shadow-md' 
-                        : 'border-gray-200 hover:border-primary/50 hover:shadow-sm'
-                    }`}
-                    onClick={() => setSelectedOffer(selectedOffer === offer.id ? null : offer.id)}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-medium">{offer.name}</h3>
-                      {selectedOffer === offer.id && (
-                        <Check className="h-4 w-4 text-primary" />
-                      )}
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Limited Time</span>
-                      <Badge className="bg-primary/10 text-primary hover:bg-primary/20">
-                        {offer.discount}
-                      </Badge>
-                    </div>
+              <div 
+                className={`rounded-lg p-4 cursor-pointer flex items-center justify-between ${vehicleColorPalettes[selectedVehicleType].secondary} transition-all hover:shadow-md`}
+                onClick={() => setShowRewardsDialog(true)}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`${vehicleColorPalettes[selectedVehicleType].primary} h-10 w-10 rounded-full flex items-center justify-center text-white`}>
+                    <Award className="h-6 w-6" />
                   </div>
-                ))}
+                  <div>
+                    <h3 className={`font-medium ${vehicleColorPalettes[selectedVehicleType].text}`}>FixPoint Rewards</h3>
+                    <p className="text-sm text-gray-600">You have <span className="font-medium">{userPoints} points</span> to redeem</p>
+                  </div>
+                </div>
+                <Badge className={`${vehicleColorPalettes[selectedVehicleType].badge} flex items-center gap-1`}>
+                  <Sparkles className="h-3 w-3" />
+                  <span>Earn {calculateRewardsPoints()} points on checkout</span>
+                </Badge>
               </div>
             </div>
+            
+            {/* Seasonal Offers Carousel */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-xl font-bold">Seasonal Offers</h2>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="rounded-full h-8 w-8" 
+                    onClick={handlePrevCarousel}
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="rounded-full h-8 w-8" 
+                    onClick={handleNextCarousel}
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <div className="relative overflow-hidden">
+                <div 
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
+                >
+                  {seasonalOffers.map((offer, index) => (
+                    <div 
+                      key={offer.id} 
+                      className="w-full flex-shrink-0 px-1"
+                    >
+                      <div 
+                        className={`border rounded-lg p-5 cursor-pointer transition-all hover:shadow-md ${
+                          selectedOffer === offer.id 
+                            ? 'border-primary bg-primary/5' 
+                            : 'border-gray-200'
+                        }`}
+                        onClick={() => setSelectedOffer(selectedOffer === offer.id ? null : offer.id)}
+                      >
+                        <div className="flex items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h3 className="text-lg font-medium">{offer.name}</h3>
+                              {selectedOffer === offer.id && (
+                                <Check className="h-4 w-4 text-primary" />
+                              )}
+                            </div>
+                            <p className="text-sm text-gray-600 mb-4">
+                              Special service packages and deals for the {offer.name.split(' ')[0]} season
+                            </p>
+                            <div className="flex items-center gap-3">
+                              <Badge className="bg-primary/10 text-primary hover:bg-primary/20">
+                                {offer.discount}
+                              </Badge>
+                              <span className="text-sm text-gray-600 flex items-center">
+                                <Calendar className="h-3 w-3 mr-1" /> Limited Time Offer
+                              </span>
+                            </div>
+                          </div>
+                          <div className="h-20 w-20 flex items-center justify-center bg-primary/5 rounded-full">
+                            {index === 0 && <div className="text-2xl">🌧️</div>}
+                            {index === 1 && <div className="text-2xl">☀️</div>}
+                            {index === 2 && <div className="text-2xl">🪔</div>}
+                            {index === 3 && <div className="text-2xl">🎆</div>}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-center mt-3 gap-1">
+                  {seasonalOffers.map((_, index) => (
+                    <div 
+                      key={index} 
+                      className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                        index === carouselIndex ? 'w-6 bg-primary' : 'w-1.5 bg-gray-300 hover:bg-gray-400'
+                      }`}
+                      onClick={() => setCarouselIndex(index)}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            {/* Contextual Service Recommendations */}
+            {serviceRecommendations.length > 0 && (
+              <div className="mb-6">
+                <h2 className="text-xl font-bold mb-3">Recommended for Your {selectedVehicleType.replace('-', ' ')}</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {serviceRecommendations.map(service => {
+                    const recommendedProvider = service.providers.find(p => p.recommended) || service.providers[0];
+                    return (
+                      <Card key={service.id} className={`border-l-4 ${vehicleColorPalettes[selectedVehicleType].border}`}>
+                        <CardContent className="p-4">
+                          <div className="flex items-start gap-3">
+                            <div className={`h-10 w-10 rounded-full ${vehicleColorPalettes[selectedVehicleType].secondary} flex items-center justify-center flex-shrink-0`}>
+                              {service.id.includes('battery') && <Zap className={`h-5 w-5 ${vehicleColorPalettes[selectedVehicleType].text}`} />}
+                              {service.id.includes('service') && <Wrench className={`h-5 w-5 ${vehicleColorPalettes[selectedVehicleType].text}`} />}
+                              {service.id.includes('ac') && <Flame className={`h-5 w-5 ${vehicleColorPalettes[selectedVehicleType].text}`} />}
+                              {service.id.includes('tyre') && <Gauge className={`h-5 w-5 ${vehicleColorPalettes[selectedVehicleType].text}`} />}
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="font-medium">{service.name}</h3>
+                              <p className="text-sm text-gray-500 mt-1 line-clamp-2">{service.description}</p>
+                              <div className="flex items-center justify-between mt-2">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sm font-medium">{formatPrice(recommendedProvider.discountedPrice || recommendedProvider.basePrice)}</span>
+                                  {recommendedProvider.discountedPrice && (
+                                    <span className="text-xs text-gray-500 line-through">{formatPrice(recommendedProvider.basePrice)}</span>
+                                  )}
+                                </div>
+                                <Button 
+                                  size="sm" 
+                                  className={`rounded-full ${isInCart(service.id, recommendedProvider.id) ? 'bg-green-500 hover:bg-green-600' : ''}`}
+                                  onClick={() => {
+                                    if (isInCart(service.id, recommendedProvider.id)) {
+                                      handleRemoveFromCart(service.id, recommendedProvider.id);
+                                    } else {
+                                      handleAddToCart(service.id, recommendedProvider.id);
+                                    }
+                                  }}
+                                >
+                                  {isInCart(service.id, recommendedProvider.id) ? 'Added' : 'Add to Cart'}
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             
             {/* Shop by Price Catalog Cards */}
             <div className="mb-6">
@@ -1004,7 +1193,7 @@ const ServiceCatalog: React.FC = () => {
                     key={index}
                     className={`rounded-lg p-3 text-center cursor-pointer transition-all ${
                       selectedPriceRange === category.label 
-                        ? 'bg-primary text-white shadow-md' 
+                        ? `${vehicleColorPalettes[selectedVehicleType].primary} text-white shadow-md` 
                         : 'bg-gray-100 hover:bg-gray-200'
                     }`}
                     onClick={() => {
@@ -1200,6 +1389,171 @@ const ServiceCatalog: React.FC = () => {
                       </Button>
                     </div>
                   )}
+                </DialogContent>
+              </Dialog>
+              
+              {/* Rewards Dialog */}
+              <Dialog open={showRewardsDialog} onOpenChange={setShowRewardsDialog}>
+                <DialogContent className="sm:max-w-[500px]">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                      <Award className="h-5 w-5 text-yellow-500" />
+                      FixPoint Rewards
+                    </DialogTitle>
+                    <DialogDescription>
+                      Earn points with every service booking and redeem them for discounts
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="space-y-4">
+                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white">
+                      <div className="text-sm mb-1">Available points</div>
+                      <div className="text-3xl font-bold mb-4">{userPoints}</div>
+                      <div className="text-sm opacity-80">You will earn {calculateRewardsPoints()} points with your current cart</div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <h3 className="font-medium">Redeem Points</h3>
+                      
+                      <div className="grid grid-cols-2 gap-3">
+                        <div 
+                          className="border rounded-lg p-4 hover:border-blue-500 cursor-pointer transition-all"
+                          onClick={() => {
+                            if (handleRedeemPoints(100)) {
+                              toast({
+                                title: "Points Redeemed",
+                                description: "You've redeemed 100 points for a ₹100 discount",
+                              });
+                            } else {
+                              toast({
+                                title: "Not Enough Points",
+                                description: "You need at least 100 points for this reward",
+                                variant: "destructive",
+                              });
+                            }
+                          }}
+                        >
+                          <div className="flex justify-between items-start mb-2">
+                            <div className="bg-green-100 p-2 rounded-full">
+                              <Zap className="h-4 w-4 text-green-600" />
+                            </div>
+                            <div className="bg-blue-100 text-blue-800 font-medium px-2 py-1 rounded text-xs">100 pts</div>
+                          </div>
+                          <h4 className="font-medium">₹100 Discount</h4>
+                          <p className="text-sm text-gray-500 mt-1">Apply to your next service booking</p>
+                        </div>
+                        
+                        <div 
+                          className="border rounded-lg p-4 hover:border-blue-500 cursor-pointer transition-all"
+                          onClick={() => {
+                            if (handleRedeemPoints(250)) {
+                              toast({
+                                title: "Points Redeemed",
+                                description: "You've redeemed 250 points for a free pickup & drop",
+                              });
+                            } else {
+                              toast({
+                                title: "Not Enough Points",
+                                description: "You need at least 250 points for this reward",
+                                variant: "destructive",
+                              });
+                            }
+                          }}
+                        >
+                          <div className="flex justify-between items-start mb-2">
+                            <div className="bg-orange-100 p-2 rounded-full">
+                              <Car className="h-4 w-4 text-orange-600" />
+                            </div>
+                            <div className="bg-blue-100 text-blue-800 font-medium px-2 py-1 rounded text-xs">250 pts</div>
+                          </div>
+                          <h4 className="font-medium">Free Pickup & Drop</h4>
+                          <p className="text-sm text-gray-500 mt-1">One-time free pickup & drop service</p>
+                        </div>
+                        
+                        <div 
+                          className="border rounded-lg p-4 hover:border-blue-500 cursor-pointer transition-all"
+                          onClick={() => {
+                            if (handleRedeemPoints(400)) {
+                              toast({
+                                title: "Points Redeemed",
+                                description: "You've redeemed 400 points for a free car wash",
+                              });
+                            } else {
+                              toast({
+                                title: "Not Enough Points",
+                                description: "You need at least 400 points for this reward",
+                                variant: "destructive",
+                              });
+                            }
+                          }}
+                        >
+                          <div className="flex justify-between items-start mb-2">
+                            <div className="bg-blue-100 p-2 rounded-full">
+                              <div className="text-blue-600 text-xs">💦</div>
+                            </div>
+                            <div className="bg-blue-100 text-blue-800 font-medium px-2 py-1 rounded text-xs">400 pts</div>
+                          </div>
+                          <h4 className="font-medium">Free Car Wash</h4>
+                          <p className="text-sm text-gray-500 mt-1">One premium car wash service</p>
+                        </div>
+                        
+                        <div 
+                          className="border rounded-lg p-4 hover:border-blue-500 cursor-pointer transition-all"
+                          onClick={() => {
+                            if (handleRedeemPoints(1000)) {
+                              toast({
+                                title: "Points Redeemed",
+                                description: "You've redeemed 1000 points for a free basic service",
+                              });
+                            } else {
+                              toast({
+                                title: "Not Enough Points",
+                                description: "You need at least 1000 points for this reward",
+                                variant: "destructive",
+                              });
+                            }
+                          }}
+                        >
+                          <div className="flex justify-between items-start mb-2">
+                            <div className="bg-purple-100 p-2 rounded-full">
+                              <Wrench className="h-4 w-4 text-purple-600" />
+                            </div>
+                            <div className="bg-blue-100 text-blue-800 font-medium px-2 py-1 rounded text-xs">1000 pts</div>
+                          </div>
+                          <h4 className="font-medium">Free Basic Service</h4>
+                          <p className="text-sm text-gray-500 mt-1">Complete basic service package</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <h3 className="font-medium mb-2">How to Earn More Points</h3>
+                      <ul className="space-y-2 text-sm">
+                        <li className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-green-500" />
+                          Book services (10 points per ₹1,000 spent)
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-green-500" />
+                          Complete vehicle profile (50 points)
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-green-500" />
+                          Leave reviews after service (25 points)
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-green-500" />
+                          Refer friends (100 points per referral)
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setShowRewardsDialog(false)}>
+                      Close
+                    </Button>
+                  </DialogFooter>
                 </DialogContent>
               </Dialog>
             </div>
