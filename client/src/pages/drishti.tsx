@@ -48,19 +48,22 @@ import {
   HelpCircle,
   X,
   Cpu,
+  Edit,
+  Map,
+  BookOpen,
+  Lightbulb,
+  Info,
+  ExternalLink,
+  CheckCircle,
   Upload,
   Download,
   LineChart,
   Sliders,
   SwitchCamera,
   Radio,
-  Info,
   Play,
-  ExternalLink,
-  Lightbulb,
   Save,
   ChevronRight,
-  CheckCircle,
   Cog,
   RotateCcw,
   Bluetooth
@@ -69,6 +72,8 @@ import {
 // Custom icons are defined below
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
 import {
   Dialog,
   DialogContent,
@@ -217,6 +222,13 @@ const Drishti: React.FC = () => {
   const [networkSpeed, setNetworkSpeed] = useState<number | null>(null);
   const [tutorialOpen, setTutorialOpen] = useState<boolean>(false);
   const [recommendationOpen, setRecommendationOpen] = useState<boolean>(false);
+  
+  // Geofencing state variables
+  const [geofenceEnabled, setGeofenceEnabled] = useState<boolean>(false);
+  const [geofenceRadius, setGeofenceRadius] = useState<number>(100);
+  const [geofenceDialogOpen, setGeofenceDialogOpen] = useState<boolean>(false);
+  const [manualGeofenceInput, setManualGeofenceInput] = useState<string>('');
+  const [geofenceTroubleshootOpen, setGeofenceTroubleshootOpen] = useState<boolean>(false);
   
   // Handle connect button click with animated status changes
   const handleConnect = () => {
@@ -970,19 +982,45 @@ const Drishti: React.FC = () => {
                 <CardContent>
                   <div className="flex items-center justify-between mb-3">
                     <Label htmlFor="geofence-toggle">Enable Geofencing</Label>
-                    <div className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white data-[state=checked]:bg-green-500">
-                      <span className="inline-block h-4 w-4 translate-x-1 rounded-full bg-white transition-transform data-[state=checked]:translate-x-6" style={{ transform: 'translateX(20px)' }}></span>
-                    </div>
+                    <Switch 
+                      id="geofence-toggle"
+                      checked={geofenceEnabled}
+                      onCheckedChange={setGeofenceEnabled}
+                    />
                   </div>
                   
                   <div className="mb-3">
                     <div className="flex justify-between mb-1">
                       <Label htmlFor="geofence-radius">Geofence Radius</Label>
-                      <span className="text-sm font-medium">3 km</span>
+                      <span className="text-sm font-medium">{geofenceRadius} km</span>
                     </div>
-                    <div className="w-full h-2 bg-green-100 rounded-full">
-                      <div className="h-full bg-green-500 rounded-full" style={{ width: '40%' }}></div>
+                    <Slider
+                      id="geofence-radius"
+                      min={1}
+                      max={1000}
+                      step={1}
+                      value={[geofenceRadius]}
+                      onValueChange={(value) => setGeofenceRadius(value[0])}
+                      disabled={!geofenceEnabled}
+                      className="mb-2"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>1 km</span>
+                      <span>1000 km</span>
                     </div>
+                  </div>
+                  
+                  <div className="mb-3">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full mb-2"
+                      onClick={() => setGeofenceDialogOpen(true)}
+                      disabled={!geofenceEnabled}
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      Set Manual Radius
+                    </Button>
                   </div>
                   
                   <div className="p-2 mb-4 rounded-md bg-gray-50 flex items-center gap-3">
@@ -995,18 +1033,64 @@ const Drishti: React.FC = () => {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button variant="outline" size="sm">
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    <Button variant="outline" size="sm" disabled={!geofenceEnabled}>
+                      <MapPin className="h-4 w-4 mr-1" />
                       Set Current Location
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" disabled={!geofenceEnabled}>
+                      <Map className="h-4 w-4 mr-1" />
                       View on Map
+                    </Button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setGeofenceTroubleshootOpen(true)}
+                      className="flex-1"
+                    >
+                      <HelpCircle className="h-4 w-4 mr-1" />
+                      Troubleshoot
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => runNetworkTest()}
+                      className="flex-1"
+                    >
+                      <Activity className="h-4 w-4 mr-1" />
+                      Test Speed
+                    </Button>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 mt-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setTutorialOpen(true)}
+                      className="flex-1"
+                    >
+                      <BookOpen className="h-4 w-4 mr-1" />
+                      Tutorial
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setRecommendationOpen(true)}
+                      className="flex-1"
+                    >
+                      <Lightbulb className="h-4 w-4 mr-1" />
+                      Recommend
                     </Button>
                   </div>
                   
                   <div className="flex items-center justify-between mt-3 text-sm">
                     <span className="text-gray-500">Alerts received</span>
-                    <Badge variant="outline">3</Badge>
+                    <Badge variant="outline" className={geofenceEnabled ? "bg-amber-50 text-amber-600 border-amber-200" : ""}>
+                      {geofenceEnabled ? 3 : 0}
+                    </Badge>
                   </div>
                 </CardContent>
               </Card>
