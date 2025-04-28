@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SimplifiedServiceCatalog from '@/components/service-booking/SimplifiedServiceCatalog';
 import RealTimeTracking from '@/components/service-booking/real-time-tracking';
-import CommunityIntegration from '@/components/service-booking/community-integration';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
   Search, ShoppingCart, Calendar, ChevronDown, 
-  Gauge, Settings, Clock, BookOpen, Users
+  Gauge, Settings, Clock, BookOpen
 } from 'lucide-react';
 
 const EnhancedServiceBookingPage: React.FC = () => {
@@ -22,7 +21,7 @@ const EnhancedServiceBookingPage: React.FC = () => {
       
       <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <div className="flex justify-between items-center">
-          <TabsList className="grid grid-cols-3 w-fit p-1">
+          <TabsList className="grid grid-cols-2 w-fit p-1">
             <TabsTrigger value="catalog" className="px-4 py-2 text-sm flex gap-2 items-center">
               <Search className="h-4 w-4" />
               Service Catalog
@@ -30,10 +29,6 @@ const EnhancedServiceBookingPage: React.FC = () => {
             <TabsTrigger value="tracking" className="px-4 py-2 text-sm flex gap-2 items-center">
               <Gauge className="h-4 w-4" />
               Real-Time Tracking
-            </TabsTrigger>
-            <TabsTrigger value="community" className="px-4 py-2 text-sm flex gap-2 items-center">
-              <Users className="h-4 w-4" />
-              Community Hub
             </TabsTrigger>
           </TabsList>
           
@@ -78,18 +73,6 @@ const EnhancedServiceBookingPage: React.FC = () => {
             </CardHeader>
             <CardContent className="pt-6">
               <RealTimeTracking />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="community" className="m-0 space-y-6">
-          <Card className="mt-0">
-            <CardHeader className="pb-0">
-              <CardTitle className="text-xl">Community & Knowledge Base</CardTitle>
-              <CardDescription>Learn from other owners and share your experience</CardDescription>
-            </CardHeader>
-            <CardContent className="pt-6">
-              <CommunityIntegration />
             </CardContent>
           </Card>
         </TabsContent>

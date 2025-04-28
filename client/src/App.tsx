@@ -15,6 +15,7 @@ import MyVehicles from "@/pages/my-vehicles-updated";
 import AddVehicle from "@/pages/add-vehicle";
 import BookService from "@/pages/book-service";
 import EnhancedServiceBooking from "@/pages/enhanced-service-booking";
+import VehicleVault from "@/pages/vehicle-vault";
 // Import the new enhanced nearby services page
 import Nearby from "@/pages/nearby-new";
 import LearnDriving from "@/pages/learn-driving";
@@ -144,6 +145,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <EnhancedServiceBooking />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/vehicle-vault">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <VehicleVault />
               </motion.div>
             )}
           </Route>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Clock, MapPin, Car, Wrench, CheckCircle2, Camera, ClipboardCheck, 
-  ChevronDown, ChevronUp, CalendarClock, AlertTriangle
+  ChevronDown, ChevronUp, CalendarClock, AlertTriangle, FileText
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,15 @@ import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogDescription, 
+  DialogFooter, 
+  DialogHeader, 
+  DialogTitle 
+} from '@/components/ui/dialog';
+import { useToast } from "@/hooks/use-toast";
 
 // Types
 type ServiceStatus = 'scheduled' | 'in-progress' | 'on-way' | 'servicing' | 'completed' | 'delayed';
@@ -157,9 +166,11 @@ const getStepStatusColor = (status: ServiceStep['status']) => {
 
 // Real-time tracking component
 const RealTimeTracking: React.FC = () => {
+  const { toast } = useToast();
   const [booking, setBooking] = useState<ServiceBooking>(mockBooking);
   const [showLiveStream, setShowLiveStream] = useState<boolean>(false);
   const [expandedSteps, setExpandedSteps] = useState<boolean>(true);
+  const [showServiceDetails, setShowServiceDetails] = useState<boolean>(false);
   
   // Simulate real-time updates
   useEffect(() => {
@@ -353,12 +364,118 @@ const RealTimeTracking: React.FC = () => {
             </Collapsible>
           </CardContent>
           <CardFooter className="flex justify-between pt-2">
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => {
+                toast({
+                  title: "Call initiated",
+                  description: `Calling technician ${booking.technician?.name}...`,
+                });
+                // In a real app, this would initiate a call or chat
+                setTimeout(() => {
+                  toast({
+                    title: "Connected with technician",
+                    description: "You are now connected with your service technician.",
+                  });
+                }, 1500);
+              }}
+            >
               Contact Technician
             </Button>
-            <Button variant="secondary" size="sm">
+            <Button 
+              variant="secondary" 
+              size="sm"
+              onClick={() => {
+                setShowServiceDetails(true);
+              }}
+            >
               View Service Details
             </Button>
+            
+            {/* Service Details Dialog */}
+            <Dialog open={showServiceDetails} onOpenChange={setShowServiceDetails}>
+              <DialogContent className="max-w-3xl">
+                <DialogHeader>
+                  <DialogTitle>Service Details</DialogTitle>
+                  <DialogDescription>
+                    Complete information about your current service
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 gap-4">
+                    <div className="col-span-1 font-medium text-right">Service ID:</div>
+                    <div className="col-span-3">{booking.id}</div>
+                    
+                    <div className="col-span-1 font-medium text-right">Service Type:</div>
+                    <div className="col-span-3">{booking.serviceType}</div>
+                    
+                    <div className="col-span-1 font-medium text-right">Scheduled:</div>
+                    <div className="col-span-3">{booking.scheduledDate}, {booking.scheduledTime}</div>
+                    
+                    <div className="col-span-1 font-medium text-right">Status:</div>
+                    <div className="col-span-3">
+                      <Badge 
+                        className={`${getStatusColor(booking.status)} py-1 px-3 flex items-center gap-1`}
+                      >
+                        {getStatusIcon(booking.status)}
+                        {booking.status === 'scheduled' ? 'Scheduled' : 
+                        booking.status === 'in-progress' ? 'In Progress' :
+                        booking.status === 'on-way' ? 'On The Way' :
+                        booking.status === 'servicing' ? 'Servicing' :
+                        booking.status === 'completed' ? 'Completed' : 'Delayed'}
+                      </Badge>
+                    </div>
+                    
+                    <div className="col-span-1 font-medium text-right">Technician:</div>
+                    <div className="col-span-3">
+                      {booking.technician ? (
+                        <div className="flex items-center">
+                          <Avatar className="h-8 w-8 mr-2">
+                            <AvatarFallback>
+                              {booking.technician.name.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <div>{booking.technician.name}</div>
+                            <div className="text-sm text-gray-500">{booking.technician.specialization}</div>
+                          </div>
+                        </div>
+                      ) : (
+                        "Not assigned yet"
+                      )}
+                    </div>
+                    
+                    <div className="col-span-1 font-medium text-right">Parts Used:</div>
+                    <div className="col-span-3">
+                      <ul className="list-disc pl-5 text-sm">
+                        <li>Engine Oil - Synthetic (4L)</li>
+                        <li>Oil Filter - OEM Compatible</li>
+                        <li>Air Filter - Premium</li>
+                        <li>Wiper Fluid Refill</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="col-span-1 font-medium text-right">Notes:</div>
+                    <div className="col-span-3 text-sm">
+                      Technician notes will appear here as they are added during the service process.
+                    </div>
+                    
+                    <div className="col-span-1 font-medium text-right">Invoice:</div>
+                    <div className="col-span-3">
+                      <Button variant="outline" size="sm" className="mr-2" disabled={true}>
+                        <FileText className="h-4 w-4 mr-2" />
+                        View Invoice
+                      </Button>
+                      <span className="text-sm text-gray-500">(Available after service completion)</span>
+                    </div>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button onClick={() => setShowServiceDetails(false)}>Close</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </CardFooter>
         </Card>
         
