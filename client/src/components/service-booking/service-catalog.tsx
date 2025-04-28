@@ -39,9 +39,35 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip';
 import { Slider } from '@/components/ui/slider';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 // Types for our service items
 type VehicleType = 'two-wheeler' | 'three-wheeler' | 'four-wheeler' | 'heavy-vehicle';
+
+// User's vehicle model type
+type UserVehicle = {
+  id: string;
+  make: string;
+  model: string;
+  year: number;
+  type: VehicleType;
+  registrationNumber: string;
+  image?: string;
+};
 
 type ServiceProvider = {
   id: string;
@@ -447,6 +473,46 @@ interface WishlistItem {
   providerId: string;
 }
 
+// Mock user vehicles - normally these would come from an API call
+const userVehicles: UserVehicle[] = [
+  {
+    id: 'v1',
+    make: 'Hyundai',
+    model: 'i10',
+    year: 2022,
+    type: 'four-wheeler',
+    registrationNumber: 'MH01AB1234',
+    image: '/hyundai-i10.jpg'
+  },
+  {
+    id: 'v2',
+    make: 'Honda',
+    model: 'Activa',
+    year: 2021,
+    type: 'two-wheeler',
+    registrationNumber: 'MH02CD5678',
+    image: '/honda-activa.jpg'
+  },
+  {
+    id: 'v3',
+    make: 'Tata',
+    model: 'Ace',
+    year: 2020,
+    type: 'three-wheeler',
+    registrationNumber: 'MH03EF9012',
+    image: '/tata-ace.jpg'
+  },
+  {
+    id: 'v4',
+    make: 'Mahindra',
+    model: 'Bolero Pickup',
+    year: 2019,
+    type: 'heavy-vehicle',
+    registrationNumber: 'MH04GH3456',
+    image: '/mahindra-bolero.jpg'
+  }
+];
+
 const ServiceCatalog: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>(serviceCategories[0].id);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(
@@ -458,6 +524,8 @@ const ServiceCatalog: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
+  const [selectedVehicle, setSelectedVehicle] = useState<UserVehicle | null>(userVehicles[0]);
+  const [cartDialogOpen, setCartDialogOpen] = useState<boolean>(false);
 
   // Find the current category and subcategory objects
   const currentCategory = serviceCategories.find(c => c.id === selectedCategory);
@@ -538,6 +606,42 @@ const ServiceCatalog: React.FC = () => {
 
   // Calculate the total items in cart
   const cartTotal = cartItems.length;
+  
+  // Calculate cart total price
+  const calculateCartTotalPrice = () => {
+    let total = 0;
+    
+    for (const item of cartItems) {
+      const service = serviceCategories
+        .flatMap(cat => cat.subCategories)
+        .flatMap(subCat => subCat.services)
+        .find(service => service.id === item.serviceId);
+        
+      const provider = service?.providers.find(provider => provider.id === item.providerId);
+      
+      if (provider) {
+        total += (provider.discountedPrice || provider.basePrice) * item.quantity;
+      }
+    }
+    
+    return total;
+  };
+  
+  // Get cart item details by serviceId and providerId
+  const getCartItemDetails = (serviceId: string, providerId: string) => {
+    const service = serviceCategories
+      .flatMap(cat => cat.subCategories)
+      .flatMap(subCat => subCat.services)
+      .find(service => service.id === serviceId);
+      
+    const provider = service?.providers.find(provider => provider.id === providerId);
+    
+    if (service && provider) {
+      return { service, provider };
+    }
+    
+    return null;
+  };
 
   // Helper to render star ratings
   const renderStarRating = (rating: number) => {
@@ -671,17 +775,104 @@ const ServiceCatalog: React.FC = () => {
 
         {/* Main content area */}
         <div className="lg:w-3/4">
-          {/* Search bar */}
-          <div className="mb-6">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input 
-                placeholder="Search for services, brands, or providers..." 
-                className="pl-10"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+          {/* Search bar and vehicle selection */}
+          <div className="mb-6 space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input 
+                  placeholder="Search for services, brands, or providers..." 
+                  className="pl-10"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="min-w-[200px] flex justify-between items-center gap-2">
+                    {selectedVehicle ? (
+                      <>
+                        <div className="flex items-center gap-2">
+                          <div className="h-6 w-6 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden">
+                            {selectedVehicle.type === 'four-wheeler' && <Car className="h-4 w-4" />}
+                            {selectedVehicle.type === 'two-wheeler' && <Bike className="h-4 w-4" />}
+                            {selectedVehicle.type === 'three-wheeler' && <span className="text-xs">🛺</span>}
+                            {selectedVehicle.type === 'heavy-vehicle' && <Truck className="h-4 w-4" />}
+                          </div>
+                          <span className="truncate text-sm">{selectedVehicle.make} {selectedVehicle.model}</span>
+                        </div>
+                        <ChevronDown className="h-4 w-4 opacity-50" />
+                      </>
+                    ) : (
+                      <>
+                        <span>Select Vehicle</span>
+                        <ChevronDown className="h-4 w-4 opacity-50" />
+                      </>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-0" align="end">
+                  <div className="p-4 border-b">
+                    <h4 className="font-medium mb-1">Select from my vehicles</h4>
+                    <p className="text-sm text-gray-500">Choose a vehicle for service</p>
+                  </div>
+                  <div className="max-h-[300px] overflow-y-auto">
+                    {userVehicles.map(vehicle => (
+                      <div
+                        key={vehicle.id}
+                        className={`p-3 flex items-center gap-3 hover:bg-gray-50 cursor-pointer ${selectedVehicle?.id === vehicle.id ? 'bg-blue-50' : ''}`}
+                        onClick={() => {
+                          setSelectedVehicle(vehicle);
+                          setSelectedVehicleType(vehicle.type);
+                        }}
+                      >
+                        <div className="h-10 w-10 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden">
+                          {vehicle.type === 'four-wheeler' && <Car className="h-6 w-6" />}
+                          {vehicle.type === 'two-wheeler' && <Bike className="h-6 w-6" />}
+                          {vehicle.type === 'three-wheeler' && <span className="text-sm">🛺</span>}
+                          {vehicle.type === 'heavy-vehicle' && <Truck className="h-6 w-6" />}
+                        </div>
+                        <div>
+                          <div className="font-medium">{vehicle.make} {vehicle.model}</div>
+                          <div className="text-xs text-gray-500">{vehicle.registrationNumber} • {vehicle.year}</div>
+                        </div>
+                        {selectedVehicle?.id === vehicle.id && (
+                          <Check className="h-4 w-4 text-blue-500 ml-auto" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="p-2 border-t">
+                    <Button variant="ghost" size="sm" className="w-full justify-start">
+                      <span className="mr-2">+</span> Add New Vehicle
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
+            
+            {selectedVehicle && (
+              <div className="bg-blue-50 p-3 rounded-md flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="bg-blue-100 p-2 rounded-full">
+                    {selectedVehicle.type === 'four-wheeler' && <Car className="h-4 w-4 text-blue-700" />}
+                    {selectedVehicle.type === 'two-wheeler' && <Bike className="h-4 w-4 text-blue-700" />}
+                    {selectedVehicle.type === 'three-wheeler' && <span className="text-sm">🛺</span>}
+                    {selectedVehicle.type === 'heavy-vehicle' && <Truck className="h-4 w-4 text-blue-700" />}
+                  </div>
+                  <div>
+                    <div className="font-medium text-blue-900">{selectedVehicle.make} {selectedVehicle.model}</div>
+                    <div className="text-xs text-blue-700">{selectedVehicle.registrationNumber}</div>
+                  </div>
+                </div>
+                <div>
+                  <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200">
+                    Showing services for {selectedVehicle.type.replace('-', ' ')}
+                  </Badge>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Navigation path and cart summary */}
@@ -719,22 +910,149 @@ const ServiceCatalog: React.FC = () => {
                 </Tooltip>
               </TooltipProvider>
               
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="outline" size="sm" className="flex items-center gap-2">
-                      <ShoppingCart className="h-4 w-4" />
-                      <span className="hidden md:inline">Cart</span>
-                      {cartItems.length > 0 && (
-                        <Badge className="h-5 w-5 p-0 flex items-center justify-center rounded-full">{cartItems.length}</Badge>
-                      )}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Cart</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Dialog open={cartDialogOpen} onOpenChange={setCartDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm" className="flex items-center gap-2">
+                    <ShoppingCart className="h-4 w-4" />
+                    <span className="hidden md:inline">Cart</span>
+                    {cartItems.length > 0 && (
+                      <Badge className="h-5 w-5 p-0 flex items-center justify-center rounded-full">{cartItems.length}</Badge>
+                    )}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[500px]">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                      <ShoppingCart className="h-5 w-5" />
+                      Service Cart
+                    </DialogTitle>
+                    <DialogDescription>
+                      {cartItems.length > 0
+                        ? `${cartItems.length} service${cartItems.length !== 1 ? 's' : ''} in your cart`
+                        : 'Your cart is empty'}
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  {cartItems.length > 0 ? (
+                    <>
+                      <div className="max-h-[400px] overflow-y-auto">
+                        <div className="space-y-4">
+                          {cartItems.map((item) => {
+                            const details = getCartItemDetails(item.serviceId, item.providerId);
+                            if (!details) return null;
+                            
+                            const { service, provider } = details;
+                            const price = provider.discountedPrice || provider.basePrice;
+                            
+                            return (
+                              <div key={`${item.serviceId}-${item.providerId}`} className="border rounded-md p-4">
+                                <div className="flex justify-between items-start">
+                                  <div>
+                                    <h4 className="font-medium text-sm">{service.name}</h4>
+                                    <p className="text-sm text-gray-500 mt-1">by {provider.name}</p>
+                                    <div className="flex items-center gap-2 mt-2">
+                                      <div className="flex items-center">
+                                        <Button 
+                                          variant="outline" 
+                                          size="icon" 
+                                          className="h-6 w-6 rounded-full"
+                                          onClick={() => {
+                                            const newCartItems = cartItems.map(cartItem => {
+                                              if (cartItem.serviceId === item.serviceId && cartItem.providerId === item.providerId) {
+                                                return {
+                                                  ...cartItem,
+                                                  quantity: Math.max(1, cartItem.quantity - 1)
+                                                };
+                                              }
+                                              return cartItem;
+                                            });
+                                            setCartItems(newCartItems);
+                                          }}
+                                        >
+                                          <span className="text-xs">-</span>
+                                        </Button>
+                                        <span className="mx-2 text-sm">{item.quantity}</span>
+                                        <Button 
+                                          variant="outline" 
+                                          size="icon" 
+                                          className="h-6 w-6 rounded-full"
+                                          onClick={() => {
+                                            const newCartItems = cartItems.map(cartItem => {
+                                              if (cartItem.serviceId === item.serviceId && cartItem.providerId === item.providerId) {
+                                                return {
+                                                  ...cartItem,
+                                                  quantity: cartItem.quantity + 1
+                                                };
+                                              }
+                                              return cartItem;
+                                            });
+                                            setCartItems(newCartItems);
+                                          }}
+                                        >
+                                          <span className="text-xs">+</span>
+                                        </Button>
+                                      </div>
+                                      <Button 
+                                        variant="ghost" 
+                                        size="sm" 
+                                        className="h-6 px-1 text-red-500 hover:text-red-700"
+                                        onClick={() => handleRemoveFromCart(item.serviceId, item.providerId)}
+                                      >
+                                        Remove
+                                      </Button>
+                                    </div>
+                                  </div>
+                                  <div className="text-right">
+                                    <div className="font-medium">{formatPrice(price * item.quantity)}</div>
+                                    {item.quantity > 1 && (
+                                      <div className="text-xs text-gray-500">({formatPrice(price)} each)</div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      
+                      <div className="border-t pt-4 mt-4">
+                        <div className="flex justify-between mb-2">
+                          <span className="text-gray-500">Subtotal</span>
+                          <span className="font-medium">{formatPrice(calculateCartTotalPrice())}</span>
+                        </div>
+                        <div className="flex justify-between mb-2">
+                          <span className="text-gray-500">Taxes & Fees</span>
+                          <span className="font-medium">{formatPrice(calculateCartTotalPrice() * 0.18)}</span>
+                        </div>
+                        <div className="flex justify-between font-bold text-lg mt-2 pt-2 border-t">
+                          <span>Total</span>
+                          <span>{formatPrice(calculateCartTotalPrice() * 1.18)}</span>
+                        </div>
+                      </div>
+                    
+                      <DialogFooter>
+                        <Button variant="outline" onClick={() => setCartDialogOpen(false)}>
+                          Continue Shopping
+                        </Button>
+                        <Button>
+                          Checkout
+                        </Button>
+                      </DialogFooter>
+                    </>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-8">
+                      <div className="h-16 w-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <ShoppingCart className="h-8 w-8 text-gray-400" />
+                      </div>
+                      <h3 className="text-lg font-medium mb-1">Your cart is empty</h3>
+                      <p className="text-gray-500 text-center mb-4">Browse services and add them to your cart</p>
+                      <Button onClick={() => setCartDialogOpen(false)}>
+                        Continue Shopping
+                      </Button>
+                    </div>
+                  )}
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
 
