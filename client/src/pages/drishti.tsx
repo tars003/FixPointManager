@@ -43,7 +43,7 @@ import {
   Power,
   Target,
   Zap,
-  HistoryIcon,
+  History as HistoryIcon,
   AlertCircle,
   HelpCircle,
   X,
@@ -64,6 +64,8 @@ import {
   Cog,
   RotateCcw
 } from 'lucide-react';
+
+// Custom icons are defined below
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -105,49 +107,6 @@ const CableIcon = (props: any) => (
   </svg>
 );
 
-const BluetoothIcon = (props: any) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="m7 7 10 10-5 5V2l5 5L7 17" />
-  </svg>
-);
-
-const SimCardIcon = (props: any) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <rect x="4" y="4" width="16" height="16" rx="2" />
-    <path d="M7 7h4v4H7z" />
-    <path d="M7 13h.01" />
-    <path d="M10 13h.01" />
-    <path d="M13 13h.01" />
-    <path d="M16 13h.01" />
-    <path d="M7 16h.01" />
-    <path d="M10 16h.01" />
-    <path d="M13 16h.01" />
-    <path d="M16 16h.01" />
-  </svg>
-);
-
 // Define feature configuration dialog type
 type ConfigDialogProps = {
   isOpen: boolean;
@@ -159,12 +118,16 @@ type ConfigDialogProps = {
   toggleActive: (id: string) => void;
 };
 
+// Define severity level type
+type SeverityLevel = 'low' | 'medium' | 'high' | 'critical';
+
 // Define troubleshooting issue type
 type TroubleshootingIssue = {
   id: string;
   title: string;
   description: string;
   solutions: string[];
+  severity: SeverityLevel;
 };
 
 const Drishti: React.FC = () => {
@@ -280,6 +243,7 @@ const Drishti: React.FC = () => {
       id: 'connection-failed',
       title: 'Connection Failed',
       description: 'Unable to establish connection with the OBD2 device',
+      severity: 'high',
       solutions: [
         'Ensure the device is powered on and within range',
         'Restart the device and try connecting again',
@@ -291,6 +255,7 @@ const Drishti: React.FC = () => {
       id: 'data-error',
       title: 'Incorrect Data Reading',
       description: 'Device is connected but showing incorrect or no data',
+      severity: 'medium',
       solutions: [
         'Make sure the vehicle ignition is on',
         'Verify the OBD2 port is compatible with your vehicle',
@@ -302,6 +267,7 @@ const Drishti: React.FC = () => {
       id: 'disconnects',
       title: 'Frequent Disconnections',
       description: 'Device keeps disconnecting during usage',
+      severity: 'medium',
       solutions: [
         'Move closer to the OBD2 device if using Bluetooth or WiFi',
         'Check for interference from other electronic devices',
@@ -1794,8 +1760,7 @@ const getHealthTextClass = (health: number) => {
   return 'text-[#DC3545]';
 };
 
-type SeverityLevel = 'low' | 'medium' | 'high' | 'critical';
-
+// Reference the SeverityLevel type defined above
 const getSeverityBgColor = (severity: SeverityLevel | string) => {
   switch (severity as SeverityLevel) {
     case 'low': return 'bg-[#28A745]';
