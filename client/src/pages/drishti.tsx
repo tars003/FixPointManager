@@ -228,40 +228,235 @@ const Drishti: React.FC = () => {
               </div>
               
               <div className="space-y-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="obd-port">OBD2 Port</Label>
-                  <Select defaultValue="auto-detect">
-                    <SelectTrigger id="obd-port">
-                      <SelectValue placeholder="Select OBD2 port" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="auto-detect">Auto-detect</SelectItem>
-                      <SelectItem value="usb">USB Connector</SelectItem>
-                      <SelectItem value="serial">Serial Port</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                {/* Wire connection settings */}
+                {connectionMethod === 'wire' && (
+                  <>
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="obd-port">OBD2 Port</Label>
+                      <Select defaultValue="auto-detect">
+                        <SelectTrigger id="obd-port">
+                          <SelectValue placeholder="Select OBD2 port" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="auto-detect">Auto-detect</SelectItem>
+                          <SelectItem value="usb">USB Connector</SelectItem>
+                          <SelectItem value="serial">Serial Port</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="obd-protocol">OBD Protocol</Label>
+                      <Select defaultValue="auto-detect">
+                        <SelectTrigger id="obd-protocol">
+                          <SelectValue placeholder="Select protocol" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="auto-detect">Auto-detect</SelectItem>
+                          <SelectItem value="iso9141">ISO 9141-2</SelectItem>
+                          <SelectItem value="iso14230">ISO 14230-4 (KWP2000)</SelectItem>
+                          <SelectItem value="iso15765">ISO 15765-4 (CAN)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </>
+                )}
                 
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="obd-protocol">OBD Protocol</Label>
-                  <Select defaultValue="auto-detect">
-                    <SelectTrigger id="obd-protocol">
-                      <SelectValue placeholder="Select protocol" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="auto-detect">Auto-detect</SelectItem>
-                      <SelectItem value="iso9141">ISO 9141-2</SelectItem>
-                      <SelectItem value="iso14230">ISO 14230-4 (KWP2000)</SelectItem>
-                      <SelectItem value="iso15765">ISO 15765-4 (CAN)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                {/* Bluetooth connection settings */}
+                {connectionMethod === 'bluetooth' && (
+                  <>
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="device-name">Device Name</Label>
+                      <Select defaultValue="drishti-scanner">
+                        <SelectTrigger id="device-name">
+                          <SelectValue placeholder="Select device" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="drishti-scanner">Drishti OBD2 Scanner</SelectItem>
+                          <SelectItem value="generic-obd">Generic OBD2 Adapter</SelectItem>
+                          <SelectItem value="elm327">ELM327 Bluetooth</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="pairing-code">Pairing Code</Label>
+                      <div className="grid grid-cols-4 gap-2">
+                        <input 
+                          type="text" 
+                          maxLength={1} 
+                          className="w-full h-12 text-center text-xl border rounded-md" 
+                          defaultValue="1"
+                        />
+                        <input 
+                          type="text" 
+                          maxLength={1} 
+                          className="w-full h-12 text-center text-xl border rounded-md" 
+                          defaultValue="2"
+                        />
+                        <input 
+                          type="text" 
+                          maxLength={1} 
+                          className="w-full h-12 text-center text-xl border rounded-md" 
+                          defaultValue="3"
+                        />
+                        <input 
+                          type="text" 
+                          maxLength={1} 
+                          className="w-full h-12 text-center text-xl border rounded-md" 
+                          defaultValue="4"
+                        />
+                      </div>
+                    </div>
+                    
+                    <Button variant="outline" className="w-full">
+                      Scan for Devices
+                    </Button>
+                  </>
+                )}
+                
+                {/* WiFi connection settings */}
+                {connectionMethod === 'wifi' && (
+                  <>
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="wifi-network">WiFi Network</Label>
+                      <Select defaultValue="home">
+                        <SelectTrigger id="wifi-network">
+                          <SelectValue placeholder="Select network" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="home">Home Network</SelectItem>
+                          <SelectItem value="office">Office WiFi</SelectItem>
+                          <SelectItem value="mobile">Mobile Hotspot</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="wifi-password">WiFi Password</Label>
+                      <div className="flex items-center space-x-2">
+                        <input 
+                          type="password" 
+                          id="wifi-password"
+                          className="w-full h-10 px-3 border rounded-md" 
+                          defaultValue="password123"
+                        />
+                        <Button variant="outline" size="icon" className="h-10 w-10">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <input type="checkbox" id="save-network" className="rounded-sm" />
+                      <Label htmlFor="save-network">Save network credentials</Label>
+                    </div>
+                  </>
+                )}
+                
+                {/* eSIM connection settings */}
+                {connectionMethod === 'esim' && (
+                  <>
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="esim-provider">eSIM Provider</Label>
+                      <Select defaultValue="jio">
+                        <SelectTrigger id="esim-provider">
+                          <SelectValue placeholder="Select provider" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="jio">Jio</SelectItem>
+                          <SelectItem value="airtel">Airtel</SelectItem>
+                          <SelectItem value="vodafone">Vodafone</SelectItem>
+                          <SelectItem value="bsnl">BSNL</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="esim-plan">Data Plan</Label>
+                      <Select defaultValue="basic">
+                        <SelectTrigger id="esim-plan">
+                          <SelectValue placeholder="Select plan" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="basic">Basic (1GB/month)</SelectItem>
+                          <SelectItem value="standard">Standard (5GB/month)</SelectItem>
+                          <SelectItem value="premium">Premium (10GB/month)</SelectItem>
+                          <SelectItem value="unlimited">Unlimited Data</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="p-3 rounded-md bg-blue-50 text-blue-700 text-sm">
+                      <p>eSIM activation requires QR code from your service provider. Please ensure you have the activation QR code ready.</p>
+                    </div>
+                  </>
+                )}
+                
+                {/* SIM Card connection settings */}
+                {connectionMethod === 'simcard' && (
+                  <>
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="sim-number">SIM Card Number</Label>
+                      <input 
+                        type="text" 
+                        id="sim-number"
+                        className="w-full h-10 px-3 border rounded-md" 
+                        placeholder="Enter SIM card number"
+                      />
+                    </div>
+                    
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="apn-settings">APN Settings</Label>
+                      <input 
+                        type="text" 
+                        id="apn-settings"
+                        className="w-full h-10 px-3 border rounded-md" 
+                        defaultValue="internet"
+                        placeholder="Access Point Name"
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="data-roaming" className="cursor-pointer">Enable Data Roaming</Label>
+                      <div className="relative inline-block w-10 h-5 transition duration-200 ease-in-out rounded-full bg-gray-200">
+                        <input
+                          type="checkbox"
+                          id="data-roaming"
+                          className="absolute w-0 h-0 opacity-0"
+                        />
+                        <label
+                          htmlFor="data-roaming"
+                          className="absolute left-0 w-5 h-5 transition duration-100 ease-in-out transform bg-white border rounded-full cursor-pointer"
+                          style={{ transform: 'translateX(0)' }}
+                        ></label>
+                      </div>
+                    </div>
+                  </>
+                )}
                 
                 <Button 
                   onClick={handleConnect}
-                  className="bg-green-500 hover:bg-green-600 text-white"
+                  className="bg-green-500 hover:bg-green-600 text-white w-full"
                 >
-                  Connect
+                  Connect {connectionMethod === 'bluetooth' ? 'via Bluetooth' : 
+                           connectionMethod === 'wifi' ? 'via WiFi' : 
+                           connectionMethod === 'esim' ? 'with eSIM' : 
+                           connectionMethod === 'simcard' ? 'with SIM Card' : 
+                           'with Wire'}
                 </Button>
               </div>
             </div>
