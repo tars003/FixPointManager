@@ -23,8 +23,18 @@ import {
   Flame,
   Gauge,
   Wrench,
-  Settings
+  Settings,
+  Trash,
+  Plus,
+  CircleDollarSign,
+  Droplet,
+  Percent,
+  Waves,
+  CalendarClock,
+  CalendarCheck,
+  Share2
 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -65,7 +75,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useToast } from "@/hooks/use-toast";
 
 // Types for our service items
 type VehicleType = 'two-wheeler' | 'three-wheeler' | 'four-wheeler' | 'heavy-vehicle';
@@ -780,154 +789,737 @@ const ServiceCatalog: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-2">Book Service</h1>
-      <p className="text-gray-600 mb-6">Find and book professional services for your vehicle</p>
+      <header className="mb-6 border-b pb-4">
+        <h1 className="text-3xl font-bold mb-2">Book Service</h1>
+        <p className="text-gray-600">Find and book professional services for your vehicle</p>
+      </header>
 
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Filters sidebar */}
-        <div className="lg:w-1/4 space-y-6">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center">
-                <Filter className="h-5 w-5 mr-2" />
-                Filters
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-medium mb-2">Vehicle Type</h3>
-                <Tabs defaultValue={selectedVehicleType} onValueChange={value => setSelectedVehicleType(value as VehicleType)}>
-                  <TabsList className="grid grid-cols-2 h-auto">
-                    <TabsTrigger value="two-wheeler" className="h-12 px-2 py-1">
-                      <div className="flex flex-col items-center">
-                        <Bike className="h-4 w-4 mb-1" />
-                        <span className="text-xs">Two Wheeler</span>
-                      </div>
-                    </TabsTrigger>
-                    <TabsTrigger value="four-wheeler" className="h-12 px-2 py-1">
-                      <div className="flex flex-col items-center">
-                        <Car className="h-4 w-4 mb-1" />
-                        <span className="text-xs">Four Wheeler</span>
-                      </div>
-                    </TabsTrigger>
-                    <TabsTrigger value="three-wheeler" className="h-12 px-2 py-1">
-                      <div className="flex flex-col items-center">
-                        <div className="text-sm mb-1">🛺</div>
-                        <span className="text-xs">Three Wheeler</span>
-                      </div>
-                    </TabsTrigger>
-                    <TabsTrigger value="heavy-vehicle" className="h-12 px-2 py-1">
-                      <div className="flex flex-col items-center">
-                        <Truck className="h-4 w-4 mb-1" />
-                        <span className="text-xs">Heavy Vehicle</span>
-                      </div>
-                    </TabsTrigger>
-                  </TabsList>
-                </Tabs>
-              </div>
+      {/* Sticky header with cart and user points */}
+      <div className="sticky top-0 z-10 bg-white border-b mb-6 py-2 px-4 -mx-4 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-3">
+          <Select value={selectedVehicleType} onValueChange={(value) => setSelectedVehicleType(value as VehicleType)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select vehicle type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="two-wheeler">
+                <Bike className="h-4 w-4 mr-2 inline" /> Two Wheeler
+              </SelectItem>
+              <SelectItem value="three-wheeler">
+                <span className="mr-2 inline">🛺</span> Three Wheeler
+              </SelectItem>
+              <SelectItem value="four-wheeler">
+                <Car className="h-4 w-4 mr-2 inline" /> Four Wheeler
+              </SelectItem>
+              <SelectItem value="heavy-vehicle">
+                <Truck className="h-4 w-4 mr-2 inline" /> Heavy Vehicle
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input 
+              placeholder="Search for services..." 
+              className="pl-10 w-[300px]"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div 
+              className="flex items-center cursor-pointer"
+              onClick={() => setShowRewardsDialog(true)}
+            >
+              <Award className="h-5 w-5 text-yellow-500 mr-1" />
+              <span className="font-medium text-sm">{userPoints} points</span>
+              <Badge className="ml-2 bg-green-100 text-green-800 hover:bg-green-200">
+                +{calculateRewardsPoints()}
+              </Badge>
+            </div>
+          </div>
 
-              <div>
-                <h3 className="font-medium mb-2">Price Range</h3>
-                <div className="px-1">
-                  <Slider 
-                    defaultValue={[1, 100000]} 
-                    min={1} 
-                    max={100000} 
-                    step={100} 
-                    value={priceRange}
-                    onValueChange={(value) => setPriceRange(value as [number, number])}
-                  />
-                  <div className="flex justify-between mt-2 text-sm text-gray-600">
-                    <span>{formatPrice(priceRange[0])}</span>
-                    <span>{formatPrice(priceRange[1])}</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="font-medium mb-2">Shop by Price</h3>
-                <div className="space-y-1">
-                  {priceCategories.map((category, index) => (
-                    <div 
-                      key={index} 
-                      className={`flex items-center space-x-2 p-2 rounded-md cursor-pointer hover:bg-gray-100 transition-colors ${selectedPriceRange === category.label ? 'bg-blue-50' : ''}`}
-                      onClick={() => {
-                        if (selectedPriceRange === category.label) {
-                          setSelectedPriceRange(null);
-                          setPriceRange([1, 100000]);
-                        } else {
-                          setSelectedPriceRange(category.label);
-                          setPriceRange([category.min, category.max]);
-                        }
-                      }}
-                    >
-                      <div className="flex items-center">
-                        <span className="text-sm">{category.label}</span>
+          <Dialog open={cartDialogOpen} onOpenChange={setCartDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <ShoppingCart className="h-4 w-4" />
+                <span className="hidden md:inline">Cart</span>
+                {cartItems.length > 0 && (
+                  <Badge className="h-5 w-5 p-0 flex items-center justify-center rounded-full">{cartItems.length}</Badge>
+                )}
+              </Button>
+            </DialogTrigger>
+          </Dialog>
+          
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm" className="hidden md:flex items-center gap-2">
+                {selectedVehicle && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div className={`h-6 w-6 ${vehicleColorPalettes[selectedVehicle.type].primary} rounded-full flex items-center justify-center`}>
+                        {selectedVehicle.type === 'four-wheeler' && <Car className="h-4 w-4 text-white" />}
+                        {selectedVehicle.type === 'two-wheeler' && <Bike className="h-4 w-4 text-white" />}
+                        {selectedVehicle.type === 'three-wheeler' && <span className="text-xs text-white">🛺</span>}
+                        {selectedVehicle.type === 'heavy-vehicle' && <Truck className="h-4 w-4 text-white" />}
                       </div>
-                      {selectedPriceRange === category.label && (
-                        <Check className="h-4 w-4 text-blue-500 ml-auto" />
-                      )}
+                      <span className="truncate text-sm">{selectedVehicle.make} {selectedVehicle.model}</span>
                     </div>
-                  ))}
-                </div>
+                  </>
+                )}
+                <ChevronDown className="h-4 w-4 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[300px] p-0" align="end">
+              <div className="p-4 border-b">
+                <h4 className="font-medium mb-1">My Vehicles</h4>
+                <p className="text-sm text-gray-500">Select a vehicle for service</p>
               </div>
-
-              <div>
-                <h3 className="font-medium mb-2">Rating</h3>
-                <div className="space-y-1">
-                  {[4.5, 4, 3.5, 3].map(rating => (
-                    <div 
-                      key={rating} 
-                      className={`flex items-center space-x-2 p-2 rounded-md cursor-pointer hover:bg-gray-100 transition-colors ${ratingFilter === rating ? 'bg-blue-50' : ''}`}
-                      onClick={() => setRatingFilter(ratingFilter === rating ? null : rating)}
-                    >
-                      <div className="flex items-center">
-                        <Star className={`h-4 w-4 ${ratingFilter === rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-300 text-gray-300'}`} />
-                        <span className="ml-1 text-sm">{rating}+ stars</span>
-                      </div>
-                      {ratingFilter === rating && (
-                        <Check className="h-4 w-4 text-blue-500" />
-                      )}
+              <div className="max-h-[300px] overflow-y-auto">
+                {userVehicles.map(vehicle => (
+                  <div
+                    key={vehicle.id}
+                    className={`p-3 flex items-center gap-3 hover:bg-gray-50 cursor-pointer ${selectedVehicle?.id === vehicle.id ? 'bg-blue-50' : ''}`}
+                    onClick={() => {
+                      setSelectedVehicle(vehicle);
+                      setSelectedVehicleType(vehicle.type);
+                    }}
+                  >
+                    <div className={`h-10 w-10 ${vehicleColorPalettes[vehicle.type].primary} rounded-full flex items-center justify-center`}>
+                      {vehicle.type === 'four-wheeler' && <Car className="h-6 w-6 text-white" />}
+                      {vehicle.type === 'two-wheeler' && <Bike className="h-6 w-6 text-white" />}
+                      {vehicle.type === 'three-wheeler' && <span className="text-sm text-white">🛺</span>}
+                      {vehicle.type === 'heavy-vehicle' && <Truck className="h-6 w-6 text-white" />}
                     </div>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Categories</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-1 pr-2">
-              {serviceCategories.map(category => (
-                <div 
-                  key={category.id}
-                  className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors ${selectedCategory === category.id ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-100'}`}
-                  onClick={() => {
-                    setSelectedCategory(category.id);
-                    if (category.subCategories.length > 0) {
-                      setSelectedSubCategory(category.subCategories[0].id);
-                    } else {
-                      setSelectedSubCategory(null);
-                    }
-                  }}
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-600">{category.icon}</span>
-                    <span className="text-sm font-medium">{category.name}</span>
+                    <div>
+                      <div className="font-medium">{vehicle.make} {vehicle.model}</div>
+                      <div className="text-xs text-gray-500">{vehicle.registrationNumber} • {vehicle.year}</div>
+                    </div>
+                    {selectedVehicle?.id === vehicle.id && (
+                      <Check className="h-4 w-4 text-blue-500 ml-auto" />
+                    )}
                   </div>
-                  {category.subCategories.length > 0 && (
-                    <ChevronRight className="h-4 w-4" />
-                  )}
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
+      
+      <div className="flex flex-col gap-6">
+        {/* Contextual Recommendations */}
+        {serviceRecommendations.length > 0 && (
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="text-xl font-bold">Recommended for Your {selectedVehicleType.replace('-', ' ')}</h2>
+              <Badge className={`${vehicleColorPalettes[selectedVehicleType].badge} px-3 py-1`}>Top Picks</Badge>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {serviceRecommendations.map(service => {
+                const recommendedProvider = service.providers.find(p => p.recommended) || service.providers[0];
+                return (
+                  <Card key={service.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                    <CardHeader className={`${vehicleColorPalettes[selectedVehicleType].secondary} pb-2 flex flex-row items-center justify-between`}>
+                      <div>
+                        <CardTitle className="text-base">{service.name}</CardTitle>
+                        <CardDescription className="text-xs line-clamp-1">{service.description}</CardDescription>
+                      </div>
+                      <div className={`h-8 w-8 ${vehicleColorPalettes[selectedVehicleType].primary} rounded-full flex items-center justify-center`}>
+                        {service.id.includes('battery') && <Zap className="h-4 w-4 text-white" />}
+                        {service.id.includes('service') && <Wrench className="h-4 w-4 text-white" />}
+                        {service.id.includes('ac') && <Flame className="h-4 w-4 text-white" />}
+                        {service.id.includes('tyre') && <Gauge className="h-4 w-4 text-white" />}
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pt-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center">
+                          {renderStarRating(recommendedProvider.rating)}
+                          <span className="ml-1 text-xs text-gray-500">({recommendedProvider.ratingCount})</span>
+                        </div>
+                        <div className="text-xs text-gray-500 flex items-center">
+                          <Clock className="h-3 w-3 mr-1" />
+                          {service.estimatedTime}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <div className="text-lg font-bold">
+                            {formatPrice(recommendedProvider.discountedPrice || recommendedProvider.basePrice)}
+                          </div>
+                          {recommendedProvider.discountedPrice && (
+                            <div className="text-xs text-gray-500 line-through">
+                              {formatPrice(recommendedProvider.basePrice)}
+                            </div>
+                          )}
+                        </div>
+                        <Button 
+                          size="sm" 
+                          className={`rounded-full ${isInCart(service.id, recommendedProvider.id) ? 'bg-green-500 hover:bg-green-600' : ''}`}
+                          onClick={() => {
+                            if (isInCart(service.id, recommendedProvider.id)) {
+                              handleRemoveFromCart(service.id, recommendedProvider.id);
+                            } else {
+                              handleAddToCart(service.id, recommendedProvider.id);
+                              toast({
+                                title: "Added to cart",
+                                description: `${service.name} by ${recommendedProvider.name}`,
+                                duration: 2000,
+                              });
+                            }
+                          }}
+                        >
+                          {isInCart(service.id, recommendedProvider.id) ? (
+                            <Check className="h-4 w-4 mr-1" />
+                          ) : (
+                            <ShoppingCart className="h-4 w-4 mr-1" />
+                          )}
+                          {isInCart(service.id, recommendedProvider.id) ? 'Added' : 'Add'}
+                        </Button>
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {recommendedProvider.features.slice(0, 2).map((feature, idx) => (
+                          <Badge key={idx} variant="outline" className="text-xs">
+                            {feature}
+                          </Badge>
+                        ))}
+                        {recommendedProvider.features.length > 2 && (
+                          <Badge variant="outline" className="text-xs">+{recommendedProvider.features.length - 2} more</Badge>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        
+        {/* Price Explorer */}
+        <div className="mb-6">
+          <h2 className="text-xl font-bold mb-3">Shop by Price</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+            {priceCategories.slice(0, 6).map((category, index) => (
+              <div
+                key={index}
+                className={`rounded-lg p-3 text-center cursor-pointer transition-all ${
+                  selectedPriceRange === category.label 
+                    ? `${vehicleColorPalettes[selectedVehicleType].primary} text-white shadow-md` 
+                    : 'bg-gray-100 hover:bg-gray-200'
+                }`}
+                onClick={() => {
+                  if (selectedPriceRange === category.label) {
+                    setSelectedPriceRange(null);
+                    setPriceRange([1, 100000]);
+                  } else {
+                    setSelectedPriceRange(category.label);
+                    setPriceRange([category.min, category.max]);
+                    toast({
+                      description: `Showing services priced ${category.label}`,
+                      duration: 2000,
+                    });
+                  }
+                }}
+              >
+                <div className="font-medium">{category.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Seasonal Offers */}
+        <div className="mb-6">
+          <div className="relative">
+            <div className="overflow-hidden rounded-lg">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
+              >
+                {seasonalOffers.map((offer, index) => (
+                  <div 
+                    key={offer.id} 
+                    className="w-full flex-shrink-0"
+                  >
+                    <div 
+                      className={`border rounded-lg p-5 cursor-pointer transition-all hover:shadow-md bg-gradient-to-r ${
+                        index === 0 ? 'from-blue-50 to-blue-100' : 
+                        index === 1 ? 'from-orange-50 to-orange-100' : 
+                        index === 2 ? 'from-purple-50 to-purple-100' : 
+                        'from-cyan-50 to-cyan-100'
+                      }`}
+                      onClick={() => setSelectedOffer(selectedOffer === offer.id ? null : offer.id)}
+                    >
+                      <div className="flex items-start">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="text-xl font-bold">{offer.name}</h3>
+                            {selectedOffer === offer.id && (
+                              <Check className="h-4 w-4 text-primary" />
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600 mb-3">
+                            Special deals for the {offer.name.split(' ')[0]} season
+                          </p>
+                          <div className="flex items-center gap-3">
+                            <Badge className="px-3 py-1 text-sm bg-primary/80 text-white hover:bg-primary">
+                              {offer.discount}
+                            </Badge>
+                            <Button size="sm" 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toast({
+                                  title: "Offer Applied",
+                                  description: `${offer.name} with ${offer.discount} has been applied`,
+                                });
+                              }}
+                            >
+                              Apply Offer
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="h-24 w-24 flex items-center justify-center bg-white bg-opacity-40 rounded-full">
+                          {index === 0 && <div className="text-3xl">🌧️</div>}
+                          {index === 1 && <div className="text-3xl">☀️</div>}
+                          {index === 2 && <div className="text-3xl">🪔</div>}
+                          {index === 3 && <div className="text-3xl">🎆</div>}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="absolute inset-y-0 left-0 flex items-center">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 rounded-full bg-white shadow-md" 
+                onClick={handlePrevCarousel}
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="absolute inset-y-0 right-0 flex items-center">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 rounded-full bg-white shadow-md" 
+                onClick={handleNextCarousel}
+              >
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div className="flex justify-center mt-3 gap-1">
+            {seasonalOffers.map((_, index) => (
+              <div 
+                key={index} 
+                className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                  index === carouselIndex ? 'w-6 bg-primary' : 'w-1.5 bg-gray-300 hover:bg-gray-400'
+                }`}
+                onClick={() => setCarouselIndex(index)}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* Main content area */}
-        <div className="lg:w-3/4">
+        {/* Services by Category */}
+        <div className="flex flex-col gap-6">
+          <div>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Browse Services</h2>
+              <div className="flex">
+                {serviceCategories.map(category => (
+                  <Button
+                    key={category.id}
+                    variant={selectedCategory === category.id ? "default" : "ghost"}
+                    size="sm"
+                    className="mr-1"
+                    onClick={() => {
+                      setSelectedCategory(category.id);
+                      if (category.subCategories.length > 0) {
+                        setSelectedSubCategory(category.subCategories[0].id);
+                      } else {
+                        setSelectedSubCategory(null);
+                      }
+                    }}
+                  >
+                    <span className="mr-2">{category.icon}</span>
+                    {category.name}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            
+            {currentCategory && currentCategory.subCategories.length > 0 && (
+              <div className="flex overflow-x-auto pb-2 mb-4 gap-2">
+                {currentCategory.subCategories.map(subCategory => (
+                  <Badge 
+                    key={subCategory.id}
+                    variant={selectedSubCategory === subCategory.id ? "default" : "outline"}
+                    className="cursor-pointer px-3 py-1 text-sm"
+                    onClick={() => setSelectedSubCategory(subCategory.id)}
+                  >
+                    {subCategory.name}
+                  </Badge>
+                ))}
+              </div>
+            )}
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {searchFilteredServices.map(service => (
+                <Card key={service.id} className="overflow-hidden border hover:shadow-md transition-shadow">
+                  <div className="grid md:grid-cols-2 h-full">
+                    <div className="p-4 border-r">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className={`h-8 w-8 ${vehicleColorPalettes[selectedVehicleType].primary} rounded-full flex items-center justify-center`}>
+                          {service.id.includes('battery') && <Zap className="h-4 w-4 text-white" />}
+                          {service.id.includes('service') && <Wrench className="h-4 w-4 text-white" />}
+                          {service.id.includes('tyre') && <Gauge className="h-4 w-4 text-white" />}
+                          {service.id.includes('ac') && <Flame className="h-4 w-4 text-white" />}
+                          {!service.id.includes('battery') && !service.id.includes('service') && 
+                           !service.id.includes('tyre') && !service.id.includes('ac') && 
+                           <Settings className="h-4 w-4 text-white" />}
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-base">{service.name}</h3>
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-3">{service.description}</p>
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <div className="flex items-center">
+                          <Clock className="h-3 w-3 mr-1" />
+                          {service.estimatedTime}
+                        </div>
+                        <div className="flex items-center">
+                          <span className="mr-1">From</span>
+                          <span className="font-medium">
+                            {formatPrice(Math.min(...service.providers.map(p => p.discountedPrice || p.basePrice)))}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col p-3">
+                      <div className="font-medium text-sm mb-2">Choose Provider</div>
+                      <div className="space-y-2 overflow-y-auto flex-grow">
+                        {service.providers.map(provider => (
+                          <div 
+                            key={provider.id} 
+                            className={`border rounded-md p-2 cursor-pointer transition-colors ${
+                              isInCart(service.id, provider.id) 
+                                ? `${vehicleColorPalettes[selectedVehicleType].secondary} ${vehicleColorPalettes[selectedVehicleType].border}`
+                                : 'hover:bg-gray-50'
+                            }`}
+                            onClick={() => {
+                              if (isInCart(service.id, provider.id)) {
+                                handleRemoveFromCart(service.id, provider.id);
+                              } else {
+                                handleAddToCart(service.id, provider.id);
+                                toast({
+                                  title: "Added to cart",
+                                  description: `${service.name} by ${provider.name}`,
+                                  duration: 2000,
+                                });
+                              }
+                            }}
+                          >
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="flex items-center">
+                                <span className="font-medium text-sm">{provider.name}</span>
+                                {provider.recommended && (
+                                  <Badge variant="outline" className="ml-2 text-xs px-1">Top Pick</Badge>
+                                )}
+                              </div>
+                              {renderStarRating(provider.rating)}
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <div className="flex flex-col">
+                                <span className="font-bold">
+                                  {formatPrice(provider.discountedPrice || provider.basePrice)}
+                                </span>
+                                {provider.discountedPrice && (
+                                  <span className="text-xs text-gray-500 line-through">
+                                    {formatPrice(provider.basePrice)}
+                                  </span>
+                                )}
+                              </div>
+                              {isInCart(service.id, provider.id) ? (
+                                <Button size="sm" variant="destructive" className="h-7 px-2 text-xs" onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleRemoveFromCart(service.id, provider.id);
+                                }}>
+                                  <Trash className="h-3 w-3 mr-1" /> Remove
+                                </Button>
+                              ) : (
+                                <Button size="sm" className="h-7 px-2 text-xs" onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleAddToCart(service.id, provider.id);
+                                  toast({
+                                    title: "Added to cart",
+                                    description: `${service.name} by ${provider.name}`,
+                                    duration: 2000,
+                                  });
+                                }}>
+                                  <ShoppingCart className="h-3 w-3 mr-1" /> Add
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+          
+          {/* Enhanced Cart Dialog */}
+          <Dialog open={cartDialogOpen} onOpenChange={setCartDialogOpen}>
+            <DialogContent className="sm:max-w-[600px]">
+              <DialogHeader>
+                <DialogTitle className="flex items-center text-xl">
+                  <ShoppingCart className="h-5 w-5 mr-2" />
+                  Your Cart
+                </DialogTitle>
+                <DialogDescription>
+                  Review your selected services before checkout
+                </DialogDescription>
+              </DialogHeader>
+              
+              {cartItems.length === 0 ? (
+                <div className="py-8 text-center">
+                  <div className="mx-auto w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                    <ShoppingCart className="h-8 w-8 text-gray-400" />
+                  </div>
+                  <h3 className="text-lg font-medium mb-1">Your cart is empty</h3>
+                  <p className="text-gray-500 mb-4">Start adding services to your cart</p>
+                  <Button onClick={() => setCartDialogOpen(false)}>Browse Services</Button>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-4 max-h-[400px] overflow-y-auto">
+                    {cartItems.map((item, index) => {
+                      const details = getCartItemDetails(item.serviceId, item.providerId);
+                      if (!details) return null;
+                      
+                      return (
+                        <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
+                          <div className={`h-10 w-10 ${vehicleColorPalettes[selectedVehicleType].primary} rounded-full flex items-center justify-center`}>
+                            {details.service.id.includes('battery') && <Zap className="h-5 w-5 text-white" />}
+                            {details.service.id.includes('service') && <Wrench className="h-5 w-5 text-white" />}
+                            {details.service.id.includes('tyre') && <Gauge className="h-5 w-5 text-white" />}
+                            {details.service.id.includes('ac') && <Flame className="h-5 w-5 text-white" />}
+                            {!details.service.id.includes('battery') && !details.service.id.includes('service') && 
+                             !details.service.id.includes('tyre') && !details.service.id.includes('ac') && 
+                             <Settings className="h-5 w-5 text-white" />}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex justify-between">
+                              <h4 className="font-medium">{details.service.name}</h4>
+                              <div>
+                                <Badge variant="outline" className="mr-2">{details.service.estimatedTime}</Badge>
+                                <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleRemoveFromCart(item.serviceId, item.providerId)}>
+                                  <Trash className="h-4 w-4 text-gray-500" />
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="flex justify-between mt-1">
+                              <div className="text-sm text-gray-600">Provider: {details.provider.name}</div>
+                              <div className="font-medium">
+                                {formatPrice(details.provider.discountedPrice || details.provider.basePrice)}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Frequently Bought Together */}
+                  <div className="border-t pt-4 mt-4">
+                    <h4 className="font-medium mb-3">Frequently Bought Together</h4>
+                    <div className="grid grid-cols-2 gap-3">
+                      {serviceCategories
+                        .flatMap(cat => cat.subCategories)
+                        .flatMap(subCat => subCat.services)
+                        .filter(service => 
+                          service.vehicleTypes.includes(selectedVehicleType) && 
+                          !cartItems.some(item => item.serviceId === service.id)
+                        )
+                        .slice(0, 2)
+                        .map(service => {
+                          const bestProvider = service.providers.find(p => p.recommended) || service.providers[0];
+                          return (
+                            <div key={service.id} className="border rounded-md p-3">
+                              <div className="flex items-center gap-2 mb-2">
+                                <div className={`h-8 w-8 ${vehicleColorPalettes[selectedVehicleType].primary} rounded-full flex items-center justify-center`}>
+                                  {service.id.includes('battery') && <Zap className="h-4 w-4 text-white" />}
+                                  {service.id.includes('service') && <Wrench className="h-4 w-4 text-white" />}
+                                  {service.id.includes('tyre') && <Gauge className="h-4 w-4 text-white" />}
+                                  {service.id.includes('ac') && <Flame className="h-4 w-4 text-white" />}
+                                  {!service.id.includes('battery') && !service.id.includes('service') && 
+                                   !service.id.includes('tyre') && !service.id.includes('ac') && 
+                                   <Settings className="h-4 w-4 text-white" />}
+                                </div>
+                                <h4 className="font-medium text-sm">{service.name}</h4>
+                              </div>
+                              <div className="flex justify-between items-center mb-2">
+                                <div className="text-sm">{bestProvider.name}</div>
+                                <div className="flex items-center">
+                                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                                  <span className="ml-1 text-xs">{bestProvider.rating}</span>
+                                </div>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="font-bold">
+                                  {formatPrice(bestProvider.discountedPrice || bestProvider.basePrice)}
+                                </span>
+                                <Button 
+                                  size="sm" 
+                                  className="h-7 px-2 text-xs"
+                                  onClick={() => {
+                                    handleAddToCart(service.id, bestProvider.id);
+                                    toast({
+                                      title: "Added to cart",
+                                      description: `${service.name} by ${bestProvider.name}`,
+                                      duration: 2000,
+                                    });
+                                  }}
+                                >
+                                  <Plus className="h-3 w-3 mr-1" /> Add
+                                </Button>
+                              </div>
+                            </div>
+                          );
+                        })
+                      }
+                    </div>
+                  </div>
+                  
+                  <div className="border-t pt-4 mt-4 space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-sm text-gray-600">Subtotal</span>
+                      <span className="font-medium">{formatPrice(calculateCartTotalPrice())}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-gray-600">Tax</span>
+                      <span className="font-medium">{formatPrice(calculateCartTotalPrice() * 0.18)}</span>
+                    </div>
+                    <div className="flex justify-between font-bold text-lg">
+                      <span>Total</span>
+                      <span>{formatPrice(calculateCartTotalPrice() * 1.18)}</span>
+                    </div>
+                    <div className="flex items-center justify-between pt-2">
+                      <div className="flex items-center gap-1">
+                        <Award className="h-5 w-5 text-yellow-500" />
+                        <span className="text-sm">You'll earn {calculateRewardsPoints()} points</span>
+                      </div>
+                      <Button 
+                        className="gap-2"
+                        onClick={() => {
+                          setCartDialogOpen(false);
+                          toast({
+                            title: "Service booked successfully",
+                            description: "Your service has been booked for your vehicle",
+                          });
+                          handleAddPoints(calculateRewardsPoints());
+                        }}
+                      >
+                        <CircleDollarSign className="h-4 w-4" />
+                        Checkout
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </DialogContent>
+          </Dialog>
+          
+          {/* Rewards Dialog */}
+          <Dialog open={showRewardsDialog} onOpenChange={setShowRewardsDialog}>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle className="flex items-center text-xl">
+                  <Award className="h-5 w-5 mr-2 text-yellow-500" />
+                  FixPoint Rewards
+                </DialogTitle>
+                <DialogDescription>
+                  You've earned points through your service bookings
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="space-y-4 py-4">
+                <div className="flex justify-between items-center">
+                  <div className="text-2xl font-bold">{userPoints}</div>
+                  <div className="text-sm text-gray-500">Available Points</div>
+                </div>
+                
+                <div className="border-t pt-4">
+                  <h4 className="font-medium mb-3">Rewards</h4>
+                  <div className="space-y-3">
+                    {[
+                      { title: 'Free Oil Change', points: 200, icon: <Droplet className="h-5 w-5" /> },
+                      { title: '10% Off Next Service', points: 350, icon: <Percent className="h-5 w-5" /> },
+                      { title: 'Free Car Wash', points: 150, icon: <Waves className="h-5 w-5" /> },
+                      { title: 'Priority Scheduling', points: 100, icon: <CalendarClock className="h-5 w-5" /> }
+                    ].map((reward, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-500">
+                            {reward.icon}
+                          </div>
+                          <div>
+                            <div className="font-medium">{reward.title}</div>
+                            <div className="text-sm text-gray-500">{reward.points} points</div>
+                          </div>
+                        </div>
+                        <Button 
+                          variant={userPoints >= reward.points ? "default" : "outline"} 
+                          size="sm"
+                          disabled={userPoints < reward.points}
+                          onClick={() => {
+                            if (handleRedeemPoints(reward.points)) {
+                              toast({
+                                title: "Reward Redeemed!",
+                                description: `You've redeemed ${reward.title}. ${reward.points} points have been deducted.`,
+                                duration: 3000,
+                              });
+                              setShowRewardsDialog(false);
+                            }
+                          }}
+                        >
+                          Redeem
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="border-t pt-4">
+                  <h4 className="font-medium mb-3">How to Earn More</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2">
+                      <CircleDollarSign className="h-4 w-4 text-green-500" />
+                      <span>10 points for every ₹1,000 spent</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CalendarCheck className="h-4 w-4 text-green-500" />
+                      <span>25 points for booking recurring services</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Share2 className="h-4 w-4 text-green-500" />
+                      <span>50 points for referring a friend</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
           {/* Search bar and vehicle selection */}
           <div className="mb-6 space-y-4">
             <div className="flex items-center gap-4">

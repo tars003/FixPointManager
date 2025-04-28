@@ -1,8 +1,8 @@
 import React from 'react';
-import ServiceCatalog from '@/components/service-booking/service-catalog';
+import SimplifiedServiceCatalog from '@/components/service-booking/SimplifiedServiceCatalog';
 
 const BookServicePage: React.FC = () => {
-  return <ServiceCatalog />;
+  return <SimplifiedServiceCatalog />;
 };
 
 export default BookServicePage;
