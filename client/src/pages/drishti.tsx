@@ -631,16 +631,91 @@ const Drishti: React.FC = () => {
                   </>
                 )}
                 
-                <Button 
-                  onClick={handleConnect}
-                  className="bg-green-500 hover:bg-green-600 text-white w-full"
-                >
-                  Connect {connectionMethod === 'bluetooth' ? 'via Bluetooth' : 
-                           connectionMethod === 'wifi' ? 'via WiFi' : 
-                           connectionMethod === 'esim' ? 'with eSIM' : 
-                           connectionMethod === 'simcard' ? 'with SIM Card' : 
-                           'with Wire'}
-                </Button>
+                <div className="space-y-3">
+                  {connectionError && (
+                    <div className="p-2 bg-red-50 border border-red-100 rounded-md flex items-start gap-2 text-sm text-red-600">
+                      <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="font-medium">Connection failed</p>
+                        <p>{connectionError}</p>
+                        <Button 
+                          variant="link" 
+                          className="p-0 h-auto text-red-600 underline"
+                          onClick={() => setTroubleshootingOpen(true)}
+                        >
+                          View troubleshooting guide
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                
+                  <Button 
+                    onClick={handleConnect}
+                    className={`${
+                      connectionStatus === 'connecting' 
+                        ? 'bg-blue-500 hover:bg-blue-600' 
+                        : 'bg-green-500 hover:bg-green-600'
+                    } text-white w-full h-11 relative overflow-hidden transition-colors`}
+                    disabled={connectionStatus === 'connecting'}
+                  >
+                    {connectionStatus === 'connecting' ? (
+                      <div className="flex items-center justify-center">
+                        <RefreshCw className="h-5 w-5 mr-2 animate-spin" />
+                        <span>Connecting...</span>
+                      </div>
+                    ) : (
+                      <span>
+                        Connect {connectionMethod === 'bluetooth' ? 'via Bluetooth' : 
+                                connectionMethod === 'wifi' ? 'via WiFi' : 
+                                connectionMethod === 'esim' ? 'with eSIM' : 
+                                connectionMethod === 'simcard' ? 'with SIM Card' : 
+                                'with Wire'}
+                      </span>
+                    )}
+                  </Button>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setTroubleshootingOpen(true)}
+                      className="flex-1"
+                    >
+                      <HelpCircle className="h-4 w-4 mr-2" />
+                      Troubleshoot
+                    </Button>
+                    
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setNetworkTestOpen(true)}
+                      className="flex-1"
+                    >
+                      <LineChart className="h-4 w-4 mr-2" />
+                      Test Speed
+                    </Button>
+                    
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setTutorialOpen(true)}
+                      className="flex-1"
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      Tutorial
+                    </Button>
+                    
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setRecommendationOpen(true)}
+                      className="flex-1"
+                    >
+                      <Lightbulb className="h-4 w-4 mr-2" />
+                      Recommend
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           </CardContent>
@@ -850,11 +925,22 @@ const Drishti: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <Badge
                       variant="outline"
-                      className="bg-emerald-50 text-emerald-600 border-emerald-200"
+                      className={`${
+                        activeFeatures['realtime-tracking'] 
+                          ? "bg-emerald-50 text-emerald-600 border-emerald-200" 
+                          : "bg-gray-50 text-gray-500 border-gray-200"
+                      }`}
                     >
-                      Active
+                      {activeFeatures['realtime-tracking'] ? 'Active' : 'Inactive'}
                     </Badge>
-                    <Button size="sm" variant="ghost">Configure</Button>
+                    <Button 
+                      size="sm" 
+                      variant="ghost"
+                      onClick={() => openConfigDialog('realtime-tracking')}
+                    >
+                      <Cog className="h-3.5 w-3.5 mr-1" />
+                      Configure
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -872,11 +958,22 @@ const Drishti: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <Badge
                       variant="outline"
-                      className="bg-emerald-50 text-emerald-600 border-emerald-200"
+                      className={`${
+                        activeFeatures['driving-behavior'] 
+                          ? "bg-emerald-50 text-emerald-600 border-emerald-200" 
+                          : "bg-gray-50 text-gray-500 border-gray-200"
+                      }`}
                     >
-                      Active
+                      {activeFeatures['driving-behavior'] ? 'Active' : 'Inactive'}
                     </Badge>
-                    <Button size="sm" variant="ghost">Configure</Button>
+                    <Button 
+                      size="sm" 
+                      variant="ghost"
+                      onClick={() => openConfigDialog('driving-behavior')}
+                    >
+                      <Cog className="h-3.5 w-3.5 mr-1" />
+                      Configure
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -894,11 +991,22 @@ const Drishti: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <Badge
                       variant="outline"
-                      className="bg-emerald-50 text-emerald-600 border-emerald-200"
+                      className={`${
+                        activeFeatures['trip-history'] 
+                          ? "bg-emerald-50 text-emerald-600 border-emerald-200" 
+                          : "bg-gray-50 text-gray-500 border-gray-200"
+                      }`}
                     >
-                      Active
+                      {activeFeatures['trip-history'] ? 'Active' : 'Inactive'}
                     </Badge>
-                    <Button size="sm" variant="ghost">Configure</Button>
+                    <Button 
+                      size="sm" 
+                      variant="ghost"
+                      onClick={() => openConfigDialog('trip-history')}
+                    >
+                      <Cog className="h-3.5 w-3.5 mr-1" />
+                      Configure
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -928,11 +1036,22 @@ const Drishti: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <Badge
                       variant="outline"
-                      className="bg-emerald-50 text-emerald-600 border-emerald-200"
+                      className={`${
+                        activeFeatures['fuel-analytics'] 
+                          ? "bg-emerald-50 text-emerald-600 border-emerald-200" 
+                          : "bg-gray-50 text-gray-500 border-gray-200"
+                      }`}
                     >
-                      Active
+                      {activeFeatures['fuel-analytics'] ? 'Active' : 'Inactive'}
                     </Badge>
-                    <Button size="sm" variant="ghost">Configure</Button>
+                    <Button 
+                      size="sm" 
+                      variant="ghost"
+                      onClick={() => openConfigDialog('fuel-analytics')}
+                    >
+                      <Cog className="h-3.5 w-3.5 mr-1" />
+                      Configure
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -961,11 +1080,22 @@ const Drishti: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <Badge
                       variant="outline"
-                      className="bg-gray-50 text-gray-500 border-gray-200"
+                      className={`${
+                        activeFeatures['dashcam'] 
+                          ? "bg-emerald-50 text-emerald-600 border-emerald-200" 
+                          : "bg-gray-50 text-gray-500 border-gray-200"
+                      }`}
                     >
-                      Inactive
+                      {activeFeatures['dashcam'] ? 'Active' : 'Inactive'}
                     </Badge>
-                    <Button size="sm" variant="ghost">Configure</Button>
+                    <Button 
+                      size="sm" 
+                      variant="ghost"
+                      onClick={() => openConfigDialog('dashcam')}
+                    >
+                      <Cog className="h-3.5 w-3.5 mr-1" />
+                      Configure
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
