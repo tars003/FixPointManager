@@ -39,7 +39,7 @@ import ArenaDashboardNew from "@/pages/arena-dashboard-new";
 import ArenaDashboardEnhanced from "@/pages/arena-dashboard-enhanced";
 import ArenaMain from "@/pages/arena-main";
 import ProjectCustomization from "@/pages/project-customization";
-import Drishti from "@/pages/drishti";
+import Drishti from "@/pages/drishti-hardware";
 
 function Router() {
   const [location] = useLocation();
