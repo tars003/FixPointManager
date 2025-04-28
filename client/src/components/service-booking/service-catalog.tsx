@@ -526,6 +526,8 @@ const userVehicles: UserVehicle[] = [
 ];
 
 const ServiceCatalog: React.FC = () => {
+  const { toast } = useToast();
+  
   const [selectedCategory, setSelectedCategory] = useState<string>(serviceCategories[0].id);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(
     serviceCategories[0].subCategories.length > 0 ? serviceCategories[0].subCategories[0].id : null
