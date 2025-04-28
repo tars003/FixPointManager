@@ -6,6 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
 import { 
   Eye, 
   BarChart3, 
@@ -35,8 +36,12 @@ import {
   Share2,
   Brain,
   Globe,
-  UserCog
+  UserCog,
+  Smartphone,
+  RefreshCw,
+  Wifi
 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 // Import custom components
 import RealtimeEnergyMonitor from '@/components/drishti/realtime-energy-monitor';
@@ -48,10 +53,80 @@ import AIRouteRecommendation from '@/components/drishti/ai-route-recommendation'
 import DriverAchievements from '@/components/drishti/driver-achievements';
 import PredictiveBatteryHealth from '@/components/drishti/predictive-battery-health';
 
+// Custom icons for the connection options
+const CableIcon = (props: any) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M4 9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9z" />
+    <path d="M9 9v6" />
+    <path d="M15 9v6" />
+  </svg>
+);
+
+const BluetoothIcon = (props: any) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="m7 7 10 10-5 5V2l5 5L7 17" />
+  </svg>
+);
+
+const SimCardIcon = (props: any) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <rect x="4" y="4" width="16" height="16" rx="2" />
+    <path d="M7 7h4v4H7z" />
+    <path d="M7 13h.01" />
+    <path d="M10 13h.01" />
+    <path d="M13 13h.01" />
+    <path d="M16 13h.01" />
+    <path d="M7 16h.01" />
+    <path d="M10 16h.01" />
+    <path d="M13 16h.01" />
+    <path d="M16 16h.01" />
+  </svg>
+);
+
 const Drishti: React.FC = () => {
   const [mainTab, setMainTab] = useState<string>('dashboard');
   const [advancedFeatureTab, setAdvancedFeatureTab] = useState<string>('energy');
   const [advancedAIFeatureTab, setAdvancedAIFeatureTab] = useState<string>('route');
+  const [connectionMethod, setConnectionMethod] = useState<string>('bluetooth');
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+  
+  // Handle connect button click
+  const handleConnect = () => {
+    setIsConnected(true);
+  };
   
   return (
     <div className="container px-4 py-6 mx-auto">
@@ -61,16 +136,137 @@ const Drishti: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="mb-6"
       >
-        <div className="flex items-center gap-3 mb-2">
-          <div className="bg-[#0056B3] p-2 rounded-lg">
-            <Eye className="h-6 w-6 text-white" />
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="bg-[#0056B3] p-2 rounded-lg">
+                <Eye className="h-6 w-6 text-white" />
+              </div>
+              <h1 className="text-3xl font-bold tracking-tight">Drishti</h1>
+            </div>
+            <p className="text-muted-foreground max-w-3xl">
+              Advanced Universal OBD2+GPS Device - Spatiotemporal intelligence system for vehicle 
+              maintenance and optimization with edge AI computing.
+            </p>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">Drishti</h1>
+          
+          <div className="flex items-center gap-3">
+            <Badge 
+              variant="outline" 
+              className={`flex items-center gap-1 py-1 ${
+                isConnected 
+                  ? "border-emerald-200 text-emerald-600" 
+                  : "border-amber-200 text-amber-600"
+              }`}
+            >
+              <span className={`h-2 w-2 rounded-full ${isConnected ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`}></span>
+              {isConnected ? "Device Connected" : "Not Connected"}
+            </Badge>
+            <Button variant="outline" size="sm">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh Data
+            </Button>
+          </div>
         </div>
-        <p className="text-muted-foreground max-w-3xl">
-          Advanced Universal OBD2+GPS Device - Spatiotemporal intelligence system for vehicle 
-          maintenance and optimization with edge AI computing.
-        </p>
+      </motion.div>
+      
+      {/* Hardware Connection Panel */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="mb-6"
+      >
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle>Hardware Connection</CardTitle>
+            <CardDescription>Select your preferred connection method</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="grid grid-cols-5 gap-2 mb-4">
+                <Button
+                  variant={connectionMethod === 'wire' ? "default" : "outline"}
+                  className="flex flex-col py-3 h-auto"
+                  onClick={() => setConnectionMethod('wire')}
+                >
+                  <CableIcon className="h-5 w-5 mb-1" />
+                  <span className="text-xs">Wire</span>
+                </Button>
+                <Button
+                  variant={connectionMethod === 'bluetooth' ? "default" : "outline"}
+                  className="flex flex-col py-3 h-auto"
+                  onClick={() => setConnectionMethod('bluetooth')}
+                >
+                  <BluetoothIcon className="h-5 w-5 mb-1" />
+                  <span className="text-xs">Bluetooth</span>
+                </Button>
+                <Button
+                  variant={connectionMethod === 'wifi' ? "default" : "outline"}
+                  className="flex flex-col py-3 h-auto"
+                  onClick={() => setConnectionMethod('wifi')}
+                >
+                  <Wifi className="h-5 w-5 mb-1" />
+                  <span className="text-xs">WiFi</span>
+                </Button>
+                <Button
+                  variant={connectionMethod === 'esim' ? "default" : "outline"}
+                  className="flex flex-col py-3 h-auto"
+                  onClick={() => setConnectionMethod('esim')}
+                >
+                  <Smartphone className="h-5 w-5 mb-1" />
+                  <span className="text-xs">eSIM</span>
+                </Button>
+                <Button
+                  variant={connectionMethod === 'simcard' ? "default" : "outline"}
+                  className="flex flex-col py-3 h-auto"
+                  onClick={() => setConnectionMethod('simcard')}
+                >
+                  <SimCardIcon className="h-5 w-5 mb-1" />
+                  <span className="text-xs">SIM Card</span>
+                </Button>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="obd-port">OBD2 Port</Label>
+                  <Select defaultValue="auto-detect">
+                    <SelectTrigger id="obd-port">
+                      <SelectValue placeholder="Select OBD2 port" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="auto-detect">Auto-detect</SelectItem>
+                      <SelectItem value="usb">USB Connector</SelectItem>
+                      <SelectItem value="serial">Serial Port</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="obd-protocol">OBD Protocol</Label>
+                  <Select defaultValue="auto-detect">
+                    <SelectTrigger id="obd-protocol">
+                      <SelectValue placeholder="Select protocol" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="auto-detect">Auto-detect</SelectItem>
+                      <SelectItem value="iso9141">ISO 9141-2</SelectItem>
+                      <SelectItem value="iso14230">ISO 14230-4 (KWP2000)</SelectItem>
+                      <SelectItem value="iso15765">ISO 15765-4 (CAN)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <Button 
+                  onClick={handleConnect}
+                  className="bg-green-500 hover:bg-green-600 text-white"
+                >
+                  Connect
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </motion.div>
 
       <Tabs value={mainTab} onValueChange={setMainTab} className="space-y-6">
