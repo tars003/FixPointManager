@@ -14,6 +14,7 @@ import PageTransition from "@/components/transitions/page-transition";
 import MyVehicles from "@/pages/my-vehicles-updated";
 import AddVehicle from "@/pages/add-vehicle";
 import BookService from "@/pages/book-service";
+import EnhancedServiceBooking from "@/pages/enhanced-service-booking";
 // Import the new enhanced nearby services page
 import Nearby from "@/pages/nearby-new";
 import LearnDriving from "@/pages/learn-driving";
@@ -130,6 +131,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <BookService />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/enhanced-service">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <EnhancedServiceBooking />
               </motion.div>
             )}
           </Route>
