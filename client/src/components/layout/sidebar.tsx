@@ -25,7 +25,8 @@ import {
   Tag,
   Receipt,
   BookOpen,
-  Eye
+  Eye,
+  Sparkles
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -134,6 +135,13 @@ const navItems = [
     href: '/commercial-fleet',
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
+  },
+  {
+    title: 'Animation Demo',
+    icon: Sparkles,
+    href: '/animation-demo',
+    color: 'text-pink-500',
+    bgColor: 'bg-pink-50',
   },
 ];
 
