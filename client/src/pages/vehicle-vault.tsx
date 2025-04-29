@@ -2032,7 +2032,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Totaled')}
                 >
                   <FileX className="h-3.5 w-3.5" />
-                  Totaled
+                  <span className="flex items-center gap-1">
+                    Totaled
+                    <span className="inline-flex items-center justify-center bg-stone-200 dark:bg-stone-700/40 text-stone-700 dark:text-stone-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Totaled' ? (
+                        <AnimatedCounter target={2} duration={1} />
+                      ) : 2}
+                    </span>
+                  </span>
                 </Badge>
               </div>
             </div>
