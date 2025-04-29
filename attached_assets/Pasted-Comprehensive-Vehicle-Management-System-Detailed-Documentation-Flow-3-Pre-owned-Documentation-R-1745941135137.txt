@@ -1,0 +1,648 @@
+Comprehensive Vehicle Management System - Detailed Documentation Flow
+3. Pre-owned
+Documentation Required:
+Previous Ownership History
+
+
+Complete chain of ownership with dates
+Previous owner(s) contact information (with consent)
+Usage history (personal/commercial)
+State/region of previous registration
+Vehicle History
+
+
+Comprehensive vehicle history report
+Accident history disclosure
+Flood/fire damage history
+Odometer verification certificate
+Previous service records from manufacturer database
+Pre-purchase Assessment
+
+
+Detailed inspection report with photographs
+Mechanical condition assessment by certified mechanic
+Electronic/electrical systems evaluation
+Body condition report with identified issues
+Estimated repair/refurbishment costs
+Title Clearance
+
+
+Lien clearance certificate
+Outstanding loan settlement proof
+Legal dispute clearance certificate
+Encumbrance-free declaration
+Valuation Documents
+
+
+Market value assessment at purchase
+Depreciation schedule projection
+Comparison with similar vehicles
+Action Flow:
+Previous issues monitoring system
+Known problem areas alert system
+Value appreciation/depreciation tracking
+Special maintenance recommendations for model-specific issues
+Previous repair verification system
+Transition pathway to "Active" status
+4. In Maintenance
+Documentation Required:
+Current Service Details
+
+
+Work order with detailed job description
+Estimated completion timeline
+Cost estimate with breakdown
+Parts being replaced with OEM/aftermarket specification
+Service technician details and qualifications
+Issue Documentation
+
+
+Problem description and diagnosis
+Diagnostic scan reports with error codes
+Photo/video evidence of issues
+Expert opinions (if multiple mechanics consulted)
+Service Center Information
+
+
+Facility contact details and operating hours
+Service manager direct contact
+Warranty coverage verification for repairs
+Service center ratings and certifications
+Alternative Transportation
+
+
+Loaner vehicle details (if provided)
+Rental car information and costs
+Rental reimbursement process (if covered by insurance)
+Transportation options database
+Service Updates
+
+
+Real-time repair status updates
+Delay notifications with reasons
+Additional issues discovered during service
+Approval requests for additional work
+Action Flow:
+Maintenance timer and status tracking
+Service center communication channel
+Cost approval workflow
+Parts delivery tracking
+Quality check verification process
+Post-service feedback system
+Return to "Active" status workflow
+5. Garage Stored
+Documentation Required:
+Storage Facility Details
+
+
+Storage location with access information
+Facility security features
+Climate control specifications
+Storage contract with terms
+Monthly/annual cost breakdown
+Vehicle Preparation Documents
+
+
+Pre-storage maintenance checklist
+Fluid levels and conditions
+Battery maintenance protocol
+Tire pressure and condition report
+Fuel system preparation details
+Preservation Measures
+
+
+Humidity control methods
+Pest prevention measures
+Cover specifications and usage
+Component rotation schedule (engine, transmission)
+Anti-rust application details
+Inspection Schedule
+
+
+Periodic inspection appointments
+Condition verification reports
+Required interventions documentation
+Photography of vehicle condition over time
+Insurance During Storage
+
+
+Modified coverage details for stored vehicles
+Premium adjustment documentation
+Facility insurance coverage overlap
+Claims process for storage-related incidents
+Action Flow:
+Storage duration tracking
+Maintenance alert system for stored vehicles
+Periodic startup and system check reminders
+Storage fee payment tracking and receipts
+Condition comparison over time
+Reactivation preparation checklist when removing from storage
+Path to return to "Active" status
+6. Out of Service
+Documentation Required:
+Non-operational Status
+
+
+Official non-operation declaration with authorities
+Tax/insurance adjustment documentation
+Parking/storage location details
+Duration of expected non-operation
+Mechanical Assessment
+
+
+Detailed diagnosis of issues preventing operation
+Required parts list with availability status
+Labor requirements and specialized skills needed
+Third-party expert opinions
+Financial Assessment
+
+
+Comprehensive repair cost estimates
+Cost-benefit analysis (repair vs. replace)
+Financing options for major repairs
+Salvage value assessment if beyond repair
+Resolution Planning
+
+
+Repair timeline projection
+Resources required for return to service
+Alternative vehicle arrangements
+Decision documentation (repair, sell, scrap)
+Action Flow:
+Non-operation status reporting to authorities
+Insurance coverage adjustment process
+Repair feasibility assessment
+Parts sourcing assistance
+Specialist workshop recommendations
+Return to service roadmap
+Status transition options (to Active, For Sale, or Scrapped)
+7. Commercial Fleet
+Documentation Required:
+Commercial Registration
+
+
+Commercial vehicle permit
+Route permit details (if applicable)
+Special operation licenses
+Interstate/international operation permits
+Category-specific certifications
+Business Usage Records
+
+
+Daily trip logs with mileage
+Driver assignments and hours
+Load/passenger manifests
+Client/contract information
+Revenue generation reports
+Compliance Documentation
+
+
+Department of Transportation compliance records
+Safety inspection certificates
+Hours of service compliance
+Weight station clearances
+Environmental compliance certificates
+Commercial Insurance
+
+
+Commercial auto policy with liability limits
+Cargo insurance details
+Passenger liability coverage
+Workers' compensation (for drivers)
+Business interruption coverage
+Fleet Management
+
+
+Preventive maintenance schedule
+Downtime optimization planning
+Fleet efficiency metrics
+Replacement cycle documentation
+Fleet standardization protocols
+Tax Documentation
+
+
+Business expense allocation
+Depreciation schedule for business vehicles
+Fuel tax reporting
+Interstate tax apportionment
+Tax deduction qualification evidence
+Action Flow:
+Commercial compliance deadline tracking
+Driver qualification file management
+Business expense categorization
+Revenue attribution by vehicle
+Route optimization suggestions
+Fleet replacement planning
+Business vs. personal use separation for taxes
+8. Leased Out
+Documentation Required:
+Lease Agreement
+
+
+Comprehensive lease contract with terms
+Payment schedule and method
+Usage restrictions and mileage limits
+Maintenance responsibilities definition
+Insurance requirements
+Termination conditions and penalties
+Lessee Information
+
+
+Lessee complete profile and verification
+Driving history and license verification
+Credit check documentation
+References verification
+Contact information for emergencies
+Vehicle Condition
+
+
+Pre-lease inspection report with photos
+Existing damage documentation
+Odometer reading verification
+Equipment and accessory inventory
+Expected condition at return definition
+Financial Records
+
+
+Security deposit receipt and terms
+Payment tracking and history
+Late payment documentation
+Security deposit deduction justification (if applicable)
+Income reporting for tax purposes
+Insurance Verification
+
+
+Lessee's insurance policy details
+Additional insured status confirmation
+Coverage adequacy verification
+Claims process in event of accident
+Insurance renewal tracking
+Action Flow:
+Lease term tracking and expiration alerts
+Payment receipt generation
+Lessee communication channel
+Lease violation notification system
+Vehicle tracking options (if permitted)
+Maintenance compliance verification
+End-of-lease condition comparison
+Return process management or renewal workflow
+9. For Sale
+Documentation Required:
+Sale Preparation
+
+
+Pre-sale inspection report
+Recommended repairs for optimal sale
+Detail/reconditioning work performed
+Market value assessment with comparables
+Title status verification (clear/lien)
+Listing Documentation
+
+
+Vehicle description with specifications
+Accurate condition disclosure
+Maintenance history summary
+Known issues disclosure
+Asking price justification
+Professional quality photographs
+Marketing Materials
+
+
+Listing platforms with account details
+Advertisement copies
+Promotion expenses tracking
+Reach and impression metrics
+Lead generation statistics
+Buyer Interactions
+
+
+Interested buyer contact database
+Viewing appointment schedule
+Test drive waivers and documentation
+Offer negotiations history
+Serious buyer verification process
+Sale Preparation
+
+
+Title transfer preparation
+Required documents checklist
+Transaction method options
+Payment verification procedures
+Bill of sale template
+Action Flow:
+Market value tracking over time
+Listing performance analytics
+Inquiry response management
+Showing appointment scheduling
+Offer evaluation assistance
+Price adjustment recommendations
+Transition to "Sold" status upon completion
+10. Sold
+Documentation Required:
+Sale Completion
+
+
+Final bill of sale with terms
+Payment confirmation and receipts
+Delivery receipt acknowledgment
+As-is condition acknowledgment
+Disclosure statement signed by buyer
+Ownership Transfer
+
+
+Title transfer documentation
+Release of liability filing
+Registration transfer confirmation
+License plate surrender receipts (if required)
+DMV transfer notification confirmation
+Buyer Information
+
+
+Buyer complete details for records
+Secondary contact information
+Transfer completion verification
+Post-sale communication log
+Financial Records
+
+
+Sale price documentation for tax purposes
+Capital gain/loss calculation
+Tax implication assessment
+Loan payoff confirmation (if applicable)
+Sales tax payment evidence
+Post-Sale Obligations
+
+
+Warranty transfer documentation (if applicable)
+Post-sale support agreement (if offered)
+Agreed upon contingencies and fulfillment
+Final odometer disclosure statement
+Defect disclosure acknowledgment
+Action Flow:
+Transfer completion verification
+Document archiving system
+Post-sale obligation tracking
+Tax reporting preparation
+Liability termination confirmation
+Relationship to historical vehicle record
+Optional: buyer feedback collection
+11. Impounded
+Documentation Required:
+Impound Information
+
+
+Official impound notice with case number
+Impounding authority contact information
+Vehicle location and facility details
+Date and time of impoundment
+Reason for impoundment with legal references
+Violation Details
+
+
+Complete violation description
+Evidence provided by authorities
+Citation/ticket copies
+Witness statements (if available)
+Officer information and badge numbers
+Release Requirements
+
+
+Complete checklist of requirements for release
+Fee schedule and payment options
+Required court appearances
+Mandatory waiting periods
+Document requirements for release
+Legal Documentation
+
+
+Legal representation information
+Court date notifications
+Hearing transcripts
+Case status updates
+Appeal documentation (if applicable)
+Financial Impacts
+
+
+Daily storage fee accumulation
+Towing charges
+Administrative processing fees
+Fine payment receipts
+Total cost assessment
+Action Flow:
+Immediate response checklist
+Authority communication tracking
+Release requirement progress tracking
+Fee calculation with daily updates
+Legal assistance connection
+Document submission tracking
+Release process steps with verification
+Return to appropriate status post-release
+12. Under Legal Hold
+Documentation Required:
+Case Information
+
+
+Case number and jurisdiction
+Court order copy with specific restrictions
+Duration of legal hold
+Case type and nature
+Official seals and authentication
+Legal Representation
+
+
+Attorney contact information
+Retainer agreement
+Attorney-client communication logs
+Legal strategy documentation
+Power of attorney (if applicable)
+Evidence Preservation
+
+
+Vehicle condition documentation for evidence
+Chain of custody documentation
+Restricted access authorization
+Mandated storage requirements
+Vehicle component preservation orders
+Legal Proceedings
+
+
+Hearing schedules and notifications
+Deposition transcripts related to vehicle
+Expert witness reports
+Legal briefings mentioning the vehicle
+Settlement discussions (if applicable)
+Resolution Tracking
+
+
+Case status updates
+Expected resolution timeline
+Potential outcomes documentation
+Release application status
+Post-resolution vehicle status options
+Action Flow:
+Legal obligation compliance tracking
+Case status monitoring
+Legal representative communication channel
+Evidence preservation verification
+Hearing date reminders
+Resolution pathway planning
+Status transition options post-resolution
+13. Stolen
+Documentation Required:
+Police Report
+
+
+First Information Report (FIR) complete copy
+Police station jurisdiction and address
+Investigating officer contact information
+Case/crime reference number
+Date and time of theft reporting
+Theft circumstance details
+Vehicle Details for Recovery
+
+
+Comprehensive vehicle description
+Distinguishing features and modifications
+Recent photographs from multiple angles
+VIN and engine/chassis numbers
+License plate information
+Traceable component serial numbers
+Insurance Claim
+
+
+Theft claim filing confirmation
+Required documentation checklist
+Claim number and adjuster information
+Claim status tracking
+Settlement offer documentation
+Payment processing details
+Recovery Efforts
+
+
+Vehicle tracking system reports (if equipped)
+GPS last known location
+Sighting reports and follow-ups
+Search area documentation
+Private investigator reports (if hired)
+Post-Theft Administration
+
+
+Stolen vehicle database registration confirmation
+DMV/RTO theft notification acknowledgment
+Lien holder notification (if applicable)
+License plate cancellation
+Temporary transportation arrangements
+Action Flow:
+Initial theft response checklist
+Authority notification verification
+Insurance claim progress tracking
+Recovery possibility assessment
+Regular case status updates
+Vehicle recovery protocol (if found)
+Insurance settlement acceptance workflow
+Status transition based on outcome (recovered or total loss)
+14. Scrapped
+Documentation Required:
+End-of-Life Decision
+
+
+Vehicle condition assessment justifying scrap decision
+Expert opinions on non-viability
+Environmental hazard assessment
+Salvageable components inventory
+Final photographs for record
+Deregistration Process
+
+
+Official deregistration application
+License plate surrender receipt
+Registration cancellation confirmation
+Road tax refund application (if applicable)
+Insurance policy cancellation
+Recycling Documentation
+
+
+Authorized Treatment Facility (ATF) certificate
+Scrap certificate with facility details
+Environmental compliance verification
+Hazardous material disposal certification
+Destruction confirmation with date and time
+Financial Closure
+
+
+Scrap value receipt
+Outstanding loan settlement (if applicable)
+Tax implications documentation
+Final accounting of vehicle-related expenses
+Insurance premium refund (if applicable)
+Legal Compliance
+
+
+End-of-life vehicle directive compliance
+Certificate of destruction for legal purposes
+Liability release confirmation
+Environmental responsibility fulfillment evidence
+Ownership termination verification
+Action Flow:
+End-of-life decision documentation
+Valuable part removal tracking
+Authorized facility selection
+Deregistration process tracking
+Environmental compliance verification
+Certificate collection confirmation
+Financial closure process
+Archived status in vehicle history
+15. Totaled
+Documentation Required:
+Accident/Damage Documentation
+
+
+Accident report with police record number
+Damage assessment photographs
+Crash reconstruction report (if severe)
+Witness statements
+Driver statement and account
+Medical reports if injuries involved
+Insurance Assessment
+
+
+Insurance adjuster's detailed report
+Total loss determination factors
+Actual cash value (ACV) calculation
+Salvage value assessment
+Comparable vehicle valuation data
+Settlement Process
+
+
+Settlement offer with breakdown
+Negotiation communication history
+Final settlement agreement
+Payment processing details
+Release of interest documentation
+Loan payoff details (if applicable)
+Vehicle Disposition
+
+
+Salvage title application
+Insurance company possession transfer
+Owner-retained salvage agreement (if keeping)
+Auction assignment documentation (if applicable)
+Parts harvesting authorization (if applicable)
+Administrative Closure
+
+
+License plate surrender confirmation
+Registration cancellation evidence
+Insurance policy termination
+Lien satisfaction letter (if financed)
+Tax implications documentation
+Action Flow:
+Post-accident documentation system
+Insurance claim tracking
+Settlement negotiation assistance
+Payoff calculation with loan balance (if applicable)
+Document submission verification
+Salvage options evaluation
+Ownership termination process
+Vehicle replacement guidance
+

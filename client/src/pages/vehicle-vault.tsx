@@ -7,6 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
+import { 
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from '@/components/ui/accordion';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue, useInView, animate } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 import { 
@@ -23,7 +29,8 @@ import {
   Fuel, Route, User as UserCircle, UserCog, CreditCard, Truck,
   Filter as FilterX, CheckCircle as CheckCircle2, MapPin, HelpCircle as FileQuestion,
   FileCheck, Circle, ClipboardCheck, PhoneCall, Image as ImageIcon, 
-  History, IndianRupee, ChevronsDown, MessageSquare
+  History, IndianRupee, ChevronsDown, MessageSquare, ShieldCheck,
+  Share2, FileEdit, ListChecks
 } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
@@ -3535,9 +3542,501 @@ const VehicleVault = () => {
                     </>
                   )}
                   
+                  {/* Garage Stored Documents Section */}
+                  {selectedStatus === 'Garage Stored' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for Garage Stored
+                        <div className="bg-sky-50 dark:bg-sky-900/20 rounded-lg p-6 mb-6">
+                          <h3 className="text-lg font-semibold text-center mb-4 text-sky-700 dark:text-sky-400">Select a Garage Stored Vehicle</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {vehicleData
+                              .filter(vehicle => (vehicle as any).status === 'Garage Stored')
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${selectedDocumentVehicle?.id === vehicle.id ? 'border-sky-500 dark:border-sky-400' : 'border-transparent'}`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-4">
+                                    <div className="aspect-video w-full overflow-hidden rounded-md mb-3 relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <div className="absolute top-2 right-2 bg-sky-500 text-white text-xs px-2 py-1 rounded-full">
+                                        Stored
+                                      </div>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <h4 className="font-semibold">{vehicle.vehicle}</h4>
+                                      <p className="text-xs text-slate-500">{vehicle.registrationNumber}</p>
+                                      <div className="flex justify-between items-center">
+                                        <Badge variant="outline" className="text-xs px-2 py-0 bg-sky-50 text-sky-700 dark:bg-sky-900/20 dark:text-sky-400">
+                                          {vehicle.fuelType}
+                                        </Badge>
+                                        <p className="text-xs text-slate-500">Since: {(vehicle as any).storageStartDate}</p>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Garage Stored Vehicle Documents Display
+                        <div className="space-y-6">
+                          <div className="bg-sky-50 dark:bg-sky-900/20 rounded-lg p-4 mb-6 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                              <div className="h-12 w-12 rounded-full bg-sky-200 dark:bg-sky-800 flex items-center justify-center">
+                                <Warehouse className="h-6 w-6 text-sky-700 dark:text-sky-400" />
+                              </div>
+                              <div>
+                                <h3 className="font-semibold flex items-center gap-2">
+                                  {selectedDocumentVehicle.vehicle}
+                                  <AnimatedStatusTransition 
+                                    currentStatus="Garage Stored"
+                                    size="sm"
+                                  />
+                                </h3>
+                                <p className="text-xs text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>
+                              </div>
+                            </div>
+                            <Button variant="outline" size="sm" onClick={() => setSelectedDocumentVehicle(null)}>
+                              Change Vehicle
+                            </Button>
+                          </div>
+                          
+                          {/* Storage Facility Details */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-sky-50 dark:bg-sky-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-sky-700 dark:text-sky-400">
+                                <Warehouse className="h-5 w-5" />
+                                Storage Facility Details
+                                <ContextualHelpTooltip tipType="storage" />
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Storage Location</h4>
+                                  <p className="text-xs text-gray-500">Facility information and access details</p>
+                                  <p className="text-xs mt-1 text-slate-700 dark:text-slate-300">
+                                    {(selectedDocumentVehicle as any).storageLocation || 'Premium Auto Storage, Block A, Unit 16, Gurgaon'}
+                                  </p>
+                                  <Button variant="outline" size="sm" className="justify-start mt-2">
+                                    <MapPin className="h-4 w-4 mr-2 text-red-500" />
+                                    View Location
+                                  </Button>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Facility Security</h4>
+                                  <p className="text-xs text-gray-500">Security features of the storage facility</p>
+                                  <div className="mt-2 grid grid-cols-2 gap-2">
+                                    <Badge variant="outline" className="justify-start bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                      24/7 CCTV
+                                    </Badge>
+                                    <Badge variant="outline" className="justify-start bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                      Gated Access
+                                    </Badge>
+                                    <Badge variant="outline" className="justify-start bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                      Fire System
+                                    </Badge>
+                                    <Badge variant="outline" className="justify-start bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                      Security Guards
+                                    </Badge>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <Separator className="my-2" />
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <InteractiveDataPoint
+                                  label="Storage Start Date"
+                                  value={(selectedDocumentVehicle as any).storageStartDate || 'January 15, 2025'}
+                                  info="Date when vehicle was placed in storage"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Contract Duration"
+                                  value={(selectedDocumentVehicle as any).storageDuration || '12 months'}
+                                  info="Length of the storage contract"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Monthly Cost"
+                                  value={(selectedDocumentVehicle as any).storageCost || '₹7,500'}
+                                  info="Monthly fee for storage service"
+                                />
+                              </div>
+                              
+                              <div className="rounded-lg border p-3 mt-4">
+                                <div className="font-medium flex justify-between">
+                                  <span>Climate Control Specifications</span>
+                                  <Badge variant="outline" className="bg-sky-50 text-sky-700 dark:bg-sky-900/20 dark:text-sky-400">
+                                    Premium
+                                  </Badge>
+                                </div>
+                                <div className="text-sm mt-1 text-muted-foreground">
+                                  Temperature maintained between 18-22°C year-round. Humidity controlled at 40-45%. Daily monitoring and alerts for any deviations from optimal conditions.
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Vehicle Preparation Documents */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-sky-50 dark:bg-sky-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-sky-700 dark:text-sky-400">
+                                <ClipboardCheck className="h-5 w-5" />
+                                Vehicle Preparation
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="rounded-lg border p-3">
+                                <div className="font-medium">Pre-storage Maintenance</div>
+                                <div className="text-sm mt-2 space-y-2">
+                                  <div className="flex items-center gap-2">
+                                    <CheckCircle className="h-4 w-4 text-green-500" />
+                                    <span>Full fluid change completed</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <CheckCircle className="h-4 w-4 text-green-500" />
+                                    <span>Fresh fuel with stabilizer added</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <CheckCircle className="h-4 w-4 text-green-500" />
+                                    <span>Battery on trickle charger</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <CheckCircle className="h-4 w-4 text-green-500" />
+                                    <span>Tire pressure adjusted for storage</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <CheckCircle className="h-4 w-4 text-green-500" />
+                                    <span>Interior detailing completed</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <X className="h-4 w-4 text-red-500" />
+                                    <span>Paint protection film application</span>
+                                  </div>
+                                </div>
+                                <Button variant="outline" size="sm" className="w-full mt-3">
+                                  <FileText className="h-4 w-4 mr-2" />
+                                  View Complete Checklist
+                                </Button>
+                              </div>
+                            
+                              <Accordion type="single" collapsible className="w-full">
+                                <AccordionItem value="fluid-levels">
+                                  <AccordionTrigger className="text-sm">Fluid Levels and Condition</AccordionTrigger>
+                                  <AccordionContent>
+                                    <div className="space-y-3">
+                                      <div className="border rounded-lg divide-y">
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Engine Oil</span>
+                                          <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                            New - Synthetic 5W-30
+                                          </Badge>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Coolant</span>
+                                          <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                            Filled - Long Life
+                                          </Badge>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Brake Fluid</span>
+                                          <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                            Changed - DOT4
+                                          </Badge>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Power Steering</span>
+                                          <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                            Checked - Full
+                                          </Badge>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Fuel Tank</span>
+                                          <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                            95% Full + Stabilizer
+                                          </Badge>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                                
+                                <AccordionItem value="battery-maintenance">
+                                  <AccordionTrigger className="text-sm">Battery Maintenance Protocol</AccordionTrigger>
+                                  <AccordionContent>
+                                    <div className="space-y-3">
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Battery Management</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          Battery disconnected from negative terminal. Professional-grade CTEK trickle charger connected to maintain optimal charge. Monthly battery health check scheduled.
+                                        </div>
+                                      </div>
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Electronic Systems Protection</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          Memory settings backed up. ECU and electronic modules protected with surge protectors. Climate controlled environment prevents circuit deterioration.
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                              </Accordion>
+                            </div>
+                          </div>
+                          
+                          {/* Preservation Measures */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-sky-50 dark:bg-sky-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-sky-700 dark:text-sky-400">
+                                <Shield className="h-5 w-5" />
+                                Preservation Measures
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="rounded-lg border p-3">
+                                  <div className="font-medium">Vehicle Cover</div>
+                                  <div className="text-sm mt-1 text-muted-foreground">
+                                    Premium breathable fabric cover with soft inner lining. Custom fit for vehicle model. UV protection and water resistance. Includes tie-down straps for secure fit.
+                                  </div>
+                                </div>
+                                
+                                <div className="rounded-lg border p-3">
+                                  <div className="font-medium">Humidity Control</div>
+                                  <div className="text-sm mt-1 text-muted-foreground">
+                                    Facility equipped with industrial dehumidifiers. Silica gel packets placed inside vehicle. Humidity monitoring system with alerts for optimal preservation.
+                                  </div>
+                                </div>
+                              </div>
+                            
+                              <Accordion type="single" collapsible className="w-full">
+                                <AccordionItem value="pest-prevention">
+                                  <AccordionTrigger className="text-sm">Pest Prevention Measures</AccordionTrigger>
+                                  <AccordionContent>
+                                    <div className="space-y-3">
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Rodent Protection</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          Vehicle undercarriage treated with natural rodent repellent. Ultrasonic pest deterrent devices placed in storage area. Monthly rodent trap inspections. All potential entry points sealed.
+                                        </div>
+                                      </div>
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Insect Control</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          Quarterly professional pest control service. Moth balls placed strategically in interior. Air vents and intakes sealed with breathable mesh covers.
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                                
+                                <AccordionItem value="component-rotation">
+                                  <AccordionTrigger className="text-sm">Component Rotation Schedule</AccordionTrigger>
+                                  <AccordionContent>
+                                    <div className="space-y-3">
+                                      <div className="border rounded-lg divide-y">
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Engine Start & Run</span>
+                                          <Badge variant="outline" className="bg-sky-50 text-sky-700 dark:bg-sky-900/20 dark:text-sky-400">
+                                            Monthly
+                                          </Badge>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Transmission Engagement</span>
+                                          <Badge variant="outline" className="bg-sky-50 text-sky-700 dark:bg-sky-900/20 dark:text-sky-400">
+                                            Quarterly
+                                          </Badge>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Brake System Operation</span>
+                                          <Badge variant="outline" className="bg-sky-50 text-sky-700 dark:bg-sky-900/20 dark:text-sky-400">
+                                            Quarterly
+                                          </Badge>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Steering System Movement</span>
+                                          <Badge variant="outline" className="bg-sky-50 text-sky-700 dark:bg-sky-900/20 dark:text-sky-400">
+                                            Quarterly
+                                          </Badge>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Tire Rotation</span>
+                                          <Badge variant="outline" className="bg-sky-50 text-sky-700 dark:bg-sky-900/20 dark:text-sky-400">
+                                            Biannually
+                                          </Badge>
+                                        </div>
+                                      </div>
+                                      <div className="text-xs text-slate-500 mt-2">
+                                        Next scheduled rotation service: May 15, 2025
+                                      </div>
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                                
+                                <AccordionItem value="anti-rust">
+                                  <AccordionTrigger className="text-sm">Anti-Rust Application</AccordionTrigger>
+                                  <AccordionContent>
+                                    <div className="space-y-3">
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Undercarriage Protection</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          Complete undercarriage treated with premium rust-preventive coating. Special attention to suspension components, exhaust system, and frame rails.
+                                        </div>
+                                      </div>
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Exposed Metal Surfaces</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          All exposed metal components treated with protective wax coating. Chrome surfaces treated with specialized metal preservative.
+                                        </div>
+                                      </div>
+                                      <div className="text-xs text-slate-500 mt-2">
+                                        Anti-rust reapplication scheduled for: October 15, 2025
+                                      </div>
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                              </Accordion>
+                            </div>
+                          </div>
+                          
+                          {/* Inspection Schedule */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-sky-50 dark:bg-sky-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-sky-700 dark:text-sky-400">
+                                <CalendarCheck className="h-5 w-5" />
+                                Inspection Schedule
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="space-y-3">
+                                <div className="font-medium">Upcoming Inspections</div>
+                                <div className="border rounded-lg divide-y">
+                                  <div className="p-3 flex justify-between items-center">
+                                    <div>
+                                      <div className="font-medium">Monthly Visual Check</div>
+                                      <div className="text-xs text-slate-500">Basic condition inspection</div>
+                                    </div>
+                                    <Badge variant="outline" className="bg-sky-50 text-sky-700 dark:bg-sky-900/20 dark:text-sky-400">
+                                      May 15, 2025
+                                    </Badge>
+                                  </div>
+                                  <div className="p-3 flex justify-between items-center">
+                                    <div>
+                                      <div className="font-medium">Quarterly Detailed Inspection</div>
+                                      <div className="text-xs text-slate-500">Comprehensive check with documentation</div>
+                                    </div>
+                                    <Badge variant="outline" className="bg-sky-50 text-sky-700 dark:bg-sky-900/20 dark:text-sky-400">
+                                      Jul 15, 2025
+                                    </Badge>
+                                  </div>
+                                  <div className="p-3 flex justify-between items-center">
+                                    <div>
+                                      <div className="font-medium">Engine Start & Run Test</div>
+                                      <div className="text-xs text-slate-500">30-minute operational test</div>
+                                    </div>
+                                    <Badge variant="outline" className="bg-sky-50 text-sky-700 dark:bg-sky-900/20 dark:text-sky-400">
+                                      May 15, 2025
+                                    </Badge>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="rounded-lg border p-3">
+                                <div className="font-medium">Inspection Documentation</div>
+                                <div className="text-sm mt-1 text-muted-foreground">
+                                  All inspections include detailed photography for comparison over time. Reports are stored digitally and accessible through your account. Notifications sent 3 days before scheduled inspection.
+                                </div>
+                              </div>
+                              
+                              <Button variant="outline" size="sm" className="w-full">
+                                <Calendar className="h-4 w-4 mr-2" />
+                                Manage Inspection Schedule
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          {/* Insurance During Storage */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-sky-50 dark:bg-sky-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-sky-700 dark:text-sky-400">
+                                <ShieldCheck className="h-5 w-5" />
+                                Insurance During Storage
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="rounded-lg border p-3">
+                                  <div className="font-medium">Modified Coverage</div>
+                                  <div className="text-sm mt-1 text-muted-foreground">
+                                    Insurance policy modified to "Laid Up" coverage status. Comprehensive protection maintained for fire, theft, vandalism, and natural disasters. Road liability coverage suspended during storage period.
+                                  </div>
+                                </div>
+                                
+                                <div className="rounded-lg border p-3">
+                                  <div className="font-medium">Facility Insurance</div>
+                                  <div className="text-sm mt-1 text-muted-foreground">
+                                    Storage facility provides additional coverage up to ₹15,00,000 for damages occurring while in their care. Coverage includes fire, structural damage, water damage, and theft from premises.
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="space-y-3">
+                                <div className="font-medium">Premium Savings</div>
+                                <div className="border rounded-lg divide-y">
+                                  <div className="p-3 flex justify-between items-center">
+                                    <div>Regular Annual Premium</div>
+                                    <div className="font-medium">₹24,000</div>
+                                  </div>
+                                  <div className="p-3 flex justify-between items-center">
+                                    <div>Storage Annual Premium</div>
+                                    <div className="font-medium text-green-600">₹12,500</div>
+                                  </div>
+                                  <div className="p-3 flex justify-between items-center bg-green-50 dark:bg-green-900/10">
+                                    <div className="font-medium">Annual Savings</div>
+                                    <div className="font-medium text-green-600">₹11,500</div>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <Button variant="outline" size="sm" className="w-full">
+                                <FileText className="h-4 w-4 mr-2" />
+                                View Insurance Certificate
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <Download className="h-4 w-4" />
+                              Export Storage Documents
+                            </Button>
+                            <Button variant="outline" className="gap-2">
+                              <FileEdit className="h-4 w-4" />
+                              Update Storage Details
+                            </Button>
+                            <Button className="gap-2 bg-sky-600 hover:bg-sky-700">
+                              <Car className="h-4 w-4" />
+                              Schedule Activation
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
                   {selectedStatus !== 'Active' && selectedStatus !== 'Recently Purchased' && 
                    selectedStatus !== 'In Maintenance' && selectedStatus !== 'Pre-Owned' &&
-                   selectedStatus !== 'Out of Service' && (
+                   selectedStatus !== 'Out of Service' && selectedStatus !== 'Garage Stored' && (
                     <div className="text-center py-12">
                       <div className="mx-auto w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
                         <FileQuestion className="h-6 w-6 text-gray-500 dark:text-gray-400" />
