@@ -610,8 +610,8 @@ const VehicleVault = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="bg-white dark:bg-slate-900 p-3 rounded-lg shadow-sm mb-4 overflow-x-auto">
-              <div className="flex space-x-3 min-w-max">
+            <div className="bg-white dark:bg-slate-900 p-3 rounded-lg shadow-sm mb-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2">
                 <Badge variant="outline" className="py-2 px-3 bg-green-50 text-green-700 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400 flex items-center gap-1.5 cursor-pointer">
                   <Car className="h-3.5 w-3.5" />
                   Active
