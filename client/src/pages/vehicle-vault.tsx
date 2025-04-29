@@ -4442,9 +4442,822 @@ const VehicleVault = () => {
                     </>
                   )}
                   
+                  {/* Commercial Fleet Documents Section */}
+                  {selectedStatus === 'Commercial Fleet' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for Commercial Fleet
+                        <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-6 mb-6">
+                          <h3 className="text-lg font-semibold text-center mb-4 text-purple-700 dark:text-purple-400">Select a Commercial Fleet Vehicle</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {vehicleData
+                              .filter(vehicle => vehicle.status === 'Commercial Fleet' || (vehicle.fleetID !== undefined))
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${selectedDocumentVehicle?.id === vehicle.id ? 'border-purple-500 dark:border-purple-400' : 'border-transparent'}`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-4">
+                                    <div className="aspect-video w-full overflow-hidden rounded-md mb-3 relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <div className="absolute top-2 right-2 bg-purple-500 text-white text-xs px-2 py-1 rounded-full">
+                                        Fleet
+                                      </div>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <h4 className="font-semibold">{vehicle.vehicle}</h4>
+                                      <p className="text-xs text-slate-500">{vehicle.registrationNumber}</p>
+                                      <div className="flex justify-between items-center">
+                                        <Badge variant="outline" className="text-xs px-2 py-0 bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">
+                                          {vehicle.fuelType}
+                                        </Badge>
+                                        <p className="text-xs text-slate-500">Fleet ID: {(vehicle as any).fleetID}</p>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Commercial Fleet Vehicle Documents Display
+                        <div className="space-y-6">
+                          <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 mb-6 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                              <Avatar>
+                                <AvatarImage src={selectedDocumentVehicle.image} />
+                                <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <h3 className="font-semibold">{selectedDocumentVehicle.vehicle}</h3>
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>
+                                  <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">Commercial Fleet</Badge>
+                                </div>
+                              </div>
+                            </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => setSelectedDocumentVehicle(null)}
+                              className="text-purple-700 dark:text-purple-400"
+                            >
+                              Change Vehicle
+                            </Button>
+                          </div>
+                          
+                          {/* Fleet Documentation */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-purple-50 dark:bg-purple-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-purple-700 dark:text-purple-400">
+                                <Building2 className="h-5 w-5" />
+                                Fleet Documentation
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-purple-700 dark:text-purple-400">
+                                  <Download className="h-4 w-4" />
+                                  <span className="sr-only">Download</span>
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Fleet Assignment</h4>
+                                  <p className="text-xs text-gray-500">Vehicle fleet information</p>
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <Building2 className="h-4 w-4 text-purple-500" />
+                                      <p className="text-xs font-medium">Fleet ID: <span className="font-normal">{(selectedDocumentVehicle as any).fleetID}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Truck className="h-4 w-4 text-purple-500" />
+                                      <p className="text-xs font-medium">Route: <span className="font-normal">{(selectedDocumentVehicle as any).routeAssignment}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Scale className="h-4 w-4 text-purple-500" />
+                                      <p className="text-xs font-medium">Load Capacity: <span className="font-normal">{(selectedDocumentVehicle as any).loadCapacity}</span></p>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Driver Information</h4>
+                                  <p className="text-xs text-gray-500">Assigned driver details</p>
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <UserCircle className="h-4 w-4 text-purple-500" />
+                                      <p className="text-xs font-medium">Driver: <span className="font-normal">{(selectedDocumentVehicle as any).driver}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <BadgeCheck className="h-4 w-4 text-purple-500" />
+                                      <p className="text-xs font-medium">License: <span className="font-normal">{(selectedDocumentVehicle as any).driverLicense}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <PhoneCall className="h-4 w-4 text-purple-500" />
+                                      <p className="text-xs font-medium">Contact: <span className="font-normal">{(selectedDocumentVehicle as any).driverContact}</span></p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="border-t border-gray-200 dark:border-gray-800 pt-4 mt-4">
+                                <h4 className="text-sm font-medium mb-3">Commercial Documentation</h4>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-purple-500" />
+                                    Commercial Permit
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-purple-500" />
+                                    GPS Tracking Details
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-purple-500" />
+                                    Route & Schedule
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-purple-500" />
+                                    Daily Run Logs
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Operating Costs */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-purple-50 dark:bg-purple-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-purple-700 dark:text-purple-400">
+                                <IndianRupee className="h-5 w-5" />
+                                Operating Costs
+                              </h3>
+                            </div>
+                            <div className="p-4">
+                              <div className="flex flex-col gap-3">
+                                <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
+                                  <span className="text-sm">Daily Running Cost</span>
+                                  <span className="font-medium">₹{(selectedDocumentVehicle as any).dailyRunningCost}</span>
+                                </div>
+                                <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
+                                  <span className="text-sm">Maintenance Cost (YTD)</span>
+                                  <span className="font-medium">₹{selectedDocumentVehicle.maintenanceCost}</span>
+                                </div>
+                                <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
+                                  <span className="text-sm">Fuel Economy</span>
+                                  <span className="font-medium">{selectedDocumentVehicle.efficiency}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <Download className="h-4 w-4" />
+                              Export Fleet Documents
+                            </Button>
+                            <Button variant="outline" className="gap-2">
+                              <FileEdit className="h-4 w-4" />
+                              Update Assignment
+                            </Button>
+                            <Button className="gap-2 bg-purple-600 hover:bg-purple-700">
+                              <MapPin className="h-4 w-4" />
+                              Track Vehicle
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
+                  {/* Leased Out Documents Section */}
+                  {selectedStatus === 'Leased Out' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for Leased Out
+                        <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-6 mb-6">
+                          <h3 className="text-lg font-semibold text-center mb-4 text-emerald-700 dark:text-emerald-400">Select a Leased Out Vehicle</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {vehicleData
+                              .filter(vehicle => vehicle.status === 'Leased Out' || (vehicle.leaseStartDate !== undefined))
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${selectedDocumentVehicle?.id === vehicle.id ? 'border-emerald-500 dark:border-emerald-400' : 'border-transparent'}`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-4">
+                                    <div className="aspect-video w-full overflow-hidden rounded-md mb-3 relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <div className="absolute top-2 right-2 bg-emerald-500 text-white text-xs px-2 py-1 rounded-full">
+                                        Leased
+                                      </div>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <h4 className="font-semibold">{vehicle.vehicle}</h4>
+                                      <p className="text-xs text-slate-500">{vehicle.registrationNumber}</p>
+                                      <div className="flex justify-between items-center">
+                                        <Badge variant="outline" className="text-xs px-2 py-0 bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400">
+                                          {vehicle.fuelType}
+                                        </Badge>
+                                        <p className="text-xs text-slate-500">To: {(vehicle as any).leasedTo?.split(' ')[0]}</p>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Leased Out Vehicle Documents Display
+                        <div className="space-y-6">
+                          <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-4 mb-6 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                              <Avatar>
+                                <AvatarImage src={selectedDocumentVehicle.image} />
+                                <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <h3 className="font-semibold">{selectedDocumentVehicle.vehicle}</h3>
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>
+                                  <Badge variant="outline" className="text-xs bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400">Leased Out</Badge>
+                                </div>
+                              </div>
+                            </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => setSelectedDocumentVehicle(null)}
+                              className="text-emerald-700 dark:text-emerald-400"
+                            >
+                              Change Vehicle
+                            </Button>
+                          </div>
+                          
+                          {/* Lease Documentation */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-emerald-50 dark:bg-emerald-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
+                                <KeyRound className="h-5 w-5" />
+                                Lease Documentation
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-emerald-700 dark:text-emerald-400">
+                                  <Download className="h-4 w-4" />
+                                  <span className="sr-only">Download</span>
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Lease Details</h4>
+                                  <p className="text-xs text-gray-500">Active lease information</p>
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <Calendar className="h-4 w-4 text-emerald-500" />
+                                      <p className="text-xs font-medium">Start Date: <span className="font-normal">{(selectedDocumentVehicle as any).leaseStartDate}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Clock className="h-4 w-4 text-emerald-500" />
+                                      <p className="text-xs font-medium">Duration: <span className="font-normal">{(selectedDocumentVehicle as any).leaseDuration}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Building2 className="h-4 w-4 text-emerald-500" />
+                                      <p className="text-xs font-medium">Leased To: <span className="font-normal">{(selectedDocumentVehicle as any).leasedTo}</span></p>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Financial Details</h4>
+                                  <p className="text-xs text-gray-500">Lease payment information</p>
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <IndianRupee className="h-4 w-4 text-emerald-500" />
+                                      <p className="text-xs font-medium">Amount: <span className="font-normal">{(selectedDocumentVehicle as any).leaseAmount}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <CreditCard className="h-4 w-4 text-emerald-500" />
+                                      <p className="text-xs font-medium">Security Deposit: <span className="font-normal">{(selectedDocumentVehicle as any).securityDeposit}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Route className="h-4 w-4 text-emerald-500" />
+                                      <p className="text-xs font-medium">KM Limit: <span className="font-normal">{(selectedDocumentVehicle as any).kmLimit}</span></p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="border-t border-gray-200 dark:border-gray-800 pt-4 mt-4">
+                                <h4 className="text-sm font-medium mb-3">Lease Agreement</h4>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-emerald-500" />
+                                    Lease Agreement #{(selectedDocumentVehicle as any).leaseAgreementNo}
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <ListChecks className="h-4 w-4 mr-2 text-emerald-500" />
+                                    Terms & Conditions
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-emerald-500" />
+                                    Vehicle Condition Report
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-emerald-500" />
+                                    Insurance Certificate
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Payment History */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-emerald-50 dark:bg-emerald-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
+                                <CreditCard className="h-5 w-5" />
+                                Payment History
+                              </h3>
+                            </div>
+                            <div className="p-4">
+                              <div className="divide-y">
+                                <div className="flex justify-between items-center py-2">
+                                  <div>
+                                    <p className="text-sm font-medium">January 2025</p>
+                                    <p className="text-xs text-gray-500">Paid on Jan 15, 2025</p>
+                                  </div>
+                                  <Badge variant="outline" className="bg-green-50 text-green-700">Paid</Badge>
+                                </div>
+                                <div className="flex justify-between items-center py-2">
+                                  <div>
+                                    <p className="text-sm font-medium">February 2025</p>
+                                    <p className="text-xs text-gray-500">Paid on Feb 15, 2025</p>
+                                  </div>
+                                  <Badge variant="outline" className="bg-green-50 text-green-700">Paid</Badge>
+                                </div>
+                                <div className="flex justify-between items-center py-2">
+                                  <div>
+                                    <p className="text-sm font-medium">March 2025</p>
+                                    <p className="text-xs text-gray-500">Paid on Mar 15, 2025</p>
+                                  </div>
+                                  <Badge variant="outline" className="bg-green-50 text-green-700">Paid</Badge>
+                                </div>
+                                <div className="flex justify-between items-center py-2">
+                                  <div>
+                                    <p className="text-sm font-medium">April 2025</p>
+                                    <p className="text-xs text-gray-500">Due on Apr 15, 2025</p>
+                                  </div>
+                                  <Badge variant="outline" className="bg-amber-50 text-amber-700">Upcoming</Badge>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <Download className="h-4 w-4" />
+                              Export Lease Documents
+                            </Button>
+                            <Button variant="outline" className="gap-2">
+                              <FileEdit className="h-4 w-4" />
+                              Update Lease Terms
+                            </Button>
+                            <Button className="gap-2 bg-emerald-600 hover:bg-emerald-700">
+                              <ShieldCheck className="h-4 w-4" />
+                              View Lease Status
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
+                  {/* For Sale Documents Section */}
+                  {selectedStatus === 'For Sale' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for For Sale
+                        <div className="bg-pink-50 dark:bg-pink-900/20 rounded-lg p-6 mb-6">
+                          <h3 className="text-lg font-semibold text-center mb-4 text-pink-700 dark:text-pink-400">Select a Vehicle For Sale</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {vehicleData
+                              .filter(vehicle => vehicle.status === 'For Sale' || (vehicle.listingDate !== undefined))
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${selectedDocumentVehicle?.id === vehicle.id ? 'border-pink-500 dark:border-pink-400' : 'border-transparent'}`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-4">
+                                    <div className="aspect-video w-full overflow-hidden rounded-md mb-3 relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <div className="absolute top-2 right-2 bg-pink-500 text-white text-xs px-2 py-1 rounded-full">
+                                        For Sale
+                                      </div>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <h4 className="font-semibold">{vehicle.vehicle}</h4>
+                                      <p className="text-xs text-slate-500">{vehicle.registrationNumber}</p>
+                                      <div className="flex justify-between items-center">
+                                        <Badge variant="outline" className="text-xs px-2 py-0 bg-pink-50 text-pink-700 dark:bg-pink-900/20 dark:text-pink-400">
+                                          {vehicle.fuelType}
+                                        </Badge>
+                                        <p className="text-xs text-slate-500">₹{(vehicle as any).askingPrice}</p>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // For Sale Vehicle Documents Display
+                        <div className="space-y-6">
+                          <div className="bg-pink-50 dark:bg-pink-900/20 rounded-lg p-4 mb-6 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                              <Avatar>
+                                <AvatarImage src={selectedDocumentVehicle.image} />
+                                <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <h3 className="font-semibold">{selectedDocumentVehicle.vehicle}</h3>
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>
+                                  <Badge variant="outline" className="text-xs bg-pink-50 text-pink-700 dark:bg-pink-900/20 dark:text-pink-400">For Sale</Badge>
+                                </div>
+                              </div>
+                            </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => setSelectedDocumentVehicle(null)}
+                              className="text-pink-700 dark:text-pink-400"
+                            >
+                              Change Vehicle
+                            </Button>
+                          </div>
+                          
+                          {/* Sale Documentation */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-pink-50 dark:bg-pink-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-pink-700 dark:text-pink-400">
+                                <Tag className="h-5 w-5" />
+                                Sale Documentation
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-pink-700 dark:text-pink-400">
+                                  <Download className="h-4 w-4" />
+                                  <span className="sr-only">Download</span>
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Listing Details</h4>
+                                  <p className="text-xs text-gray-500">Information about the sale listing</p>
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <Calendar className="h-4 w-4 text-pink-500" />
+                                      <p className="text-xs font-medium">Listing Date: <span className="font-normal">{(selectedDocumentVehicle as any).listingDate}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <IndianRupee className="h-4 w-4 text-pink-500" />
+                                      <p className="text-xs font-medium">Asking Price: <span className="font-normal">{(selectedDocumentVehicle as any).askingPrice}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      {(selectedDocumentVehicle as any).negotiable ? (
+                                        <CheckCircle className="h-4 w-4 text-green-500" />
+                                      ) : (
+                                        <X className="h-4 w-4 text-red-500" />
+                                      )}
+                                      <p className="text-xs font-medium">Negotiable: <span className="font-normal">{(selectedDocumentVehicle as any).negotiable ? 'Yes' : 'No'}</span></p>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Viewing Information</h4>
+                                  <p className="text-xs text-gray-500">Details for potential buyers</p>
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <MapPin className="h-4 w-4 text-pink-500" />
+                                      <p className="text-xs font-medium">Location: <span className="font-normal">{(selectedDocumentVehicle as any).viewingLocation}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <MessageSquare className="h-4 w-4 text-pink-500" />
+                                      <p className="text-xs font-medium">Contact: <span className="font-normal">{(selectedDocumentVehicle as any).sellerContact}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Info className="h-4 w-4 text-pink-500" />
+                                      <p className="text-xs font-medium">Reason: <span className="font-normal">{(selectedDocumentVehicle as any).sellingReason}</span></p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="border-t border-gray-200 dark:border-gray-800 pt-4 mt-4">
+                                <h4 className="text-sm font-medium mb-3">Sale Documents</h4>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-pink-500" />
+                                    Vehicle Condition Report
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-pink-500" />
+                                    Service History
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-pink-500" />
+                                    Ownership Documents
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-pink-500" />
+                                    Sale Agreement Template
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Marketing Materials */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-pink-50 dark:bg-pink-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-pink-700 dark:text-pink-400">
+                                <Image className="h-5 w-5" />
+                                Marketing Materials
+                              </h3>
+                            </div>
+                            <div className="p-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                <div className="aspect-video rounded-md overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                  <ImageIcon className="h-8 w-8 text-gray-400" />
+                                </div>
+                                <div className="aspect-video rounded-md overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                  <ImageIcon className="h-8 w-8 text-gray-400" />
+                                </div>
+                                <div className="aspect-video rounded-md overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                  <ImageIcon className="h-8 w-8 text-gray-400" />
+                                </div>
+                              </div>
+                              <div className="mt-3 text-center">
+                                <Button variant="outline" size="sm">
+                                  <Plus className="h-4 w-4 mr-2" />
+                                  Add Marketing Photos
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <Share2 className="h-4 w-4" />
+                              Share Listing
+                            </Button>
+                            <Button variant="outline" className="gap-2">
+                              <Edit className="h-4 w-4" />
+                              Edit Price & Details
+                            </Button>
+                            <Button className="gap-2 bg-pink-600 hover:bg-pink-700">
+                              <Eye className="h-4 w-4" />
+                              View Buyer Inquiries
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
+                  {/* Sold Documents Section */}
+                  {selectedStatus === 'Sold' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for Sold
+                        <div className="bg-violet-50 dark:bg-violet-900/20 rounded-lg p-6 mb-6">
+                          <h3 className="text-lg font-semibold text-center mb-4 text-violet-700 dark:text-violet-400">Select a Sold Vehicle</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {vehicleData
+                              .filter(vehicle => vehicle.status === 'Sold')
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${selectedDocumentVehicle?.id === vehicle.id ? 'border-violet-500 dark:border-violet-400' : 'border-transparent'}`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-4">
+                                    <div className="aspect-video w-full overflow-hidden rounded-md mb-3 relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <div className="absolute top-2 right-2 bg-violet-500 text-white text-xs px-2 py-1 rounded-full">
+                                        Sold
+                                      </div>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <h4 className="font-semibold">{vehicle.vehicle}</h4>
+                                      <p className="text-xs text-slate-500">{vehicle.registrationNumber}</p>
+                                      <div className="flex justify-between items-center">
+                                        <Badge variant="outline" className="text-xs px-2 py-0 bg-violet-50 text-violet-700 dark:bg-violet-900/20 dark:text-violet-400">
+                                          {vehicle.fuelType}
+                                        </Badge>
+                                        <p className="text-xs text-slate-500">Sold: Apr 2025</p>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Sold Vehicle Documents Display
+                        <div className="space-y-6">
+                          <div className="bg-violet-50 dark:bg-violet-900/20 rounded-lg p-4 mb-6 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                              <Avatar>
+                                <AvatarImage src={selectedDocumentVehicle.image} />
+                                <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <h3 className="font-semibold">{selectedDocumentVehicle.vehicle}</h3>
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>
+                                  <Badge variant="outline" className="text-xs bg-violet-50 text-violet-700 dark:bg-violet-900/20 dark:text-violet-400">Sold</Badge>
+                                </div>
+                              </div>
+                            </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => setSelectedDocumentVehicle(null)}
+                              className="text-violet-700 dark:text-violet-400"
+                            >
+                              Change Vehicle
+                            </Button>
+                          </div>
+                          
+                          {/* Sale Documentation */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-violet-50 dark:bg-violet-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-violet-700 dark:text-violet-400">
+                                <CheckCircle className="h-5 w-5" />
+                                Sale Documentation
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-violet-700 dark:text-violet-400">
+                                  <Download className="h-4 w-4" />
+                                  <span className="sr-only">Download</span>
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Sale Details</h4>
+                                  <p className="text-xs text-gray-500">Transaction information</p>
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <Calendar className="h-4 w-4 text-violet-500" />
+                                      <p className="text-xs font-medium">Sale Date: <span className="font-normal">April 10, 2025</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <IndianRupee className="h-4 w-4 text-violet-500" />
+                                      <p className="text-xs font-medium">Sale Price: <span className="font-normal">₹650,000</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <UserCircle className="h-4 w-4 text-violet-500" />
+                                      <p className="text-xs font-medium">New Owner: <span className="font-normal">Priya Sharma</span></p>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Transfer Status</h4>
+                                  <p className="text-xs text-gray-500">Ownership transfer information</p>
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <FileText className="h-4 w-4 text-violet-500" />
+                                      <p className="text-xs font-medium">RC Transfer: <span className="font-normal">In Progress</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <FileText className="h-4 w-4 text-violet-500" />
+                                      <p className="text-xs font-medium">Insurance Transfer: <span className="font-normal">Completed</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <FileText className="h-4 w-4 text-violet-500" />
+                                      <p className="text-xs font-medium">Tax Payment: <span className="font-normal">Completed</span></p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="border-t border-gray-200 dark:border-gray-800 pt-4 mt-4">
+                                <h4 className="text-sm font-medium mb-3">Sale Documents</h4>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-violet-500" />
+                                    Sale Agreement
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-violet-500" />
+                                    Delivery Note
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-violet-500" />
+                                    Payment Receipt
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-violet-500" />
+                                    Transfer Forms
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Condition at Sale */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-violet-50 dark:bg-violet-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-violet-700 dark:text-violet-400">
+                                <ClipboardCheck className="h-5 w-5" />
+                                Condition at Sale
+                              </h3>
+                            </div>
+                            <div className="p-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <h4 className="text-sm font-medium mb-2">Vehicle Specifications</h4>
+                                  <div className="space-y-1 text-xs">
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-500">Odometer Reading</span>
+                                      <span>{selectedDocumentVehicle.mileage} km</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-500">Engine Health</span>
+                                      <span>{selectedDocumentVehicle.engineHealth}%</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-500">Last Service</span>
+                                      <span>{selectedDocumentVehicle.lastService}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div>
+                                  <h4 className="text-sm font-medium mb-2">Inspection Details</h4>
+                                  <Button variant="outline" size="sm" className="w-full justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-violet-500" />
+                                    View Pre-Sale Inspection Report
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <Download className="h-4 w-4" />
+                              Export Sale Documents
+                            </Button>
+                            <Button variant="outline" className="gap-2">
+                              <MessageSquare className="h-4 w-4" />
+                              Contact Buyer
+                            </Button>
+                            <Button className="gap-2 bg-violet-600 hover:bg-violet-700">
+                              <CheckCircle className="h-4 w-4" />
+                              Complete Transfers
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
                   {selectedStatus !== 'Active' && selectedStatus !== 'Recently Purchased' && 
                    selectedStatus !== 'In Maintenance' && selectedStatus !== 'Pre-Owned' &&
-                   selectedStatus !== 'Out of Service' && selectedStatus !== 'Garage Stored' && (
+                   selectedStatus !== 'Out of Service' && selectedStatus !== 'Garage Stored' && 
+                   selectedStatus !== 'Commercial Fleet' && selectedStatus !== 'Leased Out' &&
+                   selectedStatus !== 'For Sale' && selectedStatus !== 'Sold' && (
                     <div className="text-center py-12">
                       <div className="mx-auto w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
                         <FileQuestion className="h-6 w-6 text-gray-500 dark:text-gray-400" />
