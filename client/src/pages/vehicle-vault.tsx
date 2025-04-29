@@ -530,6 +530,7 @@ const VehicleVault = () => {
   const [activeTab, setActiveTab] = useState('vehicles');
   const [selectedVehicle, setSelectedVehicle] = useState<typeof vehicleData[0] | null>(null);
   const [selectedCategory, setSelectedCategory] = useState('cars');
+  const [selectedStatus, setSelectedStatus] = useState<string | null>('Active');
   const { toast } = useToast();
   const { scrollY } = useScroll();
   const headerOpacity = useTransform(scrollY, [0, 200], [1, 0.3]);
@@ -566,6 +567,15 @@ const VehicleVault = () => {
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
     setSelectedVehicle(null);
+  };
+  
+  const handleStatusSelect = (status: string) => {
+    setSelectedStatus(status);
+    setActiveTab('documents');
+    toast({
+      title: `${status} Vehicles Selected`,
+      description: `Viewing documents for ${status} vehicles`,
+    });
   };
   
   return (
@@ -612,63 +622,123 @@ const VehicleVault = () => {
           >
             <div className="bg-white dark:bg-slate-900 p-3 rounded-lg shadow-sm mb-4">
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2">
-                <Badge variant="outline" className="py-2 px-3 bg-green-50 text-green-700 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-green-50 text-green-700 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Active' ? 'ring-2 ring-green-500 dark:ring-green-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Active')}
+                >
                   <Car className="h-3.5 w-3.5" />
                   Active
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Recently Purchased' ? 'ring-2 ring-blue-500 dark:ring-blue-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Recently Purchased')}
+                >
                   <ShoppingBag className="h-3.5 w-3.5" />
                   Recently Purchased
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-900/20 dark:text-indigo-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-900/20 dark:text-indigo-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Pre-owned' ? 'ring-2 ring-indigo-500 dark:ring-indigo-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Pre-owned')}
+                >
                   <RefreshCw className="h-3.5 w-3.5" />
                   Pre-owned
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-amber-50 text-amber-700 hover:bg-amber-100 dark:bg-amber-900/20 dark:text-amber-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-amber-50 text-amber-700 hover:bg-amber-100 dark:bg-amber-900/20 dark:text-amber-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'In Maintenance' ? 'ring-2 ring-amber-500 dark:ring-amber-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('In Maintenance')}
+                >
                   <Wrench className="h-3.5 w-3.5" />
                   In Maintenance
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-sky-50 text-sky-700 hover:bg-sky-100 dark:bg-sky-900/20 dark:text-sky-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-sky-50 text-sky-700 hover:bg-sky-100 dark:bg-sky-900/20 dark:text-sky-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Garage Stored' ? 'ring-2 ring-sky-500 dark:ring-sky-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Garage Stored')}
+                >
                   <Warehouse className="h-3.5 w-3.5" />
                   Garage Stored
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-slate-50 text-slate-700 hover:bg-slate-100 dark:bg-slate-800/40 dark:text-slate-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-slate-50 text-slate-700 hover:bg-slate-100 dark:bg-slate-800/40 dark:text-slate-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Out of Service' ? 'ring-2 ring-slate-500 dark:ring-slate-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Out of Service')}
+                >
                   <AlertOctagon className="h-3.5 w-3.5" />
                   Out of Service
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-purple-50 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/20 dark:text-purple-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-purple-50 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/20 dark:text-purple-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Commercial Fleet' ? 'ring-2 ring-purple-500 dark:ring-purple-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Commercial Fleet')}
+                >
                   <Building2 className="h-3.5 w-3.5" />
                   Commercial Fleet
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Leased Out' ? 'ring-2 ring-emerald-500 dark:ring-emerald-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Leased Out')}
+                >
                   <KeyRound className="h-3.5 w-3.5" />
                   Leased Out
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-pink-50 text-pink-700 hover:bg-pink-100 dark:bg-pink-900/20 dark:text-pink-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-pink-50 text-pink-700 hover:bg-pink-100 dark:bg-pink-900/20 dark:text-pink-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'For Sale' ? 'ring-2 ring-pink-500 dark:ring-pink-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('For Sale')}
+                >
                   <Tag className="h-3.5 w-3.5" />
                   For Sale
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-violet-50 text-violet-700 hover:bg-violet-100 dark:bg-violet-900/20 dark:text-violet-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-violet-50 text-violet-700 hover:bg-violet-100 dark:bg-violet-900/20 dark:text-violet-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Sold' ? 'ring-2 ring-violet-500 dark:ring-violet-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Sold')}
+                >
                   <CheckCircle className="h-3.5 w-3.5" />
                   Sold
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-rose-50 text-rose-700 hover:bg-rose-100 dark:bg-rose-900/20 dark:text-rose-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-rose-50 text-rose-700 hover:bg-rose-100 dark:bg-rose-900/20 dark:text-rose-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Impounded' ? 'ring-2 ring-rose-500 dark:ring-rose-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Impounded')}
+                >
                   <Shield className="h-3.5 w-3.5" />
                   Impounded
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-yellow-50 text-yellow-700 hover:bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-yellow-50 text-yellow-700 hover:bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Under Legal Hold' ? 'ring-2 ring-yellow-500 dark:ring-yellow-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Under Legal Hold')}
+                >
                   <Scale className="h-3.5 w-3.5" />
                   Under Legal Hold
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-red-50 text-red-700 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-red-50 text-red-700 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Stolen' ? 'ring-2 ring-red-500 dark:ring-red-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Stolen')}
+                >
                   <AlertTriangle className="h-3.5 w-3.5" />
                   Stolen
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-gray-50 text-gray-700 hover:bg-gray-100 dark:bg-gray-800/40 dark:text-gray-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-gray-50 text-gray-700 hover:bg-gray-100 dark:bg-gray-800/40 dark:text-gray-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Scrapped' ? 'ring-2 ring-gray-500 dark:ring-gray-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Scrapped')}
+                >
                   <Trash2 className="h-3.5 w-3.5" />
                   Scrapped
                 </Badge>
-                <Badge variant="outline" className="py-2 px-3 bg-stone-50 text-stone-700 hover:bg-stone-100 dark:bg-stone-800/40 dark:text-stone-400 flex items-center gap-1.5 cursor-pointer">
+                <Badge 
+                  variant="outline" 
+                  className={`py-2 px-3 bg-stone-50 text-stone-700 hover:bg-stone-100 dark:bg-stone-800/40 dark:text-stone-400 flex items-center gap-1.5 cursor-pointer transition-all ${selectedStatus === 'Totaled' ? 'ring-2 ring-stone-500 dark:ring-stone-400 shadow-md scale-105' : ''}`}
+                  onClick={() => handleStatusSelect('Totaled')}
+                >
                   <FileX className="h-3.5 w-3.5" />
                   Totaled
                 </Badge>
@@ -816,13 +886,529 @@ const VehicleVault = () => {
             <TabTransition isActive={activeTab === 'documents'}>
               <Card className="mt-0">
                 <CardHeader className="pb-0">
-                  <CardTitle className="text-xl">Vehicle Documents</CardTitle>
-                  <CardDescription>All your important vehicle documents in one place</CardDescription>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle className="text-xl flex items-center gap-2">
+                        {selectedStatus === 'Active' && <div className="h-3 w-3 rounded-full bg-green-500"></div>}
+                        {selectedStatus === 'Recently Purchased' && <div className="h-3 w-3 rounded-full bg-blue-500"></div>}
+                        {selectedStatus === 'Pre-owned' && <div className="h-3 w-3 rounded-full bg-indigo-500"></div>}
+                        {selectedStatus === 'In Maintenance' && <div className="h-3 w-3 rounded-full bg-amber-500"></div>}
+                        {selectedStatus === 'Garage Stored' && <div className="h-3 w-3 rounded-full bg-sky-500"></div>}
+                        {selectedStatus === 'Out of Service' && <div className="h-3 w-3 rounded-full bg-slate-500"></div>}
+                        {selectedStatus === 'Commercial Fleet' && <div className="h-3 w-3 rounded-full bg-purple-500"></div>}
+                        {selectedStatus === 'Leased Out' && <div className="h-3 w-3 rounded-full bg-emerald-500"></div>}
+                        {selectedStatus === 'For Sale' && <div className="h-3 w-3 rounded-full bg-pink-500"></div>}
+                        {selectedStatus === 'Sold' && <div className="h-3 w-3 rounded-full bg-violet-500"></div>}
+                        {selectedStatus === 'Impounded' && <div className="h-3 w-3 rounded-full bg-rose-500"></div>}
+                        {selectedStatus === 'Under Legal Hold' && <div className="h-3 w-3 rounded-full bg-yellow-500"></div>}
+                        {selectedStatus === 'Stolen' && <div className="h-3 w-3 rounded-full bg-red-500"></div>}
+                        {selectedStatus === 'Scrapped' && <div className="h-3 w-3 rounded-full bg-gray-500"></div>}
+                        {selectedStatus === 'Totaled' && <div className="h-3 w-3 rounded-full bg-stone-500"></div>}
+                        {selectedStatus} Vehicle Documents
+                      </CardTitle>
+                      <CardDescription>Manage all your important vehicle documents in one place</CardDescription>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" className="flex items-center gap-1">
+                        <Download className="h-4 w-4" />
+                        Export All
+                      </Button>
+                      <Button variant="outline" size="sm" className="flex items-center gap-1">
+                        <Plus className="h-4 w-4" />
+                        Add Document
+                      </Button>
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent className="pt-6">
-                  <div className="text-center p-12 text-gray-500">
-                    Vehicle documents section will be available here.
-                  </div>
+                  {selectedStatus === 'Active' && (
+                    <div className="space-y-8">
+                      {/* Vehicle Registration Certificate */}
+                      <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                        <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-b border-gray-200 dark:border-gray-800">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            <FileText className="h-5 w-5 text-blue-500" />
+                            Vehicle Registration Certificate (RC)
+                          </h3>
+                          <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Download className="h-4 w-4" />
+                              <span className="sr-only">Download</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Share className="h-4 w-4" />
+                              <span className="sr-only">Share</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Edit className="h-4 w-4" />
+                              <span className="sr-only">Edit</span>
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="p-4 space-y-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="flex flex-col space-y-1">
+                              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Original RC book/card</span>
+                              <Button variant="outline" size="sm" className="justify-start">
+                                <FileText className="h-4 w-4 mr-2 text-blue-500" />
+                                View Original RC
+                              </Button>
+                            </div>
+                            <div className="flex flex-col space-y-1">
+                              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Digital Copy</span>
+                              <Button variant="outline" size="sm" className="justify-start">
+                                <SmartphoneNfc className="h-4 w-4 mr-2 text-green-500" />
+                                Access Digital RC
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="border-t border-gray-200 dark:border-gray-800 pt-4">
+                            <h4 className="text-sm font-medium mb-2">Renewal Information</h4>
+                            <div className="flex items-center gap-2 text-sm">
+                              <CalendarClock className="h-4 w-4 text-amber-500" />
+                              <span>Renewal due in <strong>245 days</strong> (12/01/2026)</span>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-800 pt-3">
+                            <span className="text-sm text-gray-500">Last Updated: 05/15/2024</span>
+                            <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                              Valid
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Insurance Documentation */}
+                      <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                        <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-b border-gray-200 dark:border-gray-800">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            <Shield className="h-5 w-5 text-violet-500" />
+                            Insurance Documentation
+                          </h3>
+                          <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Download className="h-4 w-4" />
+                              <span className="sr-only">Download</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Share className="h-4 w-4" />
+                              <span className="sr-only">Share</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Edit className="h-4 w-4" />
+                              <span className="sr-only">Edit</span>
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="p-4 space-y-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="flex flex-col space-y-1">
+                              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Policy Documents</span>
+                              <Button variant="outline" size="sm" className="justify-start">
+                                <FileText className="h-4 w-4 mr-2 text-violet-500" />
+                                View Policy Details
+                              </Button>
+                            </div>
+                            <div className="flex flex-col space-y-1">
+                              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Premium Payment</span>
+                              <Button variant="outline" size="sm" className="justify-start">
+                                <Receipt className="h-4 w-4 mr-2 text-amber-500" />
+                                View Payment Receipts
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="border-t border-gray-200 dark:border-gray-800 pt-4">
+                            <h4 className="text-sm font-medium mb-2">No-Claim Bonus</h4>
+                            <div className="flex items-center gap-2 mb-2">
+                              <Award className="h-4 w-4 text-yellow-500" />
+                              <span className="text-sm">Current NCB: <strong>25%</strong></span>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm">
+                              <CalendarClock className="h-4 w-4 text-amber-500" />
+                              <span>Renewal due in <strong>123 days</strong> (08/31/2025)</span>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-800 pt-3">
+                            <span className="text-sm text-gray-500">Last Updated: 07/22/2024</span>
+                            <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                              Valid
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Pollution Control Certificate */}
+                      <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                        <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-b border-gray-200 dark:border-gray-800">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            <Leaf className="h-5 w-5 text-green-500" />
+                            Pollution Control Certificate
+                          </h3>
+                          <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Download className="h-4 w-4" />
+                              <span className="sr-only">Download</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Share className="h-4 w-4" />
+                              <span className="sr-only">Share</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Edit className="h-4 w-4" />
+                              <span className="sr-only">Edit</span>
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="p-4 space-y-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="flex flex-col space-y-1">
+                              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Current Certificate</span>
+                              <Button variant="outline" size="sm" className="justify-start">
+                                <FileText className="h-4 w-4 mr-2 text-green-500" />
+                                View Certificate
+                              </Button>
+                            </div>
+                            <div className="flex flex-col space-y-1">
+                              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Testing Center</span>
+                              <Button variant="outline" size="sm" className="justify-start">
+                                <MapPin className="h-4 w-4 mr-2 text-red-500" />
+                                View Testing Location
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="border-t border-gray-200 dark:border-gray-800 pt-4">
+                            <h4 className="text-sm font-medium mb-2">Emission Test Results</h4>
+                            <div className="flex items-center gap-2 mb-2">
+                              <CheckCircle2 className="h-4 w-4 text-green-500" />
+                              <span className="text-sm">Status: <strong>Within Permissible Limits</strong></span>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm">
+                              <CalendarClock className="h-4 w-4 text-amber-500" />
+                              <span>Renewal due in <strong>45 days</strong> (06/15/2025)</span>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-800 pt-3">
+                            <span className="text-sm text-gray-500">Last Updated: 12/15/2024</span>
+                            <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                              Valid
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Tax Documentation */}
+                      <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                        <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-b border-gray-200 dark:border-gray-800">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            <Receipt className="h-5 w-5 text-amber-500" />
+                            Tax Documentation
+                          </h3>
+                          <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Download className="h-4 w-4" />
+                              <span className="sr-only">Download</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Share className="h-4 w-4" />
+                              <span className="sr-only">Share</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Edit className="h-4 w-4" />
+                              <span className="sr-only">Edit</span>
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="p-4 space-y-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="flex flex-col space-y-1">
+                              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Road Tax Receipt</span>
+                              <Button variant="outline" size="sm" className="justify-start">
+                                <Receipt className="h-4 w-4 mr-2 text-amber-500" />
+                                View Tax Receipt
+                              </Button>
+                            </div>
+                            <div className="flex flex-col space-y-1">
+                              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Tax Validity</span>
+                              <div className="flex items-center gap-2 text-sm">
+                                <CalendarCheck className="h-4 w-4 text-blue-500" />
+                                <span>Valid until <strong>12/31/2027</strong></span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-800 pt-3">
+                            <span className="text-sm text-gray-500">Last Updated: 01/05/2025</span>
+                            <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                              Paid
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Service Records */}
+                      <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                        <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-b border-gray-200 dark:border-gray-800">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            <Wrench className="h-5 w-5 text-blue-500" />
+                            Service Records
+                          </h3>
+                          <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Download className="h-4 w-4" />
+                              <span className="sr-only">Download</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Share className="h-4 w-4" />
+                              <span className="sr-only">Share</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Edit className="h-4 w-4" />
+                              <span className="sr-only">Edit</span>
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="p-4 space-y-4">
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                                  <Wrench className="h-4 w-4 text-blue-500" />
+                                </div>
+                                <div>
+                                  <h4 className="text-sm font-medium">Regular Service</h4>
+                                  <p className="text-xs text-gray-500">March 10, 2025</p>
+                                </div>
+                              </div>
+                              <Button variant="ghost" size="sm" className="h-8 px-2">
+                                <Eye className="h-4 w-4 mr-1" />
+                                Details
+                              </Button>
+                            </div>
+                            
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <div className="h-8 w-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                                  <FilterX className="h-4 w-4 text-amber-500" />
+                                </div>
+                                <div>
+                                  <h4 className="text-sm font-medium">Oil Change</h4>
+                                  <p className="text-xs text-gray-500">January 15, 2025</p>
+                                </div>
+                              </div>
+                              <Button variant="ghost" size="sm" className="h-8 px-2">
+                                <Eye className="h-4 w-4 mr-1" />
+                                Details
+                              </Button>
+                            </div>
+                            
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <div className="h-8 w-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                                  <CheckCircle className="h-4 w-4 text-green-500" />
+                                </div>
+                                <div>
+                                  <h4 className="text-sm font-medium">Complete Service</h4>
+                                  <p className="text-xs text-gray-500">October 5, 2024</p>
+                                </div>
+                              </div>
+                              <Button variant="ghost" size="sm" className="h-8 px-2">
+                                <Eye className="h-4 w-4 mr-1" />
+                                Details
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="border-t border-gray-200 dark:border-gray-800 pt-4">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="text-sm font-medium">Upcoming Service</h4>
+                              <Button variant="outline" size="sm" className="h-7">
+                                Schedule
+                              </Button>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm">
+                              <CalendarClock className="h-4 w-4 text-amber-500" />
+                              <span>Next service due in <strong>4500 km</strong> or <strong>4 months</strong></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Vehicle Performance Logs */}
+                      <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                        <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-b border-gray-200 dark:border-gray-800">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            <BarChart3 className="h-5 w-5 text-indigo-500" />
+                            Vehicle Performance Logs
+                          </h3>
+                          <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Download className="h-4 w-4" />
+                              <span className="sr-only">Download</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Share className="h-4 w-4" />
+                              <span className="sr-only">Share</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Edit className="h-4 w-4" />
+                              <span className="sr-only">Edit</span>
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="p-4 space-y-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="bg-slate-50 dark:bg-slate-800/30 rounded-lg p-3">
+                              <h4 className="text-sm font-medium mb-2 flex items-center gap-1.5">
+                                <Fuel className="h-4 w-4 text-amber-500" />
+                                Fuel Efficiency
+                              </h4>
+                              <div className="flex items-center justify-between">
+                                <span className="text-xl font-bold">17.5 km/l</span>
+                                <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                  +2.1%
+                                </Badge>
+                              </div>
+                            </div>
+                            
+                            <div className="bg-slate-50 dark:bg-slate-800/30 rounded-lg p-3">
+                              <h4 className="text-sm font-medium mb-2 flex items-center gap-1.5">
+                                <Route className="h-4 w-4 text-blue-500" />
+                                Trip History
+                              </h4>
+                              <div className="flex items-center justify-between">
+                                <span className="text-xl font-bold">2,345 km</span>
+                                <Button variant="ghost" size="sm" className="h-7 px-2 text-xs">
+                                  View Trips
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="border-t border-gray-200 dark:border-gray-800 pt-4">
+                            <h4 className="text-sm font-medium mb-3">Performance Overview</h4>
+                            <div className="space-y-3">
+                              <div>
+                                <div className="flex justify-between items-center mb-1 text-xs">
+                                  <span>Engine Health</span>
+                                  <span className="font-medium">92%</span>
+                                </div>
+                                <Progress value={92} className="h-1.5" />
+                              </div>
+                              <div>
+                                <div className="flex justify-between items-center mb-1 text-xs">
+                                  <span>Battery Condition</span>
+                                  <span className="font-medium">87%</span>
+                                </div>
+                                <Progress value={87} className="h-1.5" />
+                              </div>
+                              <div>
+                                <div className="flex justify-between items-center mb-1 text-xs">
+                                  <span>Brake Wear</span>
+                                  <span className="font-medium">22%</span>
+                                </div>
+                                <Progress value={22} className="h-1.5" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Driver Information */}
+                      <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                        <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-b border-gray-200 dark:border-gray-800">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            <UserCircle className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                            Driver Information
+                          </h3>
+                          <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Download className="h-4 w-4" />
+                              <span className="sr-only">Download</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Share className="h-4 w-4" />
+                              <span className="sr-only">Share</span>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Edit className="h-4 w-4" />
+                              <span className="sr-only">Edit</span>
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="p-4 space-y-4">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="h-12 w-12 border">
+                              <AvatarImage src="" />
+                              <AvatarFallback className="bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400">
+                                RK
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h4 className="font-medium">Rahul Kumar</h4>
+                              <p className="text-sm text-gray-500">Primary Driver</p>
+                            </div>
+                            <Button variant="ghost" size="sm" className="ml-auto">
+                              <UserCog className="h-4 w-4 mr-1" />
+                              Manage
+                            </Button>
+                          </div>
+                          
+                          <div className="border-t border-gray-200 dark:border-gray-800 pt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <h4 className="text-sm font-medium mb-2">License Details</h4>
+                              <div className="space-y-1 text-sm">
+                                <div className="flex items-center gap-2">
+                                  <CreditCard className="h-4 w-4 text-blue-500" />
+                                  <span>MH-1420110012345</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <CalendarCheck className="h-4 w-4 text-green-500" />
+                                  <span>Valid until: <strong>06/12/2029</strong></span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <h4 className="text-sm font-medium mb-2">Authorization</h4>
+                              <div className="space-y-2">
+                                <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                  <CheckCircle className="h-3.5 w-3.5 mr-1" />
+                                  Authorized
+                                </Badge>
+                                <div className="flex">
+                                  <Button variant="outline" size="sm" className="text-xs h-7">
+                                    <Plus className="h-3.5 w-3.5 mr-1" />
+                                    Add Driver
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {selectedStatus !== 'Active' && (
+                    <div className="text-center py-12">
+                      <div className="mx-auto w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
+                        <FileQuestion className="h-6 w-6 text-gray-500 dark:text-gray-400" />
+                      </div>
+                      <h3 className="text-lg font-medium mb-2">No Documents Setup</h3>
+                      <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-6">
+                        Documents for {selectedStatus} vehicles have not been configured yet. Click below to set up document management for this category.
+                      </p>
+                      <Button variant="default">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Set Up Documents
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabTransition>
