@@ -5033,6 +5033,286 @@ const VehicleVault = () => {
                     </>
                   )}
                   
+                  {/* Impounded Vehicles Section */}
+                  {selectedStatus === 'Impounded' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for Impounded with enhanced details
+                        <div className="bg-gradient-to-br from-rose-50 to-red-50 dark:from-rose-950/30 dark:to-red-950/30 rounded-lg p-6 mb-6 border border-rose-100 dark:border-rose-900/20 shadow-sm">
+                          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+                            <h3 className="text-xl font-semibold text-center sm:text-left mb-3 sm:mb-0 text-rose-700 dark:text-rose-400 flex items-center gap-2">
+                              <Building2 className="h-5 w-5" />
+                              Impounded Vehicles
+                            </h3>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-rose-200 dark:border-rose-800">
+                                <FilterX className="h-3.5 w-3.5" />
+                                Filter
+                              </Button>
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-rose-200 dark:border-rose-800">
+                                <CalendarCheck className="h-3.5 w-3.5" />
+                                Sort by Date
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {vehicleData
+                              .filter(vehicle => vehicle.status === 'Impounded' || (vehicle.impoundDate !== undefined))
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-lg group hover:border-rose-300 dark:hover:border-rose-700`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-0 overflow-hidden">
+                                    <div className="aspect-video w-full overflow-hidden relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500"
+                                      />
+                                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/60 to-transparent opacity-70"></div>
+                                      <div className="absolute top-2 right-2 bg-rose-500 dark:bg-rose-600 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
+                                        Impounded
+                                      </div>
+                                      <div className="absolute bottom-0 left-0 w-full p-3 text-white">
+                                        <h4 className="font-semibold text-sm">{vehicle.vehicle}</h4>
+                                        <div className="flex items-center gap-2 mt-1">
+                                          <span className="text-xs opacity-90">{vehicle.fuelType}</span>
+                                          <span className="text-xs opacity-90">•</span>
+                                          <span className="text-xs opacity-90">{new Intl.NumberFormat('en-IN').format(vehicle.mileage)} km</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="p-3">
+                                      <div className="flex justify-between items-center">
+                                        <div className="text-sm font-semibold text-rose-600 dark:text-rose-400">Case #{(vehicle as any).caseNumber?.split('-').pop() || 'Not Assigned'}</div>
+                                        <Badge variant="outline" className="bg-rose-50 text-rose-700 dark:bg-rose-900/20 dark:text-rose-400">
+                                          {(vehicle as any).legalStatus || 'Pending'}
+                                        </Badge>
+                                      </div>
+                                      <div className="mt-2 text-xs flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                                        <MapPin className="h-3 w-3" />
+                                        {(vehicle as any).impoundLocation?.split(',')[0] || 'Location not specified'}
+                                      </div>
+                                      <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                                        <Calendar className="h-3 w-3 mr-1" />
+                                        Impounded: {(vehicle as any).impoundDate || 'Recently'}
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Document Detail Screen
+                        <div className="space-y-6">
+                          {/* Vehicle Info Card */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mb-6">
+                            <div className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                              <div className="flex items-center gap-4">
+                                <Avatar className="h-16 w-16 rounded-lg border border-gray-200 dark:border-gray-700">
+                                  <AvatarImage src={selectedDocumentVehicle.image} alt={selectedDocumentVehicle.vehicle} className="object-cover" />
+                                  <AvatarFallback className="rounded-lg">
+                                    <Car className="h-8 w-8 text-gray-400" />
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                  <h3 className="font-semibold flex items-center gap-2">
+                                    {selectedDocumentVehicle.vehicle}
+                                    <AnimatedStatusTransition 
+                                      currentStatus="Impounded"
+                                    />
+                                  </h3>
+                                  <p className="text-xs text-gray-500">{selectedDocumentVehicle.registrationNumber}</p>
+                                </div>
+                              </div>
+                              <Button variant="outline" size="sm" onClick={() => setSelectedDocumentVehicle(null)}>
+                                Change Vehicle
+                              </Button>
+                            </div>
+                          </div>
+
+                          {/* Impound Status Details */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-rose-50 dark:bg-rose-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-rose-700 dark:text-rose-400">
+                                <Building2 className="h-5 w-5" />
+                                Impound Details
+                                <ContextualHelpTooltip tipType="impound" />
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Case Information</h4>
+                                  <p className="text-xs text-gray-500">Case number and legal status</p>
+                                  <div className="flex mt-2 gap-2">
+                                    <Badge variant="outline" className="bg-rose-50 text-rose-700 dark:bg-rose-900/20 dark:text-rose-400">
+                                      Case #{(selectedDocumentVehicle as any).caseNumber?.split('-').pop() || 'Not assigned'}
+                                    </Badge>
+                                    <Badge variant="outline" className="bg-rose-50 text-rose-700 dark:bg-rose-900/20 dark:text-rose-400">
+                                      {(selectedDocumentVehicle as any).legalStatus || 'Pending Hearing'}
+                                    </Badge>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Impounding Authority</h4>
+                                  <p className="text-xs text-gray-500">Agency responsible for the impoundment</p>
+                                  <p className="text-xs mt-1 text-slate-700 dark:text-slate-300">
+                                    {(selectedDocumentVehicle as any).impoundingAuthority || 'Mumbai Traffic Police'}
+                                  </p>
+                                  <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                                    <PhoneCall className="h-3.5 w-3.5 text-rose-500" />
+                                    Contact: {(selectedDocumentVehicle as any).contactPerson || 'Officer Raj Kumar (ID: 87234)'}
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <Separator className="my-2" />
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <InteractiveDataPoint
+                                  label="Impound Date"
+                                  value={(selectedDocumentVehicle as any).impoundDate || 'April 15, 2025'}
+                                  info="Date when vehicle was impounded"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Hearing Date"
+                                  value={(selectedDocumentVehicle as any).hearingDate || 'April 28, 2025'}
+                                  info="Scheduled court appearance date"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Est. Release Date"
+                                  value={(selectedDocumentVehicle as any).estimatedReleaseDate || 'May 10, 2025'}
+                                  info="Expected date of vehicle release"
+                                />
+                              </div>
+                              
+                              <div className="p-3 bg-rose-50 dark:bg-rose-900/10 rounded-md space-y-2">
+                                <div className="font-medium text-sm flex items-center gap-2">
+                                  <AlertCircle className="h-4 w-4 text-rose-500" />
+                                  Impound Reason
+                                </div>
+                                <p className="text-sm text-gray-700 dark:text-gray-300">
+                                  {(selectedDocumentVehicle as any).impoundReason || 'Multiple traffic violations and unpaid challan'}
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                                  <div className="flex items-center gap-2">
+                                    <IndianRupee className="h-4 w-4 text-rose-500" />
+                                    <p className="text-xs font-medium">Fine Amount: <span className="font-normal">{(selectedDocumentVehicle as any).fineAmount || '₹15,000'}</span></p>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <Check className="h-4 w-4 text-rose-500" />
+                                    <p className="text-xs font-medium">Requirements: <span className="font-normal">{(selectedDocumentVehicle as any).releaseRequirements || 'Fine payment, court appearance'}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Timeline and Status */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-rose-50 dark:bg-rose-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-rose-700 dark:text-rose-400">
+                                <Clock className="h-5 w-5" />
+                                Legal Timeline
+                              </h3>
+                            </div>
+                            <div className="p-4">
+                              <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:w-0.5 before:bg-gray-200 dark:before:bg-gray-700 before:h-full">
+                                <div className="relative flex gap-3">
+                                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 z-10">
+                                    <Car className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex flex-col flex-1">
+                                    <span className="text-xs text-gray-500">{(selectedDocumentVehicle as any).impoundDate || 'April 15, 2025'}</span>
+                                    <h4 className="text-sm font-medium">Vehicle Impounded</h4>
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                      Vehicle was impounded due to {(selectedDocumentVehicle as any).impoundReason?.toLowerCase() || 'multiple traffic violations'} at {(selectedDocumentVehicle as any).impoundLocation || 'Central Police Station, Mumbai'}.
+                                    </p>
+                                  </div>
+                                </div>
+                                
+                                <div className="relative flex gap-3">
+                                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 z-10">
+                                    <FileText className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex flex-col flex-1">
+                                    <span className="text-xs text-gray-500">{new Date((selectedDocumentVehicle as any).impoundDate || 'April 15, 2025').getTime() + 3*24*60*60*1000 > new Date().getTime() ? 'Pending' : new Date((selectedDocumentVehicle as any).impoundDate || 'April 15, 2025').getTime() + 3*24*60*60*1000}</span>
+                                    <h4 className="text-sm font-medium">Case Filed</h4>
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                      Case {(selectedDocumentVehicle as any).caseNumber || 'number pending'} filed and hearing date scheduled.
+                                    </p>
+                                  </div>
+                                </div>
+                                
+                                <div className="relative flex gap-3">
+                                  <div className={`flex items-center justify-center w-10 h-10 rounded-full ${new Date((selectedDocumentVehicle as any).hearingDate || 'April 28, 2025').getTime() < new Date().getTime() ? 'bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'} z-10`}>
+                                    <Scale className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex flex-col flex-1">
+                                    <span className="text-xs text-gray-500">{(selectedDocumentVehicle as any).hearingDate || 'April 28, 2025'}</span>
+                                    <h4 className="text-sm font-medium">Court Hearing {new Date((selectedDocumentVehicle as any).hearingDate || 'April 28, 2025').getTime() > new Date().getTime() ? '(Upcoming)' : ''}</h4>
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                      Court appearance scheduled with {(selectedDocumentVehicle as any).impoundingAuthority || 'Traffic Police'}.
+                                    </p>
+                                  </div>
+                                </div>
+                                
+                                <div className="relative flex gap-3">
+                                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 z-10">
+                                    <IndianRupee className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex flex-col flex-1">
+                                    <span className="text-xs text-gray-500">Pending</span>
+                                    <h4 className="text-sm font-medium">Fine Payment (Pending)</h4>
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                      Fine payment of {(selectedDocumentVehicle as any).fineAmount || '₹15,000'} to be made.
+                                    </p>
+                                  </div>
+                                </div>
+                                
+                                <div className="relative flex gap-3">
+                                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 z-10">
+                                    <KeyRound className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex flex-col flex-1">
+                                    <span className="text-xs text-gray-500">{(selectedDocumentVehicle as any).estimatedReleaseDate || 'Est. May 10, 2025'}</span>
+                                    <h4 className="text-sm font-medium">Vehicle Release (Scheduled)</h4>
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                      Estimated release date upon completion of all requirements.
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <Download className="h-4 w-4" />
+                              Download Case Files
+                            </Button>
+                            <Button variant="outline" className="gap-2">
+                              <MessageSquare className="h-4 w-4" />
+                              Contact Authority
+                            </Button>
+                            <Button className="gap-2 bg-rose-600 hover:bg-rose-700">
+                              <CreditCard className="h-4 w-4" />
+                              Pay Fine
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+
                   {/* For Sale Documents Section */}
                   {selectedStatus === 'For Sale' && (
                     <>
