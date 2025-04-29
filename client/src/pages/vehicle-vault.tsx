@@ -14,7 +14,7 @@ import {
   Car, FileText, HeartPulse, Shield, FileImage, BarChart3,
   PieChart, TrendingUp, TrendingDown, Star, BoxSelect, Brain,
   Battery, Leaf, Droplets, ArrowLeft, ArrowRight, ChevronLeft, ChevronRight,
-  AlertTriangle, Activity, Info, Zap, BadgeCheck, Wrench
+  AlertTriangle, Activity, Info, Zap, BadgeCheck, Wrench, X, PlusCircle
 } from 'lucide-react';
 
 // Extended vehicle data with more details
@@ -1420,6 +1420,10 @@ const VehicleVault = () => {
             transition={{ delay: 0.4 }}
           >
             <TabsList className="grid grid-cols-5 w-fit p-1">
+              <TabsTrigger value="vehicles" className="px-4 py-2 text-sm flex gap-2 items-center">
+                <Car className="h-4 w-4" />
+                Vehicles
+              </TabsTrigger>
               <TabsTrigger value="documents" className="px-4 py-2 text-sm flex gap-2 items-center">
                 <FileText className="h-4 w-4" />
                 Documents
@@ -1428,21 +1432,69 @@ const VehicleVault = () => {
                 <Clock className="h-4 w-4" />
                 Service History
               </TabsTrigger>
-              <TabsTrigger value="health" className="px-4 py-2 text-sm flex gap-2 items-center">
-                <HeartPulse className="h-4 w-4" />
-                Health Records
-              </TabsTrigger>
               <TabsTrigger value="community" className="px-4 py-2 text-sm flex gap-2 items-center">
                 <Users className="h-4 w-4" />
                 Community Hub
               </TabsTrigger>
-              <TabsTrigger value="inspections" className="px-4 py-2 text-sm flex gap-2 items-center">
-                <Shield className="h-4 w-4" />
-                Inspections
+              <TabsTrigger value="health" className="px-4 py-2 text-sm flex gap-2 items-center">
+                <HeartPulse className="h-4 w-4" />
+                Health Records
               </TabsTrigger>
             </TabsList>
           </motion.div>
         
+          <TabsContent value="vehicles" className="m-0">
+            <TabTransition isActive={activeTab === 'vehicles'}>
+              <Card className="mt-0">
+                <CardHeader className="pb-2">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle className="text-xl">Your Vehicles</CardTitle>
+                      <CardDescription>View and manage your entire vehicle fleet</CardDescription>
+                    </div>
+                    <Button variant="outline" size="sm" className="gap-1">
+                      <PlusCircle className="h-4 w-4" />
+                      Add Vehicle
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="space-y-6">
+                    {/* Vehicle carousel section */}
+                    <VehicleCarousel 
+                      vehicles={vehicleData} 
+                      onVehicleSelect={handleVehicleSelect}
+                    />
+                    
+                    {/* Selected vehicle analysis */}
+                    {selectedVehicle && (
+                      <div className="mt-8">
+                        <div className="mb-4 flex justify-between items-center">
+                          <h3 className="text-xl font-bold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-white dark:to-slate-300 bg-clip-text text-transparent flex items-center gap-2">
+                            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-1.5 rounded-lg shadow-md">
+                              <Activity className="h-4 w-4" />
+                            </div>
+                            Vehicle Analysis
+                          </h3>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="text-xs gap-1 rounded-full" 
+                            onClick={() => setSelectedVehicle(null)}
+                          >
+                            <X className="h-3.5 w-3.5" />
+                            Close Analysis
+                          </Button>
+                        </div>
+                        <VehicleDetailAnalysis vehicle={selectedVehicle} />
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabTransition>
+          </TabsContent>
+          
           <TabsContent value="documents" className="m-0">
             <TabTransition isActive={activeTab === 'documents'}>
               <Card className="mt-0">
