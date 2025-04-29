@@ -38,9 +38,65 @@ const communityLeaderboard = [
   { name: 'Sanjay R.', points: 1520, contributions: 25, badges: 4 },
 ];
 
+// Add keyframes for pulse animation
+const pulseKeyframes = `
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) translateX(0px);
+  }
+  33% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  66% {
+    transform: translateY(5px) translateX(-5px);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(100, 149, 237, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(100, 149, 237, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(100, 149, 237, 0.3);
+  }
+}
+`;
+
 // Dynamic floating particles background
 const ParticleBg = () => {
-  const particles = Array.from({ length: 15 }, (_, i) => i);
+  const particles = Array.from({ length: 25 }, (_, i) => i);
+  
+  useEffect(() => {
+    // Insert keyframes into document
+    const style = document.createElement('style');
+    style.textContent = pulseKeyframes;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
   
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
@@ -50,16 +106,30 @@ const ParticleBg = () => {
         const initialX = Math.random() * 100;
         const initialY = Math.random() * 100;
         const delay = Math.random() * 5;
+        const opacity = Math.random() * 0.2 + 0.05;
+        const blur = Math.random() * 10 + 5;
+        
+        // Generate a random color from a palette of blues and purples
+        const colors = ['from-blue-400/10 to-indigo-500/10', 'from-indigo-300/10 to-purple-400/10', 'from-blue-500/10 to-emerald-500/10'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
         
         return (
           <motion.div
             key={i}
-            className="absolute rounded-full bg-gradient-to-br from-blue-400/10 to-indigo-500/10 backdrop-blur-sm"
-            style={{ width: size, height: size, left: `${initialX}%`, top: `${initialY}%` }}
+            className={`absolute rounded-full bg-gradient-to-br ${color} backdrop-blur-sm`}
+            style={{ 
+              width: size, 
+              height: size, 
+              left: `${initialX}%`, 
+              top: `${initialY}%`,
+              opacity: opacity,
+              filter: `blur(${blur}px)`,
+              animation: `float ${duration}s infinite ease-in-out`
+            }}
             animate={{
               x: [0, Math.random() * 200 - 100, 0],
               y: [0, Math.random() * 200 - 100, 0],
-              opacity: [0.1, 0.2, 0.1]
+              opacity: [opacity, opacity * 2, opacity]
             }}
             transition={{
               duration: duration,
@@ -158,14 +228,14 @@ const TabTransition = ({ children, isActive }: { children: React.ReactNode, isAc
 );
 
 const InfoBox = ({ icon: Icon, title, value, accent }: { icon: any; title: string; value: string; accent: string }) => (
-  <div className={`bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm p-5`}>
+  <div className={`bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-slate-200/50 dark:border-slate-700/50 rounded-xl shadow-lg p-5 transform transition-all duration-300 hover:scale-105 hover:shadow-xl`}>
     <div className="flex items-center gap-4">
-      <div className={`rounded-full p-3 ${accent}`}>
+      <div className={`rounded-full p-3 ${accent} shadow-md transform transition-all duration-300 hover:scale-110`}>
         <Icon className={`h-6 w-6 text-white`} />
       </div>
       <div>
         <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{title}</p>
-        <h3 className="text-xl font-bold">{value}</h3>
+        <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">{value}</h3>
       </div>
     </div>
   </div>
@@ -218,27 +288,110 @@ const VehicleWorthVisual = () => {
 };
 
 const VehicleStoryCard = ({ vehicle, story }: { vehicle: string; story: string }) => {
+  // Define different patterns for different vehicles
+  const patterns = {
+    'Tata Nexon EV': {
+      gradient: 'from-blue-500/5 via-cyan-500/5 to-green-500/5',
+      headerGradient: 'from-blue-50 via-cyan-50 to-teal-50 dark:from-blue-900/20 dark:via-cyan-900/20 dark:to-teal-900/20',
+      accent: 'bg-gradient-to-r from-blue-500 to-teal-500',
+      icon: <motion.div 
+              className="relative"
+              whileHover={{ rotate: [0, -5, 5, -5, 0] }}
+              transition={{ duration: 0.5 }}
+            >
+              <Brain className="h-5 w-5 text-blue-500" />
+              <motion.div 
+                className="absolute inset-0 rounded-full bg-blue-400/20" 
+                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.2, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+            </motion.div>,
+      iconBg: 'bg-blue-100 dark:bg-blue-900/30'
+    },
+    'Honda City': {
+      gradient: 'from-indigo-500/5 via-purple-500/5 to-pink-500/5',
+      headerGradient: 'from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/20 dark:via-purple-900/20 dark:to-pink-900/20',
+      accent: 'bg-gradient-to-r from-indigo-500 to-purple-500',
+      icon: <motion.div 
+              className="relative"
+              whileHover={{ rotate: [0, -5, 5, -5, 0] }}
+              transition={{ duration: 0.5 }}
+            >
+              <Brain className="h-5 w-5 text-purple-500" />
+              <motion.div 
+                className="absolute inset-0 rounded-full bg-purple-400/20" 
+                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.2, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+            </motion.div>,
+      iconBg: 'bg-purple-100 dark:bg-purple-900/30'
+    },
+    'TVS iQube': {
+      gradient: 'from-amber-500/5 via-orange-500/5 to-red-500/5',
+      headerGradient: 'from-amber-50 via-orange-50 to-red-50 dark:from-amber-900/20 dark:via-orange-900/20 dark:to-red-900/20',
+      accent: 'bg-gradient-to-r from-amber-500 to-orange-500',
+      icon: <motion.div 
+              className="relative"
+              whileHover={{ rotate: [0, -5, 5, -5, 0] }}
+              transition={{ duration: 0.5 }}
+            >
+              <Brain className="h-5 w-5 text-orange-500" />
+              <motion.div 
+                className="absolute inset-0 rounded-full bg-orange-400/20" 
+                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.2, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+            </motion.div>,
+      iconBg: 'bg-orange-100 dark:bg-orange-900/30'
+    }
+  };
+
+  // Use type assertion to handle the TypeScript error
+  const pattern = (patterns as any)[vehicle] || patterns['Tata Nexon EV'];
+
   return (
-    <Card className="overflow-hidden border-0 shadow-md bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
-      <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800/80">
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-lg font-bold">{vehicle}</CardTitle>
-          <Brain className="h-5 w-5 text-indigo-500" />
-        </div>
-        <CardDescription>AI-generated vehicle story</CardDescription>
-      </CardHeader>
-      <CardContent className="pt-4">
-        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-          {story}
-        </p>
-      </CardContent>
-      <CardFooter className="pt-0 flex justify-end">
-        <Button variant="ghost" size="sm" className="text-xs">
-          <Share className="h-3.5 w-3.5 mr-1" />
-          Share Story
-        </Button>
-      </CardFooter>
-    </Card>
+    <motion.div 
+      className="h-full"
+      whileHover={{ y: -5 }}
+      transition={{ duration: 0.2 }}
+    >
+      <Card className={`overflow-hidden border-0 shadow-lg bg-gradient-to-br ${pattern.gradient} backdrop-blur-sm h-full transform transition-all duration-300 hover:shadow-xl`}>
+        <CardHeader className={`pb-2 bg-gradient-to-r ${pattern.headerGradient}`}>
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <div className={`rounded-full p-2 ${pattern.iconBg}`}>
+                {pattern.icon}
+              </div>
+              <div>
+                <CardTitle className="text-lg font-bold">{vehicle}</CardTitle>
+                <CardDescription className="text-xs">AI-generated vehicle story</CardDescription>
+              </div>
+            </div>
+            <div className={`h-8 w-8 rounded-full ${pattern.accent} flex items-center justify-center`}>
+              <Car className="h-4 w-4 text-white" />
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-4 relative">
+          <div className="absolute top-0 right-0 opacity-5">
+            <Car className="h-32 w-32 text-slate-800 dark:text-white" />
+          </div>
+          <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed relative z-10 font-medium">
+            {story}
+          </p>
+        </CardContent>
+        <CardFooter className="pt-0 flex justify-between">
+          <Button variant="ghost" size="sm" className="text-xs">
+            <FileText className="h-3.5 w-3.5 mr-1" />
+            Save to Memory
+          </Button>
+          <Button variant="ghost" size="sm" className="text-xs">
+            <Share className="h-3.5 w-3.5 mr-1" />
+            Share Story
+          </Button>
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 };
 
@@ -288,24 +441,44 @@ const CommunityLeaderboardCard = () => {
   );
 };
 
-const TimelineEvent = ({ icon: Icon, title, date, color }: { icon: any; title: string; date: string; color: string }) => {
+const TimelineEvent = ({ icon: Icon, title, date, color, index }: { icon: any; title: string; date: string; color: string; index: number }) => {
   return (
     <motion.div 
-      className="flex items-start gap-3 group"
+      className="flex items-start gap-3 group rounded-lg p-2 hover:bg-slate-50/50 dark:hover:bg-slate-800/50"
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5 }}
-      whileHover={{ x: 5 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ x: 5, transition: { duration: 0.2 } }}
     >
-      <div className={`rounded-full p-2 ${color} mt-0.5 shadow-md`}>
-        <Icon className="h-4 w-4 text-white" />
-      </div>
-      <div className="flex-1">
-        <div className="flex justify-between">
-          <h4 className="font-medium text-sm">{title}</h4>
-          <span className="text-xs text-gray-500">{date}</span>
+      <div className="relative">
+        <div className={`rounded-full p-2 ${color} shadow-md z-10 relative`}>
+          <Icon className="h-4 w-4 text-white" />
         </div>
-        <div className="mt-0.5 text-xs text-gray-600 dark:text-gray-400 group-hover:text-primary transition-colors">
+        <motion.div 
+          className={`absolute inset-0 rounded-full opacity-40 ${color}`}
+          animate={{ 
+            scale: [1, 1.5, 1],
+            opacity: [0.3, 0.1, 0.3]
+          }}
+          transition={{ 
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: index * 0.2
+          }}
+        />
+      </div>
+      <div className="flex-1 backdrop-blur-sm bg-white/20 dark:bg-slate-700/20 p-2 rounded-lg border border-slate-200/40 dark:border-slate-700/40">
+        <div className="flex justify-between items-center">
+          <h4 className="font-medium text-sm bg-gradient-to-r from-slate-700 to-slate-900 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">{title}</h4>
+          <Badge variant="outline" className="bg-white/60 dark:bg-black/30 text-[10px] h-5 px-2 font-medium">{date}</Badge>
+        </div>
+        <div className="mt-1.5 text-xs text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="m12 16 4-4-4-4"></path>
+            <path d="M8 12h8"></path>
+          </svg>
           <span>View details</span>
         </div>
       </div>
@@ -316,41 +489,58 @@ const TimelineEvent = ({ icon: Icon, title, date, color }: { icon: any; title: s
 const VehicleTimeline = () => {
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold flex items-center gap-2">
-        <Clock className="h-5 w-5 text-blue-500" />
-        Vehicle Timeline
-      </h3>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent flex items-center gap-2">
+          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-1.5 rounded-lg shadow-md">
+            <Clock className="h-4 w-4" />
+          </div>
+          Vehicle Timeline
+        </h3>
+        <Button variant="outline" size="sm" className="text-xs h-8 gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="16"></line>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>
+          Show More
+        </Button>
+      </div>
       
-      <div className="relative pl-6 before:absolute before:left-[9px] before:top-3 before:bottom-3 before:w-0.5 before:bg-gray-200 dark:before:bg-gray-700 space-y-4">
+      <div className="relative pl-6 before:absolute before:left-[9px] before:top-3 before:bottom-3 before:w-0.5 before:bg-gradient-to-b before:from-blue-500 before:via-purple-500 before:to-amber-500 before:opacity-20 dark:before:opacity-30 space-y-4 overflow-hidden">
         <TimelineEvent 
           icon={Calendar} 
           title="Honda City - Regular Service Completed" 
           date="2 weeks ago" 
           color="bg-green-500" 
+          index={0}
         />
         <TimelineEvent 
           icon={Shield} 
           title="Tata Nexon EV - Battery Health Check" 
           date="1 month ago" 
           color="bg-blue-500" 
+          index={1}
         />
         <TimelineEvent 
           icon={FileText} 
           title="TVS iQube - Insurance Renewed" 
           date="2 months ago" 
           color="bg-indigo-500" 
+          index={2}
         />
         <TimelineEvent 
           icon={Car} 
           title="Tata Nexon EV - Major Service" 
           date="4 months ago" 
           color="bg-purple-500" 
+          index={3}
         />
         <TimelineEvent 
           icon={Car} 
           title="TVS iQube - Purchase Date" 
           date="8 months ago" 
           color="bg-amber-500" 
+          index={4}
         />
       </div>
     </div>
@@ -444,13 +634,44 @@ const VehicleVault = () => {
       <div className="container mx-auto px-4 py-6">
         {/* Enhanced header section */}
         <motion.div 
-          className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 text-white p-8 mb-8"
+          className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 text-white p-8 mb-8 shadow-2xl"
           style={{ opacity: headerOpacity }}
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-400/10 to-transparent z-0"></div>
+          {/* Light ray effects */}
+          <div className="absolute -top-20 -left-20 w-64 h-64 bg-blue-400 opacity-20 rounded-full filter blur-3xl z-0"></div>
+          <div className="absolute top-20 right-20 w-48 h-48 bg-indigo-500 opacity-20 rounded-full filter blur-3xl z-0"></div>
+          
+          {/* Animated glow */}
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-indigo-500/5 z-0"
+            animate={{ 
+              opacity: [0.1, 0.2, 0.1],
+            }}
+            transition={{ 
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut" 
+            }}
+          ></motion.div>
+          
+          {/* Particle dots */}
+          <div className="absolute inset-0 z-0">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <div 
+                key={i}
+                className="absolute rounded-full bg-white/40 w-1 h-1"
+                style={{
+                  top: `${Math.random() * 100}%`,
+                  left: `${Math.random() * 100}%`,
+                  animation: `pulse ${Math.random() * 5 + 3}s infinite`
+                }}
+              />
+            ))}
+          </div>
+          
           <motion.div 
             className="absolute -right-10 -bottom-10 z-0"
             animate={{ 
@@ -463,7 +684,7 @@ const VehicleVault = () => {
               ease: "easeInOut" 
             }}
           >
-            <Car className="h-48 w-48 text-white opacity-10" />
+            <Car className="h-48 w-48 text-white opacity-10 filter drop-shadow-xl" />
           </motion.div>
           
           <div className="relative z-10 flex justify-between">
@@ -554,73 +775,132 @@ const VehicleVault = () => {
           style={{ scale: mainContentScale }}
         >
           <FadeInView delay={0.1} direction="up">
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-5 border border-slate-200 dark:border-slate-700">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold flex items-center gap-2">
-                  <HeartPulse className="h-5 w-5 text-red-500" />
-                  Vehicle Health
+            <div className="bg-gradient-to-br from-white via-white to-gray-50 dark:from-slate-800 dark:via-slate-800 dark:to-slate-700 rounded-xl shadow-lg p-6 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm transform transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px]" style={{ animation: "glow 4s infinite" }}>
+              <div className="flex justify-between items-center mb-5">
+                <h3 className="font-bold flex items-center gap-2 text-lg">
+                  <div className="bg-red-100 dark:bg-red-900/30 p-2 rounded-full">
+                    <HeartPulse className="h-5 w-5 text-red-500" />
+                  </div>
+                  <span className="bg-gradient-to-r from-slate-700 to-slate-900 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">Vehicle Health</span>
                 </h3>
-                <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-800">Good</Badge>
+                <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border-0 px-2.5 py-0.5 font-semibold">Good</Badge>
               </div>
               <div className="text-center mb-2">
-                <AnimatedCounter target={75} />
-                <span className="ml-1">%</span>
+                <div className="inline-block relative">
+                  <AnimatedCounter target={75} />
+                  <span className="ml-1 text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-500 bg-clip-text text-transparent">%</span>
+                  <motion.div 
+                    className="absolute inset-0 -z-10 rounded-full bg-green-100 dark:bg-green-900/20 opacity-50"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                </div>
               </div>
-              <Progress value={75} className="h-2 mb-3" />
-              <p className="text-xs text-center text-slate-500">Overall fleet health score</p>
+              <Progress value={75} className="h-2.5 mb-3 bg-green-100 dark:bg-green-900/30">
+                <motion.div
+                  className="absolute inset-0 bg-green-500/20 rounded-full"
+                  animate={{ opacity: [0.2, 0.6, 0.2] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                />
+              </Progress>
+              <p className="text-xs text-center text-slate-500 dark:text-slate-400 font-medium mt-2">Overall fleet health score</p>
             </div>
           </FadeInView>
           
           <FadeInView delay={0.2} direction="up">
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-5 border border-slate-200 dark:border-slate-700">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-amber-500" />
-                  Upcoming Services
+            <div className="bg-gradient-to-br from-white via-white to-gray-50 dark:from-slate-800 dark:via-slate-800 dark:to-slate-700 rounded-xl shadow-lg p-6 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm transform transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px]" style={{ animation: "glow 4s infinite" }}>
+              <div className="flex justify-between items-center mb-5">
+                <h3 className="font-bold flex items-center gap-2 text-lg">
+                  <div className="bg-amber-100 dark:bg-amber-900/30 p-2 rounded-full">
+                    <Calendar className="h-5 w-5 text-amber-500" />
+                  </div>
+                  <span className="bg-gradient-to-r from-slate-700 to-slate-900 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">Upcoming Services</span>
                 </h3>
-                <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-800">Due Soon</Badge>
+                <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-0 px-2.5 py-0.5 font-semibold">Due Soon</Badge>
               </div>
               <div className="text-center mb-2">
-                <AnimatedCounter target={2} duration={1} />
+                <div className="inline-block relative">
+                  <AnimatedCounter target={2} duration={1} />
+                  <motion.div 
+                    className="absolute inset-0 -z-10 rounded-full bg-amber-100 dark:bg-amber-900/20 opacity-50"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                </div>
               </div>
-              <div className="text-xs text-center text-slate-500 space-y-1">
-                <motion.p 
+              <div className="mt-4 space-y-2">
+                <motion.div 
+                  className="p-2 rounded-lg bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-800/20"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 }}
+                  whileHover={{ x: 3 }}
                 >
-                  Honda City - Oil Change (3 days)
-                </motion.p>
-                <motion.p 
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-medium text-amber-800 dark:text-amber-300">Honda City - Oil Change</span>
+                    <Badge variant="outline" className="text-xs font-bold bg-white/80 dark:bg-black/20">3 days</Badge>
+                  </div>
+                </motion.div>
+                <motion.div 
+                  className="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/20"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.8 }}
+                  whileHover={{ x: 3 }}
                 >
-                  Tata Nexon EV - Battery Check (8 days)
-                </motion.p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-medium text-blue-800 dark:text-blue-300">Tata Nexon EV - Battery Check</span>
+                    <Badge variant="outline" className="text-xs font-bold bg-white/80 dark:bg-black/20">8 days</Badge>
+                  </div>
+                </motion.div>
               </div>
             </div>
           </FadeInView>
           
           <FadeInView delay={0.3} direction="up">
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-5 border border-slate-200 dark:border-slate-700">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-red-500" />
-                  Alerts
+            <div className="bg-gradient-to-br from-white via-white to-gray-50 dark:from-slate-800 dark:via-slate-800 dark:to-slate-700 rounded-xl shadow-lg p-6 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm transform transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px]" style={{ animation: "glow 4s infinite" }}>
+              <div className="flex justify-between items-center mb-5">
+                <h3 className="font-bold flex items-center gap-2 text-lg">
+                  <div className="bg-red-100 dark:bg-red-900/30 p-2 rounded-full">
+                    <Shield className="h-5 w-5 text-red-500" />
+                  </div>
+                  <span className="bg-gradient-to-r from-slate-700 to-slate-900 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">Alerts</span>
                 </h3>
-                <Badge variant="outline" className="text-red-600 border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800">Action Required</Badge>
+                <Badge className="bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-0 px-2.5 py-0.5 font-semibold">Action Required</Badge>
               </div>
               <div className="text-center mb-2">
-                <AnimatedCounter target={1} duration={1} />
+                <div className="inline-block relative">
+                  <AnimatedCounter target={1} duration={1} />
+                  <motion.div 
+                    className="absolute inset-0 -z-10 rounded-full bg-red-100 dark:bg-red-900/20 opacity-50"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                </div>
               </div>
               <motion.div 
-                className="text-xs text-center text-red-600 font-medium"
+                className="mt-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800/30"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7 }}
+                whileHover={{ scale: 1.03 }}
               >
-                <p>Honda City - Brake Inspection Required</p>
+                <div className="flex items-start gap-3">
+                  <div className="bg-red-200 dark:bg-red-800/50 rounded-full p-1 mt-0.5">
+                    <Shield className="h-3 w-3 text-red-600 dark:text-red-300" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-red-700 dark:text-red-400">Honda City - Brake Inspection Required</h4>
+                    <div className="mt-1 flex">
+                      <Button size="sm" variant="outline" className="text-[10px] h-6 text-red-600 border-red-200 hover:bg-red-50 rounded-full px-2 py-0 mr-1">
+                        Schedule
+                      </Button>
+                      <Button size="sm" variant="ghost" className="text-[10px] h-6 text-red-600">
+                        Dismiss
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             </div>
           </FadeInView>
