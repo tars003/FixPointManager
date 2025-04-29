@@ -200,7 +200,10 @@ const VehicleFilters: React.FC<VehicleFiltersProps> = ({
                       selected={date}
                       onSelect={(range) => {
                         if (range) {
-                          setDate(range);
+                          setDate({
+                            from: range.from,
+                            to: range.to || range.from // Ensure 'to' is never undefined when selected
+                          });
                         }
                       }}
                       numberOfMonths={2}

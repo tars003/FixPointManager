@@ -46,6 +46,7 @@ import QuickActionMenu from '@/components/vehicle-vault/QuickActionMenu';
 import ContextualHelpTooltip from '@/components/vehicle-vault/ContextualHelpTooltip';
 import InteractiveDataPoint from '@/components/vehicle-vault/InteractiveDataPoint';
 import AnimatedStatusTransition from '@/components/vehicle-vault/AnimatedStatusTransition';
+import VehicleFilters from '@/components/vehicle-vault/VehicleFilters';
 
 // Define Vehicle type to match our vehicleData props
 type Vehicle = {
@@ -1813,19 +1814,57 @@ const VehicleVault = () => {
     { stiffness: 300, damping: 30 }
   );
   
-  // Filter vehicles by category
+  // Filter vehicles by category, search, fuel type, and date
   const getFilteredVehicles = () => {
+    let filteredData = [...vehicleData];
+    
+    // Category filter
     if (selectedCategory === 'two-wheelers') {
-      return vehicleData.filter(v => v.vehicle.includes('TVS') || v.vehicle.includes('Royal Enfield'));
+      filteredData = filteredData.filter(v => v.vehicle.includes('TVS') || v.vehicle.includes('Royal Enfield'));
     } else if (selectedCategory === 'cars') {
-      return vehicleData.filter(v => v.vehicle.includes('Tata') || v.vehicle.includes('Honda') || v.vehicle.includes('Mahindra'));
+      filteredData = filteredData.filter(v => v.vehicle.includes('Tata') || v.vehicle.includes('Honda') || v.vehicle.includes('Mahindra'));
     } else if (selectedCategory === 'commercial') {
-      return vehicleData.filter(v => v.vehicle.includes('Mahindra') || v.vehicle.includes('XUV'));
+      filteredData = filteredData.filter(v => v.vehicle.includes('Mahindra') || v.vehicle.includes('XUV'));
     } else if (selectedCategory === 'three-wheelers') {
       // No three-wheelers in our data, so return an empty array
       return [];
     }
-    return vehicleData;
+    
+    // Search filter
+    if (searchFilter) {
+      const searchLower = searchFilter.toLowerCase();
+      filteredData = filteredData.filter(v => 
+        v.vehicle.toLowerCase().includes(searchLower) || 
+        (v.registrationNumber && v.registrationNumber.toLowerCase().includes(searchLower)) ||
+        (v.owner && v.owner.toLowerCase().includes(searchLower))
+      );
+    }
+    
+    // Fuel type filter
+    if (fuelTypeFilter && fuelTypeFilter !== 'all') {
+      filteredData = filteredData.filter(v => v.fuelType.toLowerCase() === fuelTypeFilter.toLowerCase());
+    }
+    
+    // Date range filter
+    if (dateRangeFilter.from || dateRangeFilter.to) {
+      filteredData = filteredData.filter(v => {
+        const purchaseDate = new Date(v.purchaseDate);
+        
+        // If from date is set, check if purchase date is after from date
+        if (dateRangeFilter.from && purchaseDate < dateRangeFilter.from) {
+          return false;
+        }
+        
+        // If to date is set, check if purchase date is before to date
+        if (dateRangeFilter.to && purchaseDate > dateRangeFilter.to) {
+          return false;
+        }
+        
+        return true;
+      });
+    }
+    
+    return filteredData;
   };
   
   const filteredVehicles = getFilteredVehicles();
@@ -2159,7 +2198,11 @@ const VehicleVault = () => {
                     {/* Real-time filters */}
                     <VehicleFilters
                       statusTitle={selectedStatus || 'Active'}
-                      onFilterChange={(filters) => {
+                      onFilterChange={(filters: { 
+                        search: string; 
+                        fuelType: string; 
+                        dateRange: { from: Date | undefined; to: Date | undefined }; 
+                      }) => {
                         setSearchFilter(filters.search);
                         setFuelTypeFilter(filters.fuelType);
                         setDateRangeFilter(filters.dateRange);
@@ -2312,7 +2355,20 @@ const VehicleVault = () => {
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="pt-6">
+                <CardContent className="pt-4">
+                  {/* Real-time filters */}
+                  <VehicleFilters
+                    statusTitle={`${selectedStatus || 'Active'} Documents`}
+                    onFilterChange={(filters: { 
+                      search: string; 
+                      fuelType: string; 
+                      dateRange: { from: Date | undefined; to: Date | undefined }; 
+                    }) => {
+                      setSearchFilter(filters.search);
+                      setFuelTypeFilter(filters.fuelType);
+                      setDateRangeFilter(filters.dateRange);
+                    }}
+                  />
                   {selectedStatus === 'Active' && (
                     <>
                       {!selectedDocumentVehicle ? (
