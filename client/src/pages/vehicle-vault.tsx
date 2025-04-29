@@ -1997,7 +1997,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Leased Out')}
                 >
                   <KeyRound className="h-3.5 w-3.5" />
-                  Leased Out
+                  <span className="flex items-center gap-1">
+                    Leased Out
+                    <span className="inline-flex items-center justify-center bg-emerald-200 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Leased Out' ? (
+                        <AnimatedCounter target={5} duration={1} />
+                      ) : 5}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
@@ -2005,7 +2012,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('For Sale')}
                 >
                   <Tag className="h-3.5 w-3.5" />
-                  For Sale
+                  <span className="flex items-center gap-1">
+                    For Sale
+                    <span className="inline-flex items-center justify-center bg-pink-200 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'For Sale' ? (
+                        <AnimatedCounter target={4} duration={1} />
+                      ) : 4}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
@@ -2013,7 +2027,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Sold')}
                 >
                   <CheckCircle className="h-3.5 w-3.5" />
-                  Sold
+                  <span className="flex items-center gap-1">
+                    Sold
+                    <span className="inline-flex items-center justify-center bg-violet-200 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Sold' ? (
+                        <AnimatedCounter target={8} duration={1} />
+                      ) : 8}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
