@@ -70,45 +70,7 @@ function Router() {
               </motion.div>
             )}
           </Route>
-          <Route path="/vehicles">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <MyVehicles />
-              </motion.div>
-            )}
-          </Route>
-          <Route path="/vehicles/add">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <AddVehicle />
-              </motion.div>
-            )}
-          </Route>
-          <Route path="/vehicles/:id">
-            {(params) => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <VehicleDetail />
-              </motion.div>
-            )}
-          </Route>
+          {/* /vehicles routes have been removed and replaced by /vehicle-vault */}
           <Route path="/book-service">
             {() => (
               <motion.div

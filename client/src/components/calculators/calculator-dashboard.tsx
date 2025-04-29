@@ -12,7 +12,7 @@ import {
   TrendingUp,
   Scale,
   TimerReset,
-  DollarSign,
+  IndianRupee,
   Fuel,
   BarChart3,
   LineChart,

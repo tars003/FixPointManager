@@ -446,7 +446,7 @@ const CustomizationCategories: React.FC<CustomizationCategoriesProps> = ({
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <DollarSign className="h-4 w-4 text-primary" />
+                      <IndianRupee className="h-4 w-4 text-primary" />
                       <span className="font-semibold">{formatCurrency(product.price)}</span>
                     </div>
                     
