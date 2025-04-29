@@ -21,7 +21,9 @@ type TipType =
   'tax' | 
   'pollution' |
   'commercialFleet' |
-  'leasedOut';
+  'leasedOut' |
+  'forSale' |
+  'sold';
 
 interface ContextualHelpTooltipProps {
   tipType: TipType;
@@ -174,6 +176,22 @@ const ContextualHelpTooltip = ({
           <div className="max-w-xs">
             <h4 className="font-semibold text-sm">Leased Vehicle Management</h4>
             <p className="text-xs mt-1">Keep detailed documentation of lease terms, maintenance responsibilities, mileage restrictions, and payment schedules. Regular inspection reports help prevent disputes at lease-end.</p>
+          </div>
+        );
+        
+      case 'forSale':
+        return (
+          <div className="max-w-xs">
+            <h4 className="font-semibold text-sm">Vehicle For Sale</h4>
+            <p className="text-xs mt-1">When selling a vehicle, prepare complete service history, ownership documents, and NOC from financier (if applicable). High-quality photos and transparent disclosure of conditions speed up the sale process.</p>
+          </div>
+        );
+        
+      case 'sold':
+        return (
+          <div className="max-w-xs">
+            <h4 className="font-semibold text-sm">Vehicle Transfer Process</h4>
+            <p className="text-xs mt-1">After selling a vehicle, the RC transfer process requires Form 29/30, PUC certificate, insurance transfer, and payment receipts. Track the transfer status to ensure legal compliance.</p>
           </div>
         );
         
