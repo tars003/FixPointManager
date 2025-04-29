@@ -1,249 +1,245 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Car,
-  ShoppingBag,
-  RefreshCw,
-  Wrench,
-  Warehouse,
-  AlertOctagon,
-  Building2,
-  KeyRound,
-  Tag,
-  CheckCircle,
-  AlertTriangle,
-  Shield,
-  FileX,
-  Trash2,
-  Scale
-} from 'lucide-react';
+import { CheckCircle, AlertTriangle, Clock, Lock, Archive, Wrench, DollarSign, Building2, Truck, Map, ExternalLink } from 'lucide-react';
 
 type VehicleStatus = 
   'Active' | 
   'Recently Purchased' | 
-  'Pre-owned' | 
   'In Maintenance' | 
-  'Garage Stored' | 
   'Out of Service' | 
+  'Garage Stored' | 
   'Commercial Fleet' | 
-  'Leased Out' | 
-  'For Sale' | 
-  'Sold' | 
-  'Impounded' | 
-  'Under Legal Hold' | 
-  'Stolen' | 
+  'Leased Out' |
+  'For Sale' |
+  'Sold' |
+  'Impounded' |
+  'Under Legal Hold' |
+  'Stolen' |
   'Scrapped' |
   'Totaled';
 
 interface AnimatedStatusTransitionProps {
   previousStatus?: VehicleStatus;
   currentStatus: VehicleStatus;
+  duration?: number;
   showLabel?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  onComplete?: () => void;
 }
 
-const AnimatedStatusTransition = ({
+const AnimatedStatusTransition: React.FC<AnimatedStatusTransitionProps> = ({
   previousStatus,
   currentStatus,
-  showLabel = true,
-  size = 'md',
-  onComplete,
-}: AnimatedStatusTransitionProps) => {
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [showTransition, setShowTransition] = useState(false);
+  duration = 2000,
+  showLabel = true
+}) => {
+  const [isTransitioning, setIsTransitioning] = useState(!!previousStatus);
+  const [showPrevious, setShowPrevious] = useState(!!previousStatus);
   
   useEffect(() => {
-    if (previousStatus && previousStatus !== currentStatus) {
-      setIsAnimating(true);
-      setShowTransition(true);
+    if (previousStatus) {
+      setShowPrevious(true);
+      setIsTransitioning(true);
       
       const timer = setTimeout(() => {
-        setShowTransition(false);
-        
-        setTimeout(() => {
-          setIsAnimating(false);
-          if (onComplete) onComplete();
-        }, 500);
-      }, 2000);
+        setShowPrevious(false);
+      }, duration / 2);
       
-      return () => clearTimeout(timer);
+      const endTimer = setTimeout(() => {
+        setIsTransitioning(false);
+      }, duration);
+      
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(endTimer);
+      };
     }
-  }, [previousStatus, currentStatus, onComplete]);
+  }, [previousStatus, duration]);
   
-  const getStatusColor = (status: VehicleStatus) => {
-    switch (status) {
-      case 'Active': return 'bg-green-500';
-      case 'Recently Purchased': return 'bg-blue-500';
-      case 'Pre-owned': return 'bg-indigo-500';
-      case 'In Maintenance': return 'bg-amber-500';
-      case 'Garage Stored': return 'bg-sky-500';
-      case 'Out of Service': return 'bg-slate-500';
-      case 'Commercial Fleet': return 'bg-purple-500';
-      case 'Leased Out': return 'bg-emerald-500';
-      case 'For Sale': return 'bg-pink-500';
-      case 'Sold': return 'bg-violet-500';
-      case 'Impounded': return 'bg-rose-500';
-      case 'Under Legal Hold': return 'bg-yellow-500';
-      case 'Stolen': return 'bg-red-500';
-      case 'Scrapped': return 'bg-gray-500';
-      case 'Totaled': return 'bg-stone-500';
-      default: return 'bg-green-500';
-    }
-  };
-  
-  const getStatusTextColor = (status: VehicleStatus) => {
-    switch (status) {
-      case 'Active': return 'text-green-500';
-      case 'Recently Purchased': return 'text-blue-500';
-      case 'Pre-owned': return 'text-indigo-500';
-      case 'In Maintenance': return 'text-amber-500';
-      case 'Garage Stored': return 'text-sky-500';
-      case 'Out of Service': return 'text-slate-500';
-      case 'Commercial Fleet': return 'text-purple-500';
-      case 'Leased Out': return 'text-emerald-500';
-      case 'For Sale': return 'text-pink-500';
-      case 'Sold': return 'text-violet-500';
-      case 'Impounded': return 'text-rose-500';
-      case 'Under Legal Hold': return 'text-yellow-500';
-      case 'Stolen': return 'text-red-500';
-      case 'Scrapped': return 'text-gray-500';
-      case 'Totaled': return 'text-stone-500';
-      default: return 'text-green-500';
-    }
-  };
-  
-  const getStatusIcon = (status: VehicleStatus, size: string) => {
-    const sizeClasses = {
-      sm: 'h-4 w-4',
-      md: 'h-5 w-5',
-      lg: 'h-6 w-6',
-    };
-    
-    const iconClass = sizeClasses[size as keyof typeof sizeClasses];
-    
-    switch (status) {
-      case 'Active': 
-        return <Car className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'Recently Purchased': 
-        return <ShoppingBag className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'Pre-owned': 
-        return <RefreshCw className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'In Maintenance': 
-        return <Wrench className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'Garage Stored': 
-        return <Warehouse className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'Out of Service': 
-        return <AlertOctagon className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'Commercial Fleet': 
-        return <Building2 className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'Leased Out': 
-        return <KeyRound className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'For Sale': 
-        return <Tag className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'Sold': 
-        return <CheckCircle className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'Impounded': 
-        return <Shield className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'Under Legal Hold': 
-        return <Scale className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'Stolen': 
-        return <AlertTriangle className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'Scrapped': 
-        return <Trash2 className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      case 'Totaled': 
-        return <FileX className={`${iconClass} ${getStatusTextColor(status)}`} />;
-      default: 
-        return <Car className={`${iconClass} ${getStatusTextColor(status)}`} />;
+  const getIconByStatus = (status: VehicleStatus) => {
+    switch(status) {
+      case 'Active':
+        return <CheckCircle className="text-emerald-500" />;
+      case 'Recently Purchased':
+        return <CheckCircle className="text-blue-500" />;
+      case 'In Maintenance':
+        return <Wrench className="text-amber-500" />;
+      case 'Out of Service':
+        return <AlertTriangle className="text-red-500" />;
+      case 'Garage Stored':
+        return <Archive className="text-purple-500" />;
+      case 'Commercial Fleet':
+        return <Truck className="text-indigo-500" />;
+      case 'Leased Out':
+        return <ExternalLink className="text-cyan-500" />;
+      case 'For Sale':
+        return <DollarSign className="text-green-500" />;
+      case 'Sold':
+        return <CheckCircle className="text-green-400" />;
+      case 'Impounded':
+        return <Building2 className="text-slate-500" />;
+      case 'Under Legal Hold':
+        return <Lock className="text-yellow-500" />;
+      case 'Stolen':
+        return <AlertTriangle className="text-red-600" />;
+      case 'Scrapped':
+        return <Wrench className="text-gray-500" />;
+      case 'Totaled':
+        return <AlertTriangle className="text-gray-600" />;
+      default:
+        return <Clock className="text-blue-500" />;
     }
   };
   
-  const sizeClasses = {
-    sm: {
-      container: 'text-xs',
-      icon: 'h-4 w-4',
-      text: 'text-xs',
-      arrow: 'w-3 h-3',
+  const getColorByStatus = (status: VehicleStatus) => {
+    switch(status) {
+      case 'Active':
+        return 'bg-emerald-100 border-emerald-300 text-emerald-800 dark:bg-emerald-900/30 dark:border-emerald-700 dark:text-emerald-300';
+      case 'Recently Purchased':
+        return 'bg-blue-100 border-blue-300 text-blue-800 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-300';
+      case 'In Maintenance':
+        return 'bg-amber-100 border-amber-300 text-amber-800 dark:bg-amber-900/30 dark:border-amber-700 dark:text-amber-300';
+      case 'Out of Service':
+        return 'bg-red-100 border-red-300 text-red-800 dark:bg-red-900/30 dark:border-red-700 dark:text-red-300';
+      case 'Garage Stored':
+        return 'bg-purple-100 border-purple-300 text-purple-800 dark:bg-purple-900/30 dark:border-purple-700 dark:text-purple-300';
+      case 'Commercial Fleet':
+        return 'bg-indigo-100 border-indigo-300 text-indigo-800 dark:bg-indigo-900/30 dark:border-indigo-700 dark:text-indigo-300';
+      case 'Leased Out':
+        return 'bg-cyan-100 border-cyan-300 text-cyan-800 dark:bg-cyan-900/30 dark:border-cyan-700 dark:text-cyan-300';
+      case 'For Sale':
+        return 'bg-green-100 border-green-300 text-green-800 dark:bg-green-900/30 dark:border-green-700 dark:text-green-300';
+      case 'Sold':
+        return 'bg-green-100 border-green-300 text-green-800 dark:bg-green-900/30 dark:border-green-700 dark:text-green-300';
+      case 'Impounded':
+        return 'bg-slate-100 border-slate-300 text-slate-800 dark:bg-slate-900/30 dark:border-slate-700 dark:text-slate-300';
+      case 'Under Legal Hold':
+        return 'bg-yellow-100 border-yellow-300 text-yellow-800 dark:bg-yellow-900/30 dark:border-yellow-700 dark:text-yellow-300';
+      case 'Stolen':
+        return 'bg-red-100 border-red-300 text-red-800 dark:bg-red-900/30 dark:border-red-700 dark:text-red-300';
+      case 'Scrapped':
+        return 'bg-gray-100 border-gray-300 text-gray-800 dark:bg-gray-900/30 dark:border-gray-700 dark:text-gray-300';
+      case 'Totaled':
+        return 'bg-gray-100 border-gray-300 text-gray-800 dark:bg-gray-900/30 dark:border-gray-700 dark:text-gray-300';
+      default:
+        return 'bg-blue-100 border-blue-300 text-blue-800 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-300';
+    }
+  };
+
+  const transitionVariants = {
+    initial: { 
+      opacity: 0,
+      y: -10,
+      scale: 0.9
     },
-    md: {
-      container: 'text-sm',
-      icon: 'h-5 w-5',
-      text: 'text-sm',
-      arrow: 'w-4 h-4',
+    animate: { 
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.3 }
     },
-    lg: {
-      container: 'text-base',
-      icon: 'h-6 w-6',
-      text: 'text-base',
-      arrow: 'w-5 h-5',
-    },
+    exit: { 
+      opacity: 0, 
+      y: 10,
+      scale: 0.9,
+      transition: { duration: 0.3 }
+    }
   };
   
-  if (!isAnimating && !previousStatus) {
-    // Just show current status without animation
-    return (
-      <div className={`inline-flex items-center gap-1.5 ${sizeClasses[size].container}`}>
-        {getStatusIcon(currentStatus, size)}
-        {showLabel && <span className={`font-medium ${getStatusTextColor(currentStatus)}`}>{currentStatus}</span>}
-      </div>
-    );
-  }
+  const containerVariants = {
+    transitioning: {
+      borderColor: ['rgba(200, 200, 200, 0.5)', 'rgba(250, 250, 250, 0.8)', 'rgba(200, 200, 200, 0.5)'],
+      boxShadow: ['0 0 0 rgba(150, 150, 250, 0)', '0 0 20px rgba(150, 150, 250, 0.5)', '0 0 0 rgba(150, 150, 250, 0)'],
+      transition: {
+        duration: duration / 1000,
+        times: [0, 0.5, 1],
+        repeat: 0
+      }
+    },
+    static: {
+      transition: {
+        duration: 0.3
+      }
+    }
+  };
   
   return (
-    <div className="relative">
-      <AnimatePresence>
-        {showTransition && previousStatus && (
-          <motion.div
-            className="absolute inset-0 flex items-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex items-center gap-1">
+    <motion.div 
+      className={`inline-flex items-center border rounded-full overflow-hidden transition-colors relative ${
+        isTransitioning ? 'border-gray-300 dark:border-gray-600' : getColorByStatus(currentStatus)
+      }`}
+      variants={containerVariants}
+      animate={isTransitioning ? 'transitioning' : 'static'}
+    >
+      <div className="pl-3 pr-3 py-1.5 flex items-center">
+        <AnimatePresence mode="wait">
+          {showPrevious && previousStatus ? (
+            <motion.div
+              key="previous"
+              className="h-5 w-5"
+              variants={transitionVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              {getIconByStatus(previousStatus)}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="current"
+              className="h-5 w-5"
+              variants={transitionVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              {getIconByStatus(currentStatus)}
+            </motion.div>
+          )}
+        </AnimatePresence>
+        
+        {showLabel && (
+          <AnimatePresence mode="wait">
+            {showPrevious && previousStatus ? (
               <motion.div
-                initial={{ x: 0 }}
-                animate={{ x: -20 }}
-                transition={{ duration: 0.5 }}
-                className="flex items-center gap-1.5"
+                key="previous-label"
+                className="ml-2 text-sm font-medium"
+                variants={transitionVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
               >
-                {getStatusIcon(previousStatus, size)}
-                {showLabel && <span className={`font-medium ${getStatusTextColor(previousStatus)}`}>{previousStatus}</span>}
+                {previousStatus}
               </motion.div>
-              
+            ) : (
               <motion.div
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="mx-2 h-0.5 w-10 bg-gradient-to-r from-slate-300 to-slate-400 dark:from-slate-600 dark:to-slate-500"
-              />
-              
-              <motion.div
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 1 }}
-                className="flex items-center gap-1.5"
+                key="current-label"
+                className="ml-2 text-sm font-medium"
+                variants={transitionVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
               >
-                {getStatusIcon(currentStatus, size)}
-                {showLabel && <span className={`font-medium ${getStatusTextColor(currentStatus)}`}>{currentStatus}</span>}
+                {currentStatus}
               </motion.div>
-            </div>
-          </motion.div>
+            )}
+          </AnimatePresence>
         )}
-      </AnimatePresence>
+      </div>
       
-      {!showTransition && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          className="flex items-center gap-1.5"
-        >
-          {getStatusIcon(currentStatus, size)}
-          {showLabel && <span className={`font-medium ${getStatusTextColor(currentStatus)}`}>{currentStatus}</span>}
-        </motion.div>
+      {isTransitioning && (
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+          initial={{ x: -100 }}
+          animate={{ x: 200 }}
+          transition={{
+            duration: duration / 1000,
+            ease: "linear",
+            times: [0, 1],
+            repeat: Infinity,
+            repeatType: "loop"
+          }}
+        />
       )}
-    </div>
+    </motion.div>
   );
 };
 

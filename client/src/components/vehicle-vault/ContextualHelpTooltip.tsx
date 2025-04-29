@@ -15,6 +15,7 @@ type TipType =
   'lease' | 
   'sale' | 
   'outOfService' | 
+  'nonOperational' |
   'document' | 
   'insurance' | 
   'tax' | 
@@ -115,6 +116,14 @@ const ContextualHelpTooltip = ({
           <div className="max-w-xs">
             <h4 className="font-semibold text-sm">Out of Service Vehicles</h4>
             <p className="text-xs mt-1">For vehicles temporarily decommissioned, file a non-use declaration with RTO to avoid tax liabilities. Keep insurance active to cover theft or damage.</p>
+          </div>
+        );
+        
+      case 'nonOperational':
+        return (
+          <div className="max-w-xs">
+            <h4 className="font-semibold text-sm">Non-Operational Status</h4>
+            <p className="text-xs mt-1">Vehicles with major mechanical failures require official non-operational status declaration with RTO. This suspends certain tax obligations while maintaining legal ownership.</p>
           </div>
         );
         
