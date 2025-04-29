@@ -4640,9 +4640,25 @@ const VehicleVault = () => {
                   {selectedStatus === 'Leased Out' && (
                     <>
                       {!selectedDocumentVehicle ? (
-                        // Vehicle Selection State for Leased Out
-                        <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-6 mb-6">
-                          <h3 className="text-lg font-semibold text-center mb-4 text-emerald-700 dark:text-emerald-400">Select a Leased Out Vehicle</h3>
+                        // Vehicle Selection State for Leased Out - Enhanced version
+                        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 rounded-lg p-6 mb-6 border border-emerald-100 dark:border-emerald-900/20 shadow-sm">
+                          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+                            <h3 className="text-xl font-semibold text-center sm:text-left mb-3 sm:mb-0 text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+                              <KeyRound className="h-5 w-5" />
+                              Leased Out Vehicles
+                            </h3>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-emerald-200 dark:border-emerald-800">
+                                <FilterX className="h-3.5 w-3.5" />
+                                Filter
+                              </Button>
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-emerald-200 dark:border-emerald-800">
+                                <ChevronsDown className="h-3.5 w-3.5" />
+                                Sort by Date
+                              </Button>
+                            </div>
+                          </div>
+                          
                           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                             {vehicleData
                               .filter(vehicle => vehicle.status === 'Leased Out' || (vehicle.leaseStartDate !== undefined))
