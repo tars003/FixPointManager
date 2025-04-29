@@ -3336,69 +3336,104 @@ const VehicleVault = () => {
                   {selectedStatus === 'Pre-Owned' && (
                     <>
                       {!selectedDocumentVehicle ? (
-                        // Vehicle Selection State for Pre-Owned
-                        <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-6 mb-6">
-                          <h3 className="text-lg font-semibold text-center mb-4 text-purple-700 dark:text-purple-400">Select a Pre-Owned Vehicle</h3>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                        // Vehicle Selection State for Pre-Owned vehicles
+                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-lg p-6 mb-6 border border-blue-100 dark:border-blue-900/20 shadow-sm">
+                          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+                            <h3 className="text-xl font-semibold text-center sm:text-left mb-3 sm:mb-0 text-blue-700 dark:text-blue-400 flex items-center gap-2">
+                              <ShoppingBag className="h-5 w-5" />
+                              Pre-owned Vehicles
+                            </h3>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-blue-200 dark:border-blue-800">
+                                <FilterX className="h-3.5 w-3.5" />
+                                Filter
+                              </Button>
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-blue-200 dark:border-blue-800">
+                                <Calendar className="h-3.5 w-3.5" />
+                                Sort by Date
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             {vehicleData
                               .slice(11, 14) // Pre-owned vehicles (IDs 11-13)
                               .map((vehicle) => (
-                                <Card 
-                                  key={vehicle.id} 
-                                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${selectedDocumentVehicle?.id === vehicle.id ? 'border-purple-500 dark:border-purple-400' : 'border-transparent'}`}
+                                <div
+                                  key={vehicle.id}
+                                  className="bg-white dark:bg-slate-900/80 border rounded-lg shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
                                   onClick={() => setSelectedDocumentVehicle(vehicle)}
                                 >
-                                  <CardContent className="p-4">
-                                    <div className="aspect-video w-full overflow-hidden rounded-md mb-3 relative">
-                                      <img 
-                                        src={vehicle.image} 
-                                        alt={vehicle.vehicle} 
-                                        className="w-full h-full object-cover"
-                                      />
-                                      <div className="absolute top-2 right-2 bg-purple-500 text-white text-xs px-2 py-1 rounded-full">
-                                        Pre-Owned
+                                  <div className="relative aspect-video w-full overflow-hidden">
+                                    <img
+                                      src={vehicle.image}
+                                      alt={vehicle.vehicle}
+                                      className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute top-0 right-0 bg-blue-500 text-white text-xs px-3 py-1 rounded-bl-lg font-medium">
+                                      Pre-owned
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="p-4">
+                                    <h3 className="font-semibold text-base mb-1">{vehicle.vehicle}</h3>
+                                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                      <span>{vehicle.fuelType}</span>
+                                      <span>•</span>
+                                      <span>{new Intl.NumberFormat('en-IN').format(vehicle.mileage)} km</span>
+                                    </div>
+                                    
+                                    <div className="flex justify-between items-center mb-2">
+                                      <div className="text-blue-600 dark:text-blue-400 font-medium">
+                                        Owners: {(vehicle as any).previousOwners || 1}
+                                      </div>
+                                      <div className={`px-3 py-1 text-xs rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400`}>
+                                        {(vehicle as any).purchaseType || 'Certified'}
                                       </div>
                                     </div>
-                                    <div className="space-y-1">
-                                      <h4 className="font-semibold">{vehicle.vehicle}</h4>
-                                      <p className="text-xs text-slate-500">{vehicle.registrationNumber}</p>
-                                      <div className="flex justify-between items-center">
-                                        <Badge variant="outline" className="text-xs px-2 py-0 bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">
-                                          {vehicle.fuelType}
-                                        </Badge>
-                                        <p className="text-xs text-slate-500">Certified: {(vehicle as any).certifiedBy.split(' ')[0]}</p>
+                                    
+                                    <div className="flex flex-col gap-1.5 text-sm mt-3 text-gray-500 dark:text-gray-400">
+                                      <div className="flex items-center gap-1.5">
+                                        <BadgeCheck className="h-4 w-4 text-gray-400" />
+                                        {(vehicle as any).certifiedBy || 'Dealer Certified'}
+                                      </div>
+                                      <div className="flex items-center gap-1.5">
+                                        <Calendar className="h-4 w-4 text-gray-400" />
+                                        Purchased: {vehicle.purchaseDate}
                                       </div>
                                     </div>
-                                  </CardContent>
-                                </Card>
+                                  </div>
+                                </div>
                               ))}
                           </div>
                         </div>
                       ) : (
                         // Pre-Owned Vehicle Documents Display
                         <div className="space-y-6">
-                          <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 mb-6 flex justify-between items-center">
-                            <div className="flex items-center gap-3">
-                              <Avatar>
-                                <AvatarImage src={selectedDocumentVehicle.image} />
-                                <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
-                              </Avatar>
-                              <div>
-                                <h3 className="font-semibold">{selectedDocumentVehicle.vehicle}</h3>
-                                <div className="flex items-center gap-2">
-                                  <p className="text-sm text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>
-                                  <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">Pre-Owned</Badge>
+                          {/* Vehicle Info Card */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mb-6">
+                            <div className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                              <div className="flex items-center gap-4">
+                                <Avatar className="h-16 w-16 rounded-lg border border-gray-200 dark:border-gray-700">
+                                  <AvatarImage src={selectedDocumentVehicle.image} alt={selectedDocumentVehicle.vehicle} className="object-cover" />
+                                  <AvatarFallback className="rounded-lg">
+                                    <Car className="h-8 w-8 text-gray-400" />
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                  <h3 className="font-semibold flex items-center gap-2">
+                                    {selectedDocumentVehicle.vehicle}
+                                    <AnimatedStatusTransition 
+                                      currentStatus="Pre-Owned"
+                                    />
+                                  </h3>
+                                  <p className="text-xs text-gray-500">{selectedDocumentVehicle.registrationNumber}</p>
                                 </div>
                               </div>
+                              <Button variant="outline" size="sm" onClick={() => setSelectedDocumentVehicle(null)}>
+                                Change Vehicle
+                              </Button>
                             </div>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              onClick={() => setSelectedDocumentVehicle(null)}
-                              className="text-purple-700 dark:text-purple-400"
-                            >
-                              Change Vehicle
-                            </Button>
                           </div>
                           
                           {/* Vehicle History */}
@@ -5056,53 +5091,55 @@ const VehicleVault = () => {
                             </div>
                           </div>
                           
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             {vehicleData
                               .filter(vehicle => vehicle.status === 'Totaled' || (vehicle as any).totalLossDate !== undefined)
                               .map((vehicle) => (
-                                <Card 
-                                  key={vehicle.id} 
-                                  className={`cursor-pointer transition-all hover:shadow-lg group hover:border-purple-300 dark:hover:border-purple-700`}
+                                <div
+                                  key={vehicle.id}
+                                  className="bg-white dark:bg-slate-900/80 border rounded-lg shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
                                   onClick={() => setSelectedDocumentVehicle(vehicle)}
                                 >
-                                  <CardContent className="p-0 overflow-hidden">
-                                    <div className="aspect-video w-full overflow-hidden relative">
-                                      <img 
-                                        src={vehicle.image} 
-                                        alt={vehicle.vehicle} 
-                                        className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500 contrast-75 brightness-90"
-                                      />
-                                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/60 to-transparent opacity-70"></div>
-                                      <div className="absolute top-2 right-2 bg-purple-500 dark:bg-purple-600 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
-                                        Totaled
+                                  <div className="relative aspect-video w-full overflow-hidden">
+                                    <img
+                                      src={vehicle.image}
+                                      alt={vehicle.vehicle}
+                                      className="w-full h-full object-cover contrast-75 brightness-90"
+                                    />
+                                    <div className="absolute top-0 right-0 bg-purple-500 text-white text-xs px-3 py-1 rounded-bl-lg font-medium">
+                                      Totaled
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="p-4">
+                                    <h3 className="font-semibold text-base mb-1">{vehicle.vehicle}</h3>
+                                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                      <span>{vehicle.fuelType}</span>
+                                      <span>•</span>
+                                      <span>{new Intl.NumberFormat('en-IN').format(vehicle.mileage)} km</span>
+                                    </div>
+                                    
+                                    <div className="flex justify-between items-center mb-2">
+                                      <div className="text-purple-600 dark:text-purple-400 font-medium">
+                                        Claim #{(vehicle as any).claimNumber?.substring(0, 7) || '5423'}
                                       </div>
-                                      <div className="absolute bottom-0 left-0 w-full p-3 text-white">
-                                        <h4 className="font-semibold text-sm">{vehicle.vehicle}</h4>
-                                        <div className="flex items-center gap-2 mt-1">
-                                          <span className="text-xs opacity-90">{vehicle.fuelType}</span>
-                                          <span className="text-xs opacity-90">•</span>
-                                          <span className="text-xs opacity-90">{new Intl.NumberFormat('en-IN').format(vehicle.mileage)} km</span>
-                                        </div>
+                                      <div className={`px-3 py-1 text-xs rounded-full bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400`}>
+                                        {(vehicle as any).claimStatus || 'Under Review'}
                                       </div>
                                     </div>
-                                    <div className="p-3">
-                                      <div className="flex justify-between items-center">
-                                        <div className="text-sm font-semibold text-purple-600 dark:text-purple-400">Claim #{(vehicle as any).claimNumber?.substring(0, 7) || 'Pending'}</div>
-                                        <Badge variant="outline" className="bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">
-                                          {(vehicle as any).claimStatus || 'Processing'}
-                                        </Badge>
-                                      </div>
-                                      <div className="mt-2 text-xs flex items-center gap-1 text-gray-500 dark:text-gray-400">
-                                        <ShieldCheck className="h-3 w-3" />
+                                    
+                                    <div className="flex flex-col gap-1.5 text-sm mt-3 text-gray-500 dark:text-gray-400">
+                                      <div className="flex items-center gap-1.5">
+                                        <ShieldCheck className="h-4 w-4 text-gray-400" />
                                         {(vehicle as any).insuranceProvider || 'ICICI Lombard'}
                                       </div>
-                                      <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center">
-                                        <Calendar className="h-3 w-3 mr-1" />
-                                        Incident: {(vehicle as any).incidentDate || 'Recently'}
+                                      <div className="flex items-center gap-1.5">
+                                        <Calendar className="h-4 w-4 text-gray-400" />
+                                        Incident: {(vehicle as any).incidentDate || 'April 05, 2025'}
                                       </div>
                                     </div>
-                                  </CardContent>
-                                </Card>
+                                  </div>
+                                </div>
                               ))}
                           </div>
                         </div>
@@ -5343,53 +5380,55 @@ const VehicleVault = () => {
                             </div>
                           </div>
                           
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             {vehicleData
                               .filter(vehicle => vehicle.status === 'Scrapped' || (vehicle as any).scrappingDate !== undefined)
                               .map((vehicle) => (
-                                <Card 
-                                  key={vehicle.id} 
-                                  className={`cursor-pointer transition-all hover:shadow-lg group hover:border-gray-300 dark:hover:border-gray-700`}
+                                <div
+                                  key={vehicle.id}
+                                  className="bg-white dark:bg-slate-900/80 border rounded-lg shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
                                   onClick={() => setSelectedDocumentVehicle(vehicle)}
                                 >
-                                  <CardContent className="p-0 overflow-hidden">
-                                    <div className="aspect-video w-full overflow-hidden relative">
-                                      <img 
-                                        src={vehicle.image} 
-                                        alt={vehicle.vehicle} 
-                                        className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500 grayscale"
-                                      />
-                                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/60 to-transparent opacity-70"></div>
-                                      <div className="absolute top-2 right-2 bg-gray-500 dark:bg-gray-600 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
-                                        Scrapped
+                                  <div className="relative aspect-video w-full overflow-hidden">
+                                    <img
+                                      src={vehicle.image}
+                                      alt={vehicle.vehicle}
+                                      className="w-full h-full object-cover grayscale"
+                                    />
+                                    <div className="absolute top-0 right-0 bg-gray-500 text-white text-xs px-3 py-1 rounded-bl-lg font-medium">
+                                      Scrapped
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="p-4">
+                                    <h3 className="font-semibold text-base mb-1">{vehicle.vehicle}</h3>
+                                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                      <span>{vehicle.fuelType}</span>
+                                      <span>•</span>
+                                      <span>{new Intl.NumberFormat('en-IN').format(vehicle.mileage)} km</span>
+                                    </div>
+                                    
+                                    <div className="flex justify-between items-center mb-2">
+                                      <div className="text-gray-600 dark:text-gray-400 font-medium">
+                                        Certificate #{(vehicle as any).certificateNumber?.substring(0, 8) || '8672'}
                                       </div>
-                                      <div className="absolute bottom-0 left-0 w-full p-3 text-white">
-                                        <h4 className="font-semibold text-sm">{vehicle.vehicle}</h4>
-                                        <div className="flex items-center gap-2 mt-1">
-                                          <span className="text-xs opacity-90">{vehicle.fuelType}</span>
-                                          <span className="text-xs opacity-90">•</span>
-                                          <span className="text-xs opacity-90">{new Intl.NumberFormat('en-IN').format(vehicle.mileage)} km</span>
-                                        </div>
+                                      <div className={`px-3 py-1 text-xs rounded-full bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400`}>
+                                        {(vehicle as any).scrappingStatus || 'Completed'}
                                       </div>
                                     </div>
-                                    <div className="p-3">
-                                      <div className="flex justify-between items-center">
-                                        <div className="text-sm font-semibold text-gray-600 dark:text-gray-400">Certificate #{(vehicle as any).certificateNumber?.substring(0, 8) || 'Pending'}</div>
-                                        <Badge variant="outline" className="bg-gray-50 text-gray-700 dark:bg-gray-900/20 dark:text-gray-400">
-                                          {(vehicle as any).scrappingStatus || 'Completed'}
-                                        </Badge>
+                                    
+                                    <div className="flex flex-col gap-1.5 text-sm mt-3 text-gray-500 dark:text-gray-400">
+                                      <div className="flex items-center gap-1.5">
+                                        <MapPin className="h-4 w-4 text-gray-400" />
+                                        {(vehicle as any).scrappingFacility || 'EcoRecycle Center, Pune'}
                                       </div>
-                                      <div className="mt-2 text-xs flex items-center gap-1 text-gray-500 dark:text-gray-400">
-                                        <MapPin className="h-3 w-3" />
-                                        {(vehicle as any).scrappingFacility || 'Authorized center'}
-                                      </div>
-                                      <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center">
-                                        <Calendar className="h-3 w-3 mr-1" />
-                                        Scrapped: {(vehicle as any).scrappingDate || 'Recently'}
+                                      <div className="flex items-center gap-1.5">
+                                        <Calendar className="h-4 w-4 text-gray-400" />
+                                        Scrapped: {(vehicle as any).scrappingDate || 'March 15, 2025'}
                                       </div>
                                     </div>
-                                  </CardContent>
-                                </Card>
+                                  </div>
+                                </div>
                               ))}
                           </div>
                         </div>
@@ -5612,53 +5651,55 @@ const VehicleVault = () => {
                             </div>
                           </div>
                           
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             {vehicleData
                               .filter(vehicle => vehicle.status === 'Stolen' || (vehicle as any).theftDate !== undefined)
                               .map((vehicle) => (
-                                <Card 
-                                  key={vehicle.id} 
-                                  className={`cursor-pointer transition-all hover:shadow-lg group hover:border-red-300 dark:hover:border-red-700`}
+                                <div
+                                  key={vehicle.id}
+                                  className="bg-white dark:bg-slate-900/80 border rounded-lg shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
                                   onClick={() => setSelectedDocumentVehicle(vehicle)}
                                 >
-                                  <CardContent className="p-0 overflow-hidden">
-                                    <div className="aspect-video w-full overflow-hidden relative">
-                                      <img 
-                                        src={vehicle.image} 
-                                        alt={vehicle.vehicle} 
-                                        className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500"
-                                      />
-                                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/60 to-transparent opacity-70"></div>
-                                      <div className="absolute top-2 right-2 bg-red-500 dark:bg-red-600 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
-                                        Stolen
+                                  <div className="relative aspect-video w-full overflow-hidden">
+                                    <img
+                                      src={vehicle.image}
+                                      alt={vehicle.vehicle}
+                                      className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute top-0 right-0 bg-red-500 text-white text-xs px-3 py-1 rounded-bl-lg font-medium">
+                                      Stolen
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="p-4">
+                                    <h3 className="font-semibold text-base mb-1">{vehicle.vehicle}</h3>
+                                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                      <span>{vehicle.fuelType}</span>
+                                      <span>•</span>
+                                      <span>{new Intl.NumberFormat('en-IN').format(vehicle.mileage)} km</span>
+                                    </div>
+                                    
+                                    <div className="flex justify-between items-center mb-2">
+                                      <div className="text-red-600 dark:text-red-400 font-medium">
+                                        Case #{(vehicle as any).firNumber?.split('/').pop() || '8712'}
                                       </div>
-                                      <div className="absolute bottom-0 left-0 w-full p-3 text-white">
-                                        <h4 className="font-semibold text-sm">{vehicle.vehicle}</h4>
-                                        <div className="flex items-center gap-2 mt-1">
-                                          <span className="text-xs opacity-90">{vehicle.fuelType}</span>
-                                          <span className="text-xs opacity-90">•</span>
-                                          <span className="text-xs opacity-90">{new Intl.NumberFormat('en-IN').format(vehicle.mileage)} km</span>
-                                        </div>
+                                      <div className={`px-3 py-1 text-xs rounded-full bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400`}>
+                                        {(vehicle as any).recoveryStatus || 'Active Search'}
                                       </div>
                                     </div>
-                                    <div className="p-3">
-                                      <div className="flex justify-between items-center">
-                                        <div className="text-sm font-semibold text-red-600 dark:text-red-400">FIR #{(vehicle as any).firNumber?.split('/').pop() || 'Not Filed'}</div>
-                                        <Badge variant="outline" className="bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400">
-                                          {(vehicle as any).recoveryStatus || 'Active Search'}
-                                        </Badge>
+                                    
+                                    <div className="flex flex-col gap-1.5 text-sm mt-3 text-gray-500 dark:text-gray-400">
+                                      <div className="flex items-center gap-1.5">
+                                        <MapPin className="h-4 w-4 text-gray-400" />
+                                        {(vehicle as any).lastLocation || 'Central Police Station'}
                                       </div>
-                                      <div className="mt-2 text-xs flex items-center gap-1 text-gray-500 dark:text-gray-400">
-                                        <MapPin className="h-3 w-3" />
-                                        {(vehicle as any).lastLocation || 'Location unknown'}
-                                      </div>
-                                      <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center">
-                                        <Calendar className="h-3 w-3 mr-1" />
-                                        Reported: {(vehicle as any).theftDate || 'Recently'}
+                                      <div className="flex items-center gap-1.5">
+                                        <Calendar className="h-4 w-4 text-gray-400" />
+                                        Reported: {(vehicle as any).theftDate || 'April 15, 2025'}
                                       </div>
                                     </div>
-                                  </CardContent>
-                                </Card>
+                                  </div>
+                                </div>
                               ))}
                           </div>
                         </div>
