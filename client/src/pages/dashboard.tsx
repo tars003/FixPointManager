@@ -106,7 +106,7 @@ const Dashboard = () => {
           <motion.div 
             whileHover={{ y: -5, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
             className="fx-card p-4 flex flex-col items-center justify-center cursor-pointer"
-            onClick={() => navigateTo('/vehicles')}
+            onClick={() => navigateTo('/vehicle-vault')}
           >
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
               <Car className="h-5 w-5 text-primary" />
@@ -336,7 +336,7 @@ const Dashboard = () => {
               <div className="flex justify-center mt-6">
                 <Button 
                   variant="outline"
-                  onClick={() => navigateTo('/vehicles')}
+                  onClick={() => navigateTo('/vehicle-vault')}
                   className="flex items-center"
                 >
                   View All Vehicles
