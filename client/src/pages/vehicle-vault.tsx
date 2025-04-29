@@ -672,16 +672,37 @@ const VehicleVault = () => {
                               <Activity className="h-4 w-4" />
                             </div>
                             Vehicle Analysis
+                            <Badge variant="outline" className="ml-2 bg-green-50 text-green-700 hover:bg-green-50 dark:bg-green-900/20 dark:text-green-400">
+                              Active
+                            </Badge>
                           </h3>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="text-xs gap-1 rounded-full" 
-                            onClick={() => setSelectedVehicle(null)}
-                          >
-                            <X className="h-3.5 w-3.5" />
-                            Close Analysis
-                          </Button>
+                          <div className="flex items-center gap-2">
+                            <Button 
+                              variant="outline"
+                              size="sm" 
+                              className="text-xs gap-1 rounded-full border-slate-300"
+                            >
+                              <Share className="h-3.5 w-3.5" />
+                              Share
+                            </Button>
+                            <Button 
+                              variant="destructive" 
+                              size="sm" 
+                              className="text-xs gap-1 bg-red-500 hover:bg-red-600"
+                            >
+                              <span className="font-medium">₹</span>
+                              Sell Vehicle
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="text-xs gap-1 rounded-full" 
+                              onClick={() => setSelectedVehicle(null)}
+                            >
+                              <X className="h-3.5 w-3.5" />
+                              Close
+                            </Button>
+                          </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                           <div className="md:col-span-2">
