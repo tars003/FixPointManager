@@ -26,7 +26,7 @@ import {
   Settings,
   Trash,
   Plus,
-  CircleDollarSign,
+  IndianRupee,
   Droplet,
   Percent,
   Waves,
@@ -1429,7 +1429,7 @@ const ServiceCatalog: React.FC = () => {
                           handleAddPoints(calculateRewardsPoints());
                         }}
                       >
-                        <CircleDollarSign className="h-4 w-4" />
+                        <IndianRupee className="h-4 w-4" />
                         Checkout
                       </Button>
                     </div>
@@ -1503,7 +1503,7 @@ const ServiceCatalog: React.FC = () => {
                   <h4 className="font-medium mb-3">How to Earn More</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
-                      <CircleDollarSign className="h-4 w-4 text-green-500" />
+                      <IndianRupee className="h-4 w-4 text-green-500" />
                       <span>10 points for every ₹1,000 spent</span>
                     </div>
                     <div className="flex items-center gap-2">

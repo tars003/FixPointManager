@@ -17,7 +17,7 @@ import {
   ReceiptText,
   AlertTriangle,
   CheckCircle,
-  CircleDollarSign,
+  // Using IndianRupee for currency
   X,
   Map,
   ArrowRightLeft,
@@ -423,7 +423,7 @@ const FastagEchallan = () => {
                       <Card className="bg-neutral-50">
                         <CardContent className="p-4 flex items-center gap-4">
                           <div className="bg-primary/10 p-3 rounded-full">
-                            <CircleDollarSign className="h-6 w-6 text-primary" />
+                            <IndianRupee className="h-6 w-6 text-primary" />
                           </div>
                           <div>
                             <div className="text-xl font-bold">₹ {getFastagData(selectedVehicle).monthlyUsage.totalSpent}</div>

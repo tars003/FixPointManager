@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Car, Bike, Truck, ShoppingCart, Star, Search, Award, ChevronDown, Filter, 
   Settings, Flame, Wrench, Zap, Gauge, ChevronRight, ArrowRight, ArrowLeft,
-  CircleDollarSign, Calendar, Clock, Heart, PercentIcon, Sparkles, Check
+  IndianRupee, Calendar, Clock, Heart, PercentIcon, Sparkles, Check
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

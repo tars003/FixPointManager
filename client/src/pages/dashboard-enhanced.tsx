@@ -19,6 +19,7 @@ import {
   BarChart3,
   Settings,
   CircleDollarSign,
+  IndianRupee,
   User,
   Sparkles,
   GraduationCap,
@@ -247,7 +248,7 @@ const DashboardEnhanced = () => {
     { 
       id: 'fastag', 
       name: 'FASTag & eChallan', 
-      icon: <CircleDollarSign className="h-5 w-5 text-rose-500" />,
+      icon: <IndianRupee className="h-5 w-5 text-rose-500" />,
       path: '/fastag-echallan' 
     },
   ];
