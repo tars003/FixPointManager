@@ -3680,7 +3680,6 @@ const VehicleVault = () => {
                                   {selectedDocumentVehicle.vehicle}
                                   <AnimatedStatusTransition 
                                     currentStatus="Out of Service"
-                                    size="sm"
                                   />
                                 </h3>
                                 <p className="text-xs text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>
@@ -4132,7 +4131,6 @@ const VehicleVault = () => {
                                   {selectedDocumentVehicle.vehicle}
                                   <AnimatedStatusTransition 
                                     currentStatus="Garage Stored"
-                                    size="sm"
                                   />
                                 </h3>
                                 <p className="text-xs text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>

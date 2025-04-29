@@ -75,7 +75,7 @@ const AnimatedStatusTransition: React.FC<AnimatedStatusTransitionProps> = ({
       case 'Sold':
         return <CheckCircle className="text-green-400" />;
       case 'Impounded':
-        return <Building2 className="text-slate-500" />;
+        return <Building2 className="text-rose-500" />;
       case 'Under Legal Hold':
         return <Lock className="text-yellow-500" />;
       case 'Stolen':
@@ -110,7 +110,7 @@ const AnimatedStatusTransition: React.FC<AnimatedStatusTransitionProps> = ({
       case 'Sold':
         return 'bg-green-100 border-green-300 text-green-800 dark:bg-green-900/30 dark:border-green-700 dark:text-green-300';
       case 'Impounded':
-        return 'bg-slate-100 border-slate-300 text-slate-800 dark:bg-slate-900/30 dark:border-slate-700 dark:text-slate-300';
+        return 'bg-rose-100 border-rose-300 text-rose-800 dark:bg-rose-900/30 dark:border-rose-700 dark:text-rose-300';
       case 'Under Legal Hold':
         return 'bg-yellow-100 border-yellow-300 text-yellow-800 dark:bg-yellow-900/30 dark:border-yellow-700 dark:text-yellow-300';
       case 'Stolen':
