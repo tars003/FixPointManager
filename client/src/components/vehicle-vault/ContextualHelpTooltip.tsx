@@ -19,7 +19,9 @@ type TipType =
   'document' | 
   'insurance' | 
   'tax' | 
-  'pollution';
+  'pollution' |
+  'commercialFleet' |
+  'leasedOut';
 
 interface ContextualHelpTooltipProps {
   tipType: TipType;
@@ -156,6 +158,22 @@ const ContextualHelpTooltip = ({
           <div className="max-w-xs">
             <h4 className="font-semibold text-sm">PUC Certificate</h4>
             <p className="text-xs mt-1">Pollution Under Control (PUC) certificates are mandatory. Validity ranges from 6 months to 1 year depending on vehicle age and type.</p>
+          </div>
+        );
+        
+      case 'commercialFleet':
+        return (
+          <div className="max-w-xs">
+            <h4 className="font-semibold text-sm">Commercial Fleet Management</h4>
+            <p className="text-xs mt-1">Commercial vehicles require special permits, driver logs, and regular fitness certifications. GPS tracking and route optimization can reduce operating costs significantly.</p>
+          </div>
+        );
+        
+      case 'leasedOut':
+        return (
+          <div className="max-w-xs">
+            <h4 className="font-semibold text-sm">Leased Vehicle Management</h4>
+            <p className="text-xs mt-1">Keep detailed documentation of lease terms, maintenance responsibilities, mileage restrictions, and payment schedules. Regular inspection reports help prevent disputes at lease-end.</p>
           </div>
         );
         
