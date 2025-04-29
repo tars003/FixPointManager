@@ -301,9 +301,59 @@ const DashboardEnhanced = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Background decorative elements */}
-        <div className="absolute top-1/2 right-0 w-64 h-64 bg-white opacity-5 rounded-full transform -translate-y-1/2 translate-x-1/3"></div>
-        <div className="absolute top-1/4 left-0 w-32 h-32 bg-white opacity-5 rounded-full transform -translate-x-1/2"></div>
+        {/* Animated automotive background elements */}
+        <motion.div 
+          className="absolute bottom-0 right-0 w-40 h-24 opacity-10"
+          initial={{ x: 50, opacity: 0 }}
+          animate={{ 
+            x: 0, 
+            opacity: 0.1,
+            transition: { 
+              duration: 2,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut" 
+            }
+          }}
+        >
+          <svg viewBox="0 0 640 512" fill="white">
+            <path d="M608 128.2C604.5 104 585.4 84.9 561.2 81.4C549 79.8 536.8 78.4 524.7 77.1L522.3 48.9C521.9 43 520.9 37.2 516.1 32.8C511.3 28.4 504.8 29.1 498.9 29.9L75 94.6c-18.3 2.3-35.6 10.5-48.6 23.5c-13 13-21.1 30.3-23.5 48.6L.0265 179.6c-.1108 1-.2211 1.9-.2211 2.9c0 33.1 26.9 60 60 60H81.45c-14.5 9.1-27.6 22.2-36.6 38.8c-18.1 33.5-16 75.6 6 107.6L4.289 430.1c-5.031 2.8-6.906 9.1-4.172 14.1C1.738 447.8 4.914 450 8.438 450c1.703 0 3.437-.4375 5.047-1.328l59.3-32.9c5.828 4.6 12.05 8.5 18.51 11.7c20.88 10.4 44.28 11.6 65.98 3.5c13.8-5.2 26.1-13.8 35.9-24.9h234.6c9.799 11.1 22.08 19.7 35.9 24.9c21.69 8.1 45.09 6.9 65.98-3.5c6.451-3.2 12.68-7.1 18.51-11.7l59.3 32.9c1.609 .8906 3.344 1.328 5.047 1.328c3.523 0 6.7-2.2 8.016-5.766C643.9 438.3 642 431.9 636.1 429.1L590.5 388.4c.6406-.6289 1.242-1.289 1.857-1.953C596.8 381.9 599.8 377 599.8 372c0-44.2-35.8-80-80-80H144.1c-.168 0-.2988 .0723-.4668 .0723c2.691-5.914 5.832-11.55 9.488-16.85C166.3 256.8 185.7 245.4 207.3 241.4l278.4-33.4c34.9-4.2 59.7-35.3 57.6-70.4C542.4 129.3 533.4 121.4 608 128.2zM64 224c-17.66 0-32-14.3-32-32c0-17.1 13.83-30.9 31.03-31.9l3.172-.375L68.58 176H112v16H64zM528 304c30.9 0 56 25.1 56 56c0 1.1-.3203 2.1-.4336 3.2C576.4 377.1 566.1 387.9 552 391.7c-15.31 4-31.66 .9336-44.06-8.469l-4.141-3.109l.2344-.1445c-5.094-4.062-8.062-10.2-8.062-16.7c0-11.8 9.469-21.3 21.31-21.3h4.688v-16H496v16h8C518.8 342 531.9 358.9 528 304zM111.9 342c0 11.8 9.5 21.3 21.3 21.3H144v-16h-10.7c-2.9 0-5.3-2.4-5.3-5.3s2.4-5.3 5.3-5.3H144v-16h-10.7C121.4 320.7 111.9 330.2 111.9 342zM208 384h-64c-8.801 0-16-7.2-16-16s7.199-16 16-16h64c8.8 0 16 7.2 16 16S216.8 384 208 384zM256 368c0 8.8-7.2 16-16 16s-16-7.2-16-16s7.2-16 16-16S256 359.2 256 368zM368 368c0 8.8-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16h64C360.8 352 368 359.2 368 368zM396.1 368c0-8.8 7.199-16 16-16h64c8.801 0 16 7.2 16 16s-7.199 16-16 16h-64C403.3 384 396.1 376.8 396.1 368zM444.1 400h17.9c13.83 0 26.36 7.3 33.16 19.7c6.1 11.1 6.693 24.2 1.5 35.8c-5.623 12.4-15.92 20.4-28.33 23.2c-2.502 .5-5.621 1.3-8.939 1.3c-9.422 0-18.42-3.281-25.62-9.281c-4.859-4.031-8.621-9.25-10.94-15.25C415.1 437.5 425.3 418.9 444.1 400zM476.1 208.7l-278.4 33.4c-28.1 5.3-52.5 20.4-69.3 41.8H273.7L476.1 208.7zM178.6 400c-19.66 18.9-29.02 37.5-21.26 55.5c2.314 6 6.076 11.22 10.94 15.25c7.203 6 16.2 9.281 25.62 9.281c3.736 0 7.387-.7539 10.75-1.531c9.035-2.062 17.16-7.406 22.3-15.38c8.469-13.13 8.173-31.13-1.047-46.88C214.6 399.8 196.4 394.2 178.6 400z"/>
+          </svg>
+        </motion.div>
+        
+        <motion.div 
+          className="absolute top-10 left-10 w-24 h-24 opacity-10"
+          initial={{ rotate: -10 }}
+          animate={{ 
+            rotate: 10,
+            transition: { 
+              duration: 3,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut" 
+            }
+          }}
+        >
+          <svg viewBox="0 0 512 512" fill="white">
+            <path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/>
+          </svg>
+        </motion.div>
+        
+        <motion.div 
+          className="absolute top-40 right-12 w-20 h-20 opacity-10"
+          animate={{ 
+            y: [0, -15, 0],
+            transition: { 
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut" 
+            }
+          }}
+        >
+          <svg viewBox="0 0 512 512" fill="white">
+            <path d="M135.2 117.4L109.1 192H402.9l-26.1-74.6C372.3 104.6 360.2 96 346.6 96H165.4c-13.6 0-25.7 8.6-30.2 21.4zM39.6 196.8L74.8 96.3C88.3 57.8 124.6 32 165.4 32H346.6c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2V400v48c0 17.7-14.3 32-32 32H448c-17.7 0-32-14.3-32-32V400H96v48c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V400 256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/>
+          </svg>
+        </motion.div>
         
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
@@ -381,11 +431,54 @@ const DashboardEnhanced = () => {
       {/* Vehicle quick access strip */}
       <div className="max-w-7xl mx-auto px-4 -mt-12 mb-12">
         <motion.div
-          className="bg-white rounded-2xl shadow-lg p-5"
+          className="bg-white rounded-2xl shadow-lg p-5 relative overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
+          {/* Road animation in background */}
+          <div className="absolute inset-x-0 bottom-0 h-1 bg-gray-200 overflow-hidden">
+            <motion.div 
+              className="absolute inset-y-0 left-0 w-20 bg-gray-400"
+              animate={{
+                x: ["0%", "100%"],
+                transition: {
+                  duration: 3,
+                  ease: "linear",
+                  repeat: Infinity
+                }
+              }}
+            />
+            <motion.div 
+              className="absolute inset-y-0 left-0 w-10 bg-gray-400"
+              animate={{
+                x: ["0%", "100%"],
+                transition: {
+                  duration: 2,
+                  ease: "linear",
+                  repeat: Infinity,
+                  delay: 0.5
+                }
+              }}
+            />
+          </div>
+        
+          {/* Animated speedometer icon */}
+          <motion.div 
+            className="absolute top-3 right-12 w-8 h-8 text-blue-100 opacity-10"
+            animate={{
+              rotate: [0, 180, 0],
+              transition: {
+                duration: 5,
+                ease: "easeInOut",
+                repeat: Infinity
+              }
+            }}
+          >
+            <svg viewBox="0 0 512 512" fill="currentColor">
+              <path d="M256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0zM256 448C362 448 448 362 448 256C448 149.1 362 64 256 64C149.1 64 64 149.1 64 256C64 362 149.1 448 256 448zM135.4 357.8C140.1 363.5 149.8 369.1 160.7 371.4C171.5 373.7 184.3 371.9 197 360.7L279.2 293.4C282.6 290.7 287 289.3 291.5 289.3C296 289.3 300.4 290.6 303.8 293.4L383.6 358.7C387.1 361.4 392.3 362.8 396.8 362.8C401.3 362.8 405.7 361.5 409.1 358.7C415.8 353.1 417.2 343.4 411.7 336.7C407.3 331.3 397.8 322.8 384.1 313.8C380.3 310.8 375.7 309.2 371 309.1L370.9 309.1C366.2 309.1 361.7 310.7 357.9 313.5L328.8 337.6L264.7 282.6C255.4 274.6 243.7 270 231.3 269.2C218.8 268.5 206.6 271.7 196.3 278.9C195.2 279.7 194.2 280.5 193.2 281.4L133.6 332.7C132.7 333.5 131.8 334.3 130.9 335.2C125.8 340.4 124.6 348.5 127.7 354.9C129.1 358.1 131.8 360.8 135.4 357.8L135.4 357.8zM138.7 192C138.7 178.7 149.5 168 162.7 168C176 168 186.7 178.7 186.7 192C186.7 205.3 176 216 162.7 216C149.5 216 138.7 205.3 138.7 192z"/>
+            </svg>
+          </motion.div>
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-lg">Your Vehicles</h3>
             <Button 
@@ -585,11 +678,106 @@ const DashboardEnhanced = () => {
                   whileHover={{ y: -3 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {/* Header with icon */}
-                  <div className={`${bgColor} p-5 flex items-center h-28`}>
-                    <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
+                  {/* Header with icon - with automotive animations */}
+                  <div className={`${bgColor} p-5 flex items-center h-28 relative overflow-hidden`}>
+                    {/* Tool-specific automotive animations in background */}
+                    {tool.id === 'nearby' && (
+                      <>
+                        <motion.div 
+                          className="absolute right-0 top-1/2 w-12 h-4 opacity-10"
+                          animate={{ 
+                            x: [20, -60],
+                            transition: { 
+                              duration: 3, 
+                              repeat: Infinity,
+                              ease: "linear"
+                            }
+                          }}
+                        >
+                          <svg viewBox="0 0 640 512" fill="white">
+                            <path d="M342.5 32C357.2 32 370.7 38.7 379.5 50.3L548.7 296.4C559.8 311.3 566.3 329.3 566.3 348.1C566.3 399.5 524.6 441.2 473.2 441.2H86.8C35.4 441.2-6.3 399.5-6.3 348.1C-6.3 329.3 .2 311.3 11.3 296.4L180.5 50.3C189.3 38.7 202.8 32 217.5 32H342.5zM280 224C280 251.9 302.3 274.2 330.2 271.9L389.9 378.6C391.9 382.1 389.1 386.7 385.1 386.7H254.9C250.9 386.7 248.1 382.1 250.1 378.6L309.8 271.9C337.7 274.2 360 251.9 360 224C360 196.1 337.7 173.8 309.8 176.1L250.1 69.43C248.1 65.92 250.9 61.27 254.9 61.27H385.1C389.1 61.27 391.9 65.92 389.9 69.43L330.2 176.1C302.3 173.8 280 196.1 280 224z"/>
+                          </svg>
+                        </motion.div>
+                        <motion.div 
+                          className="absolute right-4 bottom-2 w-6 h-6 opacity-10"
+                          animate={{ 
+                            y: [0, -4, 0],
+                            transition: { 
+                              duration: 2, 
+                              repeat: Infinity,
+                              ease: "easeInOut"
+                            }
+                          }}
+                        >
+                          <svg viewBox="0 0 384 512" fill="white">
+                            <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/>
+                          </svg>
+                        </motion.div>
+                      </>
+                    )}
+                    
+                    {tool.id === 'marketplace' && (
+                      <motion.div 
+                        className="absolute right-5 bottom-4 w-10 h-10 opacity-10"
+                        animate={{ 
+                          scale: [1, 1.2, 1],
+                          transition: { 
+                            duration: 2, 
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }
+                        }}
+                      >
+                        <svg viewBox="0 0 576 512" fill="white">
+                          <path d="M312 24V34.5c6.4 1.2 12.6 2.7 18.2 4.2c12.8 3.4 20.4 16.6 17 29.4s-16.6 20.4-29.4 17c-10.9-2.9-21.1-4.9-30.2-5c-7.3-.1-14.7 1.7-19.4 4.4c-2.1 1.3-3.1 2.4-3.5 3c-.3 .5-.7 1.2-.7 2.8c0 .3 0 .5 0 .6c.2 .2 .9 1.2 3.3 2.6c5.8 3.5 14.4 6.2 27.4 10.1l.9 .3c11.1 3.3 25.9 7.8 37.9 15.3c13.7 8.6 26.1 22.9 26.4 44.9c.3 22.5-11.4 38.9-26.7 48.5c-6.7 4.1-13.9 7-21.3 8.8V232c0 13.3-10.7 24-24 24s-24-10.7-24-24V220.6c-9.5-2.3-18.2-5.3-25.6-7.8c-2.1-.7-4.1-1.4-6-2c-12.6-4.2-19.4-17.8-15.2-30.4s17.8-19.4 30.4-15.2c2.6 .9 5 1.7 7.3 2.5c13.6 4.6 23.4 7.9 33.9 8.3c8 .3 15.1-1.6 19.2-4.1c1.9-1.2 2.8-2.2 3.2-2.9c.4-.6 .9-1.8 .8-4.1l0-.2c0-1 0-2.1-4-4.6c-5.7-3.6-14.3-6.4-27.1-10.3l-1.9-.6c-10.8-3.2-25-7.5-36.4-14.4c-13.5-8.1-26.5-22-26.6-44.1c-.1-22.9 12.9-38.6 27.7-47.4c6.4-3.8 13.3-6.4 20.2-8.2V24c0-13.3 10.7-24 24-24s24 10.7 24 24zM568.2 336.3c13.1 17.8 9.3 42.8-8.5 55.9L433.1 485.5c-23.4 17.2-51.6 26.5-80.7 26.5H192 32c-17.7 0-32-14.3-32-32V416c0-17.7 14.3-32 32-32H68.8l44.9-36c22.7-18.2 50.9-28 80-28H272h16 64c17.7 0 32 14.3 32 32s-14.3 32-32 32H288 272c-8.8 0-16 7.2-16 16s7.2 16 16 16H392.6l119.7-88.2c17.8-13.1 42.8-9.3 55.9 8.5zM193.6 384l0 0-.9 0c.3 0 .6 0 .9 0z"/>
+                        </svg>
+                      </motion.div>
+                    )}
+                    
+                    {tool.id === 'documents' && (
+                      <motion.div 
+                        className="absolute right-4 top-4 w-8 h-8 opacity-10"
+                        initial={{ rotate: 0 }}
+                        animate={{ 
+                          rotate: [-5, 5, -5],
+                          transition: { 
+                            duration: 4, 
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }
+                        }}
+                      >
+                        <svg viewBox="0 0 384 512" fill="white">
+                          <path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
+                        </svg>
+                      </motion.div>
+                    )}
+                    
+                    {tool.id === 'emergency' && (
+                      <motion.div 
+                        className="absolute right-3 top-3 w-10 h-10 opacity-10"
+                        animate={{ 
+                          scale: [1, 1.5, 1],
+                          transition: { 
+                            duration: 1.5, 
+                            repeat: Infinity,
+                            ease: "easeOut"
+                          }
+                        }}
+                      >
+                        <svg viewBox="0 0 640 512" fill="white">
+                          <path d="M112 32c-8.8 0-16 7.2-16 16V64H48C21.5 64 0 85.5 0 112v64c0 26.5 21.5 48 48 48H64v48c0 26.5 21.5 48 48 48h32v96c0 35.3 28.7 64 64 64s64-28.7 64-64V320h32c26.5 0 48-21.5 48-48V224h16c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H336V48c0-8.8-7.2-16-16-16s-16 7.2-16 16v48H160V48c0-8.8-7.2-16-16-16H112zM352 368c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H368c-8.8 0-16 7.2-16 16zm64 64c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H432c-8.8 0-16 7.2-16 16zm64-64c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H496c-8.8 0-16 7.2-16 16zm64 64c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H560c-8.8 0-16 7.2-16 16z"/>
+                        </svg>
+                      </motion.div>
+                    )}
+                    
+                    <motion.div 
+                      className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner"
+                      whileHover={{ rotate: 10 }}
+                      transition={{ type: "spring", stiffness: 200 }}
+                    >
                       {React.cloneElement(tool.icon, { className: "h-8 w-8 text-white" })}
-                    </div>
+                    </motion.div>
                     <div className="ml-4">
                       <h3 className="font-semibold text-lg text-white">{tool.name}</h3>
                       <p className="text-white/80 text-sm">{tool.description}</p>
@@ -658,9 +846,126 @@ const DashboardEnhanced = () => {
                   className="cursor-pointer rounded-xl overflow-hidden shadow-md bg-white hover:shadow-lg"
                   onClick={() => navigateTo(module.path)}
                 >
-                  {/* Clean header with icon */}
-                  <div className={`${color.bg} p-5 flex justify-center items-center h-28`}>
-                    {React.cloneElement(module.icon as React.ReactElement, { className: 'h-10 w-10 text-white' })}
+                  {/* Clean header with icon and automotive animations */}
+                  <div className={`${color.bg} p-5 flex justify-center items-center h-28 relative overflow-hidden`}>
+                    {/* Module-specific automotive animations in background */}
+                    {module.id === 'commercial' && (
+                      <motion.div 
+                        className="absolute bottom-2 right-2 w-14 h-14 opacity-10"
+                        animate={{ 
+                          x: [0, 10, 0],
+                          transition: { 
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "easeInOut" 
+                          }
+                        }}
+                      >
+                        <svg viewBox="0 0 640 512" fill="white">
+                          <path d="M48 0C21.5 0 0 21.5 0 48V368c0 26.5 21.5 48 48 48H64c0 53 43 96 96 96s96-43 96-96H384c0 53 43 96 96 96s96-43 96-96h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V288 256 237.3c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7H416V48c0-26.5-21.5-48-48-48H48zM416 160h50.7L544 237.3V256H416V160zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+                        </svg>
+                      </motion.div>
+                    )}
+                    
+                    {module.id === 'compare' && (
+                      <motion.div 
+                        className="absolute w-12 h-12 opacity-10 left-4 top-4"
+                        animate={{ 
+                          rotate: [0, -10, 0, 10, 0],
+                          transition: { 
+                            duration: 5,
+                            repeat: Infinity,
+                            ease: "easeInOut" 
+                          }
+                        }}
+                      >
+                        <svg viewBox="0 0 640 512" fill="white">
+                          <path d="M323.4 85.2l-96.8 78.4c-16.1 13-19.2 36.4-7 53.1c12.9 17.8 38 21.3 55.3 7.8l99.3-77.2c7-5.4 17-4.2 22.5 2.8s4.2 17-2.8 22.5l-20.9 16.2L550.2 352H592c26.5 0 48-21.5 48-48V176c0-26.5-21.5-48-48-48H516h-4-.7l-3.9-2.5L434.8 79c-15.3-9.8-33.2-15-51.4-15c-21.8 0-43 7.5-60 21.2zm22.8 124.4l-51.7 40.2C263 274.4 217.3 268 193.7 235.6c-22.2-30.5-16.6-73.1 12.7-96.8l83.2-67.3c11.5-9.3 25.9-14.4 41-14.4c13.5 0 26.5 4.1 37.5 11.7l51.5 33.1c2.6 1.7 5.6 2.8 8.7 3.2H517.6c12.1-1.3 24.9 .8 36.6 6.5c21.8 10.7 35.8 32.9 35.8 57.3V304c0 13.3-10.7 24-24 24H488c-9.1 0-17.4-5.1-21.5-13.3l-67.8-137.4c-7.9-15.9-24.1-26-42.2-26c-14.1 0-27.5 6.4-36.3 17.4zM224 128c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16H208c8.8 0 16 7.2 16 16zm-16 64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16H208zm-16 64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16H192zm-96 64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16h16z"/>
+                        </svg>
+                      </motion.div>
+                    )}
+                    
+                    {module.id === 'energy' && (
+                      <motion.div 
+                        className="absolute right-3 bottom-3 w-12 h-12 opacity-10"
+                        animate={{ 
+                          scale: [1, 1.2, 1],
+                          transition: { 
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeInOut" 
+                          }
+                        }}
+                      >
+                        <svg viewBox="0 0 576 512" fill="white">
+                          <path d="M320 32c0-9.9-4.5-19.2-12.3-25.2S289.8-1.4 280.2 1l-179.9 45C79 51.3 64 70.5 64 92.5V448H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H96 288h32V448H288V384h32V288H96v64H64V92.5c0-7.4 5-13.7 12.1-15.5L256 32V160H224c-17.7 0-32 14.3-32 32s14.3 32 32 32h32 32c17.7 0 32-14.3 32-32s-14.3-32-32-32H288V32h32zM528 256c8.8 0 16-7.2 16-16s-7.2-16-16-16H368c-8.8 0-16 7.2-16 16s7.2 16 16 16H528zM368 288c-8.8 0-16 7.2-16 16s7.2 16 16 16H528c8.8 0 16-7.2 16-16s-7.2-16-16-16H368zM352 368c0 8.8 7.2 16 16 16H528c8.8 0 16-7.2 16-16s-7.2-16-16-16H368c-8.8 0-16 7.2-16 16zM352 432c0 8.8 7.2 16 16 16H528c8.8 0 16-7.2 16-16s-7.2-16-16-16H368c-8.8 0-16 7.2-16 16z"/>
+                        </svg>
+                      </motion.div>
+                    )}
+                    
+                    {module.id === 'fastag' && (
+                      <motion.div 
+                        className="absolute left-4 top-3 w-10 h-10 opacity-10"
+                        animate={{ 
+                          y: [0, 5, 0],
+                          transition: { 
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut" 
+                          }
+                        }}
+                      >
+                        <svg viewBox="0 0 576 512" fill="white">
+                          <path d="M64 64C28.7 64 0 92.7 0 128V384c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H64zm64 320H64V320c35.3 0 64 28.7 64 64zM64 192V128h64c0 35.3-28.7 64-64 64zM448 384c0-35.3 28.7-64 64-64v64H448zm64-192c-35.3 0-64-28.7-64-64h64v64zM400 256c0 61.9-50.1 112-112 112s-112-50.1-112-112s50.1-112 112-112s112 50.1 112 112z"/>
+                        </svg>
+                      </motion.div>
+                    )}
+                    
+                    {module.id === 'learning' && (
+                      <motion.div 
+                        className="absolute top-4 right-5 w-10 h-10 opacity-10"
+                        animate={{ 
+                          rotate: [0, 20, 0],
+                          transition: { 
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "easeInOut" 
+                          }
+                        }}
+                      >
+                        <svg viewBox="0 0 384 512" fill="white">
+                          <path d="M0 32l34.9 395.8L191.5 480l157.6-52.2L384 32H0zm308.2 127.9H124.4l4.1 49.4h175.6l-13.6 148.4-97.9 27v.3h-1.1l-98.7-27.3-6-75.8h47.7L138 320l53.5 14.5 53.7-14.5 6-62.2H84.3L71.5 112.2h241.1l-4.4 47.7z"/>
+                        </svg>
+                      </motion.div>
+                    )}
+                    
+                    {module.id === 'history' && (
+                      <motion.div 
+                        className="absolute bottom-3 left-4 w-12 h-12 opacity-10"
+                        animate={{ 
+                          rotate: [0, 360],
+                          transition: { 
+                            duration: 20,
+                            repeat: Infinity,
+                            ease: "linear" 
+                          }
+                        }}
+                      >
+                        <svg viewBox="0 0 512 512" fill="white">
+                          <path d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/>
+                        </svg>
+                      </motion.div>
+                    )}
+                    
+                    <motion.div
+                      whileHover={{ 
+                        rotate: 15,
+                        scale: 1.1,
+                        transition: { type: "spring", stiffness: 300 }
+                      }}
+                    >
+                      {React.cloneElement(module.icon as React.ReactElement, { className: 'h-10 w-10 text-white' })}
+                    </motion.div>
                   </div>
                   
                   {/* Simple text with ample spacing */}
