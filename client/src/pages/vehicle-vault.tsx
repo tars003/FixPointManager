@@ -137,6 +137,20 @@ type Vehicle = {
   viewingLocation?: string;
   sellerContact?: string;
   documentStatus?: string;
+  
+  // Impounded specific fields
+  impoundDate?: string;
+  impoundLocation?: string;
+  impoundReason?: string;
+  caseNumber?: string;
+  fineAmount?: string;
+  releaseRequirements?: string;
+  impoundingAuthority?: string;
+  legalStatus?: string;
+  contactPerson?: string;
+  hearingDate?: string;
+  estimatedReleaseDate?: string;
+  legalDocuments?: string[];
 };
 
 // Extended vehicle data with more details
@@ -652,6 +666,118 @@ const vehicleData = [
     lastOperationalDate: 'Feb 20, 2025',
     parkedLocation: 'Apartment basement',
     disposalPlan: 'Planning to repair'
+  },
+  // Impounded Vehicles
+  { 
+    id: 90,
+    vehicle: 'Maruti Suzuki Dzire', 
+    worth: 520000, 
+    percentage: 48,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Maruti/Dzire/10243/1689589297515/front-left-side-47.jpg',
+    mileage: 32000,
+    fuelType: 'Petrol',
+    engineHealth: 84,
+    status: 'Impounded',
+    lastService: '4 months ago',
+    nextService: 'Overdue',
+    purchaseDate: 'May 12, 2022',
+    insuranceValid: 'May 2025',
+    maintenanceCost: 16500,
+    efficiency: '21.2 km/l',
+    averageFuel: '4.7 l/100km',
+    topSpeed: '170 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'KA 03 MB 4721',
+    chassisNumber: 'MDZ22051276K',
+    engineNumber: 'MSDZ2205122U',
+    owner: 'Manoj Kulkarni',
+    rcExpiryDate: 'May 11, 2032',
+    impoundDate: 'Apr 10, 2025',
+    impoundLocation: 'Koramangala Traffic Police Station, Bangalore',
+    impoundReason: 'Multiple parking violations & expired PUC certificate',
+    caseNumber: 'IMP-BLR-25-0472',
+    fineAmount: '₹12,500',
+    releaseRequirements: 'Payment of fine, valid PUC certificate',
+    impoundingAuthority: 'Bangalore Traffic Police',
+    legalStatus: 'In Process',
+    contactPerson: 'SI Ramesh Kumar',
+    hearingDate: 'Apr 30, 2025',
+    estimatedReleaseDate: 'May 05, 2025',
+    legalDocuments: ['Impounding Challan', 'Notice of Violation', 'Vehicle Release Form']
+  },
+  { 
+    id: 91,
+    vehicle: 'Royal Enfield Bullet 350', 
+    worth: 135000, 
+    percentage: 32,
+    image: 'https://bd.gaadicdn.com/processedimages/royal-enfield/bullet-350-2023/source/bullet-350-202364f6dd52cd90d.jpg',
+    mileage: 18500,
+    fuelType: 'Petrol',
+    engineHealth: 79,
+    status: 'Impounded',
+    lastService: '6 months ago',
+    nextService: 'Overdue',
+    purchaseDate: 'Nov 08, 2021',
+    insuranceValid: 'Nov 2024',
+    maintenanceCost: 8200,
+    efficiency: '35 km/l',
+    averageFuel: '2.9 l/100km',
+    topSpeed: '120 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'DL 5S CK 2145',
+    chassisNumber: 'REB21110878P',
+    engineNumber: 'BU35021108W2',
+    owner: 'Aditya Pancholi',
+    rcExpiryDate: 'Nov 07, 2031',
+    impoundDate: 'Mar 25, 2025',
+    impoundLocation: 'Karol Bagh Police Station, Delhi',
+    impoundReason: 'Illegal modifications and excessive noise',
+    caseNumber: 'IMP-DEL-25-1142',
+    fineAmount: '₹8,000',
+    releaseRequirements: 'Removal of modifications, noise compliance test',
+    impoundingAuthority: 'Delhi Traffic Police',
+    legalStatus: 'Pending Hearing',
+    contactPerson: 'ASI Vikas Yadav',
+    hearingDate: 'Apr 25, 2025',
+    estimatedReleaseDate: 'May 02, 2025',
+    legalDocuments: ['Seizure Report', 'Technical Inspection Report', 'Modification Violation Notice']
+  },
+  { 
+    id: 92,
+    vehicle: 'Mahindra Scorpio', 
+    worth: 980000, 
+    percentage: 64,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Mahindra/Scorpio-N/10742/1689591252285/front-left-side-47.jpg',
+    mileage: 45000,
+    fuelType: 'Diesel',
+    engineHealth: 86,
+    status: 'Impounded',
+    lastService: '2 months ago',
+    nextService: '1 month',
+    purchaseDate: 'Sep 22, 2022',
+    insuranceValid: 'Sep 2025',
+    maintenanceCost: 24500,
+    efficiency: '15.4 km/l',
+    averageFuel: '6.5 l/100km',
+    topSpeed: '160 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'MH 12 KL 9245',
+    chassisNumber: 'MSC22092267P',
+    engineNumber: 'SC22N092245',
+    owner: 'Suresh Malhotra',
+    rcExpiryDate: 'Sep 21, 2032',
+    impoundDate: 'Apr 05, 2025',
+    impoundLocation: 'Pune Traffic Police HQ',
+    impoundReason: 'Involved in hit-and-run case under investigation',
+    caseNumber: 'CR-PUN-25-0782',
+    fineAmount: 'Under investigation',
+    releaseRequirements: 'Court order after completion of investigation',
+    impoundingAuthority: 'Pune Police Crime Branch',
+    legalStatus: 'Under Investigation',
+    contactPerson: 'Inspector Mohan Jadhav',
+    hearingDate: 'To be scheduled',
+    estimatedReleaseDate: 'Pending investigation',
+    legalDocuments: ['FIR Copy', 'Seizure Memo', 'Investigation Notice']
   },
   // Commercial Fleet Vehicles
   { 
