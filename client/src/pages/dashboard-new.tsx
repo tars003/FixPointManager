@@ -610,7 +610,7 @@ const DashboardNew = () => {
                         <p className="text-sm text-gray-500 mt-1 mb-4">Add a vehicle first</p>
                         <Button 
                           size="sm" 
-                          onClick={() => navigateTo('/vehicles/add')}
+                          onClick={() => navigateTo('/vehicle-vault/add')}
                         >
                           Add Vehicle
                         </Button>
