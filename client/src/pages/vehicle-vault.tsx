@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
+import { Checkbox } from '@/components/ui/checkbox';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue, useInView, animate } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 import { 
@@ -19,8 +20,9 @@ import {
   Building2, KeyRound, Tag, CheckCircle, Scale, Trash2, FileX,
   Plus, Edit, Eye, Calendar as CalendarIcon, Clock as CalendarClock,
   Smartphone as SmartphoneNfc, Receipt, CalendarCheck,
-  Fuel, Route, User as UserCircle, UserCog, CreditCard, 
-  Filter as FilterX, CheckCircle as CheckCircle2, MapPin, HelpCircle as FileQuestion
+  Fuel, Route, User as UserCircle, UserCog, CreditCard, Truck,
+  Filter as FilterX, CheckCircle as CheckCircle2, MapPin, HelpCircle as FileQuestion,
+  FileCheck
 } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
@@ -32,6 +34,36 @@ import VehicleMoodIndicator from '@/components/vehicle-vault/VehicleMoodIndicato
 import VehicleStoryCard from '@/components/vehicle-vault/VehicleStoryCard';
 import VehicleDashboardCard from '@/components/vehicle-vault/VehicleDashboardCard';
 import ColorAdaptiveUI from '@/components/vehicle-vault/ColorAdaptiveUI';
+
+// Define Vehicle type to match our vehicleData props
+type Vehicle = {
+  id: number;
+  vehicle: string;
+  worth: number; 
+  percentage: number;
+  image: string;
+  mileage: number;
+  fuelType: string;
+  batteryHealth?: number;
+  engineHealth?: number;
+  lastService: string;
+  nextService: string;
+  purchaseDate: string;
+  insuranceValid: string;
+  maintenanceCost: number;
+  efficiency: string;
+  averageCharge?: string;
+  averageFuel?: string;
+  range?: string;
+  carbonOffset?: string;
+  topSpeed?: string;
+  emissionRating?: string;
+  registrationNumber: string;
+  chassisNumber: string;
+  engineNumber: string;
+  owner: string;
+  rcExpiryDate: string;
+};
 
 // Extended vehicle data with more details
 const vehicleData = [
@@ -1487,7 +1519,227 @@ const VehicleVault = () => {
                     </>
                   )}
                   
-                  {selectedStatus !== 'Active' && (
+                  {selectedStatus === 'Recently Purchased' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for Recently Purchased
+                        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 mb-6">
+                          <h3 className="text-lg font-semibold text-center mb-4 text-blue-700 dark:text-blue-400">Select a Recently Purchased Vehicle</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {vehicleData
+                              .filter(vehicle => vehicle.purchaseDate && new Date(vehicle.purchaseDate) > new Date(Date.now() - 3 * 30 * 24 * 60 * 60 * 1000)) // Less than 3 months old
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${selectedDocumentVehicle?.id === vehicle.id ? 'border-blue-500 dark:border-blue-400' : 'border-transparent'}`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-4">
+                                    <div className="aspect-video w-full overflow-hidden rounded-md mb-3 relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                                        New
+                                      </div>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <h4 className="font-semibold">{vehicle.vehicle}</h4>
+                                      <p className="text-xs text-slate-500">{vehicle.registrationNumber || "Registration in progress"}</p>
+                                      <div className="flex justify-between items-center">
+                                        <Badge variant="outline" className="text-xs px-2 py-0 bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400">
+                                          {vehicle.fuelType}
+                                        </Badge>
+                                        <p className="text-xs text-slate-500">Purchased: {vehicle.purchaseDate}</p>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Recently Purchased Vehicle Documents Display
+                        <div className="space-y-6">
+                          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                              <Avatar>
+                                <AvatarImage src={selectedDocumentVehicle.image} />
+                                <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <h3 className="font-semibold">{selectedDocumentVehicle.vehicle}</h3>
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm text-slate-500">{selectedDocumentVehicle.registrationNumber || "Registration in progress"}</p>
+                                  <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400">Recently Purchased</Badge>
+                                </div>
+                              </div>
+                            </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => setSelectedDocumentVehicle(null)}
+                              className="text-blue-700 dark:text-blue-400"
+                            >
+                              Change Vehicle
+                            </Button>
+                          </div>
+                          
+                          {/* Purchase Documentation */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-blue-700 dark:text-blue-400">
+                                <ShoppingBag className="h-5 w-5" />
+                                Purchase Documentation
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-blue-700 dark:text-blue-400">
+                                  <Plus className="h-4 w-4" />
+                                  <span className="sr-only">Add</span>
+                                </Button>
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-blue-700 dark:text-blue-400">
+                                  <Download className="h-4 w-4" />
+                                  <span className="sr-only">Download</span>
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Sales Invoice</h4>
+                                  <p className="text-xs text-gray-500">Itemized breakdown with all costs</p>
+                                  <Button variant="outline" size="sm" className="justify-start mt-2">
+                                    <FileText className="h-4 w-4 mr-2 text-blue-500" />
+                                    Upload Invoice
+                                  </Button>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Delivery Receipt</h4>
+                                  <p className="text-xs text-gray-500">PDI (Pre-Delivery Inspection) details</p>
+                                  <Button variant="outline" size="sm" className="justify-start mt-2">
+                                    <Truck className="h-4 w-4 mr-2 text-green-500" />
+                                    Upload Receipt
+                                  </Button>
+                                </div>
+                              </div>
+                              
+                              <div className="border-t border-gray-200 dark:border-gray-800 pt-4">
+                                <h4 className="text-sm font-medium mb-2">Post-purchase Checklist</h4>
+                                <div className="space-y-2">
+                                  <div className="flex items-center gap-2">
+                                    <Checkbox id="check1" checked={true} />
+                                    <label htmlFor="check1" className="text-sm">Sales invoice received</label>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <Checkbox id="check2" checked={true} />
+                                    <label htmlFor="check2" className="text-sm">Delivery receipt signed</label>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <Checkbox id="check3" checked={false} />
+                                    <label htmlFor="check3" className="text-sm">Registration process initiated</label>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <Checkbox id="check4" checked={false} />
+                                    <label htmlFor="check4" className="text-sm">Warranty activated</label>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <Checkbox id="check5" checked={false} />
+                                    <label htmlFor="check5" className="text-sm">First service scheduled</label>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="flex justify-between border-t border-gray-200 dark:border-gray-800 pt-4">
+                                <div className="flex items-center gap-2">
+                                  <CalendarClock className="h-4 w-4 text-amber-500" />
+                                  <span className="text-sm">Transition to "Active" in <strong>45 days</strong></span>
+                                </div>
+                                <Badge variant="outline" className="bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400">
+                                  In Progress
+                                </Badge>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Ownership Transfer */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-blue-700 dark:text-blue-400">
+                                <RefreshCw className="h-5 w-5" />
+                                Ownership Transfer
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-blue-700 dark:text-blue-400">
+                                  <Plus className="h-4 w-4" />
+                                  <span className="sr-only">Add</span>
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Transfer Documents</h4>
+                                  <p className="text-xs text-gray-500">Form 29/30 and related papers</p>
+                                  <Button variant="outline" size="sm" className="justify-start mt-2">
+                                    <FileText className="h-4 w-4 mr-2 text-indigo-500" />
+                                    Upload Forms
+                                  </Button>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Previous Owner's NOC</h4>
+                                  <p className="text-xs text-gray-500">No Objection Certificate</p>
+                                  <Button variant="outline" size="sm" className="justify-start mt-2">
+                                    <FileCheck className="h-4 w-4 mr-2 text-green-500" />
+                                    Upload NOC
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Financing/Loan Details */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-blue-700 dark:text-blue-400">
+                                <CreditCard className="h-5 w-5" />
+                                Financing/Loan Details
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-blue-700 dark:text-blue-400">
+                                  <Plus className="h-4 w-4" />
+                                  <span className="sr-only">Add</span>
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Loan Agreement</h4>
+                                  <p className="text-xs text-gray-500">Terms and conditions document</p>
+                                  <Button variant="outline" size="sm" className="justify-start mt-2">
+                                    <FileText className="h-4 w-4 mr-2 text-amber-500" />
+                                    Upload Agreement
+                                  </Button>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">EMI Schedule</h4>
+                                  <p className="text-xs text-gray-500">Payment tracking document</p>
+                                  <Button variant="outline" size="sm" className="justify-start mt-2">
+                                    <Calendar className="h-4 w-4 mr-2 text-violet-500" />
+                                    Upload Schedule
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
+                  {selectedStatus !== 'Active' && selectedStatus !== 'Recently Purchased' && (
                     <div className="text-center py-12">
                       <div className="mx-auto w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
                         <FileQuestion className="h-6 w-6 text-gray-500 dark:text-gray-400" />
