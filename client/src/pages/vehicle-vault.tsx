@@ -35,6 +35,10 @@ import VehicleMoodIndicator from '@/components/vehicle-vault/VehicleMoodIndicato
 import VehicleStoryCard from '@/components/vehicle-vault/VehicleStoryCard';
 import VehicleDashboardCard from '@/components/vehicle-vault/VehicleDashboardCard';
 import ColorAdaptiveUI from '@/components/vehicle-vault/ColorAdaptiveUI';
+import QuickActionMenu from '@/components/vehicle-vault/QuickActionMenu';
+import ContextualHelpTooltip from '@/components/vehicle-vault/ContextualHelpTooltip';
+import InteractiveDataPoint from '@/components/vehicle-vault/InteractiveDataPoint';
+import AnimatedStatusTransition from '@/components/vehicle-vault/AnimatedStatusTransition';
 
 // Define Vehicle type to match our vehicleData props
 type Vehicle = {
