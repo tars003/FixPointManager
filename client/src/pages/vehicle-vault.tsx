@@ -1792,6 +1792,19 @@ const VehicleVault = () => {
   const [selectedCategory, setSelectedCategory] = useState('cars');
   const [selectedStatus, setSelectedStatus] = useState<string | null>('Active');
   const [selectedDocumentVehicle, setSelectedDocumentVehicle] = useState<typeof vehicleData[0] | null>(null);
+  
+  // Filter states
+  const [searchFilter, setSearchFilter] = useState('');
+  const [fuelTypeFilter, setFuelTypeFilter] = useState('all');
+  const [dateRangeFilter, setDateRangeFilter] = useState<{
+    from: Date | undefined;
+    to: Date | undefined;
+  }>({
+    from: undefined,
+    to: undefined,
+  });
+  const [filterTabActive, setFilterTabActive] = useState(false);
+  
   const { toast } = useToast();
   const { scrollY } = useScroll();
   const headerOpacity = useTransform(scrollY, [0, 200], [1, 0.3]);
@@ -2143,6 +2156,16 @@ const VehicleVault = () => {
                 </CardHeader>
                 <CardContent className="pt-4">
                   <div className="space-y-6">
+                    {/* Real-time filters */}
+                    <VehicleFilters
+                      statusTitle={selectedStatus || 'Active'}
+                      onFilterChange={(filters) => {
+                        setSearchFilter(filters.search);
+                        setFuelTypeFilter(filters.fuelType);
+                        setDateRangeFilter(filters.dateRange);
+                      }}
+                    />
+                    
                     {/* Vehicle category selector */}
                     <div className="mb-6">
                       <VehicleCategorySelector 
