@@ -40,7 +40,7 @@ const navItems = [
   {
     title: 'VehicleVault',
     icon: Car,
-    href: '/vehicle-vault-community',
+    href: '/vehicle-vault',
     color: 'text-primary',
     bgColor: 'bg-primary/10',
   },

@@ -148,6 +148,19 @@ function Router() {
               </motion.div>
             )}
           </Route>
+          <Route path="/vehicle-vault">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <VehicleVault />
+              </motion.div>
+            )}
+          </Route>
           <Route path="/vehicle-vault-community">
             {() => (
               <motion.div
