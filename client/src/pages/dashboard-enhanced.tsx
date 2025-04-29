@@ -631,46 +631,95 @@ const DashboardEnhanced = () => {
           </div>
           
           <motion.div 
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-5"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            {additionalModules.map((module, index) => (
-              <motion.div
-                key={module.id}
-                variants={itemVariants}
-                whileHover={{ y: -5, scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              >
-                <Button
-                  variant="outline"
-                  className="h-auto py-6 w-full flex flex-col items-center justify-center gap-3 border-2 shadow-sm hover:shadow-md hover:border-blue-200 transition-all"
+            {additionalModules.map((module, index) => {
+              // Define a different background color for each module
+              const bgColors = [
+                "bg-lime-100", // Energy Monitor
+                "bg-purple-50", // Commercial Fleet
+                "bg-green-50", // Learning Center
+                "bg-blue-50", // Vehicle Compare
+                "bg-emerald-50", // Service History
+                "bg-rose-50", // FASTag & eChallan
+              ];
+              
+              // Get the background color for this module
+              const bgColor = module.id === 'energy' 
+                ? "bg-lime-100" 
+                : bgColors[index % bgColors.length];
+              
+              return (
+                <motion.div
+                  key={module.id}
+                  variants={itemVariants}
+                  whileHover={{ 
+                    y: -5, 
+                    scale: 1.05,
+                    boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)"
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                  className={`rounded-xl overflow-hidden ${bgColor} hover:shadow-lg cursor-pointer`}
                   onClick={() => navigateTo(module.path)}
                 >
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gray-50 to-white flex items-center justify-center shadow-sm">
-                    {module.icon}
+                  <div className="p-6 flex flex-col items-center">
+                    <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-md mb-4">
+                      {React.cloneElement(module.icon as React.ReactElement, { className: 'h-7 w-7' })}
+                    </div>
+                    <h3 className="font-medium text-gray-900 text-center">{module.name}</h3>
+                    <p className="text-xs text-gray-600 mt-1 text-center">{module.description}</p>
+                    
+                    {/* Show a subtle indicator button */}
+                    <div className="mt-4 opacity-70 hover:opacity-100 transition-opacity">
+                      <div className="bg-white/50 backdrop-blur-sm p-1 rounded-full">
+                        <ArrowRight className="h-3 w-3" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <span className="text-sm font-medium">{module.name}</span>
-                    <p className="text-xs text-gray-500 mt-1">{module.description}</p>
-                  </div>
-                </Button>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </motion.div>
           
-          <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-bold text-gray-900">Looking for more functionality?</h3>
-              <p className="text-sm text-gray-600 mt-1">We're constantly adding new features to enhance your experience.</p>
+          <motion.div 
+            className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl overflow-hidden shadow-lg"
+            whileHover={{ boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <div className="relative overflow-hidden">
+              {/* Decorative elements */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full transform translate-x-1/2 -translate-y-1/2 opacity-50"></div>
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-100 rounded-full transform -translate-x-1/2 translate-y-1/2 opacity-50"></div>
+              
+              <div className="p-8 flex flex-col md:flex-row items-start md:items-center justify-between relative z-10">
+                <div className="mb-4 md:mb-0">
+                  <div className="flex items-center">
+                    <div className="bg-white p-2 rounded-lg shadow-sm mr-4">
+                      <MessageCircle className="h-5 w-5 text-blue-500" />
+                    </div>
+                    <h3 className="text-xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
+                      Looking for more functionality?
+                    </h3>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2 ml-12">
+                    We're constantly adding new features to enhance your experience.
+                    Tell us what you'd like to see next!
+                  </p>
+                </div>
+                
+                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 shadow-md hover:shadow-lg transition-all">
+                  Send Feedback
+                  <MessageCircle className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
             </div>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-              Send Feedback
-              <MessageCircle className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
+          </motion.div>
         </section>
       </div>
     </div>
