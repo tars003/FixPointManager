@@ -15,7 +15,8 @@ import {
   PieChart, TrendingUp, TrendingDown, Star, BoxSelect, Brain,
   Battery, Leaf, Droplets, ArrowLeft, ArrowRight, ChevronLeft, ChevronRight,
   AlertTriangle, Activity, Info, Zap, BadgeCheck, Wrench, X, PlusCircle,
-  AlertCircle, ThumbsUp
+  AlertCircle, ThumbsUp, ShoppingBag, RefreshCw, Warehouse, AlertOctagon,
+  Building2, KeyRound, Tag, CheckCircle, Scale, Trash2, FileX
 } from 'lucide-react';
 
 // Import our components
@@ -24,6 +25,7 @@ import VehicleDetailAnalysis from '@/components/vehicle-vault/VehicleDetailAnaly
 import VehicleCategorySelector from '@/components/vehicle-vault/VehicleCategorySelector';
 import VehicleMoodIndicator from '@/components/vehicle-vault/VehicleMoodIndicator';
 import VehicleStoryCard from '@/components/vehicle-vault/VehicleStoryCard';
+import VehicleDashboardCard from '@/components/vehicle-vault/VehicleDashboardCard';
 import ColorAdaptiveUI from '@/components/vehicle-vault/ColorAdaptiveUI';
 
 // Extended vehicle data with more details
@@ -608,7 +610,72 @@ const VehicleVault = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <TabsList className="grid grid-cols-5 w-fit p-1">
+            <div className="bg-white dark:bg-slate-900 p-3 rounded-lg shadow-sm mb-4 overflow-x-auto">
+              <div className="flex space-x-3 min-w-max">
+                <Badge variant="outline" className="py-2 px-3 bg-green-50 text-green-700 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400 flex items-center gap-1.5 cursor-pointer">
+                  <Car className="h-3.5 w-3.5" />
+                  Active
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 flex items-center gap-1.5 cursor-pointer">
+                  <ShoppingBag className="h-3.5 w-3.5" />
+                  Recently Purchased
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-900/20 dark:text-indigo-400 flex items-center gap-1.5 cursor-pointer">
+                  <RefreshCw className="h-3.5 w-3.5" />
+                  Pre-owned
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-amber-50 text-amber-700 hover:bg-amber-100 dark:bg-amber-900/20 dark:text-amber-400 flex items-center gap-1.5 cursor-pointer">
+                  <Wrench className="h-3.5 w-3.5" />
+                  In Maintenance
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-sky-50 text-sky-700 hover:bg-sky-100 dark:bg-sky-900/20 dark:text-sky-400 flex items-center gap-1.5 cursor-pointer">
+                  <Warehouse className="h-3.5 w-3.5" />
+                  Garage Stored
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-slate-50 text-slate-700 hover:bg-slate-100 dark:bg-slate-800/40 dark:text-slate-400 flex items-center gap-1.5 cursor-pointer">
+                  <AlertOctagon className="h-3.5 w-3.5" />
+                  Out of Service
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-purple-50 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/20 dark:text-purple-400 flex items-center gap-1.5 cursor-pointer">
+                  <Building2 className="h-3.5 w-3.5" />
+                  Commercial Fleet
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 flex items-center gap-1.5 cursor-pointer">
+                  <KeyRound className="h-3.5 w-3.5" />
+                  Leased Out
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-pink-50 text-pink-700 hover:bg-pink-100 dark:bg-pink-900/20 dark:text-pink-400 flex items-center gap-1.5 cursor-pointer">
+                  <Tag className="h-3.5 w-3.5" />
+                  For Sale
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-violet-50 text-violet-700 hover:bg-violet-100 dark:bg-violet-900/20 dark:text-violet-400 flex items-center gap-1.5 cursor-pointer">
+                  <CheckCircle className="h-3.5 w-3.5" />
+                  Sold
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-rose-50 text-rose-700 hover:bg-rose-100 dark:bg-rose-900/20 dark:text-rose-400 flex items-center gap-1.5 cursor-pointer">
+                  <Shield className="h-3.5 w-3.5" />
+                  Impounded
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-yellow-50 text-yellow-700 hover:bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-400 flex items-center gap-1.5 cursor-pointer">
+                  <Scale className="h-3.5 w-3.5" />
+                  Under Legal Hold
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-red-50 text-red-700 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 flex items-center gap-1.5 cursor-pointer">
+                  <AlertTriangle className="h-3.5 w-3.5" />
+                  Stolen
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-gray-50 text-gray-700 hover:bg-gray-100 dark:bg-gray-800/40 dark:text-gray-400 flex items-center gap-1.5 cursor-pointer">
+                  <Trash2 className="h-3.5 w-3.5" />
+                  Scrapped
+                </Badge>
+                <Badge variant="outline" className="py-2 px-3 bg-stone-50 text-stone-700 hover:bg-stone-100 dark:bg-stone-800/40 dark:text-stone-400 flex items-center gap-1.5 cursor-pointer">
+                  <FileX className="h-3.5 w-3.5" />
+                  Totaled
+                </Badge>
+              </div>
+            </div>
+            
+            <TabsList className="grid grid-cols-2 w-fit p-1">
               <TabsTrigger value="vehicles" className="px-4 py-2 text-sm flex gap-2 items-center">
                 <Car className="h-4 w-4" />
                 Vehicles
@@ -616,18 +683,6 @@ const VehicleVault = () => {
               <TabsTrigger value="documents" className="px-4 py-2 text-sm flex gap-2 items-center">
                 <FileText className="h-4 w-4" />
                 Documents
-              </TabsTrigger>
-              <TabsTrigger value="service-history" className="px-4 py-2 text-sm flex gap-2 items-center">
-                <Clock className="h-4 w-4" />
-                Service History
-              </TabsTrigger>
-              <TabsTrigger value="community" className="px-4 py-2 text-sm flex gap-2 items-center">
-                <Users className="h-4 w-4" />
-                Community Hub
-              </TabsTrigger>
-              <TabsTrigger value="health" className="px-4 py-2 text-sm flex gap-2 items-center">
-                <HeartPulse className="h-4 w-4" />
-                Health Records
               </TabsTrigger>
             </TabsList>
           </motion.div>
@@ -655,6 +710,43 @@ const VehicleVault = () => {
                         selectedCategory={selectedCategory}
                         onCategorySelect={handleCategorySelect}
                       />
+                    </div>
+                    
+                    {/* Vehicle Dashboard Cards */}
+                    <div className="mb-8">
+                      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                        <Activity className="h-4 w-4 text-blue-500" />
+                        Vehicle Dashboard
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <VehicleDashboardCard 
+                          vehicle="Honda City"
+                          registrationNumber="MH02AB1234"
+                          fuelType="petrol"
+                          serviceStatus="up_to_date"
+                          healthPercentage={92}
+                          lastUpdated={new Date(Date.now() - 3 * 60 * 60 * 1000)} // 3 hours ago
+                          status="Active"
+                        />
+                        <VehicleDashboardCard 
+                          vehicle="Hyundai Creta"
+                          registrationNumber="KA01MJ5678"
+                          fuelType="diesel"
+                          serviceStatus="due"
+                          healthPercentage={75}
+                          lastUpdated={new Date(Date.now() - 24 * 60 * 60 * 1000)} // 1 day ago
+                          status="Commercial Fleet"
+                        />
+                        <VehicleDashboardCard 
+                          vehicle="Maruti Swift"
+                          registrationNumber="DL7CX9012"
+                          fuelType="petrol"
+                          serviceStatus="up_to_date"
+                          healthPercentage={95}
+                          lastUpdated={new Date(Date.now() - 5 * 60 * 60 * 1000)} // 5 hours ago
+                          status="Recently Purchased"
+                        />
+                      </div>
                     </div>
                     
                     {/* Vehicle carousel section */}
