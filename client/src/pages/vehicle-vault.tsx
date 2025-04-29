@@ -15,12 +15,15 @@ import {
   PieChart, TrendingUp, TrendingDown, Star, BoxSelect, Brain,
   Battery, Leaf, Droplets, ArrowLeft, ArrowRight, ChevronLeft, ChevronRight,
   AlertTriangle, Activity, Info, Zap, BadgeCheck, Wrench, X, PlusCircle,
-  AlertCircle
+  AlertCircle, ThumbsUp
 } from 'lucide-react';
 
-// Import our new components
+// Import our components
 import VehicleCarousel from '@/components/vehicle-vault/VehicleCarousel';
 import VehicleDetailAnalysis from '@/components/vehicle-vault/VehicleDetailAnalysis';
+import VehicleCategorySelector from '@/components/vehicle-vault/VehicleCategorySelector';
+import VehicleMoodIndicator from '@/components/vehicle-vault/VehicleMoodIndicator';
+import ColorAdaptiveUI from '@/components/vehicle-vault/ColorAdaptiveUI';
 
 // Extended vehicle data with more details
 const vehicleData = [
@@ -609,6 +612,7 @@ const FloatingActionButton = () => {
 const VehicleVault = () => {
   const [activeTab, setActiveTab] = useState('vehicles');
   const [selectedVehicle, setSelectedVehicle] = useState<typeof vehicleData[0] | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState('cars');
   const { toast } = useToast();
   const { scrollY } = useScroll();
   const headerOpacity = useTransform(scrollY, [0, 200], [1, 0.3]);
@@ -616,6 +620,23 @@ const VehicleVault = () => {
     useTransform(scrollY, [0, 100], [1, 0.98]), 
     { stiffness: 300, damping: 30 }
   );
+  
+  // Filter vehicles by category
+  const getFilteredVehicles = () => {
+    if (selectedCategory === 'two-wheelers') {
+      return vehicleData.filter(v => v.vehicle.includes('TVS') || v.vehicle.includes('Royal Enfield'));
+    } else if (selectedCategory === 'cars') {
+      return vehicleData.filter(v => v.vehicle.includes('Tata') || v.vehicle.includes('Honda') || v.vehicle.includes('Mahindra'));
+    } else if (selectedCategory === 'commercial') {
+      return vehicleData.filter(v => v.vehicle.includes('Mahindra') || v.vehicle.includes('XUV'));
+    } else if (selectedCategory === 'three-wheelers') {
+      // No three-wheelers in our data, so return an empty array
+      return [];
+    }
+    return vehicleData;
+  };
+  
+  const filteredVehicles = getFilteredVehicles();
   
   const handleVehicleSelect = (vehicle: typeof vehicleData[0]) => {
     setSelectedVehicle(vehicle);
@@ -625,23 +646,44 @@ const VehicleVault = () => {
     });
   };
   
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    setSelectedVehicle(null);
+  };
+  
   return (
     <>
       <div className="relative">
         <ParticleBg />
         <div className="relative z-10">
+          {selectedVehicle && (
+            <ColorAdaptiveUI vehicleType={selectedVehicle.vehicle}>
+              <div className="absolute inset-0 pointer-events-none z-[-1] opacity-30">
+                <div className="w-full h-full bg-gradient-to-r from-blue-50/30 to-indigo-50/30 dark:from-blue-900/10 dark:to-indigo-900/10" />
+              </div>
+            </ColorAdaptiveUI>
+          )}
+          
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-8"
+            className="mb-2"
           >
-            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-              VehicleVault
-            </h1>
-            <p className="text-lg text-slate-600 dark:text-slate-400 mt-2">
-              Manage and maintain your vehicle fleet in one place.
-            </p>
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+                  Your Vehicles
+                </h1>
+                <p className="text-slate-600 dark:text-slate-400">
+                  View and manage your entire vehicle fleet
+                </p>
+              </div>
+              <Button variant="outline" className="gap-2">
+                <PlusCircle className="h-4 w-4" />
+                Add Vehicle
+              </Button>
+            </div>
           </motion.div>
           
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
@@ -692,9 +734,17 @@ const VehicleVault = () => {
                 </CardHeader>
                 <CardContent className="pt-4">
                   <div className="space-y-6">
+                    {/* Vehicle category selector */}
+                    <div className="mb-6">
+                      <VehicleCategorySelector 
+                        selectedCategory={selectedCategory}
+                        onCategorySelect={handleCategorySelect}
+                      />
+                    </div>
+                    
                     {/* Vehicle carousel section */}
                     <VehicleCarousel 
-                      vehicles={vehicleData} 
+                      vehicles={filteredVehicles} 
                       onVehicleSelect={handleVehicleSelect}
                     />
                     
@@ -718,7 +768,14 @@ const VehicleVault = () => {
                             Close Analysis
                           </Button>
                         </div>
-                        <VehicleDetailAnalysis vehicle={selectedVehicle} />
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          <div className="md:col-span-2">
+                            <VehicleDetailAnalysis vehicle={selectedVehicle} />
+                          </div>
+                          <div>
+                            <VehicleMoodIndicator vehicle={selectedVehicle} />
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>
