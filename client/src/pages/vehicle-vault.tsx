@@ -16,8 +16,13 @@ import {
   Battery, Leaf, Droplets, ArrowLeft, ArrowRight, ChevronLeft, ChevronRight,
   AlertTriangle, Activity, Info, Zap, BadgeCheck, Wrench, X, PlusCircle,
   AlertCircle, ThumbsUp, ShoppingBag, RefreshCw, Warehouse, AlertOctagon,
-  Building2, KeyRound, Tag, CheckCircle, Scale, Trash2, FileX
+  Building2, KeyRound, Tag, CheckCircle, Scale, Trash2, FileX,
+  Plus, Edit, Eye, Calendar as CalendarIcon, Clock as CalendarClock,
+  Smartphone as SmartphoneNfc, Receipt, CalendarCheck,
+  Fuel, Route, User as UserCircle, UserCog, CreditCard, 
+  Filter as FilterX, CheckCircle as CheckCircle2, MapPin, HelpCircle as FileQuestion
 } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 // Import our components
 import VehicleCarousel from '@/components/vehicle-vault/VehicleCarousel';
