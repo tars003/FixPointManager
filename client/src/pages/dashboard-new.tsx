@@ -124,7 +124,7 @@ const DashboardNew = () => {
       name: 'VehicleVault',
       description: 'Manage all your vehicle details in one place',
       icon: <Car className="h-5 w-5" />,
-      path: '/vehicles',
+      path: '/vehicle-vault',
       color: 'bg-blue-500',
       bgColor: 'bg-blue-50'
     },
@@ -385,7 +385,7 @@ const DashboardNew = () => {
                   <Button 
                     variant="ghost" 
                     size="sm"
-                    onClick={() => navigateTo('/vehicles')}
+                    onClick={() => navigateTo('/vehicle-vault')}
                     className="flex items-center gap-1"
                   >
                     View All
@@ -399,7 +399,7 @@ const DashboardNew = () => {
                     <div 
                       key={vehicle.id}
                       className="flex items-center justify-between p-3 rounded-lg border hover:bg-gray-50 cursor-pointer"
-                      onClick={() => navigateTo(`/vehicles/${vehicle.id}`)}
+                      onClick={() => navigateTo(`/vehicle-vault/${vehicle.id}`)}
                     >
                       <div className="flex items-center">
                         <div className="bg-blue-50 p-2 rounded-md mr-4">

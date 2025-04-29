@@ -340,7 +340,7 @@ const DashboardEnhanced = () => {
               label="Vehicles"
               value={stats.totalVehicles.toString()}
               trend="stable"
-              onClick={() => navigateTo('/vehicles')}
+              onClick={() => navigateTo('/vehicle-vault')}
             />
             <StatsCard 
               icon={<Wrench className="h-5 w-5" />}
@@ -380,7 +380,7 @@ const DashboardEnhanced = () => {
             <Button 
               variant="ghost" 
               size="sm"
-              onClick={() => navigateTo('/vehicles')}
+              onClick={() => navigateTo('/vehicle-vault')}
               className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
             >
               View All
@@ -394,7 +394,7 @@ const DashboardEnhanced = () => {
                 key={vehicle.id}
                 className="border rounded-xl overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
                 whileHover={{ y: -3 }}
-                onClick={() => navigateTo(`/vehicles/${vehicle.id}`)}
+                onClick={() => navigateTo(`/vehicle-vault/${vehicle.id}`)}
               >
                 <div className="h-24 bg-gray-100 flex items-center justify-center relative">
                   {vehicle.imageSrc ? (
