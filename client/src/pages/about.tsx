@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Layout } from '@/components/layout';
+import Layout from '@/components/layout/layout';
 import { Button } from '@/components/ui/button';
 import { Car, Shield, Wrench, Award, Users, HeartHandshake, MapPin, Zap } from 'lucide-react';
 import { useLocation } from 'wouter';

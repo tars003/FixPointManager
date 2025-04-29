@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Layout } from '@/components/layout';
+import Layout from '@/components/layout/layout';
 import { 
   ShieldCheck, 
   Scale,

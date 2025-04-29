@@ -43,6 +43,8 @@ import ArenaMain from "@/pages/arena-main";
 import ProjectCustomization from "@/pages/project-customization";
 import Drishti from "@/pages/drishti";
 import AnimationDemo from "@/pages/animation-demo";
+import ProfilePage from "@/pages/profile";
+import SettingsPage from "@/pages/settings";
 
 function Router() {
   const [location] = useLocation();
@@ -420,6 +422,32 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <AnimationDemo />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/profile">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <ProfilePage />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/settings">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <SettingsPage />
               </motion.div>
             )}
           </Route>
