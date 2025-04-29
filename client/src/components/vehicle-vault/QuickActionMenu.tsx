@@ -1,195 +1,185 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Plus, 
-  X, 
-  Calendar, 
-  Wrench, 
   Car, 
-  FileText, 
-  Share, 
-  Pen, 
-  RotateCcw,
-  Zap,
-  Truck
+  Wrench, 
+  PlusCircle, 
+  Share2, 
+  ShoppingBag, 
+  Download, 
+  RefreshCw,
+  Warehouse,
+  AlertOctagon,
+  Building2,
+  KeyRound,
+  Tag,
+  History,
+  Search,
+  ShieldAlert,
+  Phone,
+  BookOpen,
+  AlertTriangle,
+  Settings
 } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { Button } from '@/components/ui/button';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 interface QuickActionMenuProps {
-  vehicleId?: number;
   vehicleStatus: string;
 }
 
-const QuickActionMenu: React.FC<QuickActionMenuProps> = ({ vehicleId, vehicleStatus }) => {
+const QuickActionMenu = ({ vehicleStatus }: QuickActionMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { toast } = useToast();
-
-  // Define context-aware actions based on vehicle status
-  const getActionsForStatus = () => {
-    switch (vehicleStatus) {
+  
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'Active': return <Car className="h-5 w-5 text-green-500" />;
+      case 'Recently Purchased': return <ShoppingBag className="h-5 w-5 text-blue-500" />;
+      case 'Pre-owned': return <RefreshCw className="h-5 w-5 text-indigo-500" />;
+      case 'In Maintenance': return <Wrench className="h-5 w-5 text-amber-500" />;
+      case 'Garage Stored': return <Warehouse className="h-5 w-5 text-sky-500" />;
+      case 'Out of Service': return <AlertOctagon className="h-5 w-5 text-slate-500" />;
+      case 'Commercial Fleet': return <Building2 className="h-5 w-5 text-purple-500" />;
+      case 'Leased Out': return <KeyRound className="h-5 w-5 text-emerald-500" />;
+      case 'For Sale': return <Tag className="h-5 w-5 text-pink-500" />;
+      default: return <Car className="h-5 w-5 text-green-500" />;
+    }
+  };
+  
+  const getQuickActions = (status: string) => {
+    const commonActions = [
+      { icon: <Share2 className="h-4 w-4" />, label: 'Share', color: 'bg-blue-500' },
+      { icon: <History className="h-4 w-4" />, label: 'History', color: 'bg-purple-500' },
+      { icon: <Search className="h-4 w-4" />, label: 'Documents', color: 'bg-indigo-500' },
+    ];
+    
+    switch (status) {
       case 'Active':
         return [
-          { icon: <Calendar className="h-4 w-4" />, label: 'Schedule Service', action: () => handleAction('schedule') },
-          { icon: <FileText className="h-4 w-4" />, label: 'View Documents', action: () => handleAction('documents') },
-          { icon: <Share className="h-4 w-4" />, label: 'Share Vehicle', action: () => handleAction('share') },
-          { icon: <Pen className="h-4 w-4" />, label: 'Edit Details', action: () => handleAction('edit') },
+          ...commonActions,
+          { icon: <Settings className="h-4 w-4" />, label: 'Schedule Service', color: 'bg-green-500' },
+          { icon: <ShieldAlert className="h-4 w-4" />, label: 'Insurance', color: 'bg-amber-500' },
         ];
+        
       case 'Recently Purchased':
         return [
-          { icon: <FileText className="h-4 w-4" />, label: 'Upload Documents', action: () => handleAction('upload') },
-          { icon: <Zap className="h-4 w-4" />, label: 'Track Registration', action: () => handleAction('track') },
-          { icon: <Calendar className="h-4 w-4" />, label: 'Schedule First Service', action: () => handleAction('schedule') },
+          ...commonActions,
+          { icon: <Download className="h-4 w-4" />, label: 'Registration', color: 'bg-blue-500' },
+          { icon: <BookOpen className="h-4 w-4" />, label: 'Ownership Guide', color: 'bg-teal-500' },
         ];
+        
+      case 'Pre-owned':
+        return [
+          ...commonActions,
+          { icon: <Settings className="h-4 w-4" />, label: 'Inspection', color: 'bg-indigo-500' },
+          { icon: <BookOpen className="h-4 w-4" />, label: 'History Report', color: 'bg-purple-500' },
+        ];
+        
       case 'In Maintenance':
         return [
-          { icon: <Wrench className="h-4 w-4" />, label: 'Service Updates', action: () => handleAction('updates') },
-          { icon: <RotateCcw className="h-4 w-4" />, label: 'Extend Service', action: () => handleAction('extend') },
-          { icon: <Truck className="h-4 w-4" />, label: 'Transport Options', action: () => handleAction('transport') },
+          ...commonActions,
+          { icon: <Phone className="h-4 w-4" />, label: 'Contact Service', color: 'bg-amber-500' },
+          { icon: <AlertTriangle className="h-4 w-4" />, label: 'Service Status', color: 'bg-orange-500' },
         ];
-      case 'Pre-Owned':
+        
+      case 'Garage Stored':
         return [
-          { icon: <FileText className="h-4 w-4" />, label: 'View History', action: () => handleAction('history') },
-          { icon: <Calendar className="h-4 w-4" />, label: 'Schedule Service', action: () => handleAction('schedule') },
-          { icon: <Pen className="h-4 w-4" />, label: 'Edit Details', action: () => handleAction('edit') },
+          ...commonActions,
+          { icon: <Settings className="h-4 w-4" />, label: 'Storage Care', color: 'bg-sky-500' },
+          { icon: <PlusCircle className="h-4 w-4" />, label: 'Reactivate', color: 'bg-green-500' },
         ];
+        
+      case 'Out of Service':
+        return [
+          ...commonActions,
+          { icon: <Settings className="h-4 w-4" />, label: 'Repair Options', color: 'bg-slate-500' },
+          { icon: <ShoppingBag className="h-4 w-4" />, label: 'Scrap/Sell', color: 'bg-red-500' },
+        ];
+        
+      case 'Commercial Fleet':
+        return [
+          ...commonActions,
+          { icon: <Settings className="h-4 w-4" />, label: 'Fleet Management', color: 'bg-purple-500' },
+          { icon: <Search className="h-4 w-4" />, label: 'Driver Records', color: 'bg-indigo-500' },
+        ];
+        
+      case 'Leased Out':
+        return [
+          ...commonActions,
+          { icon: <Tool className="h-4 w-4" />, label: 'Lease Terms', color: 'bg-emerald-500' },
+          { icon: <PlusCircle className="h-4 w-4" />, label: 'Lease Extension', color: 'bg-green-500' },
+        ];
+        
+      case 'For Sale':
+        return [
+          ...commonActions,
+          { icon: <Tool className="h-4 w-4" />, label: 'Selling Guide', color: 'bg-pink-500' },
+          { icon: <ShoppingBag className="h-4 w-4" />, label: 'Listing Options', color: 'bg-violet-500' },
+        ];
+        
       default:
-        return [
-          { icon: <Calendar className="h-4 w-4" />, label: 'Schedule Service', action: () => handleAction('schedule') },
-          { icon: <FileText className="h-4 w-4" />, label: 'View Documents', action: () => handleAction('documents') },
-        ];
+        return commonActions;
     }
   };
-
-  const handleAction = (actionType: string) => {
-    const actionMessages = {
-      'schedule': 'Service scheduled successfully!',
-      'documents': 'Opening document viewer...',
-      'share': 'Share options opened',
-      'edit': 'Edit mode activated',
-      'upload': 'Document upload started',
-      'track': 'Showing registration status',
-      'updates': 'Fetching latest service updates',
-      'extend': 'Service extension requested',
-      'transport': 'Transport options displayed',
-      'history': 'Vehicle history loaded'
-    };
-
-    toast({
-      title: "Action Triggered",
-      description: actionMessages[actionType as keyof typeof actionMessages] || "Action completed",
-    });
-    
-    setIsOpen(false);
-  };
-
-  const menuVariants = {
-    closed: {
-      opacity: 0,
-      y: 20,
-      transition: {
-        staggerChildren: 0.05,
-        staggerDirection: -1
-      }
-    },
-    open: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        staggerChildren: 0.07,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    closed: { opacity: 0, y: 10 },
-    open: { opacity: 1, y: 0 }
-  };
-
+  
   return (
     <div className="fixed bottom-6 right-6 z-50">
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            className="flex flex-col items-end space-y-2 mb-2"
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={menuVariants}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="flex flex-col gap-2 mb-4"
           >
-            {getActionsForStatus().map((action, index) => (
-              <motion.div
-                key={index}
-                className="flex items-center"
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span className="bg-white dark:bg-slate-800 py-1 px-3 rounded-l-full text-sm shadow-md mr-1">
-                  {action.label}
-                </span>
-                <Button
-                  size="sm"
-                  className="rounded-full p-2 h-9 w-9"
-                  onClick={action.action}
-                  style={{
-                    background: getStatusColor(vehicleStatus),
-                  }}
-                >
-                  {action.icon}
-                </Button>
-              </motion.div>
+            {getQuickActions(vehicleStatus).map((action, index) => (
+              <HoverCard key={index}>
+                <HoverCardTrigger asChild>
+                  <motion.button
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.05 }}
+                    className={`p-3 rounded-full shadow-lg ${action.color} text-white hover:opacity-90 transition-all`}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {action.icon}
+                  </motion.button>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-fit p-2" side="left">
+                  <span className="text-sm font-medium">{action.label}</span>
+                </HoverCardContent>
+              </HoverCard>
             ))}
           </motion.div>
         )}
       </AnimatePresence>
       
       <motion.div
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
-        <Button
-          size="lg"
-          className="rounded-full p-0 h-14 w-14 shadow-lg"
-          onClick={() => setIsOpen(!isOpen)}
-          style={{
-            background: getStatusColor(vehicleStatus),
-          }}
+        <Button 
+          onClick={() => setIsOpen(!isOpen)} 
+          className={`rounded-full w-12 h-12 p-0 shadow-lg flex items-center justify-center relative ${isOpen ? 'bg-slate-800' : 'bg-blue-600'}`}
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={isOpen ? "close" : "open"}
-              initial={{ rotate: 0, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              {isOpen ? <X className="h-6 w-6" /> : <Plus className="h-6 w-6" />}
-            </motion.div>
-          </AnimatePresence>
+          <div className="absolute -top-1 -right-1 bg-white dark:bg-gray-800 rounded-full p-1 shadow-md">
+            {getStatusIcon(vehicleStatus)}
+          </div>
+          <motion.div 
+            animate={{ rotate: isOpen ? 45 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <PlusCircle className="h-5 w-5" />
+          </motion.div>
         </Button>
       </motion.div>
     </div>
   );
 };
-
-// Helper function to get color based on status
-function getStatusColor(status: string): string {
-  switch (status) {
-    case 'Active':
-      return 'linear-gradient(135deg, #3182ce, #0047AB)';
-    case 'Recently Purchased':
-      return 'linear-gradient(135deg, #2563eb, #1e40af)';
-    case 'In Maintenance':
-      return 'linear-gradient(135deg, #f59e0b, #d97706)';
-    case 'Pre-Owned':
-      return 'linear-gradient(135deg, #8b5cf6, #6d28d9)';
-    case 'Garage Stored':
-      return 'linear-gradient(135deg, #10b981, #059669)';
-    default:
-      return 'linear-gradient(135deg, #3182ce, #0047AB)';
-  }
-}
 
 export default QuickActionMenu;

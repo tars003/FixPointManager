@@ -81,6 +81,55 @@ type Vehicle = {
   serviceCenter?: string;
   estimatedCompletion?: string;
   maintenanceNotes?: string;
+  
+  // Garage Stored specific fields
+  storageLocation?: string;
+  storageStartDate?: string;
+  storageDuration?: string;
+  storageType?: string;
+  storageConditions?: string;
+  storageCost?: string;
+  coverType?: string;
+  
+  // Out of Service specific fields
+  issueDescription?: string;
+  estimatedRepairCost?: string;
+  serviceHistory?: string;
+  condition?: string;
+  lastOperationalDate?: string;
+  parkedLocation?: string;
+  disposalPlan?: string;
+  
+  // Commercial Fleet specific fields
+  fleetID?: string;
+  driver?: string;
+  driverLicense?: string;
+  driverContact?: string;
+  routeAssignment?: string;
+  loadCapacity?: string;
+  dailyRunningCost?: string;
+  commercialPermit?: string;
+  gpsTrackingID?: string;
+  
+  // Leased Out specific fields
+  leaseStartDate?: string;
+  leaseDuration?: string;
+  leasedTo?: string;
+  leaseAmount?: string;
+  leaseTerms?: string;
+  kmLimit?: string;
+  securityDeposit?: string;
+  leaseAgreementNo?: string;
+  
+  // For Sale specific fields
+  listingDate?: string;
+  askingPrice?: string;
+  negotiable?: boolean;
+  sellingReason?: string;
+  advertisedOn?: string;
+  viewingLocation?: string;
+  sellerContact?: string;
+  documentStatus?: string;
 };
 
 // Extended vehicle data with more details
@@ -470,6 +519,329 @@ const vehicleData = [
     serviceCenter: 'Hero Authorized Workshop',
     estimatedCompletion: 'May 1, 2025',
     maintenanceNotes: 'Carburetor adjustment and chain replacement'
+  },
+  // Garage Stored Vehicles
+  { 
+    id: 16,
+    vehicle: 'Audi R8', 
+    worth: 15500000, 
+    percentage: 85,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Audi/R8/8249/1681887437801/front-left-side-47.jpg',
+    mileage: 6200,
+    fuelType: 'Petrol',
+    engineHealth: 95,
+    lastService: '2 months ago',
+    nextService: 'After storage',
+    purchaseDate: 'Jun 10, 2022',
+    insuranceValid: 'Jun 2025',
+    maintenanceCost: 125000,
+    efficiency: '7.5 km/l',
+    averageFuel: '13.3 l/100km',
+    topSpeed: '330 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'DL 01 AW 7890',
+    chassisNumber: 'AUDR8220610XYZ',
+    engineNumber: 'R822061078V10',
+    owner: 'Vikram Malhotra',
+    rcExpiryDate: 'Jun 09, 2032',
+    storageLocation: 'Premium Auto Storage, Gurugram',
+    storageStartDate: 'Jan 15, 2025',
+    storageDuration: '6 months',
+    storageType: 'Climate Controlled',
+    storageConditions: 'Temperature: 18-22°C, Humidity: 40-50%',
+    storageCost: '35000 per month',
+    coverType: 'Custom-fit breathable cover'
+  },
+  { 
+    id: 17,
+    vehicle: 'Royal Enfield Continental GT 650', 
+    worth: 310000, 
+    percentage: 72,
+    image: 'https://bd.gaadicdn.com/processedimages/royal-enfield/continental-gt-650/source/continental-gt-65062f3b82ec1c8.jpg',
+    mileage: 8500,
+    fuelType: 'Petrol',
+    engineHealth: 96,
+    lastService: 'Before storage',
+    nextService: 'After storage',
+    purchaseDate: 'Sep 25, 2023',
+    insuranceValid: 'Sep 2026',
+    maintenanceCost: 15000,
+    efficiency: '25 km/l',
+    averageFuel: '4.0 l/100km',
+    topSpeed: '160 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'MH 02 CV 5432',
+    chassisNumber: 'RECT65023925GTX',
+    engineNumber: 'GT65023925ENG',
+    owner: 'Arjun Sharma',
+    rcExpiryDate: 'Sep 24, 2033',
+    storageLocation: 'Personal Garage, Mumbai',
+    storageStartDate: 'Feb 10, 2025',
+    storageDuration: 'Indefinite',
+    storageType: 'Garage',
+    storageConditions: 'Ambient temperature, covered parking',
+    storageCost: '0',
+    coverType: 'Royal Enfield branded dust cover'
+  },
+  // Out of Service Vehicles
+  { 
+    id: 18,
+    vehicle: 'Maruti Suzuki Alto', 
+    worth: 125000, 
+    percentage: 25,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Maruti/Alto-800/10079/1687342153187/front-left-side-47.jpg',
+    mileage: 75600,
+    fuelType: 'Petrol',
+    engineHealth: 40,
+    lastService: '8 months ago',
+    nextService: 'Required',
+    purchaseDate: 'Apr 12, 2020',
+    insuranceValid: 'Apr 2023 (Expired)',
+    maintenanceCost: 45000,
+    efficiency: '20 km/l',
+    averageFuel: '5.0 l/100km',
+    topSpeed: '140 km/h',
+    emissionRating: 'BS4',
+    registrationNumber: 'KA 05 ML 2345',
+    chassisNumber: 'MSALT20041267H',
+    engineNumber: 'ALT2004126MS',
+    owner: 'Rajesh Kumar',
+    rcExpiryDate: 'Apr 11, 2030',
+    issueDescription: 'Transmission failure, engine knocking',
+    estimatedRepairCost: '65000',
+    serviceHistory: 'Irregular maintenance',
+    condition: 'Poor',
+    lastOperationalDate: 'Jan 5, 2025',
+    parkedLocation: 'Residence parking lot',
+    disposalPlan: 'Considering repair or scrap'
+  },
+  { 
+    id: 19,
+    vehicle: 'Yamaha FZ-S', 
+    worth: 45000, 
+    percentage: 30,
+    image: 'https://bd.gaadicdn.com/processedimages/yamaha/fzs-fi-v3/source/fzs-fi-v362f8f2fc7138d.jpg',
+    mileage: 52000,
+    fuelType: 'Petrol',
+    engineHealth: 35,
+    lastService: '10 months ago',
+    nextService: 'Required',
+    purchaseDate: 'Jul 28, 2021',
+    insuranceValid: 'Jul 2023 (Expired)',
+    maintenanceCost: 12000,
+    efficiency: '42 km/l',
+    averageFuel: '2.4 l/100km',
+    topSpeed: '115 km/h',
+    emissionRating: 'BS4',
+    registrationNumber: 'UP 14 BR 7891',
+    chassisNumber: 'YMFZ21072856Y',
+    engineNumber: 'FZ21072856YM',
+    owner: 'Vivek Singh',
+    rcExpiryDate: 'Jul 27, 2031',
+    issueDescription: 'Electrical system failure, starter issues',
+    estimatedRepairCost: '18000',
+    serviceHistory: 'Regular until 1 year ago',
+    condition: 'Fair',
+    lastOperationalDate: 'Feb 20, 2025',
+    parkedLocation: 'Apartment basement',
+    disposalPlan: 'Planning to repair'
+  },
+  // Commercial Fleet Vehicles
+  { 
+    id: 20,
+    vehicle: 'Tata Ace Gold', 
+    worth: 450000, 
+    percentage: 65,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Tata/Ace-Gold/7376/1677666481065/front-left-side-47.jpg',
+    mileage: 28500,
+    fuelType: 'Diesel',
+    engineHealth: 82,
+    lastService: '45 days ago',
+    nextService: '2 months',
+    purchaseDate: 'Oct 10, 2023',
+    insuranceValid: 'Oct 2026',
+    maintenanceCost: 35000,
+    efficiency: '16 km/l',
+    averageFuel: '6.3 l/100km',
+    topSpeed: '80 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'DL 1L CB 2534',
+    chassisNumber: 'TACE231010GLD',
+    engineNumber: 'ACE2310105G',
+    owner: 'Swift Logistics',
+    rcExpiryDate: 'Oct 09, 2033',
+    fleetID: 'SL-12345',
+    driver: 'Kamal Singh',
+    driverLicense: 'DL-2309876543',
+    driverContact: '9876543210',
+    routeAssignment: 'Delhi-Sonipat-Delhi',
+    loadCapacity: '710 kg',
+    dailyRunningCost: '1,200',
+    commercialPermit: 'Valid through Oct 2026',
+    gpsTrackingID: 'TRK-SL-2534'
+  },
+  { 
+    id: 21,
+    vehicle: 'Tata 407 LPT', 
+    worth: 1250000, 
+    percentage: 78,
+    image: 'https://5.imimg.com/data5/WE/FJ/QL/SELLER-26256295/tata-407-pick-up-truck-500x500.png',
+    mileage: 42000,
+    fuelType: 'Diesel',
+    engineHealth: 88,
+    lastService: '25 days ago',
+    nextService: '2.5 months',
+    purchaseDate: 'May 15, 2023',
+    insuranceValid: 'May 2026',
+    maintenanceCost: 85000,
+    efficiency: '10 km/l',
+    averageFuel: '10.0 l/100km',
+    topSpeed: '90 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'HR 55 T 9876',
+    chassisNumber: 'T407230515LPT',
+    engineNumber: '407230515TT',
+    owner: 'Galaxy Transport Co.',
+    rcExpiryDate: 'May 14, 2033',
+    fleetID: 'GT-789012',
+    driver: 'Prakash Yadav',
+    driverLicense: 'HR-4587691230',
+    driverContact: '8765432109',
+    routeAssignment: 'Delhi-Jaipur-Delhi',
+    loadCapacity: '4 tonnes',
+    dailyRunningCost: '3,500',
+    commercialPermit: 'Valid through May 2026',
+    gpsTrackingID: 'TRK-GT-9876'
+  },
+  // Leased Out Vehicles
+  { 
+    id: 22,
+    vehicle: 'Hyundai Creta', 
+    worth: 1050000, 
+    percentage: 70,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Hyundai/Creta/10544/1689586014142/front-left-side-47.jpg',
+    mileage: 18500,
+    fuelType: 'Petrol',
+    engineHealth: 92,
+    lastService: '1 month ago',
+    nextService: '4 months',
+    purchaseDate: 'Jan 05, 2024',
+    insuranceValid: 'Jan 2027',
+    maintenanceCost: 18500,
+    efficiency: '16.5 km/l',
+    averageFuel: '6.1 l/100km',
+    topSpeed: '170 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'KA 01 MJ 4567',
+    chassisNumber: 'HCRT240105BLU',
+    engineNumber: 'CRT24010512',
+    owner: 'Horizon Car Rentals',
+    rcExpiryDate: 'Jan 04, 2034',
+    leaseStartDate: 'Feb 10, 2025',
+    leaseDuration: '12 months',
+    leasedTo: 'Infosys Ltd.',
+    leaseAmount: '28,000 per month',
+    leaseTerms: 'Full maintenance included',
+    kmLimit: '2,500 km/month',
+    securityDeposit: '100,000',
+    leaseAgreementNo: 'HCR/L/2025/123'
+  },
+  { 
+    id: 23,
+    vehicle: 'Toyota Innova Crysta', 
+    worth: 1650000, 
+    percentage: 75,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Toyota/Innova-Crysta/9612/1669619170082/front-left-side-47.jpg',
+    mileage: 22000,
+    fuelType: 'Diesel',
+    engineHealth: 94,
+    lastService: '2 months ago',
+    nextService: '3 months',
+    purchaseDate: 'Sep 15, 2023',
+    insuranceValid: 'Sep 2026',
+    maintenanceCost: 25000,
+    efficiency: '13 km/l',
+    averageFuel: '7.7 l/100km',
+    topSpeed: '190 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'MH 01 TC 7890',
+    chassisNumber: 'TICR230915INV',
+    engineNumber: 'CR230915TYT',
+    owner: 'Supreme Cars',
+    rcExpiryDate: 'Sep 14, 2033',
+    leaseStartDate: 'Mar 01, 2025',
+    leaseDuration: '24 months',
+    leasedTo: 'TCS Ltd.',
+    leaseAmount: '45,000 per month',
+    leaseTerms: 'Maintenance excluded',
+    kmLimit: '3,000 km/month',
+    securityDeposit: '150,000',
+    leaseAgreementNo: 'SC/L/2025/456'
+  },
+  // For Sale Vehicles
+  { 
+    id: 24,
+    vehicle: 'Honda Amaze', 
+    worth: 585000, 
+    percentage: 55,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Honda/Amaze/10489/1687857324697/front-left-side-47.jpg',
+    mileage: 35000,
+    fuelType: 'Petrol',
+    engineHealth: 88,
+    lastService: '1.5 months ago',
+    nextService: '4 months',
+    purchaseDate: 'Jul 22, 2022',
+    insuranceValid: 'Jul 2025',
+    maintenanceCost: 22000,
+    efficiency: '18 km/l',
+    averageFuel: '5.6 l/100km',
+    topSpeed: '160 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'TN 01 AK 6789',
+    chassisNumber: 'HAMZ220722AMZ',
+    engineNumber: 'AMZ220722HN',
+    owner: 'Ravi Chandran',
+    rcExpiryDate: 'Jul 21, 2032',
+    listingDate: 'Apr 15, 2025',
+    askingPrice: '585,000',
+    negotiable: true,
+    sellingReason: 'Upgrading to SUV',
+    advertisedOn: 'FixPoint, Olx, CarTrade',
+    viewingLocation: 'Chennai, Tamil Nadu',
+    sellerContact: '9876123450',
+    documentStatus: 'All clear'
+  },
+  { 
+    id: 25,
+    vehicle: 'KTM Duke 390', 
+    worth: 240000, 
+    percentage: 60,
+    image: 'https://bd.gaadicdn.com/processedimages/ktm/duke-390/source/duke-39063e10e9fa61d9.jpg',
+    mileage: 15500,
+    fuelType: 'Petrol',
+    engineHealth: 90,
+    lastService: '2 months ago',
+    nextService: '4 months',
+    purchaseDate: 'Oct 30, 2022',
+    insuranceValid: 'Oct 2025',
+    maintenanceCost: 12000,
+    efficiency: '28 km/l',
+    averageFuel: '3.6 l/100km',
+    topSpeed: '170 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'KA 03 EB 4321',
+    chassisNumber: 'KTM221030DUK',
+    engineNumber: 'DUK221030KT',
+    owner: 'Karan Mehta',
+    rcExpiryDate: 'Oct 29, 2032',
+    listingDate: 'Apr 10, 2025',
+    askingPrice: '240,000',
+    negotiable: true,
+    sellingReason: 'Moving abroad',
+    advertisedOn: 'FixPoint, BikeWale, OLX',
+    viewingLocation: 'Bangalore, Karnataka',
+    sellerContact: '8765432198',
+    documentStatus: 'All clear'
   }
 ];
 

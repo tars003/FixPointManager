@@ -1,0 +1,248 @@
+6. Out of Service
+Documentation Required:
+Non-operational Status
+
+
+Official non-operation declaration with authorities
+Tax/insurance adjustment documentation
+Parking/storage location details
+Duration of expected non-operation
+Mechanical Assessment
+
+
+Detailed diagnosis of issues preventing operation
+Required parts list with availability status
+Labor requirements and specialized skills needed
+Third-party expert opinions
+Financial Assessment
+
+
+Comprehensive repair cost estimates
+Cost-benefit analysis (repair vs. replace)
+Financing options for major repairs
+Salvage value assessment if beyond repair
+Resolution Planning
+
+
+Repair timeline projection
+Resources required for return to service
+Alternative vehicle arrangements
+Decision documentation (repair, sell, scrap)
+Action Flow:
+Non-operation status reporting to authorities
+Insurance coverage adjustment process
+Repair feasibility assessment
+Parts sourcing assistance
+Specialist workshop recommendations
+Return to service roadmap
+Status transition options (to Active, For Sale, or Scrapped)
+7. Commercial Fleet
+Documentation Required:
+Commercial Registration
+
+
+Commercial vehicle permit
+Route permit details (if applicable)
+Special operation licenses
+Interstate/international operation permits
+Category-specific certifications
+Business Usage Records
+
+
+Daily trip logs with mileage
+Driver assignments and hours
+Load/passenger manifests
+Client/contract information
+Revenue generation reports
+Compliance Documentation
+
+
+Department of Transportation compliance records
+Safety inspection certificates
+Hours of service compliance
+Weight station clearances
+Environmental compliance certificates
+Commercial Insurance
+
+
+Commercial auto policy with liability limits
+Cargo insurance details
+Passenger liability coverage
+Workers' compensation (for drivers)
+Business interruption coverage
+Fleet Management
+
+
+Preventive maintenance schedule
+Downtime optimization planning
+Fleet efficiency metrics
+Replacement cycle documentation
+Fleet standardization protocols
+Tax Documentation
+
+
+Business expense allocation
+Depreciation schedule for business vehicles
+Fuel tax reporting
+Interstate tax apportionment
+Tax deduction qualification evidence
+Action Flow:
+Commercial compliance deadline tracking
+Driver qualification file management
+Business expense categorization
+Revenue attribution by vehicle
+Route optimization suggestions
+Fleet replacement planning
+Business vs. personal use separation for taxes
+8. Leased Out
+Documentation Required:
+Lease Agreement
+
+
+Comprehensive lease contract with terms
+Payment schedule and method
+Usage restrictions and mileage limits
+Maintenance responsibilities definition
+Insurance requirements
+Termination conditions and penalties
+Lessee Information
+
+
+Lessee complete profile and verification
+Driving history and license verification
+Credit check documentation
+References verification
+Contact information for emergencies
+Vehicle Condition
+
+
+Pre-lease inspection report with photos
+Existing damage documentation
+Odometer reading verification
+Equipment and accessory inventory
+Expected condition at return definition
+Financial Records
+
+
+Security deposit receipt and terms
+Payment tracking and history
+Late payment documentation
+Security deposit deduction justification (if applicable)
+Income reporting for tax purposes
+Insurance Verification
+
+
+Lessee's insurance policy details
+Additional insured status confirmation
+Coverage adequacy verification
+Claims process in event of accident
+Insurance renewal tracking
+Action Flow:
+Lease term tracking and expiration alerts
+Payment receipt generation
+Lessee communication channel
+Lease violation notification system
+Vehicle tracking options (if permitted)
+Maintenance compliance verification
+End-of-lease condition comparison
+Return process management or renewal workflow
+9. For Sale
+Documentation Required:
+Sale Preparation
+
+
+Pre-sale inspection report
+Recommended repairs for optimal sale
+Detail/reconditioning work performed
+Market value assessment with comparables
+Title status verification (clear/lien)
+Listing Documentation
+
+
+Vehicle description with specifications
+Accurate condition disclosure
+Maintenance history summary
+Known issues disclosure
+Asking price justification
+Professional quality photographs
+Marketing Materials
+
+
+Listing platforms with account details
+Advertisement copies
+Promotion expenses tracking
+Reach and impression metrics
+Lead generation statistics
+Buyer Interactions
+
+
+Interested buyer contact database
+Viewing appointment schedule
+Test drive waivers and documentation
+Offer negotiations history
+Serious buyer verification process
+Sale Preparation
+
+
+Title transfer preparation
+Required documents checklist
+Transaction method options
+Payment verification procedures
+Bill of sale template
+Action Flow:
+Market value tracking over time
+Listing performance analytics
+Inquiry response management
+Showing appointment scheduling
+Offer evaluation assistance
+Price adjustment recommendations
+Transition to "Sold" status upon completion
+10. Sold
+Documentation Required:
+Sale Completion
+
+
+Final bill of sale with terms
+Payment confirmation and receipts
+Delivery receipt acknowledgment
+As-is condition acknowledgment
+Disclosure statement signed by buyer
+Ownership Transfer
+
+
+Title transfer documentation
+Release of liability filing
+Registration transfer confirmation
+License plate surrender receipts (if required)
+DMV transfer notification confirmation
+Buyer Information
+
+
+Buyer complete details for records
+Secondary contact information
+Transfer completion verification
+Post-sale communication log
+Financial Records
+
+
+Sale price documentation for tax purposes
+Capital gain/loss calculation
+Tax implication assessment
+Loan payoff confirmation (if applicable)
+Sales tax payment evidence
+Post-Sale Obligations
+
+
+Warranty transfer documentation (if applicable)
+Post-sale support agreement (if offered)
+Agreed upon contingencies and fulfillment
+Final odometer disclosure statement
+Defect disclosure acknowledgment
+Action Flow:
+Transfer completion verification
+Document archiving system
+Post-sale obligation tracking
+Tax reporting preparation
+Liability termination confirmation
+Relationship to historical vehicle record
+Optional: buyer feedback collection
