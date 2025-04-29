@@ -4850,196 +4850,501 @@ const VehicleVault = () => {
                   {selectedStatus === 'For Sale' && (
                     <>
                       {!selectedDocumentVehicle ? (
-                        // Vehicle Selection State for For Sale
-                        <div className="bg-pink-50 dark:bg-pink-900/20 rounded-lg p-6 mb-6">
-                          <h3 className="text-lg font-semibold text-center mb-4 text-pink-700 dark:text-pink-400">Select a Vehicle For Sale</h3>
+                        // Vehicle Selection State for For Sale with enhanced details
+                        <div className="bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-950/30 dark:to-rose-950/30 rounded-lg p-6 mb-6 border border-pink-100 dark:border-pink-900/20 shadow-sm">
+                          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+                            <h3 className="text-xl font-semibold text-center sm:text-left mb-3 sm:mb-0 text-pink-700 dark:text-pink-400 flex items-center gap-2">
+                              <Tag className="h-5 w-5" />
+                              Vehicles For Sale
+                            </h3>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-pink-200 dark:border-pink-800">
+                                <FilterX className="h-3.5 w-3.5" />
+                                Filter
+                              </Button>
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-pink-200 dark:border-pink-800">
+                                <ArrowDown className="h-3.5 w-3.5" />
+                                Sort by Price
+                              </Button>
+                            </div>
+                          </div>
+                          
                           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                             {vehicleData
                               .filter(vehicle => vehicle.status === 'For Sale' || (vehicle.listingDate !== undefined))
                               .map((vehicle) => (
                                 <Card 
                                   key={vehicle.id} 
-                                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${selectedDocumentVehicle?.id === vehicle.id ? 'border-pink-500 dark:border-pink-400' : 'border-transparent'}`}
+                                  className={`cursor-pointer transition-all hover:shadow-lg group ${selectedDocumentVehicle?.id === vehicle.id ? 'ring-2 ring-pink-500 dark:ring-pink-400' : 'hover:border-pink-300 dark:hover:border-pink-700'}`}
                                   onClick={() => setSelectedDocumentVehicle(vehicle)}
                                 >
-                                  <CardContent className="p-4">
-                                    <div className="aspect-video w-full overflow-hidden rounded-md mb-3 relative">
+                                  <CardContent className="p-0 overflow-hidden">
+                                    <div className="aspect-video w-full overflow-hidden relative">
                                       <img 
                                         src={vehicle.image} 
                                         alt={vehicle.vehicle} 
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500"
                                       />
-                                      <div className="absolute top-2 right-2 bg-pink-500 text-white text-xs px-2 py-1 rounded-full">
+                                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/60 to-transparent opacity-70"></div>
+                                      <div className="absolute top-2 right-2 bg-pink-500 dark:bg-pink-600 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
                                         For Sale
                                       </div>
+                                      <div className="absolute bottom-0 left-0 w-full p-3 text-white">
+                                        <h4 className="font-semibold text-sm">{vehicle.vehicle}</h4>
+                                        <div className="flex justify-between items-center mt-1">
+                                          <Badge variant="secondary" className="text-xs bg-white/20 backdrop-blur-sm text-white hover:bg-white/30">
+                                            {vehicle.fuelType}
+                                          </Badge>
+                                          <p className="text-sm font-semibold">{(vehicle as any).askingPrice}</p>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div className="space-y-1">
-                                      <h4 className="font-semibold">{vehicle.vehicle}</h4>
-                                      <p className="text-xs text-slate-500">{vehicle.registrationNumber}</p>
-                                      <div className="flex justify-between items-center">
-                                        <Badge variant="outline" className="text-xs px-2 py-0 bg-pink-50 text-pink-700 dark:bg-pink-900/20 dark:text-pink-400">
-                                          {vehicle.fuelType}
-                                        </Badge>
-                                        <p className="text-xs text-slate-500">₹{(vehicle as any).askingPrice}</p>
+                                    <div className="p-4 space-y-2">
+                                      <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
+                                        <span>Reg: {vehicle.registrationNumber}</span>
+                                        <span>{vehicle.mileage} km</span>
+                                      </div>
+                                      <div className="space-y-1">
+                                        <div className="flex justify-between text-xs">
+                                          <span className="flex items-center gap-1">
+                                            <Calendar className="h-3 w-3 text-pink-500" />
+                                            {(vehicle as any).listingDate}
+                                          </span>
+                                          <span className="flex items-center gap-1">
+                                            <MapPin className="h-3 w-3 text-pink-500" />
+                                            {(vehicle as any).viewingLocation.split(',')[0]}
+                                          </span>
+                                        </div>
+                                        <div className="flex items-center text-xs mt-1">
+                                          {(vehicle as any).negotiable ? (
+                                            <div className="flex items-center text-emerald-600 dark:text-emerald-500 gap-1 text-xs">
+                                              <CheckCircle className="h-3 w-3" />
+                                              Negotiable
+                                            </div>
+                                          ) : (
+                                            <div className="flex items-center text-gray-500 gap-1 text-xs">
+                                              <X className="h-3 w-3" />
+                                              Fixed Price
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                      <div className="pt-2 mt-2 border-t border-gray-100 dark:border-gray-800">
+                                        <div className="flex justify-between">
+                                          <Button variant="ghost" size="sm" className="p-0 h-auto text-xs text-pink-600 hover:text-pink-700 dark:text-pink-400 dark:hover:text-pink-300">
+                                            View Details
+                                          </Button>
+                                          <Button variant="ghost" size="sm" className="p-0 h-auto text-xs text-pink-600 hover:text-pink-700 dark:text-pink-400 dark:hover:text-pink-300">
+                                            <Share2 className="h-3.5 w-3.5 mr-1" />
+                                            Share
+                                          </Button>
+                                        </div>
                                       </div>
                                     </div>
                                   </CardContent>
                                 </Card>
                               ))}
                           </div>
+                          
+                          <div className="flex justify-center mt-6">
+                            <Button variant="outline" className="text-pink-600 border-pink-200 dark:border-pink-800 dark:text-pink-400">
+                              <Plus className="h-4 w-4 mr-2" />
+                              Add Vehicle For Sale
+                            </Button>
+                          </div>
                         </div>
                       ) : (
-                        // For Sale Vehicle Documents Display
+                        // For Sale Vehicle Documents Display - Enhanced version
                         <div className="space-y-6">
-                          <div className="bg-pink-50 dark:bg-pink-900/20 rounded-lg p-4 mb-6 flex justify-between items-center">
+                          <div className="bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-950/30 dark:to-rose-950/30 rounded-lg p-4 mb-6 flex justify-between items-center border border-pink-100 dark:border-pink-900/20 shadow-sm">
                             <div className="flex items-center gap-3">
-                              <Avatar>
-                                <AvatarImage src={selectedDocumentVehicle.image} />
-                                <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
-                              </Avatar>
+                              <div className="relative">
+                                <Avatar className="h-12 w-12 border-2 border-pink-200 dark:border-pink-800">
+                                  <AvatarImage src={selectedDocumentVehicle.image} />
+                                  <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
+                                </Avatar>
+                                <div className="absolute -bottom-1 -right-1 bg-pink-500 h-5 w-5 rounded-full flex items-center justify-center border-2 border-white dark:border-gray-900">
+                                  <Tag className="h-3 w-3 text-white" />
+                                </div>
+                              </div>
                               <div>
-                                <h3 className="font-semibold">{selectedDocumentVehicle.vehicle}</h3>
+                                <h3 className="font-semibold text-lg">{selectedDocumentVehicle.vehicle}</h3>
                                 <div className="flex items-center gap-2">
                                   <p className="text-sm text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>
                                   <Badge variant="outline" className="text-xs bg-pink-50 text-pink-700 dark:bg-pink-900/20 dark:text-pink-400">For Sale</Badge>
                                 </div>
                               </div>
                             </div>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              onClick={() => setSelectedDocumentVehicle(null)}
-                              className="text-pink-700 dark:text-pink-400"
-                            >
-                              Change Vehicle
-                            </Button>
+                            <div className="flex items-center gap-2">
+                              <Button variant="outline" size="sm" className="text-pink-600 dark:text-pink-400 border-pink-200 dark:border-pink-800">
+                                <Eye className="h-3.5 w-3.5 mr-1" />
+                                View Listing
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => setSelectedDocumentVehicle(null)}
+                                className="text-pink-700 dark:text-pink-400"
+                              >
+                                Change Vehicle
+                              </Button>
+                            </div>
                           </div>
                           
-                          {/* Sale Documentation */}
-                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
-                            <div className="flex items-center justify-between px-4 py-3 bg-pink-50 dark:bg-pink-900/20 border-b border-gray-200 dark:border-gray-800">
-                              <h3 className="text-lg font-semibold flex items-center gap-2 text-pink-700 dark:text-pink-400">
-                                <Tag className="h-5 w-5" />
-                                Sale Documentation
-                              </h3>
-                              <div className="flex items-center gap-2">
-                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-pink-700 dark:text-pink-400">
-                                  <Download className="h-4 w-4" />
-                                  <span className="sr-only">Download</span>
-                                </Button>
-                              </div>
-                            </div>
-                            <div className="p-4 space-y-4">
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="flex flex-col space-y-1">
-                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Listing Details</h4>
-                                  <p className="text-xs text-gray-500">Information about the sale listing</p>
-                                  <div className="mt-2 space-y-2">
-                                    <div className="flex items-center gap-2">
-                                      <Calendar className="h-4 w-4 text-pink-500" />
-                                      <p className="text-xs font-medium">Listing Date: <span className="font-normal">{(selectedDocumentVehicle as any).listingDate}</span></p>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                      <IndianRupee className="h-4 w-4 text-pink-500" />
-                                      <p className="text-xs font-medium">Asking Price: <span className="font-normal">{(selectedDocumentVehicle as any).askingPrice}</span></p>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                      {(selectedDocumentVehicle as any).negotiable ? (
-                                        <CheckCircle className="h-4 w-4 text-green-500" />
-                                      ) : (
-                                        <X className="h-4 w-4 text-red-500" />
-                                      )}
-                                      <p className="text-xs font-medium">Negotiable: <span className="font-normal">{(selectedDocumentVehicle as any).negotiable ? 'Yes' : 'No'}</span></p>
-                                    </div>
+                          {/* Enhanced Sale Details - Main Information Card */}
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="md:col-span-2">
+                              <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                                <div className="flex items-center justify-between px-4 py-3 bg-pink-50 dark:bg-pink-900/20 border-b border-gray-200 dark:border-gray-800">
+                                  <h3 className="text-lg font-semibold flex items-center gap-2 text-pink-700 dark:text-pink-400">
+                                    <Tag className="h-5 w-5" />
+                                    Sale Information
+                                  </h3>
+                                  <div className="flex items-center gap-2">
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-pink-700 dark:text-pink-400">
+                                      <Download className="h-4 w-4" />
+                                      <span className="sr-only">Download</span>
+                                    </Button>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-pink-700 dark:text-pink-400">
+                                      <Share2 className="h-4 w-4" />
+                                      <span className="sr-only">Share</span>
+                                    </Button>
                                   </div>
                                 </div>
                                 
-                                <div className="flex flex-col space-y-1">
-                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Viewing Information</h4>
-                                  <p className="text-xs text-gray-500">Details for potential buyers</p>
-                                  <div className="mt-2 space-y-2">
-                                    <div className="flex items-center gap-2">
-                                      <MapPin className="h-4 w-4 text-pink-500" />
-                                      <p className="text-xs font-medium">Location: <span className="font-normal">{(selectedDocumentVehicle as any).viewingLocation}</span></p>
+                                <div className="p-6">
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    {/* Listing Details */}
+                                    <div>
+                                      <h4 className="text-sm font-medium mb-4 flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                                        <Info className="h-4 w-4 text-pink-500" />
+                                        Listing Details
+                                      </h4>
+                                      
+                                      <div className="space-y-4">
+                                        <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-800">
+                                          <span className="text-sm text-gray-600 dark:text-gray-400">Listed On</span>
+                                          <span className="text-sm font-medium">{(selectedDocumentVehicle as any).listingDate}</span>
+                                        </div>
+                                        
+                                        <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-800">
+                                          <span className="text-sm text-gray-600 dark:text-gray-400">Asking Price</span>
+                                          <span className="text-lg font-bold text-pink-600 dark:text-pink-400">{(selectedDocumentVehicle as any).askingPrice}</span>
+                                        </div>
+                                        
+                                        <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-800">
+                                          <span className="text-sm text-gray-600 dark:text-gray-400">Price Negotiable</span>
+                                          {(selectedDocumentVehicle as any).negotiable ? (
+                                            <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400">Yes</Badge>
+                                          ) : (
+                                            <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">No</Badge>
+                                          )}
+                                        </div>
+                                        
+                                        <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-800">
+                                          <span className="text-sm text-gray-600 dark:text-gray-400">Selling Reason</span>
+                                          <span className="text-sm">{(selectedDocumentVehicle as any).sellingReason}</span>
+                                        </div>
+                                        
+                                        <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-800">
+                                          <span className="text-sm text-gray-600 dark:text-gray-400">Advertised On</span>
+                                          <div className="flex flex-wrap gap-1">
+                                            {(selectedDocumentVehicle as any).advertisedOn.split(', ').map((platform: string, index: number) => (
+                                              <Badge key={index} variant="outline" className="text-xs bg-gray-50 text-gray-600 border-gray-200 dark:bg-gray-900/20 dark:border-gray-800 dark:text-gray-400">
+                                                {platform}
+                                              </Badge>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                      <MessageSquare className="h-4 w-4 text-pink-500" />
-                                      <p className="text-xs font-medium">Contact: <span className="font-normal">{(selectedDocumentVehicle as any).sellerContact}</span></p>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                      <Info className="h-4 w-4 text-pink-500" />
-                                      <p className="text-xs font-medium">Reason: <span className="font-normal">{(selectedDocumentVehicle as any).sellingReason}</span></p>
+                                    
+                                    {/* Viewing & Contact Information */}
+                                    <div>
+                                      <h4 className="text-sm font-medium mb-4 flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                                        <MapPin className="h-4 w-4 text-pink-500" />
+                                        Viewing & Contact
+                                      </h4>
+                                      
+                                      <div className="space-y-4">
+                                        <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                                          <h5 className="text-sm font-medium mb-2">Location</h5>
+                                          <p className="text-sm">{(selectedDocumentVehicle as any).viewingLocation}</p>
+                                          <div className="mt-4 aspect-video bg-gray-200 dark:bg-gray-700 rounded-md flex items-center justify-center">
+                                            <MapPin className="h-6 w-6 text-gray-400" />
+                                            <span className="text-xs text-gray-500 ml-2">Map view</span>
+                                          </div>
+                                        </div>
+                                        
+                                        <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                                          <h5 className="text-sm font-medium mb-2">Contact Details</h5>
+                                          <div className="flex items-center gap-2 mb-2">
+                                            <UserCircle className="h-4 w-4 text-pink-500" />
+                                            <p className="text-sm">{selectedDocumentVehicle.owner}</p>
+                                          </div>
+                                          <div className="flex items-center gap-2">
+                                            <PhoneCall className="h-4 w-4 text-pink-500" />
+                                            <p className="text-sm">{(selectedDocumentVehicle as any).sellerContact}</p>
+                                          </div>
+                                          <Button variant="outline" size="sm" className="w-full mt-3 text-pink-600 border-pink-200 dark:border-pink-800 dark:text-pink-400">
+                                            <MessageSquare className="h-3.5 w-3.5 mr-1" />
+                                            Contact Seller
+                                          </Button>
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                               
-                              <div className="border-t border-gray-200 dark:border-gray-800 pt-4 mt-4">
-                                <h4 className="text-sm font-medium mb-3">Sale Documents</h4>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                  <Button variant="outline" size="sm" className="justify-start">
-                                    <FileText className="h-4 w-4 mr-2 text-pink-500" />
-                                    Vehicle Condition Report
-                                  </Button>
-                                  <Button variant="outline" size="sm" className="justify-start">
-                                    <FileText className="h-4 w-4 mr-2 text-pink-500" />
-                                    Service History
-                                  </Button>
-                                  <Button variant="outline" size="sm" className="justify-start">
-                                    <FileText className="h-4 w-4 mr-2 text-pink-500" />
-                                    Ownership Documents
-                                  </Button>
-                                  <Button variant="outline" size="sm" className="justify-start">
-                                    <FileText className="h-4 w-4 mr-2 text-pink-500" />
-                                    Sale Agreement Template
+                              {/* Document Gallery */}
+                              <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mt-6">
+                                <div className="flex items-center justify-between px-4 py-3 bg-pink-50 dark:bg-pink-900/20 border-b border-gray-200 dark:border-gray-800">
+                                  <h3 className="text-lg font-semibold flex items-center gap-2 text-pink-700 dark:text-pink-400">
+                                    <FileText className="h-5 w-5" />
+                                    Sale Documents
+                                  </h3>
+                                </div>
+                                <div className="p-6">
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                      <div className="bg-pink-100 dark:bg-pink-900/20 p-2 rounded-md text-pink-600 dark:text-pink-400">
+                                        <FileText className="h-5 w-5" />
+                                      </div>
+                                      <div>
+                                        <h4 className="text-sm font-medium">Vehicle Condition Report</h4>
+                                        <p className="text-xs text-gray-500 mt-1">Detailed inspection of vehicle condition</p>
+                                        <div className="flex items-center gap-1 mt-3">
+                                          <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">PDF</Badge>
+                                          <span className="text-xs text-gray-500">•</span>
+                                          <span className="text-xs text-gray-500">Generated {(selectedDocumentVehicle as any).listingDate}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                      <div className="bg-purple-100 dark:bg-purple-900/20 p-2 rounded-md text-purple-600 dark:text-purple-400">
+                                        <FileText className="h-5 w-5" />
+                                      </div>
+                                      <div>
+                                        <h4 className="text-sm font-medium">Service History</h4>
+                                        <p className="text-xs text-gray-500 mt-1">Complete service and maintenance records</p>
+                                        <div className="flex items-center gap-1 mt-3">
+                                          <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">PDF</Badge>
+                                          <span className="text-xs text-gray-500">•</span>
+                                          <span className="text-xs text-gray-500">Last updated: {selectedDocumentVehicle.lastService}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                      <div className="bg-indigo-100 dark:bg-indigo-900/20 p-2 rounded-md text-indigo-600 dark:text-indigo-400">
+                                        <FileText className="h-5 w-5" />
+                                      </div>
+                                      <div>
+                                        <h4 className="text-sm font-medium">Ownership Documents</h4>
+                                        <p className="text-xs text-gray-500 mt-1">Registration certificate and insurance</p>
+                                        <div className="flex items-center gap-1 mt-3">
+                                          <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">PDF</Badge>
+                                          <span className="text-xs text-gray-500">•</span>
+                                          <span className="text-xs text-gray-500">{(selectedDocumentVehicle as any).documentStatus}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                      <div className="bg-emerald-100 dark:bg-emerald-900/20 p-2 rounded-md text-emerald-600 dark:text-emerald-400">
+                                        <FileText className="h-5 w-5" />
+                                      </div>
+                                      <div>
+                                        <h4 className="text-sm font-medium">Sale Agreement Template</h4>
+                                        <p className="text-xs text-gray-500 mt-1">Ready-to-use legal agreement for sale</p>
+                                        <div className="flex items-center gap-1 mt-3">
+                                          <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">DOCX</Badge>
+                                          <span className="text-xs text-gray-500">•</span>
+                                          <span className="text-xs text-gray-500">Editable template</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  <Button variant="outline" size="sm" className="w-full mt-4 text-pink-600 border-pink-200 dark:border-pink-800 dark:text-pink-400">
+                                    <Plus className="h-4 w-4 mr-2" />
+                                    Add More Documents
                                   </Button>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          
-                          {/* Marketing Materials */}
-                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
-                            <div className="flex items-center justify-between px-4 py-3 bg-pink-50 dark:bg-pink-900/20 border-b border-gray-200 dark:border-gray-800">
-                              <h3 className="text-lg font-semibold flex items-center gap-2 text-pink-700 dark:text-pink-400">
-                                <Image className="h-5 w-5" />
-                                Marketing Materials
-                              </h3>
-                            </div>
-                            <div className="p-4">
-                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                <div className="aspect-video rounded-md overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                                  <ImageIcon className="h-8 w-8 text-gray-400" />
+                            
+                            {/* Right Column - Vehicle Details & Marketing */}
+                            <div>
+                              {/* Vehicle Specs Card */}
+                              <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mb-6">
+                                <div className="px-4 py-3 bg-pink-50 dark:bg-pink-900/20 border-b border-gray-200 dark:border-gray-800">
+                                  <h3 className="text-sm font-semibold flex items-center gap-2 text-pink-700 dark:text-pink-400">
+                                    <Car className="h-4 w-4" />
+                                    Vehicle Specifications
+                                  </h3>
                                 </div>
-                                <div className="aspect-video rounded-md overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                                  <ImageIcon className="h-8 w-8 text-gray-400" />
-                                </div>
-                                <div className="aspect-video rounded-md overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                                  <ImageIcon className="h-8 w-8 text-gray-400" />
+                                <div className="p-4">
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between text-sm">
+                                      <span className="text-gray-600 dark:text-gray-400">Model</span>
+                                      <span className="font-medium">{selectedDocumentVehicle.vehicle}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span className="text-gray-600 dark:text-gray-400">Year</span>
+                                      <span className="font-medium">{selectedDocumentVehicle.purchaseDate.split(', ')[1]}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span className="text-gray-600 dark:text-gray-400">Fuel Type</span>
+                                      <span className="font-medium">{selectedDocumentVehicle.fuelType}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span className="text-gray-600 dark:text-gray-400">Odometer</span>
+                                      <span className="font-medium">{selectedDocumentVehicle.mileage} km</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span className="text-gray-600 dark:text-gray-400">Engine Health</span>
+                                      <div className="flex items-center gap-1">
+                                        <div className="h-2 w-16 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                          <div 
+                                            className={`h-full rounded-full ${
+                                              selectedDocumentVehicle.engineHealth >= 90 ? 'bg-green-500' : 
+                                              selectedDocumentVehicle.engineHealth >= 70 ? 'bg-green-500' : 
+                                              selectedDocumentVehicle.engineHealth >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                                            }`}
+                                            style={{ width: `${selectedDocumentVehicle.engineHealth}%` }}
+                                          ></div>
+                                        </div>
+                                        <span className="text-sm font-medium">{selectedDocumentVehicle.engineHealth}%</span>
+                                      </div>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span className="text-gray-600 dark:text-gray-400">Efficiency</span>
+                                      <span className="font-medium">{selectedDocumentVehicle.efficiency}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span className="text-gray-600 dark:text-gray-400">Last Service</span>
+                                      <span className="font-medium">{selectedDocumentVehicle.lastService}</span>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                              <div className="mt-3 text-center">
-                                <Button variant="outline" size="sm">
-                                  <Plus className="h-4 w-4 mr-2" />
-                                  Add Marketing Photos
-                                </Button>
+                              
+                              {/* Marketing Gallery */}
+                              <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                                <div className="px-4 py-3 bg-pink-50 dark:bg-pink-900/20 border-b border-gray-200 dark:border-gray-800">
+                                  <h3 className="text-sm font-semibold flex items-center gap-2 text-pink-700 dark:text-pink-400">
+                                    <Image className="h-4 w-4" />
+                                    Marketing Gallery
+                                  </h3>
+                                </div>
+                                <div className="p-4">
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <div className="aspect-square rounded-md overflow-hidden bg-gray-100 dark:bg-gray-800 relative group cursor-pointer">
+                                      <img 
+                                        src={selectedDocumentVehicle.image} 
+                                        alt={`${selectedDocumentVehicle.vehicle} - Main`}
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                        <div className="bg-white dark:bg-gray-800 rounded-full p-1">
+                                          <Eye className="h-4 w-4 text-pink-600 dark:text-pink-400" />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="aspect-square rounded-md overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                      <Plus className="h-8 w-8 text-gray-300 dark:text-gray-600" />
+                                    </div>
+                                    <div className="aspect-square rounded-md overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                      <Plus className="h-8 w-8 text-gray-300 dark:text-gray-600" />
+                                    </div>
+                                    <div className="aspect-square rounded-md overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                      <Plus className="h-8 w-8 text-gray-300 dark:text-gray-600" />
+                                    </div>
+                                  </div>
+                                  
+                                  <Button variant="outline" size="sm" className="w-full mt-4 text-pink-600 border-pink-200 dark:border-pink-800 dark:text-pink-400">
+                                    <ImageIcon className="h-4 w-4 mr-2" />
+                                    Manage Gallery
+                                  </Button>
+                                </div>
+                              </div>
+                              
+                              {/* Buyer Interest */}
+                              <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mt-6">
+                                <div className="px-4 py-3 bg-pink-50 dark:bg-pink-900/20 border-b border-gray-200 dark:border-gray-800">
+                                  <h3 className="text-sm font-semibold flex items-center gap-2 text-pink-700 dark:text-pink-400">
+                                    <Users className="h-4 w-4" />
+                                    Buyer Interest
+                                  </h3>
+                                </div>
+                                <div className="p-4">
+                                  <div className="flex items-center justify-between mb-4">
+                                    <div className="text-lg font-bold text-pink-600 dark:text-pink-400">3</div>
+                                    <Badge variant="outline" className="bg-pink-50 text-pink-600 border-pink-200 dark:bg-pink-900/20 dark:border-pink-800 dark:text-pink-400">
+                                      New Inquiries
+                                    </Badge>
+                                  </div>
+                                  
+                                  <div className="space-y-3">
+                                    <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800/50 rounded-md">
+                                      <Avatar className="h-8 w-8">
+                                        <AvatarFallback>RK</AvatarFallback>
+                                      </Avatar>
+                                      <div className="flex-1 min-w-0">
+                                        <p className="text-xs font-medium truncate">Rahul Kumar</p>
+                                        <p className="text-xs text-gray-500 truncate">Interested in test drive</p>
+                                      </div>
+                                      <Badge className="text-xs bg-green-500">New</Badge>
+                                    </div>
+                                    
+                                    <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800/50 rounded-md">
+                                      <Avatar className="h-8 w-8">
+                                        <AvatarFallback>AS</AvatarFallback>
+                                      </Avatar>
+                                      <div className="flex-1 min-w-0">
+                                        <p className="text-xs font-medium truncate">Ananya Singh</p>
+                                        <p className="text-xs text-gray-500 truncate">Made an offer</p>
+                                      </div>
+                                      <Badge className="text-xs bg-amber-500">Offer</Badge>
+                                    </div>
+                                    
+                                    <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800/50 rounded-md">
+                                      <Avatar className="h-8 w-8">
+                                        <AvatarFallback>VK</AvatarFallback>
+                                      </Avatar>
+                                      <div className="flex-1 min-w-0">
+                                        <p className="text-xs font-medium truncate">Vivek Kapoor</p>
+                                        <p className="text-xs text-gray-500 truncate">Asked for documents</p>
+                                      </div>
+                                      <Badge className="text-xs bg-green-500">New</Badge>
+                                    </div>
+                                  </div>
+                                  
+                                  <Button variant="outline" size="sm" className="w-full mt-4 text-pink-600 border-pink-200 dark:border-pink-800 dark:text-pink-400">
+                                    <MessageSquare className="h-4 w-4 mr-2" />
+                                    View All Inquiries
+                                  </Button>
+                                </div>
                               </div>
                             </div>
                           </div>
                           
                           {/* Action Buttons */}
                           <div className="flex flex-wrap gap-3 justify-end mt-6">
-                            <Button variant="outline" className="gap-2">
+                            <Button variant="outline" className="gap-2 border-pink-200 dark:border-pink-800 text-pink-600 dark:text-pink-400">
                               <Share2 className="h-4 w-4" />
                               Share Listing
                             </Button>
-                            <Button variant="outline" className="gap-2">
+                            <Button variant="outline" className="gap-2 border-pink-200 dark:border-pink-800 text-pink-600 dark:text-pink-400">
                               <Edit className="h-4 w-4" />
                               Edit Price & Details
                             </Button>
-                            <Button className="gap-2 bg-pink-600 hover:bg-pink-700">
-                              <Eye className="h-4 w-4" />
-                              View Buyer Inquiries
+                            <Button className="gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white border-none">
+                              <CheckCircle className="h-4 w-4" />
+                              Mark as Sold
                             </Button>
                           </div>
                         </div>
