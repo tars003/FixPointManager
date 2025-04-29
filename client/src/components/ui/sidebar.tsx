@@ -43,10 +43,10 @@ const Sidebar = () => {
       </div>
       
       <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
-        <Link href="/vehicles">
-          <a className={linkClass('/vehicles')}>
-            <Car className={iconClass('/vehicles')} />
-            My Vehicles
+        <Link href="/vehicle-vault">
+          <a className={linkClass('/vehicle-vault')}>
+            <Car className={iconClass('/vehicle-vault')} />
+            Vehicle Vault
           </a>
         </Link>
         

@@ -19,10 +19,10 @@ const MobileNav = () => {
   return (
     <nav className="lg:hidden bg-white border-t border-gray-200 fixed bottom-0 left-0 right-0 z-30">
       <div className="flex justify-around">
-        <Link href="/vehicles">
-          <a className={linkClass('/vehicles')}>
+        <Link href="/vehicle-vault">
+          <a className={linkClass('/vehicle-vault')}>
             <Car className="h-6 w-6" />
-            <span className="text-xs mt-1">Vehicles</span>
+            <span className="text-xs mt-1">Vault</span>
           </a>
         </Link>
         

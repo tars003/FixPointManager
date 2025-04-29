@@ -10,8 +10,8 @@ const MobileHeader = () => {
   useEffect(() => {
     // Update title and back button based on route
     switch (true) {
-      case location.startsWith('/vehicles'):
-        setTitle('My Vehicles');
+      case location.startsWith('/vehicle-vault'):
+        setTitle('Vehicle Vault');
         setShowBackButton(false);
         break;
       case location.startsWith('/book-service'):
