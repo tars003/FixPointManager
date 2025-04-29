@@ -186,6 +186,127 @@ const vehicleData = [
     engineNumber: 'CL35089234',
     owner: 'Karthik Narayanan',
     rcExpiryDate: 'Mar 17, 2031'
+  },
+  // Recently Purchased Vehicles
+  { 
+    id: 6,
+    vehicle: 'Bajaj Chetak Electric', 
+    worth: 142000, 
+    percentage: 98,
+    image: 'https://bd.gaadicdn.com/processedimages/bajaj/chetak-2019/source/chetak-201962ebba5fc1e52.jpg',
+    mileage: 120,
+    fuelType: 'Electric',
+    batteryHealth: 100,
+    lastService: 'None',
+    nextService: '3 months',
+    purchaseDate: 'Apr 10, 2025', // Recently purchased (current date is April 2025)
+    insuranceValid: 'Apr 2028',
+    maintenanceCost: 0,
+    efficiency: '99%',
+    averageCharge: '2.1 kWh',
+    range: '95 km',
+    carbonOffset: '0.1 tonnes',
+    registrationNumber: 'Registration in progress',
+    chassisNumber: 'BCH20250410TRE',
+    engineNumber: 'ECH25041078',
+    owner: 'Divya Sharma',
+    rcExpiryDate: 'Pending'
+  },
+  { 
+    id: 7,
+    vehicle: 'Piaggio Ape E-City', 
+    worth: 335000, 
+    percentage: 99,
+    image: 'https://bd.gaadicdn.com/processedimages/piaggio/ape-e-city/source/ape-e-city625906a6aefa9.jpg',
+    mileage: 240,
+    fuelType: 'Electric',
+    batteryHealth: 100,
+    lastService: 'None',
+    nextService: '6 months',
+    purchaseDate: 'Mar 22, 2025', // Recently purchased
+    insuranceValid: 'Mar 2028',
+    maintenanceCost: 0,
+    efficiency: '97%',
+    averageCharge: '4.5 kWh',
+    range: '110 km',
+    carbonOffset: '0.3 tonnes',
+    registrationNumber: 'DL 02 CD 3456',
+    chassisNumber: 'PIAE250322CIT',
+    engineNumber: 'API2503223WE',
+    owner: 'Rakesh Patel Transport',
+    rcExpiryDate: 'Mar 21, 2035'
+  },
+  { 
+    id: 8,
+    vehicle: 'Skoda Slavia', 
+    worth: 1250000, 
+    percentage: 97,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Skoda/Slavia/9218/1645698138797/front-left-side-47.jpg',
+    mileage: 350,
+    fuelType: 'Petrol',
+    engineHealth: 100,
+    lastService: 'PDI Completed',
+    nextService: '6 months',
+    purchaseDate: 'Feb 15, 2025', // Recently purchased
+    insuranceValid: 'Feb 2028',
+    maintenanceCost: 0,
+    efficiency: '18.0 km/l',
+    averageFuel: '5.5 l/100km',
+    topSpeed: '195 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'MH 12 FG 7654',
+    chassisNumber: 'SKSL2502155HT',
+    engineNumber: 'SL25021512YG',
+    owner: 'Arjun Menon',
+    rcExpiryDate: 'Feb 14, 2035'
+  },
+  { 
+    id: 9,
+    vehicle: 'Tata Intra V50', 
+    worth: 820000, 
+    percentage: 99,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Tata/Intra-V50/7376/1684224761578/front-left-side-47.jpg',
+    mileage: 185,
+    fuelType: 'Diesel',
+    engineHealth: 100,
+    lastService: 'PDI Completed',
+    nextService: '3 months',
+    purchaseDate: 'Mar 30, 2025', // Recently purchased
+    insuranceValid: 'Mar 2028',
+    maintenanceCost: 0,
+    efficiency: '19.3 km/l',
+    averageFuel: '5.2 l/100km',
+    topSpeed: '110 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'GJ 01 XY 9087',
+    chassisNumber: 'TINTV250330CM',
+    engineNumber: 'INV25033089T',
+    owner: 'Krishna Logistics Ltd',
+    rcExpiryDate: 'Mar 29, 2035'
+  },
+  { 
+    id: 10,
+    vehicle: 'Ashok Leyland Partner', 
+    worth: 1750000, 
+    percentage: 100,
+    image: 'https://5.imimg.com/data5/ANDROID/Default/2020/10/WK/PJ/CF/15239911/product-jpeg-500x500.jpg',
+    mileage: 90,
+    fuelType: 'Diesel',
+    engineHealth: 100,
+    lastService: 'None',
+    nextService: '3 months',
+    purchaseDate: 'Apr 02, 2025', // Recently purchased
+    insuranceValid: 'Apr 2028',
+    maintenanceCost: 0,
+    efficiency: '10.5 km/l',
+    averageFuel: '9.5 l/100km',
+    topSpeed: '90 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'Registration in progress',
+    chassisNumber: 'ALPT25040258K',
+    engineNumber: 'APT2504029XZ',
+    owner: 'Fast Delivery Services',
+    rcExpiryDate: 'Pending'
   }
 ];
 
@@ -1527,7 +1648,7 @@ const VehicleVault = () => {
                           <h3 className="text-lg font-semibold text-center mb-4 text-blue-700 dark:text-blue-400">Select a Recently Purchased Vehicle</h3>
                           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                             {vehicleData
-                              .filter(vehicle => vehicle.purchaseDate && new Date(vehicle.purchaseDate) > new Date(Date.now() - 3 * 30 * 24 * 60 * 60 * 1000)) // Less than 3 months old
+                              .slice(5, 10) // The recently purchased vehicles (IDs 6-10)
                               .map((vehicle) => (
                                 <Card 
                                   key={vehicle.id} 
