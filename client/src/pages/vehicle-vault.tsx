@@ -927,6 +927,9 @@ const VehicleVault = () => {
   
   return (
     <>
+      {/* Quick action floating menu */}
+      <QuickActionMenu vehicleStatus={selectedStatus || "Active"} />
+      
       <div className="relative">
         <ParticleBg />
         <div className="relative z-10">
