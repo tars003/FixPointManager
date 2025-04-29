@@ -22,7 +22,8 @@ import {
   Smartphone as SmartphoneNfc, Receipt, CalendarCheck,
   Fuel, Route, User as UserCircle, UserCog, CreditCard, Truck,
   Filter as FilterX, CheckCircle as CheckCircle2, MapPin, HelpCircle as FileQuestion,
-  FileCheck
+  FileCheck, Circle, ClipboardCheck, PhoneCall, Image as ImageIcon, 
+  History, IndianRupee, ChevronsDown, MessageSquare
 } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
@@ -63,6 +64,19 @@ type Vehicle = {
   engineNumber: string;
   owner: string;
   rcExpiryDate: string;
+  
+  // Pre-Owned specific fields
+  previousOwners?: number;
+  purchaseType?: string;
+  certifiedBy?: string;
+  odometerReading?: number;
+  historyReport?: string;
+  
+  // In Maintenance specific fields
+  maintenanceType?: string;
+  serviceCenter?: string;
+  estimatedCompletion?: string;
+  maintenanceNotes?: string;
 };
 
 // Extended vehicle data with more details
@@ -307,6 +321,151 @@ const vehicleData = [
     engineNumber: 'APT2504029XZ',
     owner: 'Fast Delivery Services',
     rcExpiryDate: 'Pending'
+  },
+  // Pre-Owned Vehicles
+  { 
+    id: 11,
+    vehicle: 'Honda Activa 6G', 
+    worth: 58000, 
+    percentage: 45,
+    image: 'https://bd.gaadicdn.com/processedimages/honda/activa-6g/source/activa-6g6424ea6abe1f6.jpg',
+    mileage: 12500,
+    fuelType: 'Petrol',
+    engineHealth: 88,
+    lastService: '2 months ago',
+    nextService: '1 month',
+    purchaseDate: 'Jan 20, 2024', // Pre-owned
+    insuranceValid: 'Dec 2025',
+    maintenanceCost: 3500,
+    efficiency: '45 km/l',
+    averageFuel: '2.2 l/100km',
+    topSpeed: '85 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'HR 26 AB 3214',
+    chassisNumber: 'HACT24012078G',
+    engineNumber: 'AC24G012078',
+    owner: 'Preeti Sharma',
+    rcExpiryDate: 'Jan 19, 2034',
+    previousOwners: 1,
+    purchaseType: 'Pre-Owned',
+    certifiedBy: 'Honda Certified Pre-Owned',
+    odometerReading: 12500,
+    historyReport: 'Available'
+  },
+  { 
+    id: 12,
+    vehicle: 'Mahindra Supro Mini Truck', 
+    worth: 385000, 
+    percentage: 62,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Mahindra/Supro-Minitruck/7196/1631177351344/front-left-side-47.jpg',
+    mileage: 38500,
+    fuelType: 'Diesel',
+    engineHealth: 86,
+    lastService: '1 month ago',
+    nextService: '2 months',
+    purchaseDate: 'Aug 10, 2023', // Pre-owned
+    insuranceValid: 'Aug 2025',
+    maintenanceCost: 12000,
+    efficiency: '18.5 km/l',
+    averageFuel: '5.4 l/100km',
+    topSpeed: '90 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'UP 16 CD 7821',
+    chassisNumber: 'MSUP23081022K',
+    engineNumber: 'SUP23810WV9',
+    owner: 'Rajeev Transport Co.',
+    rcExpiryDate: 'Aug 09, 2033',
+    previousOwners: 2,
+    purchaseType: 'Pre-Owned Commercial',
+    certifiedBy: 'Mahindra First Choice',
+    odometerReading: 38500,
+    historyReport: 'Available'
+  },
+  { 
+    id: 13,
+    vehicle: 'Maruti Suzuki Swift', 
+    worth: 525000, 
+    percentage: 56,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Maruti/Swift/9211/1675862859468/front-left-side-47.jpg',
+    mileage: 19800,
+    fuelType: 'Petrol',
+    engineHealth: 90,
+    lastService: '3 months ago',
+    nextService: '1 month',
+    purchaseDate: 'Dec 5, 2023', // Pre-owned
+    insuranceValid: 'Nov 2025',
+    maintenanceCost: 8500,
+    efficiency: '22.5 km/l',
+    averageFuel: '4.4 l/100km',
+    topSpeed: '165 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'MH 04 FG 9023',
+    chassisNumber: 'MSW23120599P',
+    engineNumber: 'SW2312051HJ',
+    owner: 'Sanjay Desai',
+    rcExpiryDate: 'Dec 4, 2033',
+    previousOwners: 1,
+    purchaseType: 'Pre-Owned',
+    certifiedBy: 'Maruti True Value',
+    odometerReading: 19800,
+    historyReport: 'Available'
+  },
+  // In Maintenance Vehicles
+  { 
+    id: 14,
+    vehicle: 'Tata Tiago', 
+    worth: 435000, 
+    percentage: 40,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Tata/Tiago/7339/Tata-Tiago-XT-iCNG/1676702032361/front-left-side-47.jpg',
+    mileage: 42500,
+    fuelType: 'Petrol',
+    engineHealth: 75,
+    lastService: 'In progress',
+    nextService: 'N/A',
+    purchaseDate: 'Jun 15, 2022',
+    insuranceValid: 'Jun 2025',
+    maintenanceCost: 22500,
+    efficiency: '19.8 km/l',
+    averageFuel: '5.0 l/100km',
+    topSpeed: '150 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'PB 10 CD 4532',
+    chassisNumber: 'TTAG2206156RV',
+    engineNumber: 'TG22615JK95',
+    owner: 'Manpreet Singh',
+    rcExpiryDate: 'Jun 14, 2032',
+    maintenanceType: 'Major Service',
+    serviceCenter: 'Tata Authorized Service Center',
+    estimatedCompletion: 'Apr 30, 2025',
+    maintenanceNotes: 'Engine oil leak and transmission issues'
+  },
+  { 
+    id: 15,
+    vehicle: 'Hero Splendor+', 
+    worth: 62000, 
+    percentage: 35,
+    image: 'https://bd.gaadicdn.com/processedimages/hero/splendor-plus/source/splendor-plus62e7a6a6a6b17.jpg',
+    mileage: 35600,
+    fuelType: 'Petrol',
+    engineHealth: 70,
+    lastService: 'In progress',
+    nextService: 'N/A',
+    purchaseDate: 'Mar 18, 2023',
+    insuranceValid: 'Mar 2026',
+    maintenanceCost: 4500,
+    efficiency: '65 km/l',
+    averageFuel: '1.5 l/100km',
+    topSpeed: '90 km/h',
+    emissionRating: 'BS6',
+    registrationNumber: 'TN 07 AB 5478',
+    chassisNumber: 'HSP23031879P',
+    engineNumber: 'SP23318C067',
+    owner: 'Anand Kumar',
+    rcExpiryDate: 'Mar 17, 2033',
+    maintenanceType: 'Engine Work',
+    serviceCenter: 'Hero Authorized Workshop',
+    estimatedCompletion: 'May 1, 2025',
+    maintenanceNotes: 'Carburetor adjustment and chain replacement'
   }
 ];
 
@@ -1990,7 +2149,563 @@ const VehicleVault = () => {
                     </>
                   )}
                   
-                  {selectedStatus !== 'Active' && selectedStatus !== 'Recently Purchased' && (
+                  {/* In Maintenance Documents Section */}
+                  {selectedStatus === 'In Maintenance' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for In Maintenance
+                        <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-6 mb-6">
+                          <h3 className="text-lg font-semibold text-center mb-4 text-amber-700 dark:text-amber-400">Select a Vehicle in Maintenance</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {vehicleData
+                              .slice(14, 16) // Maintenance vehicles (IDs 14-15)
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${selectedDocumentVehicle?.id === vehicle.id ? 'border-amber-500 dark:border-amber-400' : 'border-transparent'}`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-4">
+                                    <div className="aspect-video w-full overflow-hidden rounded-md mb-3 relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <div className="absolute top-2 right-2 bg-amber-500 text-white text-xs px-2 py-1 rounded-full">
+                                        In Service
+                                      </div>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <h4 className="font-semibold">{vehicle.vehicle}</h4>
+                                      <p className="text-xs text-slate-500">{vehicle.registrationNumber}</p>
+                                      <div className="flex justify-between items-center">
+                                        <Badge variant="outline" className="text-xs px-2 py-0 bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">
+                                          {vehicle.fuelType}
+                                        </Badge>
+                                        <p className="text-xs text-slate-500">EST: {(vehicle as any).estimatedCompletion}</p>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // In Maintenance Vehicle Documents Display
+                        <div className="space-y-6">
+                          <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-4 mb-6 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                              <Avatar>
+                                <AvatarImage src={selectedDocumentVehicle.image} />
+                                <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <h3 className="font-semibold">{selectedDocumentVehicle.vehicle}</h3>
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>
+                                  <Badge variant="outline" className="text-xs bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">In Maintenance</Badge>
+                                </div>
+                              </div>
+                            </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => setSelectedDocumentVehicle(null)}
+                              className="text-amber-700 dark:text-amber-400"
+                            >
+                              Change Vehicle
+                            </Button>
+                          </div>
+                          
+                          {/* Current Service Details */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-amber-700 dark:text-amber-400">
+                                <Wrench className="h-5 w-5" />
+                                Current Service Details
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-amber-700 dark:text-amber-400">
+                                  <Download className="h-4 w-4" />
+                                  <span className="sr-only">Download</span>
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Work Order</h4>
+                                  <p className="text-xs text-gray-500">Detailed job description</p>
+                                  <p className="text-xs mt-1 text-slate-700 dark:text-slate-300">
+                                    Service type: <strong>{(selectedDocumentVehicle as any).maintenanceType}</strong>
+                                  </p>
+                                  <p className="text-xs mt-1 text-slate-700 dark:text-slate-300">
+                                    Notes: <strong>{(selectedDocumentVehicle as any).maintenanceNotes}</strong>
+                                  </p>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Service Center</h4>
+                                  <p className="text-xs text-gray-500">Where the vehicle is being serviced</p>
+                                  <p className="text-xs mt-1 text-slate-700 dark:text-slate-300">
+                                    {(selectedDocumentVehicle as any).serviceCenter}
+                                  </p>
+                                  <Button variant="outline" size="sm" className="justify-start mt-2">
+                                    <MapPin className="h-4 w-4 mr-2 text-red-500" />
+                                    View Location
+                                  </Button>
+                                </div>
+                              </div>
+                              
+                              <Separator className="my-2" />
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <h4 className="text-sm font-medium mb-2">Cost Estimate</h4>
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between text-xs">
+                                      <span>Parts</span>
+                                      <span>₹8,200</span>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Labor</span>
+                                      <span>₹3,500</span>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Diagnostics</span>
+                                      <span>₹1,200</span>
+                                    </div>
+                                    <Separator />
+                                    <div className="flex justify-between text-sm font-medium">
+                                      <span>Total</span>
+                                      <span>₹12,900</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div>
+                                  <h4 className="text-sm font-medium mb-2">Service Timeline</h4>
+                                  <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <CheckCircle className="h-4 w-4 text-green-500" />
+                                      <span className="text-xs">Diagnostic completed</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <CheckCircle className="h-4 w-4 text-green-500" />
+                                      <span className="text-xs">Parts ordered</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Circle className="h-4 w-4 text-amber-500" />
+                                      <span className="text-xs">Repair in progress</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Circle className="h-4 w-4 text-gray-300 dark:text-gray-600" />
+                                      <span className="text-xs">Quality check</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Circle className="h-4 w-4 text-gray-300 dark:text-gray-600" />
+                                      <span className="text-xs">Ready for pickup</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="bg-amber-50/50 dark:bg-amber-950/20 p-3 rounded-lg mt-2">
+                                <div className="flex justify-between items-center">
+                                  <div className="flex items-center gap-2 text-sm text-amber-700 dark:text-amber-400">
+                                    <CalendarCheck className="h-4 w-4" />
+                                    <span>Estimated completion: <strong>{(selectedDocumentVehicle as any).estimatedCompletion}</strong></span>
+                                  </div>
+                                  <Badge variant="outline" className="bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">
+                                    In Progress
+                                  </Badge>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Issue Documentation */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-amber-700 dark:text-amber-400">
+                                <AlertTriangle className="h-5 w-5" />
+                                Issue Documentation
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-amber-700 dark:text-amber-400">
+                                  <Plus className="h-4 w-4" />
+                                  <span className="sr-only">Add</span>
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="border border-gray-200 dark:border-gray-800 rounded-md p-3">
+                                <h4 className="text-sm font-medium">Problem Description</h4>
+                                <p className="text-xs mt-2">{(selectedDocumentVehicle as any).maintenanceNotes}</p>
+                              </div>
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <Button variant="outline" size="sm" className="justify-start">
+                                  <FileText className="h-4 w-4 mr-2 text-purple-500" />
+                                  View Diagnostic Report
+                                </Button>
+                                <Button variant="outline" size="sm" className="justify-start">
+                                  <ImageIcon className="h-4 w-4 mr-2 text-blue-500" />
+                                  View Issue Photos
+                                </Button>
+                              </div>
+                              
+                              <div className="border-t border-gray-200 dark:border-gray-800 pt-3">
+                                <h4 className="text-sm font-medium mb-2">Error Codes</h4>
+                                <div className="grid grid-cols-2 gap-2">
+                                  <div className="bg-red-50 dark:bg-red-900/20 rounded p-2 text-xs">
+                                    <span className="font-mono text-red-600 dark:text-red-400">P0300</span>
+                                    <p className="mt-1 text-gray-600 dark:text-gray-400">Random/Multiple Cylinder Misfire Detected</p>
+                                  </div>
+                                  <div className="bg-amber-50 dark:bg-amber-900/20 rounded p-2 text-xs">
+                                    <span className="font-mono text-amber-600 dark:text-amber-400">P0171</span>
+                                    <p className="mt-1 text-gray-600 dark:text-gray-400">System Too Lean (Bank 1)</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Alternative Transportation */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-amber-700 dark:text-amber-400">
+                                <Car className="h-5 w-5" />
+                                Alternative Transportation
+                              </h3>
+                            </div>
+                            <div className="p-4">
+                              <div className="bg-green-50 dark:bg-green-900/20 rounded-md p-3">
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-2">
+                                    <CheckCircle className="h-5 w-5 text-green-500" />
+                                    <h4 className="text-sm font-medium">Loaner Vehicle Provided</h4>
+                                  </div>
+                                  <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">Active</Badge>
+                                </div>
+                                <p className="text-xs mt-2">Vehicle: Maruti Suzuki WagonR</p>
+                                <p className="text-xs">Pickup date: Apr 25, 2025</p>
+                                <p className="text-xs">Return due: Upon service completion</p>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <PhoneCall className="h-4 w-4" />
+                              Contact Service Center
+                            </Button>
+                            <Button className="gap-2 bg-amber-600 hover:bg-amber-700">
+                              <RefreshCw className="h-4 w-4" />
+                              Get Service Updates
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
+                  {/* Pre-Owned Documents Section */}
+                  {selectedStatus === 'Pre-Owned' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for Pre-Owned
+                        <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-6 mb-6">
+                          <h3 className="text-lg font-semibold text-center mb-4 text-purple-700 dark:text-purple-400">Select a Pre-Owned Vehicle</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {vehicleData
+                              .slice(11, 14) // Pre-owned vehicles (IDs 11-13)
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${selectedDocumentVehicle?.id === vehicle.id ? 'border-purple-500 dark:border-purple-400' : 'border-transparent'}`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-4">
+                                    <div className="aspect-video w-full overflow-hidden rounded-md mb-3 relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <div className="absolute top-2 right-2 bg-purple-500 text-white text-xs px-2 py-1 rounded-full">
+                                        Pre-Owned
+                                      </div>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <h4 className="font-semibold">{vehicle.vehicle}</h4>
+                                      <p className="text-xs text-slate-500">{vehicle.registrationNumber}</p>
+                                      <div className="flex justify-between items-center">
+                                        <Badge variant="outline" className="text-xs px-2 py-0 bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">
+                                          {vehicle.fuelType}
+                                        </Badge>
+                                        <p className="text-xs text-slate-500">Certified: {(vehicle as any).certifiedBy.split(' ')[0]}</p>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Pre-Owned Vehicle Documents Display
+                        <div className="space-y-6">
+                          <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 mb-6 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                              <Avatar>
+                                <AvatarImage src={selectedDocumentVehicle.image} />
+                                <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <h3 className="font-semibold">{selectedDocumentVehicle.vehicle}</h3>
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>
+                                  <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">Pre-Owned</Badge>
+                                </div>
+                              </div>
+                            </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => setSelectedDocumentVehicle(null)}
+                              className="text-purple-700 dark:text-purple-400"
+                            >
+                              Change Vehicle
+                            </Button>
+                          </div>
+                          
+                          {/* Vehicle History */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-purple-50 dark:bg-purple-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-purple-700 dark:text-purple-400">
+                                <History className="h-5 w-5" />
+                                Vehicle History
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-purple-700 dark:text-purple-400">
+                                  <Download className="h-4 w-4" />
+                                  <span className="sr-only">Download</span>
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Ownership History</h4>
+                                  <p className="text-xs text-gray-500">Previous ownership details</p>
+                                  <div className="mt-2 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <UserCircle className="h-4 w-4 text-purple-500" />
+                                      <p className="text-xs font-medium">Previous Owners: <span className="font-normal">{(selectedDocumentVehicle as any).previousOwners}</span></p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Gauge className="h-4 w-4 text-purple-500" />
+                                      <p className="text-xs font-medium">Odometer Reading: <span className="font-normal">{(selectedDocumentVehicle as any).odometerReading} km</span></p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Certification</h4>
+                                  <p className="text-xs text-gray-500">Vehicle certification details</p>
+                                  <div className="bg-purple-50/50 dark:bg-purple-950/20 p-3 rounded-lg mt-2">
+                                    <div className="flex items-center gap-2">
+                                      <CheckCircle className="h-4 w-4 text-purple-500" />
+                                      <p className="text-xs font-medium">{(selectedDocumentVehicle as any).certifiedBy}</p>
+                                    </div>
+                                    <p className="text-xs mt-1">Full history report available</p>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="border-t border-gray-200 dark:border-gray-800 pt-4">
+                                <h4 className="text-sm font-medium mb-2">Vehicle History Timeline</h4>
+                                <div className="space-y-3">
+                                  <div className="relative pl-5 pb-3 border-l-2 border-purple-200 dark:border-purple-900">
+                                    <div className="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-purple-500"></div>
+                                    <p className="text-xs font-medium">First Registration</p>
+                                    <p className="text-xs text-gray-500">June 2022</p>
+                                  </div>
+                                  <div className="relative pl-5 pb-3 border-l-2 border-purple-200 dark:border-purple-900">
+                                    <div className="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-purple-300"></div>
+                                    <p className="text-xs font-medium">First Ownership Period</p>
+                                    <p className="text-xs text-gray-500">June 2022 - March 2023</p>
+                                  </div>
+                                  <div className="relative pl-5 pb-3 border-l-2 border-purple-200 dark:border-purple-900">
+                                    <div className="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-purple-300"></div>
+                                    <p className="text-xs font-medium">Ownership Transfer</p>
+                                    <p className="text-xs text-gray-500">March 2023</p>
+                                  </div>
+                                  <div className="relative pl-5">
+                                    <div className="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-green-500"></div>
+                                    <p className="text-xs font-medium">Current Ownership</p>
+                                    <p className="text-xs text-gray-500">Started {selectedDocumentVehicle.purchaseDate}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Inspection Report */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-purple-50 dark:bg-purple-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-purple-700 dark:text-purple-400">
+                                <ClipboardCheck className="h-5 w-5" />
+                                Inspection Report
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                  <h4 className="text-sm font-medium mb-2">Mechanical</h4>
+                                  <div className="space-y-1.5">
+                                    <div className="flex justify-between text-xs">
+                                      <span>Engine</span>
+                                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">Passed</Badge>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Transmission</span>
+                                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">Passed</Badge>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Suspension</span>
+                                      <Badge variant="outline" className="bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400">Minor Issues</Badge>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Brakes</span>
+                                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">Passed</Badge>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div>
+                                  <h4 className="text-sm font-medium mb-2">Exterior</h4>
+                                  <div className="space-y-1.5">
+                                    <div className="flex justify-between text-xs">
+                                      <span>Body</span>
+                                      <Badge variant="outline" className="bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400">Minor Issues</Badge>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Paint</span>
+                                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">Passed</Badge>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Glass/Lights</span>
+                                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">Passed</Badge>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Tires</span>
+                                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">Passed</Badge>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div>
+                                  <h4 className="text-sm font-medium mb-2">Interior</h4>
+                                  <div className="space-y-1.5">
+                                    <div className="flex justify-between text-xs">
+                                      <span>Seats/Upholstery</span>
+                                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">Passed</Badge>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Dashboard</span>
+                                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">Passed</Badge>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Electronics</span>
+                                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">Passed</Badge>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>AC/Heating</span>
+                                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">Passed</Badge>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <Button variant="outline" size="sm" className="w-full mt-2">
+                                <FileText className="h-4 w-4 mr-2" />
+                                View Full Inspection Report
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          {/* Price and Value */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-purple-50 dark:bg-purple-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-purple-700 dark:text-purple-400">
+                                <IndianRupee className="h-5 w-5" />
+                                Purchase & Value Details
+                              </h3>
+                            </div>
+                            <div className="p-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <h4 className="text-sm font-medium mb-2">Purchase Details</h4>
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between text-xs">
+                                      <span>Purchase Date</span>
+                                      <span className="font-medium">{selectedDocumentVehicle.purchaseDate}</span>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Purchase Price</span>
+                                      <span className="font-medium">₹{selectedDocumentVehicle.worth.toLocaleString()}</span>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Purchase Type</span>
+                                      <span className="font-medium">{(selectedDocumentVehicle as any).purchaseType}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div>
+                                  <h4 className="text-sm font-medium mb-2">Market Valuation</h4>
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between text-xs">
+                                      <span>Current Market Value</span>
+                                      <span className="font-medium">₹{selectedDocumentVehicle.worth.toLocaleString()}</span>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Historical Depreciation</span>
+                                      <Badge className="bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400 font-normal">
+                                        {(100 - selectedDocumentVehicle.percentage).toFixed(1)}%
+                                      </Badge>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                      <span>Warranty Status</span>
+                                      <Badge className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 font-normal">
+                                        Extended
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <Download className="h-4 w-4" />
+                              Export All Documents
+                            </Button>
+                            <Button className="gap-2 bg-purple-600 hover:bg-purple-700">
+                              <Share className="h-4 w-4" />
+                              Share History Report
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
+                  {selectedStatus !== 'Active' && selectedStatus !== 'Recently Purchased' && 
+                   selectedStatus !== 'In Maintenance' && selectedStatus !== 'Pre-Owned' && (
                     <div className="text-center py-12">
                       <div className="mx-auto w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
                         <FileQuestion className="h-6 w-6 text-gray-500 dark:text-gray-400" />
