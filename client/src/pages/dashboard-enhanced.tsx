@@ -36,7 +36,8 @@ import {
   RefreshCw,
   Search,
   ArrowUpRight,
-  CheckCircle
+  CheckCircle,
+  MessageCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -185,7 +186,8 @@ const DashboardEnhanced = () => {
       description: 'Find workshops, fuel stations & more near you',
       icon: <MapPin className="h-5 w-5 text-rose-500" />,
       color: 'bg-rose-100 text-rose-600',
-      path: '/nearby' 
+      path: '/nearby',
+      keyFeature: 'Real-time location tracking of nearby service centers with ratings and reviews'
     },
     { 
       id: 'marketplace', 
@@ -193,7 +195,8 @@ const DashboardEnhanced = () => {
       description: 'Browse & purchase verified spare parts',
       icon: <ShoppingBag className="h-5 w-5 text-cyan-500" />,
       color: 'bg-cyan-100 text-cyan-600',
-      path: '/marketplace' 
+      path: '/marketplace',
+      keyFeature: 'Genuine parts verification and price comparison across multiple vendors'
     },
     { 
       id: 'documents', 
@@ -201,7 +204,8 @@ const DashboardEnhanced = () => {
       description: 'All your vehicle documents in one place',
       icon: <FileText className="h-5 w-5 text-violet-500" />,
       color: 'bg-violet-100 text-violet-600',
-      path: '/documents' 
+      path: '/documents',
+      keyFeature: 'Automatic renewal reminders for insurance, registration and pollution certificates'
     },
     { 
       id: 'emergency', 
@@ -209,7 +213,8 @@ const DashboardEnhanced = () => {
       description: 'Quick access to roadside assistance & help',
       icon: <Zap className="h-5 w-5 text-amber-500" />,
       color: 'bg-amber-100 text-amber-600',
-      path: '/emergency' 
+      path: '/emergency',
+      keyFeature: '24/7 SOS assistance with one-tap calling and location sharing'
     },
   ];
   
@@ -218,36 +223,42 @@ const DashboardEnhanced = () => {
     { 
       id: 'commercial', 
       name: 'Commercial Fleet', 
+      description: 'Manage business vehicles',
       icon: <Truck className="h-5 w-5 text-purple-500" />,
       path: '/commercial-fleet' 
     },
     { 
       id: 'learning', 
       name: 'Learning Center', 
+      description: 'Driving tips & courses',
       icon: <GraduationCap className="h-5 w-5 text-green-500" />,
       path: '/driving-education' 
     },
     { 
       id: 'energy', 
       name: 'Energy Monitor', 
+      description: 'Track EV consumption',
       icon: <Zap className="h-5 w-5 text-amber-500" />,
       path: '/energy' 
     },
     { 
       id: 'compare', 
       name: 'Vehicle Compare', 
+      description: 'Side-by-side analysis',
       icon: <PieChart className="h-5 w-5 text-blue-500" />,
       path: '/compare' 
     },
     { 
       id: 'history', 
       name: 'Service History', 
+      description: 'Past service records',
       icon: <History className="h-5 w-5 text-emerald-500" />,
       path: '/history' 
     },
     { 
       id: 'fastag', 
       name: 'FASTag & eChallan', 
+      description: 'Manage tolls & fines',
       icon: <IndianRupee className="h-5 w-5 text-rose-500" />,
       path: '/fastag-echallan' 
     },
@@ -316,7 +327,7 @@ const DashboardEnhanced = () => {
             {/* Quick actions */}
             <div className="flex items-center gap-3">
               <Button 
-                onClick={() => navigateTo('/vehicles/add')}
+                onClick={() => navigateTo('/vehicle-vault/add')}
                 className="bg-white/10 hover:bg-white/20 text-white border-0"
               >
                 <Plus className="h-4 w-4 mr-2" />
@@ -541,7 +552,20 @@ const DashboardEnhanced = () => {
         
         {/* Essential Tools Section */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">Essential Tools</h2>
+          <div className="flex items-center mb-6">
+            <h2 className="text-2xl font-bold">Essential Tools</h2>
+            <div className="ml-4 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 text-sm px-3 py-1 rounded-full">
+              Powerful utilities for vehicle management
+            </div>
+          </div>
+          
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl mb-8">
+            <p className="text-gray-700 max-w-3xl">
+              Our essential tools provide powerful features to manage every aspect of your vehicle ownership experience.
+              From tracking maintenance schedules to calculating fuel efficiency, these tools are designed to make 
+              vehicle ownership simpler and more enjoyable.
+            </p>
+          </div>
           
           <motion.div 
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5"
@@ -552,21 +576,29 @@ const DashboardEnhanced = () => {
             {essentialTools.map((tool, index) => (
               <motion.div
                 key={tool.id}
-                className="bg-white rounded-xl overflow-hidden shadow-sm border hover:shadow-md transition-all cursor-pointer"
+                className="bg-white rounded-xl overflow-hidden shadow-sm border hover:shadow-md transition-all cursor-pointer backdrop-blur-sm"
                 onClick={() => navigateTo(tool.path)}
                 variants={itemVariants}
-                whileHover={{ y: -3 }}
+                whileHover={{ y: -5, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index }}
               >
+                <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
                 <div className="p-5">
-                  <div className={`w-12 h-12 rounded-full ${tool.color.split(' ')[0]} flex items-center justify-center mb-4`}>
-                    {React.cloneElement(tool.icon, { className: `h-6 w-6 ${tool.color.split(' ')[1]}` })}
+                  <div className={`w-14 h-14 rounded-full ${tool.color.split(' ')[0]} flex items-center justify-center mb-4 shadow-md transform transition-transform hover:rotate-12`}>
+                    {React.cloneElement(tool.icon, { className: `h-7 w-7 ${tool.color.split(' ')[1]}` })}
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-1">{tool.name}</h3>
-                  <p className="text-sm text-gray-500 mb-4 line-clamp-2">{tool.description}</p>
+                  <h3 className="font-bold text-gray-900 mb-2 text-lg">{tool.name}</h3>
+                  <p className="text-sm text-gray-600 mb-3">{tool.description}</p>
+                  <div className="text-xs bg-gray-50 rounded-md p-2 mb-3 text-gray-500">
+                    <span className="font-medium text-blue-600">Key feature:</span> {tool.keyFeature}
+                  </div>
                   <Button 
-                    variant="ghost" 
+                    variant="outline" 
                     size="sm" 
-                    className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 -ml-2 mt-auto"
+                    className="w-full bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 border-blue-200"
                     onClick={(e) => {
                       e.stopPropagation();
                       navigateTo(tool.path);
@@ -582,26 +614,62 @@ const DashboardEnhanced = () => {
         </section>
         
         {/* Footer Tools Section */}
-        <section>
-          <div className="flex items-center mb-5">
-            <h2 className="text-xl font-bold">More Modules</h2>
+        <section className="mb-16">
+          <div className="flex items-center mb-8">
+            <h2 className="text-2xl font-bold">More Modules</h2>
+            <div className="ml-4 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 text-sm px-3 py-1 rounded-full">
+              Specialized features
+            </div>
             <Separator className="flex-1 ml-3" />
           </div>
           
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-            {additionalModules.map((module) => (
-              <Button
+          <div className="bg-gradient-to-br from-slate-50 to-gray-50 p-6 rounded-xl mb-8">
+            <p className="text-gray-700 max-w-3xl">
+              Explore additional specialized modules designed to enhance your vehicle management experience. 
+              These modules offer dedicated tools for specific use cases, from fleet management to educational resources.
+            </p>
+          </div>
+          
+          <motion.div 
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-5"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {additionalModules.map((module, index) => (
+              <motion.div
                 key={module.id}
-                variant="outline"
-                className="h-auto py-6 flex flex-col items-center justify-center gap-3"
-                onClick={() => navigateTo(module.path)}
+                variants={itemVariants}
+                whileHover={{ y: -5, scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
               >
-                <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-                  {module.icon}
-                </div>
-                <span className="text-sm">{module.name}</span>
-              </Button>
+                <Button
+                  variant="outline"
+                  className="h-auto py-6 w-full flex flex-col items-center justify-center gap-3 border-2 shadow-sm hover:shadow-md hover:border-blue-200 transition-all"
+                  onClick={() => navigateTo(module.path)}
+                >
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gray-50 to-white flex items-center justify-center shadow-sm">
+                    {module.icon}
+                  </div>
+                  <div className="text-center">
+                    <span className="text-sm font-medium">{module.name}</span>
+                    <p className="text-xs text-gray-500 mt-1">{module.description}</p>
+                  </div>
+                </Button>
+              </motion.div>
             ))}
+          </motion.div>
+          
+          <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-bold text-gray-900">Looking for more functionality?</h3>
+              <p className="text-sm text-gray-600 mt-1">We're constantly adding new features to enhance your experience.</p>
+            </div>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+              Send Feedback
+              <MessageCircle className="ml-2 h-4 w-4" />
+            </Button>
           </div>
         </section>
       </div>
