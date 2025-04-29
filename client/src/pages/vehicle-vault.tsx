@@ -1972,7 +1972,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Impounded')}
                 >
                   <Shield className="h-3.5 w-3.5" />
-                  Impounded
+                  <span className="flex items-center gap-1">
+                    Impounded
+                    <span className="inline-flex items-center justify-center bg-rose-200 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Impounded' ? (
+                        <AnimatedCounter target={4} duration={1} />
+                      ) : 4}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
@@ -1980,7 +1987,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Under Legal Hold')}
                 >
                   <Scale className="h-3.5 w-3.5" />
-                  Under Legal Hold
+                  <span className="flex items-center gap-1">
+                    Under Legal Hold
+                    <span className="inline-flex items-center justify-center bg-yellow-200 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Under Legal Hold' ? (
+                        <AnimatedCounter target={3} duration={1} />
+                      ) : 3}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
@@ -1988,7 +2002,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Stolen')}
                 >
                   <AlertTriangle className="h-3.5 w-3.5" />
-                  Stolen
+                  <span className="flex items-center gap-1">
+                    Stolen
+                    <span className="inline-flex items-center justify-center bg-red-200 dark:bg-red-900/40 text-red-700 dark:text-red-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Stolen' ? (
+                        <AnimatedCounter target={2} duration={1} />
+                      ) : 2}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
@@ -1996,7 +2017,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Scrapped')}
                 >
                   <Trash2 className="h-3.5 w-3.5" />
-                  Scrapped
+                  <span className="flex items-center gap-1">
+                    Scrapped
+                    <span className="inline-flex items-center justify-center bg-gray-200 dark:bg-gray-700/40 text-gray-700 dark:text-gray-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Scrapped' ? (
+                        <AnimatedCounter target={3} duration={1} />
+                      ) : 3}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
