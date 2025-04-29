@@ -953,9 +953,69 @@ const VehicleVault = () => {
                 </CardHeader>
                 <CardContent className="pt-6">
                   {selectedStatus === 'Active' && (
-                    <div className="space-y-8">
-                      {/* Vehicle Registration Certificate */}
-                      <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State
+                        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6 mb-6">
+                          <h3 className="text-lg font-semibold text-center mb-4">Select a Vehicle to View Documents</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {vehicleData.map((vehicle) => (
+                              <Card 
+                                key={vehicle.id} 
+                                className={`cursor-pointer transition-all hover:shadow-md ${selectedDocumentVehicle?.id === vehicle.id ? 'ring-2 ring-blue-500 dark:ring-blue-400' : ''}`}
+                                onClick={() => setSelectedDocumentVehicle(vehicle)}
+                              >
+                                <CardContent className="p-4">
+                                  <div className="aspect-video w-full overflow-hidden rounded-md mb-3">
+                                    <img 
+                                      src={vehicle.image} 
+                                      alt={vehicle.vehicle} 
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <h4 className="font-semibold">{vehicle.vehicle}</h4>
+                                    <p className="text-xs text-slate-500">{vehicle.registrationNumber || "No registration"}</p>
+                                    <div className="flex justify-between items-center">
+                                      <Badge variant="outline" className="text-xs px-2 py-0">
+                                        {vehicle.fuelType}
+                                      </Badge>
+                                      <p className="text-xs text-slate-500">Owner: {vehicle.owner || "Unknown"}</p>
+                                    </div>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Vehicle Documents Display State
+                        <div className="space-y-6">
+                          <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 mb-6 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                              <Avatar>
+                                <AvatarImage src={selectedDocumentVehicle.image} />
+                                <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <h3 className="font-semibold">{selectedDocumentVehicle.vehicle}</h3>
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm text-slate-500">{selectedDocumentVehicle.registrationNumber || "No registration"}</p>
+                                  <Badge variant="outline" className="text-xs">{selectedDocumentVehicle.fuelType}</Badge>
+                                </div>
+                              </div>
+                            </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => setSelectedDocumentVehicle(null)}
+                            >
+                              Change Vehicle
+                            </Button>
+                          </div>
+                          
+                          {/* Vehicle Registration Certificate */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
                         <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-b border-gray-200 dark:border-gray-800">
                           <h3 className="text-lg font-semibold flex items-center gap-2">
                             <FileText className="h-5 w-5 text-blue-500" />
@@ -1422,7 +1482,9 @@ const VehicleVault = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                        </div>
+                      )}
+                    </>
                   )}
                   
                   {selectedStatus !== 'Active' && (
