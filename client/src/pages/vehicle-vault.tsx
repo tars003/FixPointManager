@@ -52,7 +52,12 @@ const vehicleData = [
     efficiency: '88%',
     averageCharge: '35 kWh',
     range: '312 km',
-    carbonOffset: '2.4 tonnes'
+    carbonOffset: '2.4 tonnes',
+    registrationNumber: 'MH 01 AB 1234',
+    chassisNumber: 'TNEJ3498323CNEX',
+    engineNumber: 'EV77123NX',
+    owner: 'Raj Kumar',
+    rcExpiryDate: 'May 15, 2028'
   },
   { 
     id: 2,
@@ -71,7 +76,12 @@ const vehicleData = [
     efficiency: '16.5 km/l',
     averageFuel: '5.2 l/100km',
     topSpeed: '185 km/h',
-    emissionRating: 'BS6'
+    emissionRating: 'BS6',
+    registrationNumber: 'DL 8C AB 3921',
+    chassisNumber: 'HONC4723984CTY',
+    engineNumber: 'PE239874HC',
+    owner: 'Anjali Singh',
+    rcExpiryDate: 'Jul 20, 2029'
   },
   { 
     id: 3,
@@ -90,7 +100,12 @@ const vehicleData = [
     efficiency: '95%',
     averageCharge: '2.8 kWh',
     range: '85 km',
-    carbonOffset: '0.3 tonnes'
+    carbonOffset: '0.3 tonnes',
+    registrationNumber: 'KA 01 MJ 9023',
+    chassisNumber: 'TVS23487234IQB',
+    engineNumber: 'ETV98712',
+    owner: 'Sunil Patel',
+    rcExpiryDate: 'Aug 04, 2028'
   },
   { 
     id: 4,
@@ -109,7 +124,12 @@ const vehicleData = [
     efficiency: '14.3 km/l',
     averageFuel: '7.0 l/100km',
     topSpeed: '200 km/h',
-    emissionRating: 'BS6'
+    emissionRating: 'BS6',
+    registrationNumber: 'UP 32 BT 5687',
+    chassisNumber: 'MHXXUV7002384753',
+    engineNumber: 'DZ15893XUV',
+    owner: 'Vikram Rathore',
+    rcExpiryDate: 'Jan 09, 2033'
   },
   { 
     id: 5,
@@ -128,7 +148,12 @@ const vehicleData = [
     efficiency: '35 km/l',
     averageFuel: '2.9 l/100km',
     topSpeed: '120 km/h',
-    emissionRating: 'BS6'
+    emissionRating: 'BS6',
+    registrationNumber: 'TN 75 AQ 4523',
+    chassisNumber: 'RE350CL23784952',
+    engineNumber: 'CL35089234',
+    owner: 'Karthik Narayanan',
+    rcExpiryDate: 'Mar 17, 2031'
   }
 ];
 
@@ -536,6 +561,7 @@ const VehicleVault = () => {
   const [selectedVehicle, setSelectedVehicle] = useState<typeof vehicleData[0] | null>(null);
   const [selectedCategory, setSelectedCategory] = useState('cars');
   const [selectedStatus, setSelectedStatus] = useState<string | null>('Active');
+  const [selectedDocumentVehicle, setSelectedDocumentVehicle] = useState<typeof vehicleData[0] | null>(null);
   const { toast } = useToast();
   const { scrollY } = useScroll();
   const headerOpacity = useTransform(scrollY, [0, 200], [1, 0.3]);
