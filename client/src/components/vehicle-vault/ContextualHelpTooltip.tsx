@@ -26,7 +26,9 @@ type TipType =
   'sold' |
   'impound' |
   'legal' |
-  'stolen';
+  'stolen' |
+  'scrapped' |
+  'totaled';
 
 interface ContextualHelpTooltipProps {
   tipType: TipType;
@@ -219,6 +221,22 @@ const ContextualHelpTooltip = ({
           <div className="max-w-xs">
             <h4 className="font-semibold text-sm">Stolen Vehicle Procedures</h4>
             <p className="text-xs mt-1">File an FIR immediately at the nearest police station. Notify your insurance company within 24 hours. Provide all vehicle documents including RC, insurance, and previous service records to authorities to aid recovery.</p>
+          </div>
+        );
+        
+      case 'scrapped':
+        return (
+          <div className="max-w-xs">
+            <h4 className="font-semibold text-sm">Vehicle Scrapping Guidelines</h4>
+            <p className="text-xs mt-1">Ensure proper deregistration with RTO before scrapping. Obtain a "Certificate of Deposit" from authorized vehicle scrapping facility. This certificate is required for tax benefits and as proof of proper disposal for insurance closure.</p>
+          </div>
+        );
+        
+      case 'totaled':
+        return (
+          <div className="max-w-xs">
+            <h4 className="font-semibold text-sm">Totaled Vehicle Procedures</h4>
+            <p className="text-xs mt-1">When a vehicle is declared a total loss by insurance, ensure you receive a "Total Loss Certificate". This document is crucial for claiming tax refunds, canceling RC, and closing insurance. Keep all documentation of the damage assessment.</p>
           </div>
         );
         

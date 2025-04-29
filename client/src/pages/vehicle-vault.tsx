@@ -5033,6 +5033,562 @@ const VehicleVault = () => {
                     </>
                   )}
                   
+                  {/* Totaled Vehicles Section */}
+                  {selectedStatus === 'Totaled' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for Totaled vehicles
+                        <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/30 dark:to-blue-950/30 rounded-lg p-6 mb-6 border border-purple-100 dark:border-purple-900/20 shadow-sm">
+                          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+                            <h3 className="text-xl font-semibold text-center sm:text-left mb-3 sm:mb-0 text-purple-700 dark:text-purple-400 flex items-center gap-2">
+                              <AlertOctagon className="h-5 w-5" />
+                              Totaled Vehicles
+                            </h3>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-purple-200 dark:border-purple-800">
+                                <FilterX className="h-3.5 w-3.5" />
+                                Filter
+                              </Button>
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-purple-200 dark:border-purple-800">
+                                <Calendar className="h-3.5 w-3.5" />
+                                Sort by Date
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {vehicleData
+                              .filter(vehicle => vehicle.status === 'Totaled' || (vehicle as any).totalLossDate !== undefined)
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-lg group hover:border-purple-300 dark:hover:border-purple-700`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-0 overflow-hidden">
+                                    <div className="aspect-video w-full overflow-hidden relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500 contrast-75 brightness-90"
+                                      />
+                                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/60 to-transparent opacity-70"></div>
+                                      <div className="absolute top-2 right-2 bg-purple-500 dark:bg-purple-600 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
+                                        Totaled
+                                      </div>
+                                      <div className="absolute bottom-0 left-0 w-full p-3 text-white">
+                                        <h4 className="font-semibold text-sm">{vehicle.vehicle}</h4>
+                                        <div className="flex items-center gap-2 mt-1">
+                                          <span className="text-xs opacity-90">{vehicle.fuelType}</span>
+                                          <span className="text-xs opacity-90">•</span>
+                                          <span className="text-xs opacity-90">{new Intl.NumberFormat('en-IN').format(vehicle.mileage)} km</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="p-3">
+                                      <div className="flex justify-between items-center">
+                                        <div className="text-sm font-semibold text-purple-600 dark:text-purple-400">Claim #{(vehicle as any).claimNumber?.substring(0, 7) || 'Pending'}</div>
+                                        <Badge variant="outline" className="bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">
+                                          {(vehicle as any).claimStatus || 'Processing'}
+                                        </Badge>
+                                      </div>
+                                      <div className="mt-2 text-xs flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                                        <ShieldCheck className="h-3 w-3" />
+                                        {(vehicle as any).insuranceProvider || 'ICICI Lombard'}
+                                      </div>
+                                      <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                                        <Calendar className="h-3 w-3 mr-1" />
+                                        Incident: {(vehicle as any).incidentDate || 'Recently'}
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Document Detail Screen
+                        <div className="space-y-6">
+                          {/* Vehicle Info Card */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mb-6">
+                            <div className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                              <div className="flex items-center gap-4">
+                                <Avatar className="h-16 w-16 rounded-lg border border-gray-200 dark:border-gray-700">
+                                  <AvatarImage src={selectedDocumentVehicle.image} alt={selectedDocumentVehicle.vehicle} className="object-cover contrast-75 brightness-90" />
+                                  <AvatarFallback className="rounded-lg">
+                                    <Car className="h-8 w-8 text-gray-400" />
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                  <h3 className="font-semibold flex items-center gap-2">
+                                    {selectedDocumentVehicle.vehicle}
+                                    <AnimatedStatusTransition 
+                                      currentStatus="Totaled"
+                                    />
+                                  </h3>
+                                  <p className="text-xs text-gray-500">{selectedDocumentVehicle.registrationNumber}</p>
+                                </div>
+                              </div>
+                              <Button variant="outline" size="sm" onClick={() => setSelectedDocumentVehicle(null)}>
+                                Change Vehicle
+                              </Button>
+                            </div>
+                          </div>
+
+                          {/* Totaled Details */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-purple-50 dark:bg-purple-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-purple-700 dark:text-purple-400">
+                                <AlertOctagon className="h-5 w-5" />
+                                Total Loss Details
+                                <ContextualHelpTooltip tipType="totaled" />
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Insurance Claim</h4>
+                                  <p className="text-xs text-gray-500">Insurance claim details</p>
+                                  <div className="flex mt-2 gap-2">
+                                    <Badge variant="outline" className="bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">
+                                      Claim #{(selectedDocumentVehicle as any).claimNumber || 'IL-2025-042789'}
+                                    </Badge>
+                                    <Badge variant="outline" className="bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">
+                                      {(selectedDocumentVehicle as any).claimStatus || 'Under Review'}
+                                    </Badge>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Insurance Provider</h4>
+                                  <p className="text-xs text-gray-500">Company handling the claim</p>
+                                  <p className="text-xs mt-1 text-slate-700 dark:text-slate-300">
+                                    {(selectedDocumentVehicle as any).insuranceProvider || 'ICICI Lombard General Insurance Co. Ltd.'}
+                                  </p>
+                                  <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                                    <PhoneCall className="h-3.5 w-3.5 text-purple-500" />
+                                    Contact: {(selectedDocumentVehicle as any).insuranceContact || '+91 1800 2666'}
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <Separator className="my-2" />
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <InteractiveDataPoint
+                                  label="Incident Date"
+                                  value={(selectedDocumentVehicle as any).incidentDate || 'April 1, 2025'}
+                                  info="Date when accident or damage occurred"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Claim Filed"
+                                  value={(selectedDocumentVehicle as any).claimFiledDate || 'April 2, 2025'}
+                                  info="Date when insurance claim was filed"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Settlement Amount"
+                                  value={(selectedDocumentVehicle as any).settlementAmount ? `₹${new Intl.NumberFormat('en-IN').format((selectedDocumentVehicle as any).settlementAmount)}` : `₹${new Intl.NumberFormat('en-IN').format(selectedDocumentVehicle.worth * 0.8)}`}
+                                  info="Expected insurance payout"
+                                />
+                              </div>
+                              
+                              <div className="p-3 bg-purple-50 dark:bg-purple-900/10 rounded-md space-y-2">
+                                <div className="font-medium text-sm flex items-center gap-2">
+                                  <AlertTriangle className="h-4 w-4 text-purple-500" />
+                                  Damage Assessment
+                                </div>
+                                <p className="text-sm text-gray-700 dark:text-gray-300">
+                                  {(selectedDocumentVehicle as any).damageDescription || 'Severe structural damage to chassis and frame due to high-impact collision. Engine compartment extensively damaged with coolant and oil system failures. Airbags deployed. Repair costs exceed 85% of vehicle market value, resulting in total loss declaration.'}
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                                  <div className="flex items-center gap-2">
+                                    <Scale className="h-4 w-4 text-amber-500" />
+                                    <p className="text-xs font-medium">Repair Cost Ratio: <span className="font-normal">{(selectedDocumentVehicle as any).repairCostRatio || '85% of vehicle value'}</span></p>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <BarChart3 className="h-4 w-4 text-blue-500" />
+                                    <p className="text-xs font-medium">Salvage Value: <span className="font-normal">{(selectedDocumentVehicle as any).salvageValue ? `₹${new Intl.NumberFormat('en-IN').format((selectedDocumentVehicle as any).salvageValue)}` : `₹${new Intl.NumberFormat('en-IN').format(selectedDocumentVehicle.worth * 0.15)}`}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Insurance Claim Documentation */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-purple-50 dark:bg-purple-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-purple-700 dark:text-purple-400">
+                                <FileText className="h-5 w-5" />
+                                Required Documentation
+                              </h3>
+                            </div>
+                            <div className="p-4">
+                              <div className="space-y-4">
+                                <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                  <div className="bg-green-100 dark:bg-green-900/20 p-2 rounded-md text-green-600 dark:text-green-400">
+                                    <CheckCircle className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-medium">Total Loss Certificate</h4>
+                                    <p className="text-xs text-gray-500 mt-1">Certificate declaring vehicle as total loss</p>
+                                    <div className="flex items-center gap-1 mt-3">
+                                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">PDF</Badge>
+                                      <span className="text-xs text-gray-500">•</span>
+                                      <span className="text-xs text-gray-500">Issued: {(selectedDocumentVehicle as any).totalLossDate || 'April 8, 2025'}</span>
+                                    </div>
+                                  </div>
+                                  <Button variant="ghost" size="icon" className="text-gray-500">
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                                
+                                <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                  <div className="bg-green-100 dark:bg-green-900/20 p-2 rounded-md text-green-600 dark:text-green-400">
+                                    <CheckCircle className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-medium">Damage Assessment Report</h4>
+                                    <p className="text-xs text-gray-500 mt-1">Detailed assessment of vehicle damage</p>
+                                    <div className="flex items-center gap-1 mt-3">
+                                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">PDF</Badge>
+                                      <span className="text-xs text-gray-500">•</span>
+                                      <span className="text-xs text-gray-500">By: {(selectedDocumentVehicle as any).assessorName || 'Surveyor Rajesh Khanna, IRDA Lic#289356'}</span>
+                                    </div>
+                                  </div>
+                                  <Button variant="ghost" size="icon" className="text-gray-500">
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                                
+                                <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                  <div className="bg-amber-100 dark:bg-amber-900/20 p-2 rounded-md text-amber-600 dark:text-amber-400">
+                                    <Clock className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-medium">Settlement Agreement</h4>
+                                    <p className="text-xs text-gray-500 mt-1">Final agreement for insurance settlement</p>
+                                    <div className="flex items-center gap-1 mt-3">
+                                      <Badge variant="outline" className="text-xs bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-400">Pending</Badge>
+                                      <span className="text-xs text-gray-500">•</span>
+                                      <span className="text-xs text-gray-500">Expected by: {(selectedDocumentVehicle as any).expectedSettlementDate || 'April 20, 2025'}</span>
+                                    </div>
+                                  </div>
+                                  <Button variant="ghost" size="icon" className="text-gray-500" disabled>
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                                
+                                <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                  <div className="bg-amber-100 dark:bg-amber-900/20 p-2 rounded-md text-amber-600 dark:text-amber-400">
+                                    <Clock className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-medium">Deregistration Certificate</h4>
+                                    <p className="text-xs text-gray-500 mt-1">RTO certificate for vehicle deregistration</p>
+                                    <div className="flex items-center gap-1 mt-3">
+                                      <Badge variant="outline" className="text-xs bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-400">To be applied</Badge>
+                                      <span className="text-xs text-gray-500">•</span>
+                                      <span className="text-xs text-gray-500">After settlement</span>
+                                    </div>
+                                  </div>
+                                  <Button variant="ghost" size="icon" className="text-gray-500" disabled>
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <ImageIcon className="h-4 w-4" />
+                              View Damage Photos
+                            </Button>
+                            <Button variant="outline" className="gap-2">
+                              <MessageSquare className="h-4 w-4" />
+                              Contact Insurance
+                            </Button>
+                            <Button className="gap-2 bg-purple-600 hover:bg-purple-700">
+                              <Activity className="h-4 w-4" />
+                              Track Claim Status
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
+                  {/* Scrapped Vehicles Section */}
+                  {selectedStatus === 'Scrapped' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for Scrapped vehicles
+                        <div className="bg-gradient-to-br from-gray-50 to-slate-50 dark:from-gray-950/30 dark:to-slate-950/30 rounded-lg p-6 mb-6 border border-gray-100 dark:border-gray-900/20 shadow-sm">
+                          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+                            <h3 className="text-xl font-semibold text-center sm:text-left mb-3 sm:mb-0 text-gray-700 dark:text-gray-400 flex items-center gap-2">
+                              <Trash2 className="h-5 w-5" />
+                              Scrapped Vehicles
+                            </h3>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-gray-200 dark:border-gray-800">
+                                <FilterX className="h-3.5 w-3.5" />
+                                Filter
+                              </Button>
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-gray-200 dark:border-gray-800">
+                                <Calendar className="h-3.5 w-3.5" />
+                                Sort by Date
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {vehicleData
+                              .filter(vehicle => vehicle.status === 'Scrapped' || (vehicle as any).scrappingDate !== undefined)
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-lg group hover:border-gray-300 dark:hover:border-gray-700`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-0 overflow-hidden">
+                                    <div className="aspect-video w-full overflow-hidden relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500 grayscale"
+                                      />
+                                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/60 to-transparent opacity-70"></div>
+                                      <div className="absolute top-2 right-2 bg-gray-500 dark:bg-gray-600 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
+                                        Scrapped
+                                      </div>
+                                      <div className="absolute bottom-0 left-0 w-full p-3 text-white">
+                                        <h4 className="font-semibold text-sm">{vehicle.vehicle}</h4>
+                                        <div className="flex items-center gap-2 mt-1">
+                                          <span className="text-xs opacity-90">{vehicle.fuelType}</span>
+                                          <span className="text-xs opacity-90">•</span>
+                                          <span className="text-xs opacity-90">{new Intl.NumberFormat('en-IN').format(vehicle.mileage)} km</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="p-3">
+                                      <div className="flex justify-between items-center">
+                                        <div className="text-sm font-semibold text-gray-600 dark:text-gray-400">Certificate #{(vehicle as any).certificateNumber?.substring(0, 8) || 'Pending'}</div>
+                                        <Badge variant="outline" className="bg-gray-50 text-gray-700 dark:bg-gray-900/20 dark:text-gray-400">
+                                          {(vehicle as any).scrappingStatus || 'Completed'}
+                                        </Badge>
+                                      </div>
+                                      <div className="mt-2 text-xs flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                                        <MapPin className="h-3 w-3" />
+                                        {(vehicle as any).scrappingFacility || 'Authorized center'}
+                                      </div>
+                                      <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                                        <Calendar className="h-3 w-3 mr-1" />
+                                        Scrapped: {(vehicle as any).scrappingDate || 'Recently'}
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Document Detail Screen
+                        <div className="space-y-6">
+                          {/* Vehicle Info Card */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mb-6">
+                            <div className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                              <div className="flex items-center gap-4">
+                                <Avatar className="h-16 w-16 rounded-lg border border-gray-200 dark:border-gray-700">
+                                  <AvatarImage src={selectedDocumentVehicle.image} alt={selectedDocumentVehicle.vehicle} className="object-cover grayscale" />
+                                  <AvatarFallback className="rounded-lg">
+                                    <Car className="h-8 w-8 text-gray-400" />
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                  <h3 className="font-semibold flex items-center gap-2">
+                                    {selectedDocumentVehicle.vehicle}
+                                    <AnimatedStatusTransition 
+                                      currentStatus="Scrapped"
+                                    />
+                                  </h3>
+                                  <p className="text-xs text-gray-500">{selectedDocumentVehicle.registrationNumber}</p>
+                                </div>
+                              </div>
+                              <Button variant="outline" size="sm" onClick={() => setSelectedDocumentVehicle(null)}>
+                                Change Vehicle
+                              </Button>
+                            </div>
+                          </div>
+
+                          {/* Scrapping Details */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-700 dark:text-gray-400">
+                                <Trash2 className="h-5 w-5" />
+                                Vehicle Scrapping Details
+                                <ContextualHelpTooltip tipType="scrapped" />
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Certificate Information</h4>
+                                  <p className="text-xs text-gray-500">Certificate of Deposit details</p>
+                                  <div className="flex mt-2 gap-2">
+                                    <Badge variant="outline" className="bg-gray-50 text-gray-700 dark:bg-gray-900/20 dark:text-gray-400">
+                                      Certificate #{(selectedDocumentVehicle as any).certificateNumber || 'CD2025IN73546982'}
+                                    </Badge>
+                                    <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                      {(selectedDocumentVehicle as any).scrappingStatus || 'Completed'}
+                                    </Badge>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Scrapping Facility</h4>
+                                  <p className="text-xs text-gray-500">Authorized center details</p>
+                                  <p className="text-xs mt-1 text-slate-700 dark:text-slate-300">
+                                    {(selectedDocumentVehicle as any).scrappingFacility || 'EcoRecycle Automotive, ARAI Certified Center, Pune'}
+                                  </p>
+                                  <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                                    <PhoneCall className="h-3.5 w-3.5 text-gray-500" />
+                                    Contact: {(selectedDocumentVehicle as any).facilityContact || '+91 20 25896743'}
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <Separator className="my-2" />
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <InteractiveDataPoint
+                                  label="Scrapping Date"
+                                  value={(selectedDocumentVehicle as any).scrappingDate || 'March 15, 2025'}
+                                  info="Date when vehicle was officially scrapped"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Deregistration"
+                                  value={(selectedDocumentVehicle as any).deregistrationDate || 'March 10, 2025'}
+                                  info="Date of RTO deregistration"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Material Recovery"
+                                  value={(selectedDocumentVehicle as any).materialRecovery || '83% recyclable materials'}
+                                  info="Percentage of materials recovered for recycling"
+                                />
+                              </div>
+                              
+                              <div className="p-3 bg-gray-50 dark:bg-gray-900/10 rounded-md space-y-2">
+                                <div className="font-medium text-sm flex items-center gap-2">
+                                  <Info className="h-4 w-4 text-gray-500" />
+                                  Scrapping Reason
+                                </div>
+                                <p className="text-sm text-gray-700 dark:text-gray-300">
+                                  {(selectedDocumentVehicle as any).scrappingReason || 'Vehicle reached end of operational life with major mechanical failures. Repair and maintenance costs exceeded vehicle value. Opted for authorized scrapping to avail government incentives and tax benefits.'}
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                                  <div className="flex items-center gap-2">
+                                    <IndianRupee className="h-4 w-4 text-green-500" />
+                                    <p className="text-xs font-medium">Incentive Value: <span className="font-normal">{(selectedDocumentVehicle as any).incentiveValue || '₹50,000 tax benefit on next purchase'}</span></p>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <Leaf className="h-4 w-4 text-green-500" />
+                                    <p className="text-xs font-medium">Environmental Impact: <span className="font-normal">{(selectedDocumentVehicle as any).environmentalImpact || '1.2 tonnes CO2 reduction'}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Scrapping Documentation */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-700 dark:text-gray-400">
+                                <FileX className="h-5 w-5" />
+                                Required Documentation
+                              </h3>
+                            </div>
+                            <div className="p-4">
+                              <div className="space-y-4">
+                                <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                  <div className="bg-green-100 dark:bg-green-900/20 p-2 rounded-md text-green-600 dark:text-green-400">
+                                    <CheckCircle className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-medium">Certificate of Deposit</h4>
+                                    <p className="text-xs text-gray-500 mt-1">Official certificate from authorized scrapping facility</p>
+                                    <div className="flex items-center gap-1 mt-3">
+                                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">PDF</Badge>
+                                      <span className="text-xs text-gray-500">•</span>
+                                      <span className="text-xs text-gray-500">Issued: {(selectedDocumentVehicle as any).certificateDate || 'March 15, 2025'}</span>
+                                    </div>
+                                  </div>
+                                  <Button variant="ghost" size="icon" className="text-gray-500">
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                                
+                                <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                  <div className="bg-green-100 dark:bg-green-900/20 p-2 rounded-md text-green-600 dark:text-green-400">
+                                    <CheckCircle className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-medium">RTO Deregistration Confirmation</h4>
+                                    <p className="text-xs text-gray-500 mt-1">Proof of vehicle deregistration from RTO</p>
+                                    <div className="flex items-center gap-1 mt-3">
+                                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">PDF</Badge>
+                                      <span className="text-xs text-gray-500">•</span>
+                                      <span className="text-xs text-gray-500">Ref: {(selectedDocumentVehicle as any).deregistrationRef || 'DR/2025/03/98234'}</span>
+                                    </div>
+                                  </div>
+                                  <Button variant="ghost" size="icon" className="text-gray-500">
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                                
+                                <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                  <div className="bg-green-100 dark:bg-green-900/20 p-2 rounded-md text-green-600 dark:text-green-400">
+                                    <CheckCircle className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-medium">Tax Benefit Certificate</h4>
+                                    <p className="text-xs text-gray-500 mt-1">Certificate for tax benefits on future vehicle purchase</p>
+                                    <div className="flex items-center gap-1 mt-3">
+                                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">PDF</Badge>
+                                      <span className="text-xs text-gray-500">•</span>
+                                      <span className="text-xs text-gray-500">Valid until: March 15, 2027</span>
+                                    </div>
+                                  </div>
+                                  <Button variant="ghost" size="icon" className="text-gray-500">
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <Download className="h-4 w-4" />
+                              Download All Documents
+                            </Button>
+                            <Button variant="outline" className="gap-2">
+                              <MessageSquare className="h-4 w-4" />
+                              Contact Facility
+                            </Button>
+                            <Button className="gap-2 bg-green-600 hover:bg-green-700">
+                              <Car className="h-4 w-4" />
+                              New Vehicle Offers
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
                   {/* Stolen Vehicles Section */}
                   {selectedStatus === 'Stolen' && (
                     <>
