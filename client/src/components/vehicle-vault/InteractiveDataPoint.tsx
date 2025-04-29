@@ -1,199 +1,140 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Zap, 
-  TrendingUp, 
-  Calendar, 
-  Gauge, 
-  Droplet, 
-  Leaf, 
-  Battery, 
-  Clock, 
-  DollarSign,
-  IndianRupee
-} from 'lucide-react';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { InfoIcon, TrendingUp, TrendingDown, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
 interface InteractiveDataPointProps {
-  title: string;
+  label: string;
   value: string | number;
-  type: 'efficiency' | 'cost' | 'battery' | 'fuel' | 'emission' | 'mileage' | 'age' | 'time' | 'speed' | 'date' | 'charge';
-  previousValue?: string | number;
-  isPositive?: boolean;
-  showChange?: boolean;
+  unit?: string;
+  info?: string;
+  trend?: 'up' | 'down' | 'neutral' | 'warning' | 'good';
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'outline' | 'ghost';
+  showPulse?: boolean;
 }
 
-const InteractiveDataPoint: React.FC<InteractiveDataPointProps> = ({
-  title,
+const InteractiveDataPoint = ({
+  label,
   value,
-  type,
-  previousValue,
-  isPositive = true,
-  showChange = false
-}) => {
-  const [hovered, setHovered] = useState(false);
-
-  // Get icon based on data type
-  const getIcon = () => {
-    switch (type) {
-      case 'efficiency':
-        return <Zap className="h-4 w-4" />;
-      case 'cost':
-        return <IndianRupee className="h-4 w-4" />;
-      case 'battery':
-        return <Battery className="h-4 w-4" />;
-      case 'fuel':
-        return <Droplet className="h-4 w-4" />;
-      case 'emission':
-        return <Leaf className="h-4 w-4" />;
-      case 'mileage':
-        return <Gauge className="h-4 w-4" />;
-      case 'age':
-      case 'date':
-        return <Calendar className="h-4 w-4" />;
-      case 'time':
-        return <Clock className="h-4 w-4" />;
-      case 'speed':
-        return <TrendingUp className="h-4 w-4" />;
-      case 'charge':
-        return <Zap className="h-4 w-4" />;
+  unit = '',
+  info,
+  trend = 'neutral',
+  size = 'md',
+  variant = 'default',
+  showPulse = false,
+}: InteractiveDataPointProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const sizeClasses = {
+    sm: {
+      container: 'p-2 text-xs',
+      value: 'text-sm font-medium',
+      icon: 'h-3 w-3',
+    },
+    md: {
+      container: 'p-3 text-sm',
+      value: 'text-base font-semibold',
+      icon: 'h-4 w-4',
+    },
+    lg: {
+      container: 'p-4 text-base',
+      value: 'text-xl font-bold',
+      icon: 'h-5 w-5',
+    },
+  };
+  
+  const variantClasses = {
+    default: 'bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700',
+    outline: 'border border-slate-200 dark:border-slate-700',
+    ghost: 'hover:bg-slate-100 dark:hover:bg-slate-800',
+  };
+  
+  const getTrendIcon = () => {
+    const colors = {
+      up: 'text-green-500',
+      down: 'text-red-500',
+      neutral: 'text-slate-400',
+      warning: 'text-amber-500',
+      good: 'text-emerald-500',
+    };
+    
+    const iconClass = `${sizeClasses[size].icon} ${colors[trend]}`;
+    
+    switch (trend) {
+      case 'up':
+        return <TrendingUp className={iconClass} />;
+      case 'down':
+        return <TrendingDown className={iconClass} />;
+      case 'warning':
+        return <AlertTriangle className={iconClass} />;
+      case 'good':
+        return <CheckCircle2 className={iconClass} />;
       default:
-        return <Gauge className="h-4 w-4" />;
+        return null;
     }
   };
-
-  // Get color scheme based on data type
-  const getColorScheme = () => {
-    switch (type) {
-      case 'efficiency':
-        return 'text-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:text-blue-400';
-      case 'cost':
-        return 'text-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 dark:text-emerald-400';
-      case 'battery':
-        return 'text-purple-500 bg-purple-50 dark:bg-purple-900/20 dark:text-purple-400';
-      case 'fuel':
-        return 'text-amber-500 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-400';
-      case 'emission':
-        return 'text-green-500 bg-green-50 dark:bg-green-900/20 dark:text-green-400';
-      case 'mileage':
-        return 'text-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 dark:text-indigo-400';
-      case 'age':
-      case 'date':
-        return 'text-orange-500 bg-orange-50 dark:bg-orange-900/20 dark:text-orange-400';
-      case 'time':
-        return 'text-cyan-500 bg-cyan-50 dark:bg-cyan-900/20 dark:text-cyan-400';
-      case 'speed':
-        return 'text-red-500 bg-red-50 dark:bg-red-900/20 dark:text-red-400';
-      case 'charge':
-        return 'text-yellow-500 bg-yellow-50 dark:bg-yellow-900/20 dark:text-yellow-400';
-      default:
-        return 'text-gray-500 bg-gray-50 dark:bg-gray-900/20 dark:text-gray-400';
-    }
-  };
-
-  // Format value for display
-  const formatValue = () => {
-    if (type === 'cost') {
-      // Add thousands separators for currency values
-      return typeof value === 'number' 
-        ? `₹${value.toLocaleString('en-IN')}`
-        : value;
-    }
-    return value;
-  };
-
-  // Calculate change percentage if possible
-  const calculateChange = () => {
-    if (previousValue === undefined || !showChange) return null;
-    
-    let current = typeof value === 'number' ? value : parseFloat(value.toString());
-    let previous = typeof previousValue === 'number' ? previousValue : parseFloat(previousValue.toString());
-    
-    if (isNaN(current) || isNaN(previous) || previous === 0) return null;
-    
-    const percentChange = ((current - previous) / previous) * 100;
-    return percentChange.toFixed(1);
-  };
-
-  const change = calculateChange();
-
+  
   return (
     <motion.div
-      className={`rounded-lg p-3 ${getColorScheme()} relative overflow-hidden transition-all duration-300 cursor-pointer`}
+      className={`relative rounded-lg ${variantClasses[variant]} ${sizeClasses[size].container} transition-all duration-200 overflow-hidden`}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.98 }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-      initial={{ opacity: 0.8 }}
-      animate={{ 
-        opacity: 1,
-        boxShadow: hovered ? '0 4px 12px rgba(0,0,0,0.1)' : '0 1px 3px rgba(0,0,0,0.05)'
-      }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
     >
-      {/* Hover effect light rays */}
-      <AnimatePresence>
-        {hovered && (
-          <motion.div 
-            className="absolute inset-0 opacity-20 pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.2 }}
-            exit={{ opacity: 0 }}
-          >
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-24 bg-white rounded-full filter blur-xl transform -translate-y-1/2 opacity-70"></div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
-      <div className="flex justify-between items-center mb-1">
-        <span className="text-xs font-medium flex items-center gap-1">
-          {getIcon()}
-          {title}
+      {showPulse && (
+        <span className="absolute top-1 right-1">
+          <span className="relative flex h-2 w-2">
+            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${trend === 'warning' ? 'bg-amber-400' : trend === 'down' ? 'bg-red-400' : 'bg-green-400'}`}></span>
+            <span className={`relative inline-flex rounded-full h-2 w-2 ${trend === 'warning' ? 'bg-amber-500' : trend === 'down' ? 'bg-red-500' : 'bg-green-500'}`}></span>
+          </span>
         </span>
+      )}
+      
+      <div className="flex flex-col">
+        <div className="flex items-center justify-between">
+          <span className="text-slate-500 dark:text-slate-400">{label}</span>
+          {info && (
+            <TooltipProvider>
+              <Tooltip delayDuration={200}>
+                <TooltipTrigger asChild>
+                  <motion.div
+                    initial={{ opacity: 0.6 }}
+                    animate={{ opacity: isHovered ? 1 : 0.6 }}
+                    className="text-slate-400 dark:text-slate-500 cursor-help ml-1"
+                  >
+                    <InfoIcon className="h-3 w-3" />
+                  </motion.div>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="max-w-xs text-xs">
+                  {info}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
         
-        {showChange && change && (
-          <motion.div 
-            className={`text-xs px-1.5 py-0.5 rounded ${
-              isPositive ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 
-                          'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-            }`}
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            {isPositive ? '+' : ''}{change}%
-          </motion.div>
-        )}
+        <div className="flex items-center mt-1 gap-1.5">
+          <span className={sizeClasses[size].value}>
+            {value}
+            {unit && <span className="ml-1 text-slate-500 text-xs">{unit}</span>}
+          </span>
+          {getTrendIcon()}
+        </div>
       </div>
       
-      <motion.div 
-        className="text-lg font-bold"
-        initial={{ opacity: 0, y: 5 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-      >
-        {formatValue()}
-      </motion.div>
-      
-      {/* Animated micro-bar chart */}
-      <AnimatePresence>
-        {hovered && (
-          <motion.div 
-            className="mt-2 h-1 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden"
-            initial={{ opacity: 0, scaleX: 0 }}
-            animate={{ opacity: 1, scaleX: 1 }}
-            exit={{ opacity: 0, scaleX: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <motion.div 
-              className={`h-full ${
-                isPositive ? 'bg-green-500 dark:bg-green-400' : 'bg-red-500 dark:bg-red-400'
-              }`}
-              initial={{ width: '0%' }}
-              animate={{ width: '60%' }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 dark:via-slate-700/20 to-transparent"
+        initial={{ x: '-100%', opacity: 0 }}
+        animate={{ x: isHovered ? '100%' : '-100%', opacity: isHovered ? 0.5 : 0 }}
+        transition={{ duration: 0.6 }}
+      />
     </motion.div>
   );
 };

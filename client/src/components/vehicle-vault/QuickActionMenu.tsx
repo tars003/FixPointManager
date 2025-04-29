@@ -110,14 +110,14 @@ const QuickActionMenu = ({ vehicleStatus }: QuickActionMenuProps) => {
       case 'Leased Out':
         return [
           ...commonActions,
-          { icon: <Tool className="h-4 w-4" />, label: 'Lease Terms', color: 'bg-emerald-500' },
+          { icon: <Settings className="h-4 w-4" />, label: 'Lease Terms', color: 'bg-emerald-500' },
           { icon: <PlusCircle className="h-4 w-4" />, label: 'Lease Extension', color: 'bg-green-500' },
         ];
         
       case 'For Sale':
         return [
           ...commonActions,
-          { icon: <Tool className="h-4 w-4" />, label: 'Selling Guide', color: 'bg-pink-500' },
+          { icon: <Settings className="h-4 w-4" />, label: 'Selling Guide', color: 'bg-pink-500' },
           { icon: <ShoppingBag className="h-4 w-4" />, label: 'Listing Options', color: 'bg-violet-500' },
         ];
         
