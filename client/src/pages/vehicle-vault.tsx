@@ -47,6 +47,7 @@ import ContextualHelpTooltip from '@/components/vehicle-vault/ContextualHelpTool
 import InteractiveDataPoint from '@/components/vehicle-vault/InteractiveDataPoint';
 import AnimatedStatusTransition from '@/components/vehicle-vault/AnimatedStatusTransition';
 import VehicleFilters from '@/components/vehicle-vault/VehicleFilters';
+import VehiclePortfolioValue from '@/components/vehicle-vault/VehiclePortfolioValue';
 
 // Define Vehicle type to match our vehicleData props
 type Vehicle = {
@@ -2217,41 +2218,46 @@ const VehicleVault = () => {
                       />
                     </div>
                     
-                    {/* Vehicle Dashboard Cards */}
+                    {/* Vehicle Portfolio Value */}
                     <div className="mb-8">
                       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                         <Activity className="h-4 w-4 text-blue-500" />
-                        Vehicle Dashboard
+                        Vehicle Portfolio Value
                       </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <VehicleDashboardCard 
-                          vehicle="Honda City"
-                          registrationNumber="MH02AB1234"
-                          fuelType="petrol"
-                          serviceStatus="up_to_date"
-                          healthPercentage={92}
-                          lastUpdated={new Date(Date.now() - 3 * 60 * 60 * 1000)} // 3 hours ago
-                          status="Active"
-                        />
-                        <VehicleDashboardCard 
-                          vehicle="Hyundai Creta"
-                          registrationNumber="KA01MJ5678"
-                          fuelType="diesel"
-                          serviceStatus="due"
-                          healthPercentage={75}
-                          lastUpdated={new Date(Date.now() - 24 * 60 * 60 * 1000)} // 1 day ago
-                          status="Commercial Fleet"
-                        />
-                        <VehicleDashboardCard 
-                          vehicle="Maruti Swift"
-                          registrationNumber="DL7CX9012"
-                          fuelType="petrol"
-                          serviceStatus="up_to_date"
-                          healthPercentage={95}
-                          lastUpdated={new Date(Date.now() - 5 * 60 * 60 * 1000)} // 5 hours ago
-                          status="Recently Purchased"
-                        />
-                      </div>
+                      <VehiclePortfolioValue 
+                        vehicles={[
+                          {
+                            id: 1,
+                            vehicle: "Tata Nexon EV",
+                            worth: 892500,
+                            fuelType: "Electric"
+                          },
+                          {
+                            id: 2,
+                            vehicle: "Honda City",
+                            worth: 375000,
+                            fuelType: "Petrol"
+                          },
+                          {
+                            id: 3,
+                            vehicle: "TVS iQube",
+                            worth: 73500,
+                            fuelType: "Electric"
+                          },
+                          {
+                            id: 4,
+                            vehicle: "Mahindra XUV700",
+                            worth: 1250000,
+                            fuelType: "Diesel"
+                          },
+                          {
+                            id: 5,
+                            vehicle: "Royal Enfield Classic 350",
+                            worth: 190000,
+                            fuelType: "Petrol"
+                          }
+                        ]}
+                      />
                     </div>
                     
                     {/* Vehicle carousel section */}
