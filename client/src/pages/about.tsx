@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Layout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
-import { Car, Shield, Tool, Award, Users, HeartHandshake, MapPin, Zap } from 'lucide-react';
+import { Car, Shield, Wrench, Award, Users, HeartHandshake, MapPin, Zap } from 'lucide-react';
 import { useLocation } from 'wouter';
 
 const AboutPage: React.FC = () => {
@@ -36,7 +36,7 @@ const AboutPage: React.FC = () => {
       color: "bg-blue-500"
     },
     {
-      icon: Tool,
+      icon: Wrench,
       title: "Quality Service",
       description: "Connecting vehicle owners with top-rated service providers for the best maintenance experience.",
       color: "bg-green-500"
