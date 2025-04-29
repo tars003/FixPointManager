@@ -3083,8 +3083,461 @@ const VehicleVault = () => {
                     </>
                   )}
                   
+                  {/* Out of Service Documents Section */}
+                  {selectedStatus === 'Out of Service' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for Out of Service
+                        <div className="bg-slate-50 dark:bg-slate-900/20 rounded-lg p-6 mb-6">
+                          <h3 className="text-lg font-semibold text-center mb-4 text-slate-700 dark:text-slate-400">Select an Out of Service Vehicle</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {vehicleData
+                              .filter(vehicle => (vehicle as any).status === 'Out of Service')
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${selectedDocumentVehicle?.id === vehicle.id ? 'border-slate-500 dark:border-slate-400' : 'border-transparent'}`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-4">
+                                    <div className="aspect-video w-full overflow-hidden rounded-md mb-3 relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <div className="absolute top-2 right-2 bg-slate-500 text-white text-xs px-2 py-1 rounded-full">
+                                        OOS
+                                      </div>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <h4 className="font-semibold">{vehicle.vehicle}</h4>
+                                      <p className="text-xs text-slate-500">{vehicle.registrationNumber}</p>
+                                      <div className="flex justify-between items-center">
+                                        <Badge variant="outline" className="text-xs px-2 py-0 bg-slate-50 text-slate-700 dark:bg-slate-900/20 dark:text-slate-400">
+                                          {vehicle.fuelType}
+                                        </Badge>
+                                        <p className="text-xs text-slate-500">Since: {(vehicle as any).outOfServiceDate}</p>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Out of Service Vehicle Documents Display
+                        <div className="space-y-6">
+                          <div className="bg-slate-50 dark:bg-slate-900/20 rounded-lg p-4 mb-6 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                              <div className="h-12 w-12 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                                <AlertOctagon className="h-6 w-6 text-slate-700 dark:text-slate-400" />
+                              </div>
+                              <div>
+                                <h3 className="font-semibold flex items-center gap-2">
+                                  {selectedDocumentVehicle.vehicle}
+                                  <AnimatedStatusTransition 
+                                    currentStatus="Out of Service"
+                                    size="sm"
+                                  />
+                                </h3>
+                                <p className="text-xs text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>
+                              </div>
+                            </div>
+                            <Button variant="outline" size="sm" onClick={() => setSelectedDocumentVehicle(null)}>
+                              Change Vehicle
+                            </Button>
+                          </div>
+                          
+                          {/* Non-operational Status */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-slate-50 dark:bg-slate-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-slate-700 dark:text-slate-400">
+                                <AlertOctagon className="h-5 w-5" />
+                                Non-operational Status
+                                <ContextualHelpTooltip tipType="nonOperational" />
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Official Declaration</h4>
+                                  <p className="text-xs text-gray-500">Non-operation status with authorities</p>
+                                  <div className="flex mt-2 gap-2">
+                                    <Badge variant="outline" className="bg-slate-50 text-slate-700 dark:bg-slate-900/20 dark:text-slate-400">
+                                      {(selectedDocumentVehicle as any).declarationStatus || 'Pending'}
+                                    </Badge>
+                                    {(selectedDocumentVehicle as any).declarationStatus === 'Filed' && (
+                                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                        Verified
+                                      </Badge>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Storage Location</h4>
+                                  <p className="text-xs text-gray-500">Where the vehicle is currently kept</p>
+                                  <p className="text-xs mt-1 text-slate-700 dark:text-slate-300">
+                                    {(selectedDocumentVehicle as any).storageLocation || 'Not specified'}
+                                  </p>
+                                  <Button variant="outline" size="sm" className="justify-start mt-2">
+                                    <MapPin className="h-4 w-4 mr-2 text-red-500" />
+                                    Update Location
+                                  </Button>
+                                </div>
+                              </div>
+                              
+                              <Separator className="my-2" />
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <InteractiveDataPoint
+                                  label="Out of Service Since"
+                                  value={(selectedDocumentVehicle as any).outOfServiceDate || 'Not recorded'}
+                                  info="Date when vehicle was officially declared non-operational"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Expected Duration"
+                                  value={(selectedDocumentVehicle as any).expectedDuration || 'Indefinite'}
+                                  info="Estimated time vehicle will remain out of service"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Insurance Status"
+                                  value={(selectedDocumentVehicle as any).insuranceStatus || 'Adjusted'}
+                                  info="Current insurance coverage status"
+                                  trend={(selectedDocumentVehicle as any).insuranceStatus === 'Adjusted' ? 'good' : 'neutral'}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Mechanical Assessment */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-slate-50 dark:bg-slate-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-slate-700 dark:text-slate-400">
+                                <Wrench className="h-5 w-5" />
+                                Mechanical Assessment
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="rounded-lg border p-3">
+                                <div className="font-medium">Diagnosis Summary</div>
+                                <div className="text-sm mt-1 text-muted-foreground">
+                                  {(selectedDocumentVehicle as any).diagnosisSummary || 'Major transmission failure requiring complete replacement. Vehicle cannot be driven safely.'}
+                                </div>
+                              </div>
+                            
+                              <Accordion type="single" collapsible className="w-full">
+                                <AccordionItem value="required-parts">
+                                  <AccordionTrigger className="text-sm">Required Parts</AccordionTrigger>
+                                  <AccordionContent>
+                                    <div className="space-y-3">
+                                      <div className="border rounded-lg divide-y">
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Transmission Assembly</span>
+                                          <Badge variant="outline" className="bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">
+                                            On Order
+                                          </Badge>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Clutch Kit</span>
+                                          <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                            In Stock
+                                          </Badge>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Gearbox Mount</span>
+                                          <Badge variant="outline" className="bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400">
+                                            Unavailable
+                                          </Badge>
+                                        </div>
+                                      </div>
+                                      <Button variant="outline" size="sm" className="w-full">
+                                        <ListChecks className="h-4 w-4 mr-2" />
+                                        View Complete Parts List
+                                      </Button>
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                                
+                                <AccordionItem value="labor-requirements">
+                                  <AccordionTrigger className="text-sm">Labor Requirements</AccordionTrigger>
+                                  <AccordionContent>
+                                    <div className="space-y-3">
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Specialized Skills Required</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          Transmission specialist with experience in this specific vehicle model required. Estimated labor hours: 12-16 hours.
+                                        </div>
+                                      </div>
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Workshop Requirements</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          Hydraulic lift, transmission jack, and specialized diagnostics equipment needed.
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                                
+                                <AccordionItem value="expert-opinions">
+                                  <AccordionTrigger className="text-sm">Expert Opinions</AccordionTrigger>
+                                  <AccordionContent>
+                                    <div className="space-y-3">
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Authorized Service Center</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          "Complete transmission replacement recommended. Vehicle has exceeded warranty period, but may qualify for goodwill assistance from manufacturer."
+                                        </div>
+                                      </div>
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Independent Specialist</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          "Transmission rebuild possible at 40% lower cost than replacement, but would require 3-4 week lead time."
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                              </Accordion>
+                            </div>
+                          </div>
+                          
+                          {/* Financial Assessment */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-slate-50 dark:bg-slate-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-slate-700 dark:text-slate-400">
+                                <IndianRupee className="h-5 w-5" />
+                                Financial Assessment
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="rounded-lg border p-3">
+                                <div className="font-medium">Comprehensive Repair Estimate</div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between text-sm">
+                                      <span>Parts</span>
+                                      <span>₹75,000</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span>Labor</span>
+                                      <span>₹25,000</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span>Diagnostics</span>
+                                      <span>₹5,000</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm font-medium pt-2 border-t">
+                                      <span>Total Estimate</span>
+                                      <span>₹105,000</span>
+                                    </div>
+                                  </div>
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between text-sm">
+                                      <span>Current Value</span>
+                                      <span>₹340,000</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span>Repair Cost %</span>
+                                      <span>31%</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span>Salvage Value</span>
+                                      <span>₹180,000</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            
+                              <Accordion type="single" collapsible className="w-full">
+                                <AccordionItem value="cost-benefit-analysis">
+                                  <AccordionTrigger className="text-sm">Cost-Benefit Analysis</AccordionTrigger>
+                                  <AccordionContent>
+                                    <div className="space-y-3">
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Repair Option</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          <p>Investment: ₹105,000</p>
+                                          <p>Extended vehicle life: Est. 3-5 years</p>
+                                          <p>Resale value after repair: ₹320,000 (6% loss)</p>
+                                          <p>Monthly cost: ₹2,100 (over 48 months)</p>
+                                        </div>
+                                      </div>
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Replace Option</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          <p>New vehicle cost: ₹650,000</p>
+                                          <p>Less salvage value: ₹180,000</p>
+                                          <p>Net investment: ₹470,000</p>
+                                          <p>Monthly cost: ₹9,800 (over 48 months)</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                                
+                                <AccordionItem value="financing-options">
+                                  <AccordionTrigger className="text-sm">Financing Options</AccordionTrigger>
+                                  <AccordionContent>
+                                    <div className="space-y-3">
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Service Center Financing</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          <p>6 months no-interest payment plan</p>
+                                          <p>₹17,500 per month for 6 months</p>
+                                        </div>
+                                      </div>
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Bank Personal Loan</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          <p>10.5% interest rate</p>
+                                          <p>₹3,400 per month for 36 months</p>
+                                          <p>Total interest: ₹17,400</p>
+                                        </div>
+                                      </div>
+                                      <div className="rounded-lg border p-3">
+                                        <div className="font-medium">Credit Card</div>
+                                        <div className="text-sm mt-1 text-muted-foreground">
+                                          <p>12-month EMI option</p>
+                                          <p>₹9,200 per month for 12 months</p>
+                                          <p>Includes processing fee of ₹5,400</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                              </Accordion>
+                            </div>
+                          </div>
+                          
+                          {/* Resolution Planning */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-slate-50 dark:bg-slate-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-slate-700 dark:text-slate-400">
+                                <BarChart3 className="h-5 w-5" />
+                                Resolution Planning
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="rounded-lg border p-3">
+                                <div className="font-medium">Decision Timeline</div>
+                                <div className="text-sm mt-1 text-muted-foreground">
+                                  <p>Decision deadline: May 15, 2025</p>
+                                  <p>Insurance adjustment expires: June 1, 2025</p>
+                                  <p>Recommended action by: May 10, 2025</p>
+                                </div>
+                              </div>
+                              
+                              <div className="rounded-lg border p-3">
+                                <div className="flex justify-between">
+                                  <div className="font-medium">Repair Timeline</div>
+                                  <Badge variant="outline" className="bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">
+                                    Recommended
+                                  </Badge>
+                                </div>
+                                <div className="space-y-3 mt-3">
+                                  <div className="relative pl-5 pb-3 border-l-2 border-slate-200 dark:border-slate-800">
+                                    <div className="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-slate-500"></div>
+                                    <p className="text-xs font-medium">Parts Ordering</p>
+                                    <p className="text-xs text-gray-500">May 10-15, 2025</p>
+                                  </div>
+                                  <div className="relative pl-5 pb-3 border-l-2 border-slate-200 dark:border-slate-800">
+                                    <div className="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-slate-300"></div>
+                                    <p className="text-xs font-medium">Repair Work</p>
+                                    <p className="text-xs text-gray-500">May 20-30, 2025</p>
+                                  </div>
+                                  <div className="relative pl-5">
+                                    <div className="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-green-500"></div>
+                                    <p className="text-xs font-medium">Return to Service</p>
+                                    <p className="text-xs text-gray-500">June 5, 2025</p>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <Accordion type="single" collapsible className="w-full">
+                                <AccordionItem value="alternative-arrangements">
+                                  <AccordionTrigger className="text-sm">Alternative Vehicle Arrangements</AccordionTrigger>
+                                  <AccordionContent>
+                                    <div className="space-y-3">
+                                      <div className="border rounded-lg divide-y">
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Rental Car</span>
+                                          <div className="text-right">
+                                            <div className="text-xs">₹2,500/day</div>
+                                            <div className="text-xs text-slate-500">Insurance covered: 15 days</div>
+                                          </div>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Rideshare Services</span>
+                                          <div className="text-right">
+                                            <div className="text-xs">Est. ₹800/day</div>
+                                            <div className="text-xs text-slate-500">Based on typical usage</div>
+                                          </div>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <span>Temporary Lease</span>
+                                          <div className="text-right">
+                                            <div className="text-xs">₹25,000/month</div>
+                                            <div className="text-xs text-slate-500">3-month minimum</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                                
+                                <AccordionItem value="specialists">
+                                  <AccordionTrigger className="text-sm">Recommended Specialists</AccordionTrigger>
+                                  <AccordionContent>
+                                    <div className="space-y-3">
+                                      <div className="border rounded-lg divide-y">
+                                        <div className="p-3 flex justify-between items-center">
+                                          <div>
+                                            <div className="font-medium">Automotive Transmission Experts</div>
+                                            <div className="text-xs text-slate-500">Authorized dealer service center</div>
+                                          </div>
+                                          <Button variant="outline" size="sm">Contact</Button>
+                                        </div>
+                                        <div className="p-3 flex justify-between items-center">
+                                          <div>
+                                            <div className="font-medium">Precision Auto Works</div>
+                                            <div className="text-xs text-slate-500">Independent transmission specialist</div>
+                                          </div>
+                                          <Button variant="outline" size="sm">Contact</Button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </AccordionContent>
+                                </AccordionItem>
+                              </Accordion>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <Download className="h-4 w-4" />
+                              Export Assessment
+                            </Button>
+                            <Button variant="outline" className="gap-2">
+                              <Share2 className="h-4 w-4" />
+                              Share with Mechanic
+                            </Button>
+                            <Button className="gap-2 bg-slate-600 hover:bg-slate-700">
+                              <CheckCircle className="h-4 w-4" />
+                              Approve Repair
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
                   {selectedStatus !== 'Active' && selectedStatus !== 'Recently Purchased' && 
-                   selectedStatus !== 'In Maintenance' && selectedStatus !== 'Pre-Owned' && (
+                   selectedStatus !== 'In Maintenance' && selectedStatus !== 'Pre-Owned' &&
+                   selectedStatus !== 'Out of Service' && (
                     <div className="text-center py-12">
                       <div className="mx-auto w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
                         <FileQuestion className="h-6 w-6 text-gray-500 dark:text-gray-400" />
