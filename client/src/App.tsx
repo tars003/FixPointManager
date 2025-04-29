@@ -42,6 +42,7 @@ import ArenaDashboardEnhanced from "@/pages/arena-dashboard-enhanced";
 import ArenaMain from "@/pages/arena-main";
 import ProjectCustomization from "@/pages/project-customization";
 import Drishti from "@/pages/drishti";
+import AnimationDemo from "@/pages/animation-demo";
 
 function Router() {
   const [location] = useLocation();
@@ -406,6 +407,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <ProjectCustomization />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/animation-demo">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <AnimationDemo />
               </motion.div>
             )}
           </Route>
