@@ -1734,6 +1734,136 @@ const VehicleVault = () => {
                               </div>
                             </div>
                           </div>
+                          
+                          {/* Warranty Information */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mt-6">
+                            <div className="flex items-center justify-between px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-blue-700 dark:text-blue-400">
+                                <Shield className="h-5 w-5" />
+                                Warranty Information
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-blue-700 dark:text-blue-400">
+                                  <Plus className="h-4 w-4" />
+                                  <span className="sr-only">Add</span>
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Manufacturer Warranty</h4>
+                                  <p className="text-xs text-gray-500">Coverage details and terms</p>
+                                  <Button variant="outline" size="sm" className="justify-start mt-2">
+                                    <FileText className="h-4 w-4 mr-2 text-green-500" />
+                                    Upload Certificate
+                                  </Button>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Extended Warranty</h4>
+                                  <p className="text-xs text-gray-500">Additional coverage purchased</p>
+                                  <Button variant="outline" size="sm" className="justify-start mt-2">
+                                    <Shield className="h-4 w-4 mr-2 text-indigo-500" />
+                                    Upload Details
+                                  </Button>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-center justify-between bg-blue-50/50 dark:bg-blue-950/20 p-3 rounded-lg">
+                                <div className="text-sm text-blue-700 dark:text-blue-400 flex items-center gap-2">
+                                  <AlertCircle className="h-4 w-4" />
+                                  <span>Warranty active until: <strong>Jan 2028</strong></span>
+                                </div>
+                                <Badge variant="outline" className="bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400">
+                                  Active
+                                </Badge>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Initial Vehicle Documentation */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mt-6">
+                            <div className="flex items-center justify-between px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-blue-700 dark:text-blue-400">
+                                <FileText className="h-5 w-5" />
+                                Initial Vehicle Documentation
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-blue-700 dark:text-blue-400">
+                                  <Plus className="h-4 w-4" />
+                                  <span className="sr-only">Add</span>
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">VIN Details</h4>
+                                  <p className="text-xs text-gray-500">Vehicle identification number information</p>
+                                  <p className="text-xs font-medium mt-1 text-slate-700 dark:text-slate-300">{selectedDocumentVehicle.chassisNumber}</p>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Engine/Chassis Numbers</h4>
+                                  <p className="text-xs text-gray-500">Core vehicle identifiers</p>
+                                  <p className="text-xs font-medium mt-1 text-slate-700 dark:text-slate-300">Engine: {selectedDocumentVehicle.engineNumber}</p>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Color & Variant</h4>
+                                  <p className="text-xs text-gray-500">Vehicle specifications</p>
+                                  <Button variant="outline" size="sm" className="justify-start mt-2">
+                                    <FileText className="h-4 w-4 mr-2 text-amber-500" />
+                                    Upload Specs
+                                  </Button>
+                                </div>
+                              </div>
+                              
+                              <Separator className="my-2" />
+                              
+                              <div className="mt-2">
+                                <h4 className="text-sm font-medium mb-2">Vehicle Feature Documentation</h4>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-blue-500" />
+                                    Owner's Manual
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-purple-500" />
+                                    Service Schedule
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-emerald-500" />
+                                    Feature Guide
+                                  </Button>
+                                  <Button variant="outline" size="sm" className="justify-start">
+                                    <FileText className="h-4 w-4 mr-2 text-amber-500" />
+                                    Accessory Catalog
+                                  </Button>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-center justify-between bg-amber-50/50 dark:bg-amber-950/20 p-3 rounded-lg mt-4">
+                                <div className="text-sm text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                                  <CalendarCheck className="h-4 w-4" />
+                                  <span>First service scheduled for: <strong>Feb 15, 2025</strong></span>
+                                </div>
+                                <Button variant="outline" size="sm" className="h-8 bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-950/30 dark:border-amber-800 dark:text-amber-400">
+                                  Reschedule
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <Download className="h-4 w-4" />
+                              Export All Documents
+                            </Button>
+                            <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
+                              <CheckCircle className="h-4 w-4" />
+                              Complete Setup
+                            </Button>
+                          </div>
                         </div>
                       )}
                     </>
