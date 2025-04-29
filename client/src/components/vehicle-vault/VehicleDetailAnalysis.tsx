@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { 
   FileText, Calendar, Clock, Zap, ChevronUp, TrendingDown, TrendingUp, 
   GaugeCircle, Droplets, Info, BarChart3, Wrench, AlertTriangle, PlugZap,
-  Activity, Download, Share2, Upload, DollarSign, Brain, Check, X, 
+  Activity, Download, Share2, Upload, DollarSign, IndianRupee, Brain, Check, X, 
   MessageCircle, Car, Fuel, Coins, CircleDashed, AlertCircle, BadgeCheck, Share
 } from 'lucide-react';
 
@@ -162,7 +162,7 @@ const VehicleDetailAnalysis: React.FC<VehicleDetailAnalysisProps> = ({ vehicle }
                 Share
               </Button>
               <Button variant="destructive" size="sm" className="gap-1">
-                <DollarSign className="h-4 w-4" />
+                <IndianRupee className="h-4 w-4" />
                 Sell Vehicle
               </Button>
             </div>

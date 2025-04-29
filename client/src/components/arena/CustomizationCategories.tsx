@@ -14,7 +14,7 @@ import {
   TabsList,
   TabsTrigger
 } from '@/components/ui/tabs';
-import { ChevronRight, ShoppingCart, Star, Sparkles, Info, DollarSign } from 'lucide-react';
+import { ChevronRight, ShoppingCart, Star, Sparkles, Info, IndianRupee } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // Define product interface
