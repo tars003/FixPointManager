@@ -23,6 +23,7 @@ import VehicleCarousel from '@/components/vehicle-vault/VehicleCarousel';
 import VehicleDetailAnalysis from '@/components/vehicle-vault/VehicleDetailAnalysis';
 import VehicleCategorySelector from '@/components/vehicle-vault/VehicleCategorySelector';
 import VehicleMoodIndicator from '@/components/vehicle-vault/VehicleMoodIndicator';
+import VehicleStoryCard from '@/components/vehicle-vault/VehicleStoryCard';
 import ColorAdaptiveUI from '@/components/vehicle-vault/ColorAdaptiveUI';
 
 // Extended vehicle data with more details
@@ -135,7 +136,9 @@ const vehicleWorthData = vehicleData.slice(0, 3).map(v => ({
 const vehicleStories = {
   'Tata Nexon EV': "Your Tata Nexon EV has been with you for 2 years, reliably serving through 15,000 km of urban commutes and 3 memorable road trips. Its electric powertrain has saved approximately ₹87,500 in fuel costs compared to a petrol equivalent, while helping reduce your carbon footprint by an estimated 3.2 tonnes of CO2.",
   'Honda City': "Your Honda City has been a loyal companion for 5 years, clocking 45,000 km across various terrains. It's witnessed 2 family vacations to the hills and has an impressive service record with only one major maintenance issue. The fuel efficiency remains excellent at 16.5 km/l, above the average for its age.",
-  'TVS iQube': "The TVS iQube, your newest addition from 8 months ago, has transformed your daily commute. With 1,200 km on the odometer, it's already saved you 30 hours in traffic and reduced your monthly transportation budget by 35%. Its charging efficiency remains at factory optimal levels."
+  'TVS iQube': "The TVS iQube, your newest addition from 8 months ago, has transformed your daily commute. With 1,200 km on the odometer, it's already saved you 30 hours in traffic and reduced your monthly transportation budget by 35%. Its charging efficiency remains at factory optimal levels.",
+  'Mahindra XUV700': "Your Mahindra XUV700, acquired just 16 months ago, has already become the family favorite for weekend getaways. With 8,500 km logged, it's taken you on 4 long trips and countless city drives. Its spacious interior and advanced safety features have provided peace of mind during monsoon travel conditions.",
+  'Royal Enfield Classic 350': "The Royal Enfield Classic 350 has been your weekend companion for 3 years now. It's participated in 5 group rides, including the prestigious Royal Enfield Rider Mania. With 22,500 km on the odometer, it's developed that distinctive character that Royal Enfield enthusiasts cherish, and its value has remained remarkably stable."
 };
 
 // Community leaderboard data
@@ -411,95 +414,7 @@ const VehicleWorthVisual = () => {
   );
 };
 
-const VehicleStoryCard = ({ vehicle, story }: { vehicle: string; story: string }) => {
-  // Define different patterns for different vehicles
-  const patterns = {
-    'Tata Nexon EV': {
-      gradient: 'from-blue-500/5 via-cyan-500/5 to-green-500/5',
-      headerGradient: 'from-blue-50 via-cyan-50 to-teal-50 dark:from-blue-900/20 dark:via-cyan-900/20 dark:to-teal-900/20',
-      accent: 'bg-gradient-to-r from-blue-500 to-teal-500',
-      icon: <motion.div 
-              className="relative"
-              whileHover={{ rotate: [0, -5, 5, -5, 0] }}
-              transition={{ duration: 0.5 }}
-            >
-              <Brain className="h-5 w-5 text-blue-500" />
-              <motion.div 
-                className="absolute inset-0 rounded-full bg-blue-400/20" 
-                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.2, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-            </motion.div>,
-      iconBg: 'bg-blue-100 dark:bg-blue-900/30'
-    },
-    'Honda City': {
-      gradient: 'from-indigo-500/5 via-purple-500/5 to-pink-500/5',
-      headerGradient: 'from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/20 dark:via-purple-900/20 dark:to-pink-900/20',
-      accent: 'bg-gradient-to-r from-indigo-500 to-purple-500',
-      icon: <motion.div 
-              className="relative"
-              whileHover={{ rotate: [0, -5, 5, -5, 0] }}
-              transition={{ duration: 0.5 }}
-            >
-              <Brain className="h-5 w-5 text-purple-500" />
-              <motion.div 
-                className="absolute inset-0 rounded-full bg-purple-400/20" 
-                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.2, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-            </motion.div>,
-      iconBg: 'bg-purple-100 dark:bg-purple-900/30'
-    },
-    'TVS iQube': {
-      gradient: 'from-emerald-500/5 via-teal-500/5 to-green-500/5',
-      headerGradient: 'from-emerald-50 via-teal-50 to-green-50 dark:from-emerald-900/20 dark:via-teal-900/20 dark:to-green-900/20',
-      accent: 'bg-gradient-to-r from-emerald-500 to-green-500',
-      icon: <motion.div 
-              className="relative"
-              whileHover={{ rotate: [0, -5, 5, -5, 0] }}
-              transition={{ duration: 0.5 }}
-            >
-              <Brain className="h-5 w-5 text-emerald-500" />
-              <motion.div 
-                className="absolute inset-0 rounded-full bg-emerald-400/20" 
-                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.2, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-            </motion.div>,
-      iconBg: 'bg-emerald-100 dark:bg-emerald-900/30'
-    }
-  };
-  
-  const pattern = patterns[vehicle] || patterns['Honda City']; // Fallback pattern
-  
-  return (
-    <motion.div 
-      className={`bg-gradient-to-br ${pattern.gradient} border border-slate-200/60 dark:border-slate-700/40 rounded-xl shadow-lg overflow-hidden`}
-      whileHover={{ y: -5, boxShadow: '0 15px 30px rgba(0,0,0,0.1)' }}
-      transition={{ duration: 0.3 }}
-    >
-      <div className={`bg-gradient-to-r ${pattern.headerGradient} py-4 px-5`}>
-        <div className="flex items-center gap-3">
-          <div className={`rounded-full p-2 ${pattern.iconBg}`}>
-            {pattern.icon}
-          </div>
-          <h3 className="font-bold text-lg">{vehicle}</h3>
-        </div>
-      </div>
-      <div className="p-5">
-        <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-          {story}
-        </p>
-        <div className="mt-4 flex justify-end">
-          <Button variant="ghost" size="sm" className="text-xs gap-1.5 opacity-80 hover:opacity-100">
-            <span className={pattern.accent + " h-2 w-2 rounded-full"}></span>
-            View More
-          </Button>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
+// Using the imported VehicleStoryCard component
 
 const PredictiveMaintenance = () => {
   return (
@@ -872,7 +787,10 @@ const VehicleVault = () => {
               </div>
               
               <div className="mt-6">
-                <h2 className="text-xl font-bold mb-4">AI-Generated Vehicle Stories</h2>
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-purple-500" />
+                  AI-Generated Vehicle Stories
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {Object.entries(vehicleStories).map(([vehicle, story]) => (
                     <VehicleStoryCard key={vehicle} vehicle={vehicle} story={story} />
