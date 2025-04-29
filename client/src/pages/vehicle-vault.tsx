@@ -4863,7 +4863,7 @@ const VehicleVault = () => {
                                 Filter
                               </Button>
                               <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-pink-200 dark:border-pink-800">
-                                <ArrowDown className="h-3.5 w-3.5" />
+                                <ChevronsDown className="h-3.5 w-3.5" />
                                 Sort by Price
                               </Button>
                             </div>
@@ -5210,14 +5210,14 @@ const VehicleVault = () => {
                                         <div className="h-2 w-16 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                           <div 
                                             className={`h-full rounded-full ${
-                                              selectedDocumentVehicle.engineHealth >= 90 ? 'bg-green-500' : 
-                                              selectedDocumentVehicle.engineHealth >= 70 ? 'bg-green-500' : 
-                                              selectedDocumentVehicle.engineHealth >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                                              (selectedDocumentVehicle.engineHealth || 0) >= 90 ? 'bg-green-500' : 
+                                              (selectedDocumentVehicle.engineHealth || 0) >= 70 ? 'bg-green-500' : 
+                                              (selectedDocumentVehicle.engineHealth || 0) >= 50 ? 'bg-yellow-500' : 'bg-red-500'
                                             }`}
-                                            style={{ width: `${selectedDocumentVehicle.engineHealth}%` }}
+                                            style={{ width: `${selectedDocumentVehicle.engineHealth || 0}%` }}
                                           ></div>
                                         </div>
-                                        <span className="text-sm font-medium">{selectedDocumentVehicle.engineHealth}%</span>
+                                        <span className="text-sm font-medium">{selectedDocumentVehicle.engineHealth || 0}%</span>
                                       </div>
                                     </div>
                                     <div className="flex justify-between text-sm">
@@ -5236,7 +5236,7 @@ const VehicleVault = () => {
                               <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
                                 <div className="px-4 py-3 bg-pink-50 dark:bg-pink-900/20 border-b border-gray-200 dark:border-gray-800">
                                   <h3 className="text-sm font-semibold flex items-center gap-2 text-pink-700 dark:text-pink-400">
-                                    <Image className="h-4 w-4" />
+                                    <ImageIcon className="h-4 w-4" />
                                     Marketing Gallery
                                   </h3>
                                 </div>
