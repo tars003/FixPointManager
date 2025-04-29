@@ -19,6 +19,7 @@ import {
   BarChart3,
   Settings,
   CircleDollarSign,
+  IndianRupee,
   RefreshCw,
   User,
   Sparkles,
@@ -709,13 +710,13 @@ const DashboardNew = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <CircleDollarSign className="h-5 w-5 text-green-500" />
+                    <IndianRupee className="h-5 w-5 text-green-500" />
                     Cost Breakdown
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="bg-gray-100 rounded-lg h-40 flex items-center justify-center">
-                    <CircleDollarSign className="h-10 w-10 text-gray-300" />
+                    <IndianRupee className="h-10 w-10 text-gray-300" />
                   </div>
                 </CardContent>
               </Card>

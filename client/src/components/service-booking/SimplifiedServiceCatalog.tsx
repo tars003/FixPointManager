@@ -1157,7 +1157,7 @@ const SimplifiedServiceCatalog = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <h3 className="text-sm font-medium mb-2 flex items-center">
-                          <CircleDollarSign className="h-4 w-4 mr-1" />
+                          <IndianRupee className="h-4 w-4 mr-1" />
                           Price Range
                         </h3>
                         <div className="px-2">
