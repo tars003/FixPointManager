@@ -2281,22 +2281,6 @@ const VehicleVault = () => {
                           </h3>
                           <div className="flex items-center gap-2">
                             <Button 
-                              variant="outline"
-                              size="sm" 
-                              className="text-xs gap-1 rounded-full border-slate-300"
-                            >
-                              <Share className="h-3.5 w-3.5" />
-                              Share
-                            </Button>
-                            <Button 
-                              variant="destructive" 
-                              size="sm" 
-                              className="text-xs gap-1 bg-red-500 hover:bg-red-600"
-                            >
-                              <span className="font-medium">₹</span>
-                              Sell Vehicle
-                            </Button>
-                            <Button 
                               variant="ghost" 
                               size="sm" 
                               className="text-xs gap-1 rounded-full" 
