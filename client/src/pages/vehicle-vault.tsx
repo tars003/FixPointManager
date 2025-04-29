@@ -12,15 +12,116 @@ import {
   Search, Calendar, ChevronDown, Download, Share, Award,
   Gauge, Settings, Clock, BookOpen, Users, Trophy,
   Car, FileText, HeartPulse, Shield, FileImage, BarChart3,
-  PieChart, TrendingUp, TrendingDown, Star, BoxSelect, Brain
+  PieChart, TrendingUp, TrendingDown, Star, BoxSelect, Brain,
+  Battery, Leaf, Droplets, ArrowLeft, ArrowRight, ChevronLeft, ChevronRight,
+  AlertTriangle, Activity, Info, Zap, BadgeCheck, Wrench
 } from 'lucide-react';
 
-// Mock data for vehicle worth chart
-const vehicleWorthData = [
-  { vehicle: 'Tata Nexon EV', worth: 892500, percentage: 67 },
-  { vehicle: 'Honda City', worth: 375000, percentage: 28 },
-  { vehicle: 'TVS iQube', worth: 73500, percentage: 5 },
+// Extended vehicle data with more details
+const vehicleData = [
+  { 
+    id: 1,
+    vehicle: 'Tata Nexon EV', 
+    worth: 892500, 
+    percentage: 67,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Tata/Nexon-EV/9779/1673939319612/front-left-side-47.jpg',
+    mileage: 15200,
+    fuelType: 'Electric',
+    batteryHealth: 93,
+    lastService: '2 months ago',
+    nextService: '4 months',
+    purchaseDate: 'Jun 15, 2023',
+    insuranceValid: 'May 2025',
+    maintenanceCost: 12500,
+    efficiency: '88%',
+    averageCharge: '35 kWh',
+    range: '312 km',
+    carbonOffset: '2.4 tonnes'
+  },
+  { 
+    id: 2,
+    vehicle: 'Honda City', 
+    worth: 375000, 
+    percentage: 28,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Honda/City/9710/1677914238296/front-left-side-47.jpg',
+    mileage: 45700,
+    fuelType: 'Petrol',
+    engineHealth: 87,
+    lastService: '2 weeks ago',
+    nextService: '3 months',
+    purchaseDate: 'Aug 21, 2019',
+    insuranceValid: 'Jul 2025',
+    maintenanceCost: 38500,
+    efficiency: '16.5 km/l',
+    averageFuel: '5.2 l/100km',
+    topSpeed: '185 km/h',
+    emissionRating: 'BS6'
+  },
+  { 
+    id: 3,
+    vehicle: 'TVS iQube', 
+    worth: 73500, 
+    percentage: 5,
+    image: 'https://bd.gaadicdn.com/processedimages/tvs/iqube/source/iqube62edf2890fdfa.jpg',
+    mileage: 1200,
+    fuelType: 'Electric',
+    batteryHealth: 98,
+    lastService: 'None',
+    nextService: '2 months',
+    purchaseDate: 'Aug 05, 2023',
+    insuranceValid: 'Aug 2026',
+    maintenanceCost: 2500,
+    efficiency: '95%',
+    averageCharge: '2.8 kWh',
+    range: '85 km',
+    carbonOffset: '0.3 tonnes'
+  },
+  { 
+    id: 4,
+    vehicle: 'Mahindra XUV700', 
+    worth: 1250000, 
+    percentage: 82,
+    image: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Mahindra/XUV700/10798/1690452411429/front-left-side-47.jpg',
+    mileage: 8500,
+    fuelType: 'Diesel',
+    engineHealth: 96,
+    lastService: '1 month ago',
+    nextService: '5 months',
+    purchaseDate: 'Jan 10, 2023',
+    insuranceValid: 'Dec 2026',
+    maintenanceCost: 15000,
+    efficiency: '14.3 km/l',
+    averageFuel: '7.0 l/100km',
+    topSpeed: '200 km/h',
+    emissionRating: 'BS6'
+  },
+  { 
+    id: 5,
+    vehicle: 'Royal Enfield Classic 350', 
+    worth: 190000, 
+    percentage: 38,
+    image: 'https://bd.gaadicdn.com/processedimages/royal-enfield/classic-350/source/classic-35062f3b48bfe873.jpg',
+    mileage: 22500,
+    fuelType: 'Petrol',
+    engineHealth: 90,
+    lastService: '3 months ago',
+    nextService: '1 month',
+    purchaseDate: 'Mar 18, 2021',
+    insuranceValid: 'Feb 2025',
+    maintenanceCost: 18500,
+    efficiency: '35 km/l',
+    averageFuel: '2.9 l/100km',
+    topSpeed: '120 km/h',
+    emissionRating: 'BS6'
+  }
 ];
+
+// Extract the first 3 vehicles for the worth chart
+const vehicleWorthData = vehicleData.slice(0, 3).map(v => ({
+  vehicle: v.vehicle,
+  worth: v.worth,
+  percentage: v.percentage
+}));
 
 // AI generated stories for each vehicle
 const vehicleStories = {
@@ -602,8 +703,403 @@ const PredictiveMaintenance = () => {
   );
 };
 
+// Vehicle Carousel Component
+const VehicleCarousel = ({ 
+  vehicles, 
+  onVehicleSelect 
+}: { 
+  vehicles: typeof vehicleData, 
+  onVehicleSelect: (vehicle: typeof vehicleData[0]) => void 
+}) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [autoSlide, setAutoSlide] = useState(true);
+  const visibleCount = 3;
+  
+  // Calculate the total number of slides needed
+  const totalSlides = Math.ceil(vehicles.length / visibleCount);
+  
+  // Implement auto sliding
+  useEffect(() => {
+    if (!autoSlide) return;
+    
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => {
+        const nextIndex = (prevIndex + 1) % totalSlides;
+        return nextIndex;
+      });
+    }, 5000); // Auto slide every 5 seconds
+    
+    return () => clearInterval(interval);
+  }, [vehicles.length, totalSlides, autoSlide]);
+  
+  // Handle manual navigation
+  const handlePrev = () => {
+    setAutoSlide(false); // Disable auto-slide when manually navigating
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = prevIndex === 0 ? totalSlides - 1 : prevIndex - 1;
+      return nextIndex;
+    });
+  };
+  
+  const handleNext = () => {
+    setAutoSlide(false); // Disable auto-slide when manually navigating
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = (prevIndex + 1) % totalSlides;
+      return nextIndex;
+    });
+  };
+  
+  // Get current visible vehicles
+  const getVisibleVehicles = () => {
+    const startIdx = currentIndex * visibleCount;
+    const endIdx = Math.min(startIdx + visibleCount, vehicles.length);
+    
+    // Get a slice of the visible vehicles
+    return vehicles.slice(startIdx, endIdx);
+  };
+  
+  const visibleVehicles = getVisibleVehicles();
+  
+  // Resume auto-slide after 10 seconds of inactivity
+  useEffect(() => {
+    if (autoSlide) return;
+    
+    const timeout = setTimeout(() => {
+      setAutoSlide(true);
+    }, 10000);
+    
+    return () => clearTimeout(timeout);
+  }, [autoSlide]);
+
+  return (
+    <div className="relative w-full">
+      <div className="overflow-hidden rounded-xl">
+        <div className="flex space-x-6 p-2">
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={currentIndex}
+              className="flex gap-6 w-full"
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.5 }}
+            >
+              {visibleVehicles.map((vehicle) => (
+                <motion.div
+                  key={vehicle.id}
+                  className="flex-1 min-w-0 cursor-pointer"
+                  whileHover={{ y: -8 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                  onClick={() => onVehicleSelect(vehicle)}
+                >
+                  <div className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-lg border border-slate-200/50 dark:border-slate-700/50 h-full">
+                    <div className="aspect-video relative overflow-hidden">
+                      <img 
+                        src={vehicle.image} 
+                        alt={vehicle.vehicle} 
+                        className="object-cover w-full h-full transform transition-transform duration-700 hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                      <div className="absolute bottom-0 left-0 p-4 w-full">
+                        <p className="text-white font-bold text-lg drop-shadow-md">{vehicle.vehicle}</p>
+                        <div className="flex justify-between items-center mt-1">
+                          <span className="text-white/90 text-sm">
+                            <span className="font-medium">{vehicle.mileage.toLocaleString()}</span> km
+                          </span>
+                          <span className="bg-white/20 backdrop-blur-sm text-white text-xs py-1 px-2 rounded-full">
+                            {vehicle.fuelType}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <div className="flex justify-between mb-2">
+                        <div>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">Est. Value</p>
+                          <p className="font-bold text-primary">₹{vehicle.worth.toLocaleString('en-IN')}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm text-slate-500 dark:text-slate-400">Next Service</p>
+                          <p className="font-medium">{vehicle.nextService}</p>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-xs text-slate-500">Health</span>
+                          <span className="text-xs font-medium">
+                            {vehicle.batteryHealth || vehicle.engineHealth || 90}%
+                          </span>
+                        </div>
+                        <Progress 
+                          value={vehicle.batteryHealth || vehicle.engineHealth || 90} 
+                          className="h-1.5" 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+      
+      {totalSlides > 1 && (
+        <>
+          <motion.button
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-white dark:bg-slate-800 rounded-full h-10 w-10 flex items-center justify-center shadow-lg border border-slate-200 dark:border-slate-700"
+            onClick={handlePrev}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+          </motion.button>
+          
+          <motion.button
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-white dark:bg-slate-800 rounded-full h-10 w-10 flex items-center justify-center shadow-lg border border-slate-200 dark:border-slate-700"
+            onClick={handleNext}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
+          </motion.button>
+          
+          <div className="flex justify-center mt-4 gap-2">
+            {Array.from({ length: totalSlides }).map((_, idx) => (
+              <motion.button
+                key={idx}
+                className={`h-2 rounded-full transition-all ${idx === currentIndex ? 'w-6 bg-primary' : 'w-2 bg-slate-300 dark:bg-slate-700'}`}
+                onClick={() => {
+                  setAutoSlide(false);
+                  setCurrentIndex(idx);
+                }}
+                whileHover={{ scale: 1.2 }}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+// Vehicle Detail Analysis Component
+const VehicleDetailAnalysis = ({ vehicle }: { vehicle: typeof vehicleData[0] }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50"
+    >
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="md:w-1/3">
+          <div className="aspect-video rounded-lg overflow-hidden mb-4">
+            <img src={vehicle.image} alt={vehicle.vehicle} className="w-full h-full object-cover" />
+          </div>
+          
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-2xl font-bold">{vehicle.vehicle}</h3>
+              <p className="text-slate-500 dark:text-slate-400">Purchased on {vehicle.purchaseDate}</p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-lg">
+                <p className="text-xs text-slate-500 dark:text-slate-400">Mileage</p>
+                <p className="font-bold">{vehicle.mileage.toLocaleString()} km</p>
+              </div>
+              <div className="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-lg">
+                <p className="text-xs text-slate-500 dark:text-slate-400">Fuel Type</p>
+                <p className="font-bold">{vehicle.fuelType}</p>
+              </div>
+              <div className="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-lg">
+                <p className="text-xs text-slate-500 dark:text-slate-400">Last Service</p>
+                <p className="font-bold">{vehicle.lastService}</p>
+              </div>
+              <div className="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-lg">
+                <p className="text-xs text-slate-500 dark:text-slate-400">Next Due</p>
+                <p className="font-bold">{vehicle.nextService}</p>
+              </div>
+            </div>
+            
+            <div>
+              <p className="text-sm font-medium mb-1">Health Status</p>
+              <div className="flex items-center gap-3">
+                <Progress value={vehicle.batteryHealth || vehicle.engineHealth || 90} className="h-2 flex-grow" />
+                <span className="text-sm font-bold">{vehicle.batteryHealth || vehicle.engineHealth || 90}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="md:w-2/3 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="font-semibold text-green-800 dark:text-green-400">Current Value</h4>
+                <div className="bg-green-100 dark:bg-green-800/50 p-1.5 rounded-full">
+                  <BarChart3 className="h-4 w-4 text-green-600 dark:text-green-400" />
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-green-700 dark:text-green-300">₹{vehicle.worth.toLocaleString('en-IN')}</p>
+              {vehicle.percentage > 50 ? (
+                <p className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1 mt-1">
+                  <TrendingUp className="h-3 w-3" /> Appreciated 8% last quarter
+                </p>
+              ) : (
+                <p className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-1 mt-1">
+                  <TrendingDown className="h-3 w-3" /> Depreciated 5% last quarter
+                </p>
+              )}
+            </div>
+            
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="font-semibold text-blue-800 dark:text-blue-400">Insurance</h4>
+                <div className="bg-blue-100 dark:bg-blue-800/50 p-1.5 rounded-full">
+                  <Shield className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                </div>
+              </div>
+              <p className="text-sm font-medium text-blue-700 dark:text-blue-300">Valid until</p>
+              <p className="text-lg font-bold text-blue-700 dark:text-blue-300">{vehicle.insuranceValid}</p>
+            </div>
+            
+            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="font-semibold text-purple-800 dark:text-purple-400">Maintenance</h4>
+                <div className="bg-purple-100 dark:bg-purple-800/50 p-1.5 rounded-full">
+                  <Settings className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                </div>
+              </div>
+              <p className="text-sm font-medium text-purple-700 dark:text-purple-300">Lifetime cost</p>
+              <p className="text-lg font-bold text-purple-700 dark:text-purple-300">₹{vehicle.maintenanceCost.toLocaleString('en-IN')}</p>
+            </div>
+          </div>
+          
+          <div className="bg-slate-50 dark:bg-slate-700/30 rounded-lg p-4">
+            <h4 className="font-bold mb-3 flex items-center gap-2">
+              <FileText className="h-4 w-4 text-slate-600 dark:text-slate-300" />
+              Performance Metrics
+            </h4>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {vehicle.fuelType === 'Electric' ? (
+                <>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Charging Efficiency</p>
+                      <p className="font-bold">{vehicle.efficiency}</p>
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                      <HeartPulse className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Average Charge</p>
+                      <p className="font-bold">{vehicle.averageCharge}</p>
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                      <Battery className="h-4 w-4 text-green-600 dark:text-green-400" />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Range</p>
+                      <p className="font-bold">{vehicle.range}</p>
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                      <Gauge className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Carbon Offset</p>
+                      <p className="font-bold">{vehicle.carbonOffset}</p>
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                      <Leaf className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Fuel Efficiency</p>
+                      <p className="font-bold">{vehicle.efficiency}</p>
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                      <HeartPulse className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Average Consumption</p>
+                      <p className="font-bold">{vehicle.averageFuel}</p>
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                      <Droplets className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Top Speed</p>
+                      <p className="font-bold">{vehicle.topSpeed}</p>
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                      <Gauge className="h-4 w-4 text-red-600 dark:text-red-400" />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Emission Rating</p>
+                      <p className="font-bold">{vehicle.emissionRating}</p>
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                      <Leaf className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+          
+          <div className="space-y-3">
+            <h4 className="font-bold">Recommended Actions</h4>
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm" variant="outline" className="rounded-full">
+                <Calendar className="h-3.5 w-3.5 mr-2" />
+                Schedule Service
+              </Button>
+              <Button size="sm" variant="outline" className="rounded-full">
+                <FileText className="h-3.5 w-3.5 mr-2" />
+                View Documents
+              </Button>
+              <Button size="sm" variant="outline" className="rounded-full">
+                <BarChart3 className="h-3.5 w-3.5 mr-2" />
+                Value History
+              </Button>
+              <Button size="sm" variant="outline" className="rounded-full">
+                <Share className="h-3.5 w-3.5 mr-2" />
+                Share Details
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 const VehicleVault = () => {
-  const [activeTab, setActiveTab] = useState('community');
+  const [activeTab, setActiveTab] = useState('vehicles');
+  const [selectedVehicle, setSelectedVehicle] = useState<typeof vehicleData[0] | null>(null);
   const { toast } = useToast();
   const { scrollY } = useScroll();
   const headerOpacity = useTransform(scrollY, [0, 200], [1, 0.3]);
@@ -626,6 +1122,15 @@ const VehicleVault = () => {
         description: "Your Vehicle Memory Book has been generated successfully!",
       });
     }, 2500);
+  };
+  
+  // Handle vehicle selection
+  const handleVehicleSelect = (vehicle: typeof vehicleData[0]) => {
+    setSelectedVehicle(vehicle);
+    toast({
+      title: "Vehicle Selected",
+      description: `Analyzing ${vehicle.vehicle} details...`,
+    });
   };
 
   return (
