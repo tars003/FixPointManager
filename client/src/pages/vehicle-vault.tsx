@@ -30,7 +30,7 @@ import {
   Filter as FilterX, CheckCircle as CheckCircle2, MapPin, HelpCircle as FileQuestion,
   FileCheck, Circle, ClipboardCheck, PhoneCall, Image as ImageIcon, 
   History, IndianRupee, ChevronsDown, MessageSquare, ShieldCheck,
-  Share2, FileEdit, ListChecks
+  Share2, FileEdit, ListChecks, Check
 } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
@@ -683,6 +683,19 @@ const vehicleData = [
     purchaseDate: 'May 12, 2022',
     insuranceValid: 'May 2025',
     maintenanceCost: 16500,
+    // Impounded specific details
+    impoundDate: 'April 15, 2025',
+    impoundLocation: 'Central Police Station, Mumbai',
+    impoundReason: 'Multiple traffic violations and unpaid challan',
+    caseNumber: 'IM-2025-8712',
+    fineAmount: '₹15,000',
+    releaseRequirements: 'Fine payment, court appearance',
+    impoundingAuthority: 'Mumbai Traffic Police',
+    legalStatus: 'Pending Hearing',
+    contactPerson: 'Officer Raj Kumar (ID: 87234)',
+    hearingDate: 'April 28, 2025',
+    estimatedReleaseDate: 'May 10, 2025',
+    legalDocuments: ['Impound Notice', 'Vehicle Inspection Report', 'Violation Record', 'Court Summons'],
     efficiency: '21.2 km/l',
     averageFuel: '4.7 l/100km',
     topSpeed: '170 km/h',
@@ -691,19 +704,7 @@ const vehicleData = [
     chassisNumber: 'MDZ22051276K',
     engineNumber: 'MSDZ2205122U',
     owner: 'Manoj Kulkarni',
-    rcExpiryDate: 'May 11, 2032',
-    impoundDate: 'Apr 10, 2025',
-    impoundLocation: 'Koramangala Traffic Police Station, Bangalore',
-    impoundReason: 'Multiple parking violations & expired PUC certificate',
-    caseNumber: 'IMP-BLR-25-0472',
-    fineAmount: '₹12,500',
-    releaseRequirements: 'Payment of fine, valid PUC certificate',
-    impoundingAuthority: 'Bangalore Traffic Police',
-    legalStatus: 'In Process',
-    contactPerson: 'SI Ramesh Kumar',
-    hearingDate: 'Apr 30, 2025',
-    estimatedReleaseDate: 'May 05, 2025',
-    legalDocuments: ['Impounding Challan', 'Notice of Violation', 'Vehicle Release Form']
+    rcExpiryDate: 'May 11, 2032'
   },
   { 
     id: 91,
@@ -5863,11 +5864,11 @@ const VehicleVault = () => {
                                       <p className="text-xs font-medium">Fine Amount: <span className="font-normal">{selectedDocumentVehicle.fineAmount || '₹15,000'}</span></p>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                      <CheckSquare className="h-4 w-4 text-rose-500" />
+                                      <Check className="h-4 w-4 text-rose-500" />
                                       <p className="text-xs font-medium">Requirements: <span className="font-normal">{selectedDocumentVehicle.releaseRequirements || 'Fine payment, court appearance'}</span></p>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                      <Building className="h-4 w-4 text-rose-500" />
+                                      <Building2 className="h-4 w-4 text-rose-500" />
                                       <p className="text-xs font-medium">Authority: <span className="font-normal">{selectedDocumentVehicle.impoundingAuthority || 'Mumbai Traffic Police'}</span></p>
                                     </div>
                                     <div className="flex items-center gap-2">
