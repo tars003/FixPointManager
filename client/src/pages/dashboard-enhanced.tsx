@@ -550,135 +550,123 @@ const DashboardEnhanced = () => {
           </motion.div>
         </section>
         
-        {/* Essential Tools Section */}
-        <section className="mb-12">
-          <div className="flex items-center mb-6">
-            <h2 className="text-2xl font-bold">Essential Tools</h2>
-            <div className="ml-4 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 text-sm px-3 py-1 rounded-full">
-              Powerful utilities for vehicle management
-            </div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl mb-8">
-            <p className="text-gray-700 max-w-3xl">
-              Our essential tools provide powerful features to manage every aspect of your vehicle ownership experience.
-              From tracking maintenance schedules to calculating fuel efficiency, these tools are designed to make 
-              vehicle ownership simpler and more enjoyable.
+        {/* Essential Tools Section - Clean Canva-inspired design */}
+        <section className="mb-20">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Essential Tools</h2>
+            <p className="text-gray-600 max-w-3xl">
+              Powerful utilities to manage every aspect of your vehicle ownership experience.
             </p>
           </div>
           
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            {essentialTools.map((tool, index) => (
-              <motion.div
-                key={tool.id}
-                className="bg-white rounded-xl overflow-hidden shadow-sm border hover:shadow-md transition-all cursor-pointer backdrop-blur-sm"
-                onClick={() => navigateTo(tool.path)}
-                variants={itemVariants}
-                whileHover={{ y: -5, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * index }}
-              >
-                <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
-                <div className="p-5">
-                  <div className={`w-14 h-14 rounded-full ${tool.color.split(' ')[0]} flex items-center justify-center mb-4 shadow-md transform transition-transform hover:rotate-12`}>
-                    {React.cloneElement(tool.icon, { className: `h-7 w-7 ${tool.color.split(' ')[1]}` })}
+            {essentialTools.map((tool, index) => {
+              // Define clean, vibrant colors for tool cards
+              const toolColors = {
+                'nearby': 'bg-rose-500',
+                'marketplace': 'bg-cyan-500',
+                'documents': 'bg-violet-500',
+                'emergency': 'bg-amber-500'
+              };
+              
+              const bgColor = toolColors[tool.id as keyof typeof toolColors] || 'bg-blue-500';
+              
+              return (
+                <motion.div
+                  key={tool.id}
+                  className="cursor-pointer rounded-xl overflow-hidden bg-white shadow-md hover:shadow-lg"
+                  onClick={() => navigateTo(tool.path)}
+                  variants={itemVariants}
+                  whileHover={{ y: -3 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {/* Header with icon */}
+                  <div className={`${bgColor} p-5 flex items-center h-28`}>
+                    <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
+                      {React.cloneElement(tool.icon, { className: "h-8 w-8 text-white" })}
+                    </div>
+                    <div className="ml-4">
+                      <h3 className="font-semibold text-lg text-white">{tool.name}</h3>
+                      <p className="text-white/80 text-sm">{tool.description}</p>
+                    </div>
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2 text-lg">{tool.name}</h3>
-                  <p className="text-sm text-gray-600 mb-3">{tool.description}</p>
-                  <div className="text-xs bg-gray-50 rounded-md p-2 mb-3 text-gray-500">
-                    <span className="font-medium text-blue-600">Key feature:</span> {tool.keyFeature}
+                  
+                  {/* Key feature highlight */}
+                  <div className="p-5">
+                    <div className="mb-4">
+                      <div className="text-xs uppercase tracking-wider text-gray-500 font-medium mb-1">Key Feature</div>
+                      <p className="text-sm text-gray-700">{tool.keyFeature}</p>
+                    </div>
+                    
+                    <Button 
+                      className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 border-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigateTo(tool.path);
+                      }}
+                    >
+                      <span>Access Tool</span>
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 border-blue-200"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigateTo(tool.path);
-                    }}
-                  >
-                    Access Tool
-                    <ArrowRight className="ml-1 h-4 w-4" />
-                  </Button>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </motion.div>
         </section>
         
-        {/* Footer Tools Section */}
-        <section className="mb-16">
-          <div className="flex items-center mb-8">
-            <h2 className="text-2xl font-bold">More Modules</h2>
-            <div className="ml-4 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 text-sm px-3 py-1 rounded-full">
-              Specialized features
-            </div>
-            <Separator className="flex-1 ml-3" />
-          </div>
-          
-          <div className="bg-gradient-to-br from-slate-50 to-gray-50 p-6 rounded-xl mb-8">
-            <p className="text-gray-700 max-w-3xl">
-              Explore additional specialized modules designed to enhance your vehicle management experience. 
-              These modules offer dedicated tools for specific use cases, from fleet management to educational resources.
+        {/* More Modules Section - Clean Canva-inspired design */}
+        <section className="mb-20">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">More Modules</h2>
+            <p className="text-gray-600 max-w-3xl">
+              Explore additional specialized modules designed to enhance your vehicle management experience.
             </p>
           </div>
           
           <motion.div 
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
             {additionalModules.map((module, index) => {
-              // Define a different background color for each module
-              const bgColors = [
-                "bg-lime-100", // Energy Monitor
-                "bg-purple-50", // Commercial Fleet
-                "bg-green-50", // Learning Center
-                "bg-blue-50", // Vehicle Compare
-                "bg-emerald-50", // Service History
-                "bg-rose-50", // FASTag & eChallan
-              ];
+              // Define module colors - vibrant solid colors inspired by Canva
+              const moduleColors = {
+                'commercial': { bg: 'bg-emerald-500', text: 'text-white' },
+                'learning': { bg: 'bg-violet-500', text: 'text-white' },
+                'energy': { bg: 'bg-amber-500', text: 'text-white' },
+                'compare': { bg: 'bg-blue-500', text: 'text-white' },
+                'history': { bg: 'bg-rose-500', text: 'text-white' },
+                'fastag': { bg: 'bg-purple-500', text: 'text-white' },
+              };
               
-              // Get the background color for this module
-              const bgColor = module.id === 'energy' 
-                ? "bg-lime-100" 
-                : bgColors[index % bgColors.length];
+              const color = moduleColors[module.id as keyof typeof moduleColors] || 
+                { bg: 'bg-gray-500', text: 'text-white' };
               
               return (
                 <motion.div
                   key={module.id}
                   variants={itemVariants}
-                  whileHover={{ 
-                    y: -5, 
-                    scale: 1.05,
-                    boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)"
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                  className={`rounded-xl overflow-hidden ${bgColor} hover:shadow-lg cursor-pointer`}
+                  whileHover={{ y: -3 }}
+                  transition={{ duration: 0.2 }}
+                  className="cursor-pointer rounded-xl overflow-hidden shadow-md bg-white hover:shadow-lg"
                   onClick={() => navigateTo(module.path)}
                 >
-                  <div className="p-6 flex flex-col items-center">
-                    <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-md mb-4">
-                      {React.cloneElement(module.icon as React.ReactElement, { className: 'h-7 w-7' })}
-                    </div>
-                    <h3 className="font-medium text-gray-900 text-center">{module.name}</h3>
-                    <p className="text-xs text-gray-600 mt-1 text-center">{module.description}</p>
-                    
-                    {/* Show a subtle indicator button */}
-                    <div className="mt-4 opacity-70 hover:opacity-100 transition-opacity">
-                      <div className="bg-white/50 backdrop-blur-sm p-1 rounded-full">
-                        <ArrowRight className="h-3 w-3" />
-                      </div>
-                    </div>
+                  {/* Clean header with icon */}
+                  <div className={`${color.bg} p-5 flex justify-center items-center h-28`}>
+                    {React.cloneElement(module.icon as React.ReactElement, { className: 'h-10 w-10 text-white' })}
+                  </div>
+                  
+                  {/* Simple text with ample spacing */}
+                  <div className="px-4 pt-4 pb-5">
+                    <h3 className="font-semibold text-base mb-1">{module.name}</h3>
+                    <p className="text-xs text-gray-500">{module.description}</p>
                   </div>
                 </motion.div>
               );
@@ -686,38 +674,25 @@ const DashboardEnhanced = () => {
           </motion.div>
           
           <motion.div 
-            className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl overflow-hidden shadow-lg"
-            whileHover={{ boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+            className="mt-16 rounded-xl overflow-hidden bg-blue-50"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.2 }}
           >
-            <div className="relative overflow-hidden">
-              {/* Decorative elements */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full transform translate-x-1/2 -translate-y-1/2 opacity-50"></div>
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-100 rounded-full transform -translate-x-1/2 translate-y-1/2 opacity-50"></div>
-              
-              <div className="p-8 flex flex-col md:flex-row items-start md:items-center justify-between relative z-10">
-                <div className="mb-4 md:mb-0">
-                  <div className="flex items-center">
-                    <div className="bg-white p-2 rounded-lg shadow-sm mr-4">
-                      <MessageCircle className="h-5 w-5 text-blue-500" />
-                    </div>
-                    <h3 className="text-xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
-                      Looking for more functionality?
-                    </h3>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-2 ml-12">
-                    We're constantly adding new features to enhance your experience.
-                    Tell us what you'd like to see next!
-                  </p>
-                </div>
-                
-                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 shadow-md hover:shadow-lg transition-all">
-                  Send Feedback
-                  <MessageCircle className="ml-2 h-4 w-4" />
-                </Button>
+            <div className="py-8 px-6 md:px-10 flex flex-col md:flex-row items-start md:items-center justify-between">
+              <div className="mb-6 md:mb-0 md:mr-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  Looking for more functionality?
+                </h3>
+                <p className="text-gray-600">
+                  We're constantly adding new features to enhance your experience.
+                </p>
               </div>
+              
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-6 h-auto text-base font-medium rounded-lg transition-colors">
+                Send Feedback
+                <MessageCircle className="ml-2 h-5 w-5" />
+              </Button>
             </div>
           </motion.div>
         </section>
