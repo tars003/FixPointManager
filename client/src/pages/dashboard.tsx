@@ -26,6 +26,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { formatDate } from '@/lib/format';
 import { NotificationPopover } from '@/components/notification/notification-popover';
 import FeatureShowcase from '@/components/dashboard/feature-showcase';
+import VehiclePortfolioValue from '@/components/vehicle-vault/VehiclePortfolioValue';
 
 const Dashboard = () => {
   const [, navigate] = useLocation();
@@ -286,97 +287,62 @@ const Dashboard = () => {
           <TabsContent value="dashboard" className="mt-4">
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h3 className="text-xl font-semibold mb-4 flex items-center">
-                <span className="mr-2">Your Vehicle Journey</span>
+                <span className="mr-2">Vehicle Portfolio Value</span>
                 <Info className="h-4 w-4 text-neutral-light" />
               </h3>
-              <p className="text-neutral-light mb-4">Track your vehicle's complete lifecycle</p>
+              <p className="text-neutral-light mb-4">See the total worth of your vehicle collection</p>
               
               {isLoading ? (
                 <div className="flex justify-center py-12">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                 </div>
-              ) : vehicles && vehicles.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {vehicles.slice(0, 3).map((vehicle, idx) => (
-                    <motion.div
-                      key={vehicle.id}
-                      className="fx-card overflow-hidden border"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.1 * idx }}
-                      whileHover={{ y: -5, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
-                      onClick={() => navigateTo(`/vehicles/${vehicle.id}`)}
-                    >
-                      <div className="h-32 bg-neutral-100 flex items-center justify-center relative">
-                        {vehicle.imageUrl ? (
-                          <img 
-                            src={vehicle.imageUrl} 
-                            alt={vehicle.name} 
-                            className="w-full h-full object-cover" 
-                          />
-                        ) : (
-                          <Car className="h-16 w-16 text-neutral-300" />
-                        )}
-                        <Badge 
-                          className={`absolute top-2 right-2 ${
-                            vehicle.fuelType === 'electric' 
-                              ? 'bg-blue-100 text-blue-600 hover:bg-blue-100'
-                              : vehicle.fuelType === 'hybrid'
-                                ? 'bg-green-100 text-green-600 hover:bg-green-100'
-                                : 'bg-orange-100 text-orange-600 hover:bg-orange-100'
-                          }`}
-                        >
-                          {vehicle.fuelType || 'Petrol'}
-                        </Badge>
-                      </div>
-                      <div className="p-3">
-                        <h4 className="font-semibold">{vehicle.name}</h4>
-                        <p className="text-sm text-neutral-light">{vehicle.make} {vehicle.model} • {vehicle.year}</p>
-                        
-                        <div className="flex justify-between mt-3">
-                          <div>
-                            <p className="text-xs text-neutral-light">Last Service</p>
-                            <p className="text-sm font-medium">
-                              {vehicle.lastService ? formatDate(vehicle.lastService) : 'N/A'}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-xs text-neutral-light">Health</p>
-                            <p className="text-sm font-medium">
-                              {vehicle.healthScore || '85'}%
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
               ) : (
-                <div className="text-center py-8">
-                  <Car className="h-12 w-12 mx-auto text-neutral-light mb-3" />
-                  <h4 className="font-semibold mb-2">No Vehicles Found</h4>
-                  <p className="text-neutral-light mb-4">Add your first vehicle to get started</p>
-                  <Button 
-                    onClick={() => navigateTo('/vehicles/add')}
-                    className="fx-button-gradient"
-                  >
-                    Add Vehicle
-                  </Button>
-                </div>
+                <VehiclePortfolioValue
+                  vehicles={[
+                    {
+                      id: 1,
+                      vehicle: "Tata Nexon EV",
+                      worth: 892500,
+                      fuelType: "Electric"
+                    },
+                    {
+                      id: 2,
+                      vehicle: "Honda City",
+                      worth: 375000,
+                      fuelType: "Petrol"
+                    },
+                    {
+                      id: 3,
+                      vehicle: "TVS iQube",
+                      worth: 73500,
+                      fuelType: "Electric"
+                    },
+                    {
+                      id: 4,
+                      vehicle: "Mahindra XUV700",
+                      worth: 1250000,
+                      fuelType: "Diesel"
+                    },
+                    {
+                      id: 5,
+                      vehicle: "Royal Enfield Classic 350",
+                      worth: 190000,
+                      fuelType: "Petrol"
+                    }
+                  ]}
+                />
               )}
               
-              {vehicles && vehicles.length > 0 && (
-                <div className="flex justify-center mt-4">
-                  <Button 
-                    variant="outline"
-                    onClick={() => navigateTo('/vehicles')}
-                    className="flex items-center"
-                  >
-                    View All Vehicles
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </div>
-              )}
+              <div className="flex justify-center mt-6">
+                <Button 
+                  variant="outline"
+                  onClick={() => navigateTo('/vehicles')}
+                  className="flex items-center"
+                >
+                  View All Vehicles
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </div>
             </div>
           </TabsContent>
           
