@@ -1892,7 +1892,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Active')}
                 >
                   <Car className="h-3.5 w-3.5" />
-                  Active
+                  <span className="flex items-center gap-1">
+                    Active
+                    <span className="inline-flex items-center justify-center bg-green-200 dark:bg-green-900/40 text-green-700 dark:text-green-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Active' ? (
+                        <AnimatedCounter target={9} duration={1} />
+                      ) : 9}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
@@ -1900,7 +1907,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Recently Purchased')}
                 >
                   <ShoppingBag className="h-3.5 w-3.5" />
-                  Recently Purchased
+                  <span className="flex items-center gap-1">
+                    Recently Purchased
+                    <span className="inline-flex items-center justify-center bg-blue-200 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Recently Purchased' ? (
+                        <AnimatedCounter target={5} duration={1} />
+                      ) : 5}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
@@ -1908,7 +1922,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Pre-owned')}
                 >
                   <RefreshCw className="h-3.5 w-3.5" />
-                  Pre-owned
+                  <span className="flex items-center gap-1">
+                    Pre-owned
+                    <span className="inline-flex items-center justify-center bg-indigo-200 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Pre-owned' ? (
+                        <AnimatedCounter target={6} duration={1} />
+                      ) : 6}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
@@ -1916,7 +1937,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('In Maintenance')}
                 >
                   <Wrench className="h-3.5 w-3.5" />
-                  In Maintenance
+                  <span className="flex items-center gap-1">
+                    In Maintenance
+                    <span className="inline-flex items-center justify-center bg-amber-200 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'In Maintenance' ? (
+                        <AnimatedCounter target={3} duration={1} />
+                      ) : 3}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
@@ -1924,7 +1952,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Garage Stored')}
                 >
                   <Warehouse className="h-3.5 w-3.5" />
-                  Garage Stored
+                  <span className="flex items-center gap-1">
+                    Garage Stored
+                    <span className="inline-flex items-center justify-center bg-sky-200 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Garage Stored' ? (
+                        <AnimatedCounter target={4} duration={1} />
+                      ) : 4}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
@@ -1932,7 +1967,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Out of Service')}
                 >
                   <AlertOctagon className="h-3.5 w-3.5" />
-                  Out of Service
+                  <span className="flex items-center gap-1">
+                    Out of Service
+                    <span className="inline-flex items-center justify-center bg-slate-200 dark:bg-slate-700/40 text-slate-700 dark:text-slate-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Out of Service' ? (
+                        <AnimatedCounter target={3} duration={1} />
+                      ) : 3}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
@@ -1940,7 +1982,14 @@ const VehicleVault = () => {
                   onClick={() => handleStatusSelect('Commercial Fleet')}
                 >
                   <Building2 className="h-3.5 w-3.5" />
-                  Commercial Fleet
+                  <span className="flex items-center gap-1">
+                    Commercial Fleet
+                    <span className="inline-flex items-center justify-center bg-purple-200 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded-full text-xs font-medium px-1.5 min-w-[1.25rem]">
+                      {selectedStatus === 'Commercial Fleet' ? (
+                        <AnimatedCounter target={7} duration={1} />
+                      ) : 7}
+                    </span>
+                  </span>
                 </Badge>
                 <Badge 
                   variant="outline" 
