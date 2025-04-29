@@ -30,7 +30,7 @@ import {
   Filter as FilterX, CheckCircle as CheckCircle2, MapPin, HelpCircle as FileQuestion,
   FileCheck, Circle, ClipboardCheck, PhoneCall, Image as ImageIcon, 
   History, IndianRupee, ChevronsDown, MessageSquare, ShieldCheck,
-  Share2, FileEdit, ListChecks, Check
+  Share2, FileEdit, ListChecks, Check, Gavel, ShieldAlert, FileClock
 } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
@@ -5026,6 +5026,574 @@ const VehicleVault = () => {
                             <Button className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-none">
                               <ShieldCheck className="h-4 w-4" />
                               View Lease Status
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
+                  {/* Stolen Vehicles Section */}
+                  {selectedStatus === 'Stolen' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for Stolen vehicles
+                        <div className="bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/30 dark:to-orange-950/30 rounded-lg p-6 mb-6 border border-red-100 dark:border-red-900/20 shadow-sm">
+                          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+                            <h3 className="text-xl font-semibold text-center sm:text-left mb-3 sm:mb-0 text-red-700 dark:text-red-400 flex items-center gap-2">
+                              <Shield className="h-5 w-5" />
+                              Stolen Vehicles
+                            </h3>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-red-200 dark:border-red-800">
+                                <FilterX className="h-3.5 w-3.5" />
+                                Filter
+                              </Button>
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-red-200 dark:border-red-800">
+                                <Calendar className="h-3.5 w-3.5" />
+                                Sort by Date
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {vehicleData
+                              .filter(vehicle => vehicle.status === 'Stolen' || (vehicle as any).theftDate !== undefined)
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-lg group hover:border-red-300 dark:hover:border-red-700`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-0 overflow-hidden">
+                                    <div className="aspect-video w-full overflow-hidden relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500"
+                                      />
+                                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/60 to-transparent opacity-70"></div>
+                                      <div className="absolute top-2 right-2 bg-red-500 dark:bg-red-600 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
+                                        Stolen
+                                      </div>
+                                      <div className="absolute bottom-0 left-0 w-full p-3 text-white">
+                                        <h4 className="font-semibold text-sm">{vehicle.vehicle}</h4>
+                                        <div className="flex items-center gap-2 mt-1">
+                                          <span className="text-xs opacity-90">{vehicle.fuelType}</span>
+                                          <span className="text-xs opacity-90">•</span>
+                                          <span className="text-xs opacity-90">{new Intl.NumberFormat('en-IN').format(vehicle.mileage)} km</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="p-3">
+                                      <div className="flex justify-between items-center">
+                                        <div className="text-sm font-semibold text-red-600 dark:text-red-400">FIR #{(vehicle as any).firNumber?.split('/').pop() || 'Not Filed'}</div>
+                                        <Badge variant="outline" className="bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400">
+                                          {(vehicle as any).recoveryStatus || 'Active Search'}
+                                        </Badge>
+                                      </div>
+                                      <div className="mt-2 text-xs flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                                        <MapPin className="h-3 w-3" />
+                                        {(vehicle as any).lastLocation || 'Location unknown'}
+                                      </div>
+                                      <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                                        <Calendar className="h-3 w-3 mr-1" />
+                                        Reported: {(vehicle as any).theftDate || 'Recently'}
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Document Detail Screen
+                        <div className="space-y-6">
+                          {/* Vehicle Info Card */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mb-6">
+                            <div className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                              <div className="flex items-center gap-4">
+                                <Avatar className="h-16 w-16 rounded-lg border border-gray-200 dark:border-gray-700">
+                                  <AvatarImage src={selectedDocumentVehicle.image} alt={selectedDocumentVehicle.vehicle} className="object-cover" />
+                                  <AvatarFallback className="rounded-lg">
+                                    <Car className="h-8 w-8 text-gray-400" />
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                  <h3 className="font-semibold flex items-center gap-2">
+                                    {selectedDocumentVehicle.vehicle}
+                                    <AnimatedStatusTransition 
+                                      currentStatus="Stolen"
+                                    />
+                                  </h3>
+                                  <p className="text-xs text-gray-500">{selectedDocumentVehicle.registrationNumber}</p>
+                                </div>
+                              </div>
+                              <Button variant="outline" size="sm" onClick={() => setSelectedDocumentVehicle(null)}>
+                                Change Vehicle
+                              </Button>
+                            </div>
+                          </div>
+
+                          {/* Theft Details */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-red-50 dark:bg-red-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-red-700 dark:text-red-400">
+                                <Shield className="h-5 w-5" />
+                                Theft Report Details
+                                <ContextualHelpTooltip tipType="stolen" />
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">FIR Information</h4>
+                                  <p className="text-xs text-gray-500">Police case details</p>
+                                  <div className="flex mt-2 gap-2">
+                                    <Badge variant="outline" className="bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400">
+                                      FIR #{(selectedDocumentVehicle as any).firNumber || 'FIR/2025/04/12983'}
+                                    </Badge>
+                                    <Badge variant="outline" className="bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400">
+                                      {(selectedDocumentVehicle as any).recoveryStatus || 'Active Search'}
+                                    </Badge>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Police Station</h4>
+                                  <p className="text-xs text-gray-500">Authority handling the theft case</p>
+                                  <p className="text-xs mt-1 text-slate-700 dark:text-slate-300">
+                                    {(selectedDocumentVehicle as any).policeStation || 'Andheri East Police Station, Mumbai'}
+                                  </p>
+                                  <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                                    <PhoneCall className="h-3.5 w-3.5 text-red-500" />
+                                    Contact: {(selectedDocumentVehicle as any).policeContact || 'Inspector Sanjay Patil (022-26124040)'}
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <Separator className="my-2" />
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <InteractiveDataPoint
+                                  label="Theft Date"
+                                  value={(selectedDocumentVehicle as any).theftDate || 'April 10, 2025'}
+                                  info="Date when vehicle was reported stolen"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Last Location"
+                                  value={(selectedDocumentVehicle as any).lastLocation || 'Malad West, Mumbai'}
+                                  info="Last known location of the vehicle"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Case Officer"
+                                  value={(selectedDocumentVehicle as any).caseOfficer || 'SI Prakash Joshi'}
+                                  info="Officer handling the investigation"
+                                />
+                              </div>
+                              
+                              <div className="p-3 bg-red-50 dark:bg-red-900/10 rounded-md space-y-2">
+                                <div className="font-medium text-sm flex items-center gap-2">
+                                  <AlertTriangle className="h-4 w-4 text-red-500" />
+                                  Theft Details
+                                </div>
+                                <p className="text-sm text-gray-700 dark:text-gray-300">
+                                  {(selectedDocumentVehicle as any).theftDetails || 'Vehicle reported stolen from residential parking area. No CCTV footage available. No witnesses. Last seen at approximately 11:30 PM on April 10, 2025.'}
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                                  <div className="flex items-center gap-2">
+                                    <CheckCircle className="h-4 w-4 text-amber-500" />
+                                    <p className="text-xs font-medium">Insurance Notified: <span className="font-normal">{(selectedDocumentVehicle as any).insuranceNotified || 'Yes - April 11, 2025'}</span></p>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <AlertCircle className="h-4 w-4 text-red-500" />
+                                    <p className="text-xs font-medium">Recovery Chance: <span className="font-normal">{(selectedDocumentVehicle as any).recoveryChance || 'Moderate'}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Insurance Claim Process */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-red-50 dark:bg-red-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-red-700 dark:text-red-400">
+                                <FileText className="h-5 w-5" />
+                                Insurance Claim Process
+                              </h3>
+                            </div>
+                            <div className="p-4">
+                              <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:w-0.5 before:bg-gray-200 dark:before:bg-gray-700 before:h-full">
+                                <div className="relative flex gap-3">
+                                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 z-10">
+                                    <CheckCircle className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex flex-col flex-1">
+                                    <span className="text-xs text-gray-500">{(selectedDocumentVehicle as any).theftDate || 'April 10, 2025'}</span>
+                                    <h4 className="text-sm font-medium">FIR Filed</h4>
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                      First Information Report filed at {(selectedDocumentVehicle as any).policeStation || 'Andheri East Police Station'}.
+                                    </p>
+                                  </div>
+                                </div>
+                                
+                                <div className="relative flex gap-3">
+                                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 z-10">
+                                    <CheckCircle className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex flex-col flex-1">
+                                    <span className="text-xs text-gray-500">{(selectedDocumentVehicle as any).insuranceNotifiedDate || 'April 11, 2025'}</span>
+                                    <h4 className="text-sm font-medium">Insurance Company Notified</h4>
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                      Insurance company {(selectedDocumentVehicle as any).insuranceCompany || 'ICICI Lombard'} notified about theft.
+                                    </p>
+                                  </div>
+                                </div>
+                                
+                                <div className="relative flex gap-3">
+                                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 z-10">
+                                    <Clock className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex flex-col flex-1">
+                                    <span className="text-xs text-gray-500">In Progress</span>
+                                    <h4 className="text-sm font-medium">Claim Documentation</h4>
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                      Submitting required documents to insurance company.
+                                    </p>
+                                    <div className="mt-2 grid grid-cols-2 gap-2">
+                                      <Badge variant="outline" className="justify-start bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                        FIR Copy ✓
+                                      </Badge>
+                                      <Badge variant="outline" className="justify-start bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                        RC Copy ✓
+                                      </Badge>
+                                      <Badge variant="outline" className="justify-start bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                        Insurance Policy ✓
+                                      </Badge>
+                                      <Badge variant="outline" className="justify-start bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">
+                                        Keys Handover ◯
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div className="relative flex gap-3">
+                                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 z-10">
+                                    <CreditCard className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex flex-col flex-1">
+                                    <span className="text-xs text-gray-500">Pending</span>
+                                    <h4 className="text-sm font-medium">Settlement Approval</h4>
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                      Insurance company to approve claim settlement after verification.
+                                    </p>
+                                  </div>
+                                </div>
+                                
+                                <div className="relative flex gap-3">
+                                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 z-10">
+                                    <IndianRupee className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex flex-col flex-1">
+                                    <span className="text-xs text-gray-500">Estimated by {(selectedDocumentVehicle as any).settlementDate || 'June 10, 2025'}</span>
+                                    <h4 className="text-sm font-medium">Claim Settlement</h4>
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                      Expected settlement amount: ₹{new Intl.NumberFormat('en-IN').format((selectedDocumentVehicle as any).settlementAmount || selectedDocumentVehicle.worth * 0.85)}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <Download className="h-4 w-4" />
+                              Download FIR Copy
+                            </Button>
+                            <Button variant="outline" className="gap-2">
+                              <MessageSquare className="h-4 w-4" />
+                              Contact Case Officer
+                            </Button>
+                            <Button className="gap-2 bg-red-600 hover:bg-red-700">
+                              <Activity className="h-4 w-4" />
+                              Track Claim Status
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
+                  {/* Under Legal Hold Section */}
+                  {selectedStatus === 'Under Legal Hold' && (
+                    <>
+                      {!selectedDocumentVehicle ? (
+                        // Vehicle Selection State for Under Legal Hold
+                        <div className="bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-yellow-950/30 dark:to-amber-950/30 rounded-lg p-6 mb-6 border border-yellow-100 dark:border-yellow-900/20 shadow-sm">
+                          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+                            <h3 className="text-xl font-semibold text-center sm:text-left mb-3 sm:mb-0 text-yellow-700 dark:text-yellow-400 flex items-center gap-2">
+                              <Gavel className="h-5 w-5" />
+                              Vehicles Under Legal Hold
+                            </h3>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-yellow-200 dark:border-yellow-800">
+                                <FilterX className="h-3.5 w-3.5" />
+                                Filter
+                              </Button>
+                              <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5 border-yellow-200 dark:border-yellow-800">
+                                <FileClock className="h-3.5 w-3.5" />
+                                Sort by Date
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {vehicleData
+                              .filter(vehicle => vehicle.status === 'Under Legal Hold' || (vehicle as any).caseNumber !== undefined)
+                              .map((vehicle) => (
+                                <Card 
+                                  key={vehicle.id} 
+                                  className={`cursor-pointer transition-all hover:shadow-lg group hover:border-yellow-300 dark:hover:border-yellow-700`}
+                                  onClick={() => setSelectedDocumentVehicle(vehicle)}
+                                >
+                                  <CardContent className="p-0 overflow-hidden">
+                                    <div className="aspect-video w-full overflow-hidden relative">
+                                      <img 
+                                        src={vehicle.image} 
+                                        alt={vehicle.vehicle} 
+                                        className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500"
+                                      />
+                                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/60 to-transparent opacity-70"></div>
+                                      <div className="absolute top-2 right-2 bg-yellow-500 dark:bg-yellow-600 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
+                                        Legal Hold
+                                      </div>
+                                      <div className="absolute bottom-0 left-0 w-full p-3 text-white">
+                                        <h4 className="font-semibold text-sm">{vehicle.vehicle}</h4>
+                                        <div className="flex items-center gap-2 mt-1">
+                                          <span className="text-xs opacity-90">{vehicle.fuelType}</span>
+                                          <span className="text-xs opacity-90">•</span>
+                                          <span className="text-xs opacity-90">{new Intl.NumberFormat('en-IN').format(vehicle.mileage)} km</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="p-3">
+                                      <div className="flex justify-between items-center">
+                                        <div className="text-sm font-semibold text-yellow-600 dark:text-yellow-400">Case #{(vehicle as any).caseNumber?.split('-').pop() || 'Not Assigned'}</div>
+                                        <Badge variant="outline" className="bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400">
+                                          {(vehicle as any).legalStatus || 'Investigation'}
+                                        </Badge>
+                                      </div>
+                                      <div className="mt-2 text-xs flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                                        <Scale className="h-3 w-3" />
+                                        {(vehicle as any).legalHoldReason || 'Legal investigation'}
+                                      </div>
+                                      <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                                        <Calendar className="h-3 w-3 mr-1" />
+                                        Hold since: {(vehicle as any).legalHoldDate || 'Recent'}
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Document Detail Screen
+                        <div className="space-y-6">
+                          {/* Vehicle Info Card */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mb-6">
+                            <div className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                              <div className="flex items-center gap-4">
+                                <Avatar className="h-16 w-16 rounded-lg border border-gray-200 dark:border-gray-700">
+                                  <AvatarImage src={selectedDocumentVehicle.image} alt={selectedDocumentVehicle.vehicle} className="object-cover" />
+                                  <AvatarFallback className="rounded-lg">
+                                    <Car className="h-8 w-8 text-gray-400" />
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                  <h3 className="font-semibold flex items-center gap-2">
+                                    {selectedDocumentVehicle.vehicle}
+                                    <AnimatedStatusTransition 
+                                      currentStatus="Under Legal Hold"
+                                    />
+                                  </h3>
+                                  <p className="text-xs text-gray-500">{selectedDocumentVehicle.registrationNumber}</p>
+                                </div>
+                              </div>
+                              <Button variant="outline" size="sm" onClick={() => setSelectedDocumentVehicle(null)}>
+                                Change Vehicle
+                              </Button>
+                            </div>
+                          </div>
+
+                          {/* Legal Hold Details */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-yellow-50 dark:bg-yellow-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-yellow-700 dark:text-yellow-400">
+                                <Gavel className="h-5 w-5" />
+                                Legal Hold Details
+                                <ContextualHelpTooltip tipType="legal" />
+                              </h3>
+                            </div>
+                            <div className="p-4 space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Case Information</h4>
+                                  <p className="text-xs text-gray-500">Case number and legal status</p>
+                                  <div className="flex mt-2 gap-2">
+                                    <Badge variant="outline" className="bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400">
+                                      Case #{(selectedDocumentVehicle as any).caseNumber?.split('-').pop() || 'L-29873'}
+                                    </Badge>
+                                    <Badge variant="outline" className="bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400">
+                                      {(selectedDocumentVehicle as any).legalStatus || 'Under Investigation'}
+                                    </Badge>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col space-y-1">
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Legal Authority</h4>
+                                  <p className="text-xs text-gray-500">Agency responsible for the legal hold</p>
+                                  <p className="text-xs mt-1 text-slate-700 dark:text-slate-300">
+                                    {(selectedDocumentVehicle as any).legalAuthority || 'Delhi High Court, Division 3'}
+                                  </p>
+                                  <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                                    <PhoneCall className="h-3.5 w-3.5 text-yellow-500" />
+                                    Contact: {(selectedDocumentVehicle as any).legalContactPerson || 'Legal Officer Amit Sharma (Ref: LCR-8923)'}
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <Separator className="my-2" />
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <InteractiveDataPoint
+                                  label="Hold Start Date"
+                                  value={(selectedDocumentVehicle as any).legalHoldDate || 'March 28, 2025'}
+                                  info="Date when legal hold was placed on vehicle"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Expected Duration"
+                                  value={(selectedDocumentVehicle as any).expectedDuration || '3-6 months'}
+                                  info="Estimated period of legal restriction"
+                                />
+                                
+                                <InteractiveDataPoint
+                                  label="Next Hearing"
+                                  value={(selectedDocumentVehicle as any).nextHearingDate || 'May 15, 2025'}
+                                  info="Date of next court proceeding"
+                                />
+                              </div>
+                              
+                              <div className="p-3 bg-yellow-50 dark:bg-yellow-900/10 rounded-md space-y-2">
+                                <div className="font-medium text-sm flex items-center gap-2">
+                                  <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                                  Legal Hold Reason
+                                </div>
+                                <p className="text-sm text-gray-700 dark:text-gray-300">
+                                  {(selectedDocumentVehicle as any).legalHoldReason || 'Vehicle is subject to ownership dispute in civil case #CV-8723. Court has ordered to retain the vehicle in current condition until case resolution.'}
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                                  <div className="flex items-center gap-2">
+                                    <ShieldAlert className="h-4 w-4 text-yellow-500" />
+                                    <p className="text-xs font-medium">Restrictions: <span className="font-normal">{(selectedDocumentVehicle as any).restrictions || 'No transfer, No modification'}</span></p>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <Scale className="h-4 w-4 text-yellow-500" />
+                                    <p className="text-xs font-medium">Legal Reference: <span className="font-normal">{(selectedDocumentVehicle as any).legalReference || 'Section 83B of MV Act'}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Legal Documents */}
+                          <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 bg-yellow-50 dark:bg-yellow-900/20 border-b border-gray-200 dark:border-gray-800">
+                              <h3 className="text-lg font-semibold flex items-center gap-2 text-yellow-700 dark:text-yellow-400">
+                                <FileText className="h-5 w-5" />
+                                Legal Documentation
+                              </h3>
+                            </div>
+                            <div className="p-4">
+                              <div className="space-y-4">
+                                <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                  <div className="bg-yellow-100 dark:bg-yellow-900/20 p-2 rounded-md text-yellow-600 dark:text-yellow-400">
+                                    <FileText className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-medium">Court Order</h4>
+                                    <p className="text-xs text-gray-500 mt-1">Official document from court mandating legal hold</p>
+                                    <div className="flex items-center gap-1 mt-3">
+                                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">PDF</Badge>
+                                      <span className="text-xs text-gray-500">•</span>
+                                      <span className="text-xs text-gray-500">Issued: {(selectedDocumentVehicle as any).legalHoldDate || 'March 28, 2025'}</span>
+                                    </div>
+                                  </div>
+                                  <Button variant="ghost" size="icon" className="text-gray-500">
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                                
+                                <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                  <div className="bg-indigo-100 dark:bg-indigo-900/20 p-2 rounded-md text-indigo-600 dark:text-indigo-400">
+                                    <FileText className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-medium">Legal Notice</h4>
+                                    <p className="text-xs text-gray-500 mt-1">Formal notice regarding the legal proceedings</p>
+                                    <div className="flex items-center gap-1 mt-3">
+                                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">PDF</Badge>
+                                      <span className="text-xs text-gray-500">•</span>
+                                      <span className="text-xs text-gray-500">Case #{(selectedDocumentVehicle as any).caseNumber?.split('-').pop() || 'L-29873'}</span>
+                                    </div>
+                                  </div>
+                                  <Button variant="ghost" size="icon" className="text-gray-500">
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                                
+                                <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                  <div className="bg-amber-100 dark:bg-amber-900/20 p-2 rounded-md text-amber-600 dark:text-amber-400">
+                                    <FileText className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-medium">Attorney Communication</h4>
+                                    <p className="text-xs text-gray-500 mt-1">Communication from your legal representative</p>
+                                    <div className="flex items-center gap-1 mt-3">
+                                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">PDF</Badge>
+                                      <span className="text-xs text-gray-500">•</span>
+                                      <span className="text-xs text-gray-500">Last updated: April 10, 2025</span>
+                                    </div>
+                                  </div>
+                                  <Button variant="ghost" size="icon" className="text-gray-500">
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                              
+                              <Button variant="outline" size="sm" className="w-full mt-4 text-yellow-600 border-yellow-200 dark:border-yellow-800 dark:text-yellow-400">
+                                <Plus className="h-4 w-4 mr-2" />
+                                Upload Additional Documents
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <Button variant="outline" className="gap-2">
+                              <Download className="h-4 w-4" />
+                              Download All Documents
+                            </Button>
+                            <Button variant="outline" className="gap-2">
+                              <MessageSquare className="h-4 w-4" />
+                              Contact Legal Team
+                            </Button>
+                            <Button className="gap-2 bg-yellow-600 hover:bg-yellow-700">
+                              <CalendarClock className="h-4 w-4" />
+                              Request Hearing
                             </Button>
                           </div>
                         </div>

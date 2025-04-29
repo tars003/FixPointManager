@@ -1,4 +1,4 @@
-import { Info, HelpCircle, AlertCircle } from 'lucide-react';
+import { Info, HelpCircle, AlertCircle, Gavel, Shield, FileText as FileTextIcon } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -23,7 +23,10 @@ type TipType =
   'commercialFleet' |
   'leasedOut' |
   'forSale' |
-  'sold';
+  'sold' |
+  'impound' |
+  'legal' |
+  'stolen';
 
 interface ContextualHelpTooltipProps {
   tipType: TipType;
@@ -192,6 +195,30 @@ const ContextualHelpTooltip = ({
           <div className="max-w-xs">
             <h4 className="font-semibold text-sm">Vehicle Transfer Process</h4>
             <p className="text-xs mt-1">After selling a vehicle, the RC transfer process requires Form 29/30, PUC certificate, insurance transfer, and payment receipts. Track the transfer status to ensure legal compliance.</p>
+          </div>
+        );
+        
+      case 'impound':
+        return (
+          <div className="max-w-xs">
+            <h4 className="font-semibold text-sm">Impounded Vehicle Management</h4>
+            <p className="text-xs mt-1">When a vehicle is impounded, collect all case documentation including impound notice, violation records, and release requirements. Pay any pending fines and complete legal formalities for vehicle release.</p>
+          </div>
+        );
+        
+      case 'legal':
+        return (
+          <div className="max-w-xs">
+            <h4 className="font-semibold text-sm">Legal Hold Information</h4>
+            <p className="text-xs mt-1">Vehicles under legal hold cannot be sold, transferred or significantly modified. Maintain all court documents, legal notices, and case information in organized manner for quick reference during proceedings.</p>
+          </div>
+        );
+        
+      case 'stolen':
+        return (
+          <div className="max-w-xs">
+            <h4 className="font-semibold text-sm">Stolen Vehicle Procedures</h4>
+            <p className="text-xs mt-1">File an FIR immediately at the nearest police station. Notify your insurance company within 24 hours. Provide all vehicle documents including RC, insurance, and previous service records to authorities to aid recovery.</p>
           </div>
         );
         
