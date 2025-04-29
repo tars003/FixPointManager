@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Car } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { formatCurrency } from '@/lib/format';
 
 type VehicleItem = {
   id: number;
@@ -19,16 +20,7 @@ const VehiclePortfolioValue: React.FC<VehiclePortfolioValueProps> = ({ vehicles 
   const [displayValue, setDisplayValue] = useState(0);
   const [showedValues, setShowedValues] = useState<boolean[]>(Array(vehicles.length).fill(false));
 
-  // Format currency in Indian Rupees
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    })
-      .format(value)
-      .replace('₹', '₹');
-  };
+  // Using the imported formatCurrency from lib/format
 
   // Calculate total value
   useEffect(() => {
