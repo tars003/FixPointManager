@@ -4665,28 +4665,63 @@ const VehicleVault = () => {
                               .map((vehicle) => (
                                 <Card 
                                   key={vehicle.id} 
-                                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${selectedDocumentVehicle?.id === vehicle.id ? 'border-emerald-500 dark:border-emerald-400' : 'border-transparent'}`}
+                                  className={`cursor-pointer transition-all hover:shadow-lg group ${selectedDocumentVehicle?.id === vehicle.id ? 'ring-2 ring-emerald-500 dark:ring-emerald-400' : 'hover:border-emerald-300 dark:hover:border-emerald-700'}`}
                                   onClick={() => setSelectedDocumentVehicle(vehicle)}
                                 >
-                                  <CardContent className="p-4">
-                                    <div className="aspect-video w-full overflow-hidden rounded-md mb-3 relative">
+                                  <CardContent className="p-0 overflow-hidden">
+                                    <div className="aspect-video w-full overflow-hidden relative">
                                       <img 
                                         src={vehicle.image} 
                                         alt={vehicle.vehicle} 
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500"
                                       />
-                                      <div className="absolute top-2 right-2 bg-emerald-500 text-white text-xs px-2 py-1 rounded-full">
+                                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/60 to-transparent opacity-70"></div>
+                                      <div className="absolute top-2 right-2 bg-emerald-500 dark:bg-emerald-600 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
                                         Leased
                                       </div>
+                                      <div className="absolute bottom-0 left-0 w-full p-3 text-white">
+                                        <h4 className="font-semibold text-sm">{vehicle.vehicle}</h4>
+                                        <div className="flex justify-between items-center mt-1">
+                                          <Badge variant="secondary" className="text-xs bg-white/20 backdrop-blur-sm text-white hover:bg-white/30">
+                                            {vehicle.fuelType}
+                                          </Badge>
+                                          <p className="text-sm font-semibold">{(vehicle as any).leaseAmount}</p>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div className="space-y-1">
-                                      <h4 className="font-semibold">{vehicle.vehicle}</h4>
-                                      <p className="text-xs text-slate-500">{vehicle.registrationNumber}</p>
-                                      <div className="flex justify-between items-center">
-                                        <Badge variant="outline" className="text-xs px-2 py-0 bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400">
-                                          {vehicle.fuelType}
-                                        </Badge>
-                                        <p className="text-xs text-slate-500">To: {(vehicle as any).leasedTo?.split(' ')[0]}</p>
+                                    <div className="p-4 space-y-2">
+                                      <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
+                                        <span>Reg: {vehicle.registrationNumber}</span>
+                                        <span>{vehicle.mileage} km</span>
+                                      </div>
+                                      <div className="space-y-1">
+                                        <div className="flex justify-between text-xs">
+                                          <span className="flex items-center gap-1">
+                                            <Calendar className="h-3 w-3 text-emerald-500" />
+                                            {(vehicle as any).leaseStartDate}
+                                          </span>
+                                          <span className="flex items-center gap-1">
+                                            <Clock className="h-3 w-3 text-emerald-500" />
+                                            {(vehicle as any).leaseDuration}
+                                          </span>
+                                        </div>
+                                        <div className="flex items-center text-xs mt-1">
+                                          <div className="flex items-center text-emerald-600 dark:text-emerald-500 gap-1 text-xs">
+                                            <Building2 className="h-3 w-3" />
+                                            {(vehicle as any).leasedTo?.split(' ')[0]}
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="pt-2 mt-2 border-t border-gray-100 dark:border-gray-800">
+                                        <div className="flex justify-between">
+                                          <Button variant="ghost" size="sm" className="p-0 h-auto text-xs text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300">
+                                            View Agreement
+                                          </Button>
+                                          <Button variant="ghost" size="sm" className="p-0 h-auto text-xs text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300">
+                                            <Receipt className="h-3.5 w-3.5 mr-1" />
+                                            Payments
+                                          </Button>
+                                        </div>
                                       </div>
                                     </div>
                                   </CardContent>
@@ -4697,28 +4732,39 @@ const VehicleVault = () => {
                       ) : (
                         // Leased Out Vehicle Documents Display
                         <div className="space-y-6">
-                          <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-4 mb-6 flex justify-between items-center">
+                          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 rounded-lg p-4 mb-6 flex justify-between items-center border border-emerald-100 dark:border-emerald-900/20 shadow-sm">
                             <div className="flex items-center gap-3">
-                              <Avatar>
-                                <AvatarImage src={selectedDocumentVehicle.image} />
-                                <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
-                              </Avatar>
+                              <div className="relative">
+                                <Avatar className="h-12 w-12 border-2 border-emerald-200 dark:border-emerald-800">
+                                  <AvatarImage src={selectedDocumentVehicle.image} />
+                                  <AvatarFallback>{selectedDocumentVehicle.vehicle.substring(0, 2)}</AvatarFallback>
+                                </Avatar>
+                                <div className="absolute -bottom-1 -right-1 bg-emerald-500 h-5 w-5 rounded-full flex items-center justify-center border-2 border-white dark:border-gray-900">
+                                  <KeyRound className="h-3 w-3 text-white" />
+                                </div>
+                              </div>
                               <div>
-                                <h3 className="font-semibold">{selectedDocumentVehicle.vehicle}</h3>
+                                <h3 className="font-semibold text-lg">{selectedDocumentVehicle.vehicle}</h3>
                                 <div className="flex items-center gap-2">
                                   <p className="text-sm text-slate-500">{selectedDocumentVehicle.registrationNumber}</p>
                                   <Badge variant="outline" className="text-xs bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400">Leased Out</Badge>
                                 </div>
                               </div>
                             </div>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              onClick={() => setSelectedDocumentVehicle(null)}
-                              className="text-emerald-700 dark:text-emerald-400"
-                            >
-                              Change Vehicle
-                            </Button>
+                            <div className="flex items-center gap-2">
+                              <Button variant="outline" size="sm" className="text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800">
+                                <FileText className="h-3.5 w-3.5 mr-1" />
+                                Agreement
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => setSelectedDocumentVehicle(null)}
+                                className="text-emerald-700 dark:text-emerald-400"
+                              >
+                                Change Vehicle
+                              </Button>
+                            </div>
                           </div>
                           
                           {/* Lease Documentation */}
@@ -4844,15 +4890,15 @@ const VehicleVault = () => {
                           
                           {/* Action Buttons */}
                           <div className="flex flex-wrap gap-3 justify-end mt-6">
-                            <Button variant="outline" className="gap-2">
+                            <Button variant="outline" className="gap-2 border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400">
                               <Download className="h-4 w-4" />
                               Export Lease Documents
                             </Button>
-                            <Button variant="outline" className="gap-2">
+                            <Button variant="outline" className="gap-2 border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400">
                               <FileEdit className="h-4 w-4" />
                               Update Lease Terms
                             </Button>
-                            <Button className="gap-2 bg-emerald-600 hover:bg-emerald-700">
+                            <Button className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-none">
                               <ShieldCheck className="h-4 w-4" />
                               View Lease Status
                             </Button>
