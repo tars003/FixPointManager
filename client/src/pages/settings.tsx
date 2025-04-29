@@ -324,21 +324,21 @@ const SettingsPage: React.FC = () => {
     confirmPassword: ''
   });
   
-  const handleToggleChange = (category: string, setting: string, value: boolean) => {
+  const handleToggleChange = (category: keyof typeof userPreferences, setting: string, value: boolean) => {
     setPreferences(prev => ({
       ...prev,
       [category]: {
-        ...prev[category],
+        ...(prev[category] as Record<string, any>),
         [setting]: value
       }
     }));
   };
   
-  const handleSelectChange = (category: string, setting: string, value: string) => {
+  const handleSelectChange = (category: keyof typeof userPreferences, setting: string, value: string) => {
     setPreferences(prev => ({
       ...prev,
       [category]: {
-        ...prev[category],
+        ...(prev[category] as Record<string, any>),
         [setting]: value
       }
     }));
@@ -1107,9 +1107,9 @@ const SettingsPage: React.FC = () => {
                                         <p className="font-medium">Current Session</p>
                                         <p className="text-sm text-gray-500">Web Browser • Delhi, India</p>
                                       </div>
-                                      <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200">
+                                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-50 text-green-600 border border-green-200">
                                         Active Now
-                                      </Badge>
+                                      </span>
                                     </div>
                                     
                                     <Button 

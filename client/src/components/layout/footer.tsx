@@ -28,8 +28,13 @@ import {
   BookMarked,
   School,
   Smartphone,
-  AlertTriangle,
+  Building2,
+  Scale,
+  LifeBuoy,
+  AlertCircle,
+  ThumbsUp,
   ShoppingBag,
+  AlertTriangle,
   MapPin
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -298,559 +303,489 @@ const Footer: React.FC = () => {
         </div>
       </motion.div>
       
-      {/* Features, Explore, Community Sections */}
-      <div className="border-t border-gray-100 pt-12 pb-8 bg-gradient-to-br from-gray-50 to-white">
+      {/* Features, Explore, Community Sections - Simplified layout based on screenshots */}
+      <div className="border-t border-gray-100 pt-8 pb-6 bg-white">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Features Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="relative"
-            >
-              <div className="flex items-center mb-5">
-                <motion.div
-                  className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md mr-3"
-                  whileHover={{ scale: 1.05, rotate: 5 }}
-                >
-                  <Sparkles className="h-5 w-5 text-white" />
-                </motion.div>
-                <h3 className="text-xl font-bold text-gray-900">Features</h3>
+            <div className="relative">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 rounded-md bg-blue-100 flex items-center justify-center mr-3">
+                  <Sparkles className="h-5 w-5 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800">Features</h3>
               </div>
               
-              <div className="space-y-3">
-                {[
-                  { 
-                    title: "Vehicle Vault", 
-                    description: "Store & manage all vehicle documents securely", 
-                    icon: Car,
-                    color: "text-indigo-500",
-                    href: "/vehicle-vault"
-                  },
-                  { 
-                    title: "Service Booking", 
-                    description: "Book verified service centers with live tracking", 
-                    icon: Wrench,
-                    color: "text-green-500",
-                    href: "/service-booking"
-                  },
-                  { 
-                    title: "Emergency Services", 
-                    description: "24/7 roadside assistance anywhere in India", 
-                    icon: AlertTriangle,
-                    color: "text-red-500",
-                    href: "/emergency"
-                  }
-                ].map((feature, index) => (
-                  <motion.div 
-                    key={index}
-                    className="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all p-3"
-                    whileHover={{ x: 5, scale: 1.01 }}
-                    onClick={() => navigate(feature.href)}
-                    style={{ cursor: 'pointer' }}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div>
-                        <feature.icon className={`h-6 w-6 ${feature.color}`} />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900 flex items-center text-sm">
-                          {feature.title}
-                          <ArrowRight className="h-3 w-3 ml-1 text-gray-400" />
-                        </h4>
-                        <p className="text-gray-600 text-xs">{feature.description}</p>
-                      </div>
+              <div className="space-y-3 mt-4">
+                <div className="flex items-start">
+                  <div className="mr-3 mt-1">
+                    <Car className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="font-medium text-gray-800 text-sm">Vehicle Vault</h4>
+                      <div className="text-xs text-gray-400">•</div>
                     </div>
-                  </motion.div>
-                ))}
+                    <p className="text-gray-500 text-xs">Store & manage all vehicle documents securely</p>
+                  </div>
+                </div>
                 
-                <motion.button
-                  className="w-full text-sm text-center text-primary hover:text-blue-700 mt-1 py-2"
-                  whileHover={{ scale: 1.03 }}
-                  onClick={() => navigate("/features")}
-                >
-                  View all features <ArrowRight className="inline h-3 w-3 ml-1" />
-                </motion.button>
+                <div className="flex items-start">
+                  <div className="mr-3 mt-1">
+                    <Wrench className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="font-medium text-gray-800 text-sm">Service Booking</h4>
+                      <div className="text-xs text-gray-400">•</div>
+                    </div>
+                    <p className="text-gray-500 text-xs">Book verified service centers with live tracking</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="mr-3 mt-1">
+                    <AlertTriangle className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="font-medium text-gray-800 text-sm">Emergency Services</h4>
+                      <div className="text-xs text-gray-400">•</div>
+                    </div>
+                    <p className="text-gray-500 text-xs">24/7 roadside assistance anywhere in India</p>
+                  </div>
+                </div>
+                
+                <div className="mt-2">
+                  <button 
+                    className="text-xs text-blue-600 hover:text-blue-700 flex items-center"
+                    onClick={() => navigate("/features")}
+                  >
+                    View all features 
+                    <ArrowRight className="h-3 w-3 ml-1.5" />
+                  </button>
+                </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Explore Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="relative"
-            >
-              <div className="flex items-center mb-5">
-                <motion.div
-                  className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-md mr-3"
-                  whileHover={{ scale: 1.05, rotate: 5 }}
-                >
-                  <BookOpen className="h-5 w-5 text-white" />
-                </motion.div>
-                <h3 className="text-xl font-bold text-gray-900">Explore</h3>
+            <div className="relative">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 rounded-md bg-green-100 flex items-center justify-center mr-3">
+                  <BookOpen className="h-5 w-5 text-green-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800">Explore</h3>
               </div>
               
-              <div className="space-y-3">
-                {[
-                  { 
-                    title: "Parts Marketplace", 
-                    description: "Verified genuine parts with express delivery", 
-                    icon: ShoppingBag,
-                    color: "text-blue-500",
-                    href: "/parts-marketplace"
-                  },
-                  { 
-                    title: "Driving School", 
-                    description: "Learn from certified instructors near you", 
-                    icon: School,
-                    color: "text-amber-500",
-                    href: "/driving-school"
-                  },
-                  { 
-                    title: "Insurance Hub", 
-                    description: "Compare & buy insurance with AI advisor", 
-                    icon: Shield,
-                    color: "text-green-500",
-                    href: "/insurance"
-                  }
-                ].map((item, index) => (
-                  <motion.div 
-                    key={index}
-                    className="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all p-3"
-                    whileHover={{ x: 5, scale: 1.01 }}
-                    onClick={() => navigate(item.href)}
-                    style={{ cursor: 'pointer' }}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div>
-                        <item.icon className={`h-6 w-6 ${item.color}`} />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900 flex items-center text-sm">
-                          {item.title}
-                          <ArrowRight className="h-3 w-3 ml-1 text-gray-400" />
-                        </h4>
-                        <p className="text-gray-600 text-xs">{item.description}</p>
-                      </div>
+              <div className="space-y-3 mt-4">
+                <div className="flex items-start">
+                  <div className="mr-3 mt-1">
+                    <ShoppingBag className="h-4 w-4 text-green-600" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="font-medium text-gray-800 text-sm">Parts Marketplace</h4>
+                      <div className="text-xs text-gray-400">•</div>
                     </div>
-                  </motion.div>
-                ))}
+                    <p className="text-gray-500 text-xs">Verified genuine parts with express delivery</p>
+                  </div>
+                </div>
                 
-                <motion.button
-                  className="w-full text-sm text-center text-green-600 hover:text-green-700 mt-1 py-2"
-                  whileHover={{ scale: 1.03 }}
-                  onClick={() => navigate("/explore")}
-                >
-                  Explore more <ArrowRight className="inline h-3 w-3 ml-1" />
-                </motion.button>
+                <div className="flex items-start">
+                  <div className="mr-3 mt-1">
+                    <School className="h-4 w-4 text-green-600" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="font-medium text-gray-800 text-sm">Driving School</h4>
+                      <div className="text-xs text-gray-400">•</div>
+                    </div>
+                    <p className="text-gray-500 text-xs">Learn from certified instructors near you</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="mr-3 mt-1">
+                    <Shield className="h-4 w-4 text-green-600" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="font-medium text-gray-800 text-sm">Insurance Hub</h4>
+                      <div className="text-xs text-gray-400">•</div>
+                    </div>
+                    <p className="text-gray-500 text-xs">Compare & buy insurance with AI advisor</p>
+                  </div>
+                </div>
+                
+                <div className="mt-2">
+                  <button 
+                    className="text-xs text-green-600 hover:text-green-700 flex items-center"
+                    onClick={() => navigate("/explore")}
+                  >
+                    Explore more
+                    <ArrowRight className="h-3 w-3 ml-1.5" />
+                  </button>
+                </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Community Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="relative"
-            >
-              <div className="flex items-center mb-5">
-                <motion.div
-                  className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center shadow-md mr-3"
-                  whileHover={{ scale: 1.05, rotate: 5 }}
-                >
-                  <Users className="h-5 w-5 text-white" />
-                </motion.div>
-                <h3 className="text-xl font-bold text-gray-900">Community</h3>
+            <div className="relative">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 rounded-md bg-purple-100 flex items-center justify-center mr-3">
+                  <Users className="h-5 w-5 text-purple-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800">Community</h3>
               </div>
               
-              <div className="space-y-3">
-                {[
-                  { 
-                    title: "Owner's Clubs", 
-                    description: "Connect with fellow owners, join local meetups", 
-                    icon: Users,
-                    color: "text-orange-500",
-                    badge: "Popular",
-                    href: "/owners-club"
-                  },
-                  { 
-                    title: "Knowledge Base", 
-                    description: "Vehicle guides, maintenance tips, videos", 
-                    icon: BookMarked,
-                    color: "text-blue-500",
-                    href: "/knowledge-base"
-                  },
-                  { 
-                    title: "Discussion Forums", 
-                    description: "Expert advice on vehicle topics", 
-                    icon: MessageSquare,
-                    color: "text-indigo-500",
-                    badge: "Active",
-                    href: "/forums"
-                  }
-                ].map((item, index) => (
-                  <motion.div 
-                    key={index}
-                    className="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all p-3"
-                    whileHover={{ x: 5, scale: 1.01 }}
-                    onClick={() => navigate(item.href)}
-                    style={{ cursor: 'pointer' }}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div>
-                        <item.icon className={`h-6 w-6 ${item.color}`} />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-semibold text-gray-900 flex items-center text-sm">
-                            {item.title}
-                            <ArrowRight className="h-3 w-3 ml-1 text-gray-400" />
-                          </h4>
-                          {item.badge && (
-                            <span className="px-1.5 py-0.5 text-[10px] bg-gray-100 text-gray-700 rounded-full">
-                              {item.badge}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-gray-600 text-xs">{item.description}</p>
-                      </div>
+              <div className="space-y-3 mt-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start">
+                    <div className="mr-3 mt-1">
+                      <Users className="h-4 w-4 text-purple-600" />
                     </div>
-                  </motion.div>
-                ))}
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <h4 className="font-medium text-gray-800 text-sm">Owner's Clubs</h4>
+                        <div className="text-xs text-gray-400">•</div>
+                      </div>
+                      <p className="text-gray-500 text-xs">Connect with fellow owners, join local meetups</p>
+                    </div>
+                  </div>
+                  <span className="px-1.5 text-[9px] bg-gray-100 text-gray-700 rounded h-4 flex items-center font-medium">
+                    Popular
+                  </span>
+                </div>
                 
-                <motion.button
-                  className="w-full text-sm text-center text-purple-600 hover:text-purple-700 mt-1 py-2"
-                  whileHover={{ scale: 1.03 }}
-                  onClick={() => navigate("/community")}
-                >
-                  Join our community <ArrowRight className="inline h-3 w-3 ml-1" />
-                </motion.button>
+                <div className="flex items-start">
+                  <div className="mr-3 mt-1">
+                    <BookMarked className="h-4 w-4 text-purple-600" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="font-medium text-gray-800 text-sm">Knowledge Base</h4>
+                      <div className="text-xs text-gray-400">•</div>
+                    </div>
+                    <p className="text-gray-500 text-xs">Vehicle guides, maintenance tips, videos</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start">
+                    <div className="mr-3 mt-1">
+                      <MessageSquare className="h-4 w-4 text-purple-600" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <h4 className="font-medium text-gray-800 text-sm">Discussion Forums</h4>
+                        <div className="text-xs text-gray-400">•</div>
+                      </div>
+                      <p className="text-gray-500 text-xs">Expert advice on vehicle topics</p>
+                    </div>
+                  </div>
+                  <span className="px-1.5 text-[9px] bg-gray-100 text-gray-700 rounded h-4 flex items-center font-medium">
+                    Active
+                  </span>
+                </div>
+                
+                <div className="mt-2">
+                  <button 
+                    className="text-xs text-purple-600 hover:text-purple-700 flex items-center"
+                    onClick={() => navigate("/community")}
+                  >
+                    Join our community
+                    <ArrowRight className="h-3 w-3 ml-1.5" />
+                  </button>
+                </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Enhanced App Promotion */}
-      <div className="bg-gradient-to-br from-blue-600 to-indigo-700 py-10 relative overflow-hidden">
-        {/* Background elements */}
-        <motion.div 
-          className="absolute right-10 bottom-0 opacity-10"
-          animate={{ 
-            y: [0, 10, 0],
-            rotate: [0, 5, 0] 
-          }}
-          transition={{ 
-            duration: 8, 
-            repeat: Infinity,
-            repeatType: "mirror" 
-          }}
-        >
-          <Smartphone className="h-64 w-64 text-white" />
-        </motion.div>
-        
-        <motion.div 
-          className="absolute -left-10 top-10 opacity-5"
-          animate={{ 
-            x: [0, 10, 0],
-            y: [0, -5, 0] 
-          }}
-          transition={{ 
-            duration: 10, 
-            repeat: Infinity,
-            repeatType: "mirror" 
-          }}
-        >
-          <MapPin className="h-48 w-48 text-white" />
-        </motion.div>
-        
+      {/* Enhanced App Promotion - matched to screenshot */}
+      <div className="bg-blue-600 py-8 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            {/* App Details & Download */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-white"
-            >
-              <div className="flex items-center mb-6">
-                <motion.div 
-                  className="w-14 h-14 flex-shrink-0 rounded-full bg-white shadow-lg flex items-center justify-center mr-4"
-                  animate={{ 
-                    scale: [1, 1.05, 1],
-                    rotate: [0, 5, 0, -5, 0]
-                  }}
-                  transition={{ 
-                    duration: 8, 
-                    repeat: Infinity,
-                    repeatType: "mirror" 
-                  }}
-                >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                    <span className="text-white font-bold text-xl">F</span>
-                  </div>
-                </motion.div>
-                <div>
-                  <h2 className="text-3xl font-bold">Download the FixPoint App</h2>
-                  <div className="flex items-center mt-1 text-blue-100">
-                    <svg className="h-4 w-4 mr-1 text-yellow-300" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
-                    <span className="text-sm">4.8/5 • 100K+ Downloads</span>
-                  </div>
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="flex items-center text-white">
+              <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mr-3">
+                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">F</span>
                 </div>
               </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 flex items-start">
-                  <div className="bg-blue-500 rounded-full p-2 mr-3 flex-shrink-0">
-                    <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div>
+                <h2 className="text-xl font-bold">Download the FixPoint App</h2>
+                <div className="flex items-center mt-0.5">
+                  <svg className="h-3 w-3 mr-1 text-yellow-300" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                  </svg>
+                  <span className="text-xs text-blue-100">4.8/5 • 100K+ Downloads</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full md:w-auto">
+              <div className="bg-blue-700/50 rounded p-3 flex flex-col">
+                <div className="flex items-center mb-1">
+                  <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center mr-2">
+                    <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-white">Real-time Alerts</h4>
-                    <p className="text-blue-100 text-sm">Service reminders, document expiry alerts</p>
-                  </div>
+                  <h4 className="text-xs font-medium text-white">Real-time Alerts</h4>
                 </div>
-                
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 flex items-start">
-                  <div className="bg-indigo-500 rounded-full p-2 mr-3 flex-shrink-0">
-                    <Zap className="h-5 w-5 text-white" />
+                <p className="text-[10px] text-blue-100">Service reminders, document expiry alerts</p>
+              </div>
+              
+              <div className="bg-blue-700/50 rounded p-3 flex flex-col">
+                <div className="flex items-center mb-1">
+                  <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center mr-2">
+                    <Zap className="h-3.5 w-3.5 text-white" />
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-white">Quick Access</h4>
-                    <p className="text-blue-100 text-sm">Emergency services at your fingertips</p>
-                  </div>
+                  <h4 className="text-xs font-medium text-white">Quick Access</h4>
                 </div>
-                
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 flex items-start">
-                  <div className="bg-purple-500 rounded-full p-2 mr-3 flex-shrink-0">
-                    <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <p className="text-[10px] text-blue-100">Emergency services at your fingertips</p>
+              </div>
+              
+              <div className="bg-blue-700/50 rounded p-3 flex flex-col">
+                <div className="flex items-center mb-1">
+                  <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center mr-2">
+                    <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-white">Quick Verification</h4>
-                    <p className="text-blue-100 text-sm">Face ID login & document scanning</p>
-                  </div>
+                  <h4 className="text-xs font-medium text-white">Quick Verification</h4>
                 </div>
-                
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 flex items-start">
-                  <div className="bg-green-500 rounded-full p-2 mr-3 flex-shrink-0">
-                    <MapPin className="h-5 w-5 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-white">Location Services</h4>
-                    <p className="text-blue-100 text-sm">Find nearby fuel stations & service centers</p>
-                  </div>
-                </div>
+                <p className="text-[10px] text-blue-100">Face ID login & document scanning</p>
               </div>
               
-              <p className="text-blue-100 mb-6">
-                Join over 100,000 Indian vehicle owners who manage their vehicles smarter with FixPoint. 
-                Download now for a complete suite of tools designed specifically for Indian roads and conditions.
-              </p>
-              
-              <div className="flex flex-wrap gap-4 items-center">
-                <motion.a
-                  href="#"
-                  className="flex items-center bg-black text-white px-5 py-2.5 rounded-xl shadow-lg"
-                  whileHover={{ scale: 1.05, y: -2 }}
-                >
-                  <div className="mr-3">
-                    <svg viewBox="0 0 24 24" className="h-8 w-8" fill="currentColor">
-                      <path d="M17.5234 12.3582L14.5547 10.3239L14.1152 9.97376C13.5937 9.58813 13.5547 9.3082 13.5547 9.19542C13.5547 9.08264 13.6133 8.84042 14.1152 8.41709L17.4453 5.64146C17.6406 5.4614 17.9141 5.4614 18.1094 5.64146L23.8281 10.3239C24.0234 10.504 24.0624 10.7613 23.8672 10.9794L18.1484 16.047C17.9531 16.2651 17.6797 16.2651 17.4844 16.085L17.5234 12.3582ZM4.31248 0C6.24998 0 7.65622 0.676423 8.71873 1.95098L8.83591 2.10147L12.6952 9.15772C12.8124 9.38203 12.7538 9.64216 12.5585 9.82222L1.40622 19.7329C1.21092 19.8956 0.937475 19.913 0.742162 19.7329C0.546849 19.5903 0.507787 19.2982 0.624975 19.0739L4.25779 11.5853L0.624975 4.0967C0.468725 3.7699 0.351537 3.44309 0.273412 3.11629V2.86436C0.273412 1.27176 2.05466 0 4.31248 0Z" />
-                    </svg>
+              <div className="bg-blue-700/50 rounded p-3 flex flex-col">
+                <div className="flex items-center mb-1">
+                  <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center mr-2">
+                    <MapPin className="h-3.5 w-3.5 text-white" />
                   </div>
-                  <div>
-                    <div className="text-xs">GET IT ON</div>
-                    <div className="text-lg font-semibold leading-tight">Google Play</div>
-                  </div>
-                </motion.a>
-                
-                <motion.a
-                  href="#"
-                  className="flex items-center bg-black text-white px-5 py-2.5 rounded-xl shadow-lg"
-                  whileHover={{ scale: 1.05, y: -2 }}
-                >
-                  <div className="mr-3">
-                    <svg viewBox="0 0 384 512" className="h-8 w-8" fill="currentColor">
-                      <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <div className="text-xs">DOWNLOAD ON THE</div>
-                    <div className="text-lg font-semibold leading-tight">App Store</div>
-                  </div>
-                </motion.a>
-                
-                <motion.div 
-                  className="flex items-center"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.4 }}
-                >
-                  <div className="flex -space-x-4">
-                    {[
-                      "bg-gradient-to-br from-yellow-400 to-orange-500",
-                      "bg-gradient-to-br from-green-400 to-emerald-500",
-                      "bg-gradient-to-br from-blue-400 to-indigo-500"
-                    ].map((bgColor, i) => (
-                      <div key={i} className={`w-10 h-10 rounded-full ${bgColor} flex items-center justify-center border-2 border-white text-white text-xs font-medium`}>
-                        {String.fromCharCode(65 + i)}
-                      </div>
-                    ))}
-                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center border-2 border-white text-gray-600 text-xs font-medium">
-                      +5k
-                    </div>
-                  </div>
-                  <span className="ml-3 text-blue-100 text-sm">People downloaded <br />in the last 24 hours</span>
-                </motion.div>
+                  <h4 className="text-xs font-medium text-white">Location Services</h4>
+                </div>
+                <p className="text-[10px] text-blue-100">Find nearby fuel stations & service centers</p>
               </div>
-            </motion.div>
+            </div>
+          </div>
+          
+          <div className="mt-6 flex flex-wrap justify-between items-center">
+            <p className="text-blue-100 text-xs max-w-md mb-4 md:mb-0">
+              Join over 100,000 Indian vehicle owners who manage their vehicles smarter with FixPoint. 
+              Download now for a complete suite of tools designed specifically for Indian roads and conditions.
+            </p>
             
-            {/* App Preview Image */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex justify-center lg:justify-end"
-            >
-              <div className="relative max-w-[280px]">
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-indigo-500/20 rounded-3xl blur-xl"
-                  animate={{ 
-                    scale: [1, 1.05, 1],
-                    opacity: [0.6, 0.8, 0.6] 
-                  }}
-                  transition={{ 
-                    duration: 4, 
-                    repeat: Infinity,
-                    repeatType: "mirror" 
-                  }}
-                ></motion.div>
-                
-                <motion.div
-                  className="relative z-10"
-                  animate={{ 
-                    y: [0, -8, 0]
-                  }}
-                  transition={{ 
-                    duration: 5, 
-                    repeat: Infinity,
-                    repeatType: "mirror" 
-                  }}
-                >
-                  <img 
-                    src="https://images.unsplash.com/photo-1601972599720-36938d4ecd31?q=80&w=500&auto=format&fit=crop" 
-                    alt="FixPoint App Preview"
-                    className="rounded-3xl shadow-2xl border-8 border-white"
-                  />
-                  
-                  {/* Floating feature badges */}
-                  <motion.div
-                    className="absolute -left-16 top-16 bg-white p-2 rounded-lg shadow-lg flex items-center space-x-2"
-                    animate={{ 
-                      y: [0, 5, 0],
-                      x: [0, -5, 0],
-                      rotate: [0, -3, 0]
-                    }}
-                    transition={{ 
-                      duration: 6, 
-                      repeat: Infinity,
-                      repeatType: "mirror" 
-                    }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                      <svg className="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                      </svg>
+            <div className="flex flex-wrap gap-3 items-center">
+              <a 
+                href="#"
+                className="flex items-center bg-black text-white px-4 py-2 rounded-lg"
+              >
+                <div className="mr-2">
+                  <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor">
+                    <path d="M17.5234 12.3582L14.5547 10.3239L14.1152 9.97376C13.5937 9.58813 13.5547 9.3082 13.5547 9.19542C13.5547 9.08264 13.6133 8.84042 14.1152 8.41709L17.4453 5.64146C17.6406 5.4614 17.9141 5.4614 18.1094 5.64146L23.8281 10.3239C24.0234 10.504 24.0624 10.7613 23.8672 10.9794L18.1484 16.047C17.9531 16.2651 17.6797 16.2651 17.4844 16.085L17.5234 12.3582ZM4.31248 0C6.24998 0 7.65622 0.676423 8.71873 1.95098L8.83591 2.10147L12.6952 9.15772C12.8124 9.38203 12.7538 9.64216 12.5585 9.82222L1.40622 19.7329C1.21092 19.8956 0.937475 19.913 0.742162 19.7329C0.546849 19.5903 0.507787 19.2982 0.624975 19.0739L4.25779 11.5853L0.624975 4.0967C0.468725 3.7699 0.351537 3.44309 0.273412 3.11629V2.86436C0.273412 1.27176 2.05466 0 4.31248 0Z" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="text-[8px]">GET IT ON</div>
+                  <div className="text-sm font-semibold leading-tight">Google Play</div>
+                </div>
+              </a>
+              
+              <a 
+                href="#"
+                className="flex items-center bg-black text-white px-4 py-2 rounded-lg"
+              >
+                <div className="mr-2">
+                  <svg viewBox="0 0 384 512" className="h-6 w-6" fill="currentColor">
+                    <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div className="text-[8px]">DOWNLOAD ON THE</div>
+                  <div className="text-sm font-semibold leading-tight">App Store</div>
+                </div>
+              </a>
+              
+              <div className="flex items-center ml-2">
+                <div className="flex -space-x-2">
+                  {[
+                    "bg-gradient-to-r from-yellow-400 to-orange-500",
+                    "bg-gradient-to-r from-green-400 to-emerald-500",
+                    "bg-gradient-to-r from-blue-400 to-indigo-500"
+                  ].map((bgColor, i) => (
+                    <div key={i} className={`w-8 h-8 rounded-full ${bgColor} flex items-center justify-center border-2 border-white text-white text-[10px] font-medium`}>
+                      {String.fromCharCode(65 + i)}
                     </div>
-                    <div className="text-xs">
-                      <div className="font-medium text-gray-900">Service Alert</div>
-                      <div className="text-gray-500">Oil change due</div>
-                    </div>
-                  </motion.div>
-                  
-                  <motion.div
-                    className="absolute -right-20 bottom-32 bg-white p-2 rounded-lg shadow-lg flex items-center space-x-2"
-                    animate={{ 
-                      y: [0, -5, 0],
-                      x: [0, 5, 0],
-                      rotate: [0, 3, 0]
-                    }}
-                    transition={{ 
-                      duration: 8, 
-                      repeat: Infinity,
-                      repeatType: "mirror",
-                      delay: 1
-                    }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                      <MapPin className="h-4 w-4 text-blue-600" />
-                    </div>
-                    <div className="text-xs">
-                      <div className="font-medium text-gray-900">Nearby</div>
-                      <div className="text-gray-500">3 service centers</div>
-                    </div>
-                  </motion.div>
-                </motion.div>
+                  ))}
+                  <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center border-2 border-white text-gray-600 text-[10px] font-medium">
+                    +5k
+                  </div>
+                </div>
+                <span className="ml-2 text-blue-100 text-[10px]">
+                  People downloaded<br />in the last 24 hours
+                </span>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
       
+      {/* Company, Legal, Contact Info - from screenshot */}
+      <div className="border-t border-gray-100 pt-6 pb-8 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {/* FixPoint */}
+            <div>
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                  <span className="text-blue-600 font-bold text-lg">F</span>
+                </div>
+                <span className="text-lg font-bold text-gray-800">FixPoint</span>
+              </div>
+              <p className="text-xs text-gray-500 mb-4">
+                India's first comprehensive vehicle intelligence platform<br />
+                for smarter ownership and management.
+              </p>
+              <div className="flex items-center gap-2 mb-6">
+                <a href="#" className="text-gray-500 hover:text-gray-700">
+                  <Facebook size={18} />
+                </a>
+                <a href="#" className="text-gray-500 hover:text-gray-700">
+                  <Twitter size={18} />
+                </a>
+                <a href="#" className="text-gray-500 hover:text-gray-700">
+                  <Instagram size={18} />
+                </a>
+                <a href="#" className="text-gray-500 hover:text-gray-700">
+                  <Linkedin size={18} />
+                </a>
+                <a href="#" className="text-gray-500 hover:text-gray-700">
+                  <Youtube size={18} />
+                </a>
+              </div>
+            </div>
+            
+            {/* Company */}
+            <div>
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                  <Building2 className="h-4 w-4 text-blue-600" />
+                </div>
+                <span className="text-base font-semibold text-gray-800">Company</span>
+              </div>
+              <div className="space-y-2.5">
+                <div>
+                  <a href="/about" className="text-xs text-gray-600 hover:text-blue-600">About Us</a>
+                </div>
+                <div>
+                  <a href="/contact" className="text-xs text-gray-600 hover:text-blue-600">Contact Us</a>
+                </div>
+                <div>
+                  <a href="/careers" className="text-xs text-gray-600 hover:text-blue-600">Careers</a>
+                </div>
+                <div>
+                  <a href="/support" className="text-xs text-gray-600 hover:text-blue-600">Support</a>
+                </div>
+                <div>
+                  <a href="/safety" className="text-xs text-gray-600 hover:text-blue-600">Safety</a>
+                </div>
+              </div>
+            </div>
+            
+            {/* Legal */}
+            <div>
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                  <Scale className="h-4 w-4 text-blue-600" />
+                </div>
+                <span className="text-base font-semibold text-gray-800">Legal</span>
+              </div>
+              <div className="space-y-2.5">
+                <div>
+                  <a href="/terms" className="text-xs text-gray-600 hover:text-blue-600">Terms of Service</a>
+                </div>
+                <div>
+                  <a href="/privacy" className="text-xs text-gray-600 hover:text-blue-600">Privacy Policy</a>
+                </div>
+                <div>
+                  <a href="/cookies" className="text-xs text-gray-600 hover:text-blue-600">Cookie Policy</a>
+                </div>
+                <div>
+                  <a href="/accessibility" className="text-xs text-gray-600 hover:text-blue-600">Accessibility</a>
+                </div>
+                <div>
+                  <a href="/guidelines" className="text-xs text-gray-600 hover:text-blue-600">Community Guidelines</a>
+                </div>
+              </div>
+            </div>
+            
+            {/* Contact & Help */}
+            <div>
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                  <LifeBuoy className="h-4 w-4 text-blue-600" />
+                </div>
+                <span className="text-base font-semibold text-gray-800">Contact & Help</span>
+              </div>
+              <div className="space-y-2.5 mb-4">
+                <div className="flex items-center">
+                  <Phone className="h-3.5 w-3.5 mr-2 text-gray-500" />
+                  <span className="text-xs text-gray-600">+91 1800-000-0000</span>
+                </div>
+                <div className="flex items-center">
+                  <Mail className="h-3.5 w-3.5 mr-2 text-gray-500" />
+                  <span className="text-xs text-gray-600">support@fixpoint.co.in</span>
+                </div>
+              </div>
+              
+              <div>
+                <h5 className="text-sm font-medium text-gray-700 mb-3">Quick Links</h5>
+                <div className="grid grid-cols-2 gap-2">
+                  <a 
+                    href="/emergency" 
+                    className="flex items-center text-xs text-gray-600 hover:text-blue-600 bg-gray-100 px-2 py-1.5 rounded"
+                  >
+                    <AlertCircle className="h-3 w-3 mr-1" /> Emergency Services
+                  </a>
+                  <a 
+                    href="/help" 
+                    className="flex items-center text-xs text-gray-600 hover:text-blue-600 bg-gray-100 px-2 py-1.5 rounded"
+                  >
+                    <HelpCircle className="h-3 w-3 mr-1" /> Help Center
+                  </a>
+                  <a 
+                    href="/docs" 
+                    className="flex items-center text-xs text-gray-600 hover:text-blue-600 bg-gray-100 px-2 py-1.5 rounded"
+                  >
+                    <FileText className="h-3 w-3 mr-1" /> Documentation
+                  </a>
+                  <a 
+                    href="/feedback" 
+                    className="flex items-center text-xs text-gray-600 hover:text-blue-600 bg-gray-100 px-2 py-1.5 rounded"
+                  >
+                    <ThumbsUp className="h-3 w-3 mr-1" /> Feedback
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Copyright */}
-      <div className="container mx-auto px-4 py-6">
-        <motion.div 
-          className="flex flex-col md:flex-row items-center justify-between text-sm"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
-          <p className="text-gray-500 mb-4 md:mb-0">
+      <div className="container mx-auto px-4 py-4 border-t border-gray-100">
+        <div className="flex flex-col md:flex-row items-center justify-between text-xs">
+          <p className="text-gray-500 mb-2 md:mb-0">
             © {new Date().getFullYear()} FixPoint Technologies Pvt. Ltd. All rights reserved.
           </p>
           <div className="flex items-center">
-            <motion.span 
-              className="text-gray-500 flex items-center"
-              whileHover={{ scale: 1.05 }}
-            >
-              Made with <Heart className="h-3 w-3 mx-1 text-red-500 animate-pulse" /> in India
-            </motion.span>
-            <span className="mx-3 text-gray-300">|</span>
-            <motion.a 
-              href="/animation-demo"
-              className="text-primary hover:underline font-medium"
-              whileHover={{ 
-                scale: 1.1, 
-                color: "#F97316",
-                transition: { duration: 0.2 }
-              }}
-            >
-              View Animations
-            </motion.a>
+            <span className="text-gray-500 flex items-center">
+              Made with <Heart className="h-3 w-3 mx-1 text-red-500" /> in India
+            </span>
           </div>
-        </motion.div>
+        </div>
       </div>
     </footer>
   );
