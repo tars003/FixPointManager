@@ -16,7 +16,7 @@ import { VehicleCategory } from '@shared/schema';
 
 interface NewProjectModalProps {
   onClose: () => void;
-  onCreate: (name: string, vehicleType: string) => void;
+  onCreate: (name: string, vehicleType: VehicleCategory) => void;
 }
 
 const vehicleTypes: { value: VehicleCategory; label: string }[] = [

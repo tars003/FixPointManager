@@ -35,6 +35,7 @@ import {
   Zap
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { VehicleCategory } from '@shared/schema';
 
 // Import Arena components
 import Vehicle3DViewer from '@/components/arena/3d-viewer/Vehicle3DViewer';

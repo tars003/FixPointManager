@@ -3,7 +3,7 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 // Export type for Arena Customization Platform
-export type VehicleCategory = 'two-wheeler' | 'four-wheeler' | 'special';
+export type VehicleCategory = 'two-wheeler' | 'three-wheeler' | 'four-wheeler' | 'special' | 'heavy-vehicle';
 
 // User schema
 export const users = pgTable("users", {
@@ -669,9 +669,6 @@ export type InsertEmergencyProfile = z.infer<typeof insertEmergencyProfileSchema
 
 export type EmergencyIncident = typeof emergencyIncidents.$inferSelect;
 export type InsertEmergencyIncident = z.infer<typeof insertEmergencyIncidentSchema>;
-
-// Vehicle Category types for Arena
-export type VehicleCategory = 'two-wheeler' | 'three-wheeler' | 'four-wheeler' | 'heavy-vehicle';
 
 // Vehicle Model table for Arena
 export const vehicleModels = pgTable('arena_vehicle_models', {
