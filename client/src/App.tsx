@@ -43,6 +43,7 @@ import ArenaDashboardEnhanced from "@/pages/arena-dashboard-enhanced";
 import ArenaMain from "@/pages/arena-main";
 import ProjectCustomization from "@/pages/project-customization";
 import EnhancedArenaFeatures from "@/pages/enhanced-arena-features";
+import LaunchArena from "@/pages/launch-arena";
 import Drishti from "@/pages/drishti";
 import AnimationDemo from "@/pages/animation-demo";
 import ProfilePage from "@/pages/profile";
@@ -424,6 +425,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <EnhancedArenaFeatures />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/launch-arena">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <LaunchArena />
               </motion.div>
             )}
           </Route>
