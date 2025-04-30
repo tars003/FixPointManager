@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { Vehicle } from '@shared/schema';
 import ValueTrendPredictor from '@/components/dashboard/ValueTrendPredictor';
+import CustomizeDashboardDialog, { DashboardModule } from '@/components/dashboard/CustomizeDashboardDialog';
+import { getDashboardModules, saveDashboardModules } from '@/services/dashboardPreferences';
 import { 
   Car, 
   Bell, 
@@ -56,6 +58,20 @@ import { NotificationPopover } from '@/components/notification/notification-popo
 
 const DashboardEnhanced = () => {
   const [, navigate] = useLocation();
+  const [isCustomizeDialogOpen, setIsCustomizeDialogOpen] = useState(false);
+  const [dashboardModules, setDashboardModules] = useState<DashboardModule[]>([]);
+  
+  // Load dashboard modules on initial render
+  useEffect(() => {
+    const modules = getDashboardModules();
+    setDashboardModules(modules);
+  }, []);
+  
+  // Handle saving dashboard modules
+  const handleSaveDashboardModules = (modules: DashboardModule[]) => {
+    setDashboardModules(modules);
+    saveDashboardModules(modules);
+  };
   
   // Mock data for user
   const user = {
@@ -329,6 +345,14 @@ const DashboardEnhanced = () => {
   
   return (
     <div className="pb-12">
+      {/* Customize Dashboard Dialog */}
+      <CustomizeDashboardDialog 
+        open={isCustomizeDialogOpen}
+        onOpenChange={setIsCustomizeDialogOpen}
+        modules={dashboardModules}
+        onSaveModules={handleSaveDashboardModules}
+      />
+      
       {/* Hero section with main stats & welcome */}
       <motion.div
         className="bg-gradient-to-r from-blue-700 to-indigo-700 pt-12 pb-24 px-4 rounded-b-3xl relative overflow-hidden"
@@ -1009,7 +1033,7 @@ const DashboardEnhanced = () => {
               variant="ghost" 
               size="sm"
               className="text-gray-500 hover:text-gray-700"
-              onClick={() => {}}
+              onClick={() => setIsCustomizeDialogOpen(true)}
             >
               Customize Dashboard
               <Settings className="ml-2 h-4 w-4" />
@@ -1022,7 +1046,12 @@ const DashboardEnhanced = () => {
             initial="hidden"
             animate="visible"
           >
-            {featureModules.map((module, index) => (
+            {featureModules.filter(module => {
+              // Find the module in dashboardModules
+              const dashModule = dashboardModules.find(m => m.id === module.id);
+              // If found and visible is false, filter it out, otherwise keep it
+              return !dashModule || dashModule.visible !== false;
+            }).map((module, index) => (
               <motion.div
                 key={module.id}
                 className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border"
