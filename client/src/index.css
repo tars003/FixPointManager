@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+}
+
 /* Pre-owned vehicle styles */
 .preowned-theme h2 {
   @apply bg-gradient-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent;

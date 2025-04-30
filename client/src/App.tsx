@@ -47,6 +47,7 @@ import Drishti from "@/pages/drishti";
 import AnimationDemo from "@/pages/animation-demo";
 import ProfilePage from "@/pages/profile";
 import SettingsPage from "@/pages/settings";
+import MembershipPage from "@/pages/membership";
 
 function Router() {
   const [location] = useLocation();
