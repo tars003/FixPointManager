@@ -6,6 +6,7 @@ import { Vehicle } from '@shared/schema';
 import ValueTrendPredictor from '@/components/dashboard/ValueTrendPredictor';
 import CustomizeDashboardDialog, { DashboardModule } from '@/components/dashboard/CustomizeDashboardDialog';
 import { getDashboardModules, saveDashboardModules } from '@/services/dashboardPreferences';
+import FixPointCard from '@/components/membership/FixPointCard';
 import { 
   Car, 
   Bell, 
@@ -104,6 +105,21 @@ const DashboardEnhanced = () => {
   
   // Key feature modules
   const featureModules = [
+    {
+      id: 'membership',
+      name: 'FixPoint Card',
+      tagline: 'Premium vehicle management membership',
+      description: 'Access exclusive benefits, priority service, and roadside assistance with your premium membership card.',
+      icon: <CreditCard className="h-6 w-6 text-white" />,
+      bgClass: 'bg-gradient-to-br from-indigo-600 to-blue-700',
+      accentColor: 'bg-indigo-500',
+      path: '/membership',
+      stats: [
+        { label: 'Points', value: '1,250', trend: 'up' },
+        { label: 'Status', value: 'Premium', trend: 'up' },
+        { label: 'Benefits', value: '24', trend: 'stable' }
+      ]
+    },
     {
       id: 'vehiclevault',
       name: 'Vehicle Vault',
