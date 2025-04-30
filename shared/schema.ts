@@ -666,3 +666,136 @@ export type InsertEmergencyProfile = z.infer<typeof insertEmergencyProfileSchema
 
 export type EmergencyIncident = typeof emergencyIncidents.$inferSelect;
 export type InsertEmergencyIncident = z.infer<typeof insertEmergencyIncidentSchema>;
+
+// Vehicle Category types for Arena
+export type VehicleCategory = 'two-wheeler' | 'three-wheeler' | 'four-wheeler' | 'heavy-vehicle';
+
+// Vehicle Model table for Arena
+export const vehicleModels = pgTable('arena_vehicle_models', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  manufacturer: text('manufacturer').notNull(),
+  category: text('category').notNull().$type<VehicleCategory>(),
+  subcategory: text('subcategory').notNull(),
+  year: integer('year').notNull(),
+  modelCode: varchar('model_code', { length: 100 }).notNull(),
+  thumbnailUrl: text('thumbnail_url'),
+  modelUrl: text('model_url'),
+  description: text('description'),
+  specifications: jsonb('specifications'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+  isActive: boolean('is_active').default(true),
+  popularity: integer('popularity').default(0),
+});
+
+// Customization Projects for Arena
+export const customizationProjects = pgTable('arena_projects', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  description: text('description'),
+  userId: integer('user_id').notNull(),
+  vehicleId: integer('vehicle_id').notNull(),
+  thumbnailUrl: text('thumbnail_url'),
+  customizations: jsonb('customizations').default({}),
+  status: text('status').default('draft').$type<'draft' | 'in-progress' | 'completed'>(),
+  visibility: text('visibility').default('private').$type<'private' | 'public' | 'shared'>(),
+  totalPoints: integer('total_points').default(0),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// Customization Parts Catalog for Arena
+export const customizationParts = pgTable('arena_parts', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  category: text('category').notNull().$type<'exterior' | 'interior' | 'performance' | 'wheels' | 'lighting'>(),
+  subcategory: text('subcategory').notNull(),
+  vehicleCategories: jsonb('vehicle_categories').notNull().$type<VehicleCategory[]>(),
+  compatibleModels: jsonb('compatible_models').$type<string[]>(),
+  thumbnailUrl: text('thumbnail_url'),
+  modelUrl: text('model_url'),
+  price: integer('price'),
+  currency: text('currency').default('INR'),
+  description: text('description'),
+  specifications: jsonb('specifications'),
+  installationDifficulty: integer('installation_difficulty').default(1),
+  popularity: integer('popularity').default(0),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// User Achievements in Arena
+export const arenaAchievements = pgTable('arena_achievements', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').notNull(),
+  achievementType: text('achievement_type').notNull(),
+  name: text('name').notNull(),
+  description: text('description'),
+  points: integer('points').default(0),
+  iconUrl: text('icon_url'),
+  unlockedAt: timestamp('unlocked_at').defaultNow(),
+});
+
+// Project Collaborators for Arena
+export const projectCollaborators = pgTable('arena_project_collaborators', {
+  id: serial('id').primaryKey(),
+  projectId: integer('project_id').notNull(),
+  userId: integer('user_id').notNull(),
+  role: text('role').default('viewer').$type<'owner' | 'editor' | 'viewer'>(),
+  joinedAt: timestamp('joined_at').defaultNow(),
+  lastActive: timestamp('last_active'),
+});
+
+// Community Showcase Projects for Arena
+export const showcaseProjects = pgTable('arena_showcase', {
+  id: serial('id').primaryKey(),
+  projectId: integer('project_id').notNull(),
+  title: text('title').notNull(),
+  description: text('description'),
+  imageUrls: jsonb('image_urls').$type<string[]>(),
+  videoUrl: text('video_url'),
+  likes: integer('likes').default(0),
+  views: integer('views').default(0),
+  featured: boolean('featured').default(false),
+  categoryTags: jsonb('category_tags').$type<string[]>(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+// Zod schemas for Arena
+export const insertVehicleModelSchema = createInsertSchema(vehicleModels);
+export const selectVehicleModelSchema = createInsertSchema(vehicleModels);
+
+export const insertCustomizationProjectSchema = createInsertSchema(customizationProjects);
+export const selectCustomizationProjectSchema = createInsertSchema(customizationProjects);
+
+export const insertCustomizationPartSchema = createInsertSchema(customizationParts);
+export const selectCustomizationPartSchema = createInsertSchema(customizationParts);
+
+export const insertArenaAchievementSchema = createInsertSchema(arenaAchievements);
+export const selectArenaAchievementSchema = createInsertSchema(arenaAchievements);
+
+export const insertProjectCollaboratorSchema = createInsertSchema(projectCollaborators);
+export const selectProjectCollaboratorSchema = createInsertSchema(projectCollaborators);
+
+export const insertShowcaseProjectSchema = createInsertSchema(showcaseProjects);
+export const selectShowcaseProjectSchema = createInsertSchema(showcaseProjects);
+
+// TypeScript types for Arena
+export type VehicleModel = typeof vehicleModels.$inferSelect;
+export type InsertVehicleModel = typeof vehicleModels.$inferInsert;
+
+export type CustomizationProject = typeof customizationProjects.$inferSelect;
+export type InsertCustomizationProject = typeof customizationProjects.$inferInsert;
+
+export type CustomizationPart = typeof customizationParts.$inferSelect;
+export type InsertCustomizationPart = typeof customizationParts.$inferInsert;
+
+export type ArenaAchievement = typeof arenaAchievements.$inferSelect;
+export type InsertArenaAchievement = typeof arenaAchievements.$inferInsert;
+
+export type ProjectCollaborator = typeof projectCollaborators.$inferSelect;
+export type InsertProjectCollaborator = typeof projectCollaborators.$inferInsert;
+
+export type ShowcaseProject = typeof showcaseProjects.$inferSelect;
+export type InsertShowcaseProject = typeof showcaseProjects.$inferInsert;
