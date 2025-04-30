@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -38,13 +38,19 @@ import {
   Download,
   Heart,
   Send,
-  CheckSquare
+  CheckSquare,
+  ShoppingCart,
+  Lightbulb,
+  Paintbrush,
+  Plus,
+  Sparkles
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ArenaWrapper from '@/components/arena/ArenaWrapper';
 import PreviewCard from '@/components/arena/PreviewCard';
 import EnhancedColorSelector from '@/components/arena/EnhancedColorSelector';
 import CustomizationPackage from '@/components/arena/CustomizationPackage';
+import CartPanel, { CartItem } from '@/components/arena/CartPanel';
 
 // Available vehicle models
 const vehicleModels = [
@@ -141,16 +147,42 @@ const spoilerOptions = [
   }
 ];
 
-// Simplified Arena Studio Page with expanded Customization
+// Exterior submenu items
+const exteriorCategoryItems = [
+  { id: 'body-kits', label: 'Body Kits', icon: Car },
+  { id: 'spoilers', label: 'Spoilers', icon: Component },
+  { id: 'paint-wraps', label: 'Paint & Wraps', icon: Paintbrush },
+  { id: 'lighting', label: 'Lighting', icon: Lightbulb },
+];
+
+// Vehicle Categories
+type CustomizationCategory = 'exterior' | 'interior' | 'performance' | 'wheels-tires' | 'visualization';
+
+// Enhanced Arena Studio Page
 const Arena: React.FC = () => {
   // State for navigation and selections
   const [activeTab, setActiveTab] = useState('vehicle-selection');
   const [selectedVehicle, setSelectedVehicle] = useState<null | typeof vehicleModels[0]>(null);
-  const [customizationCategory, setCustomizationCategory] = useState('exterior');
+  const [mainCategory, setMainCategory] = useState<CustomizationCategory>('exterior');
+  const [exteriorSubcategory, setExteriorSubcategory] = useState('body-kits');
   const [selectedBodyKit, setSelectedBodyKit] = useState('stock');
   const [selectedSpoiler, setSelectedSpoiler] = useState('none');
   const [vehicleColor, setVehicleColor] = useState('#1E40AF');
   const [colorFinish, setColorFinish] = useState<'gloss' | 'matte' | 'metallic' | 'pearlescent' | 'satin'>('gloss');
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [likedItems, setLikedItems] = useState<string[]>([]);
+  const [isUpperTabsSticky, setIsUpperTabsSticky] = useState(false);
+
+  // Effect to handle scroll and make upper tabs sticky
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsUpperTabsSticky(scrollPosition > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   
   // Calculate total price
   const getTotalPrice = () => {
@@ -158,7 +190,7 @@ const Arena: React.FC = () => {
     
     // Add body kit price
     const bodyKit = bodyKitOptions.find(option => option.id === selectedBodyKit);
-    if (bodyKit) {
+    if (bodyKit && bodyKit.id !== 'stock') {
       if (bodyKit.discount) {
         total += bodyKit.price - (bodyKit.price * bodyKit.discount / 100);
       } else {
@@ -168,7 +200,7 @@ const Arena: React.FC = () => {
     
     // Add spoiler price
     const spoiler = spoilerOptions.find(option => option.id === selectedSpoiler);
-    if (spoiler) {
+    if (spoiler && spoiler.id !== 'none') {
       if (spoiler.discount) {
         total += spoiler.price - (spoiler.price * spoiler.discount / 100);
       } else {
@@ -180,6 +212,9 @@ const Arena: React.FC = () => {
     if (colorFinish !== 'gloss') {
       total += 25000; // Premium finish cost
     }
+    
+    // Add cart items
+    total += cartItems.reduce((sum, item) => sum + item.price, 0);
     
     return total;
   };
@@ -200,8 +235,18 @@ const Arena: React.FC = () => {
   };
   
   // Function to handle customization category change
-  const handleCategoryChange = (category: string) => {
-    setCustomizationCategory(category);
+  const handleCategoryChange = (category: CustomizationCategory) => {
+    setMainCategory(category);
+    
+    // Reset subcategory when changing main category
+    if (category === 'exterior') {
+      setExteriorSubcategory('body-kits');
+    }
+  };
+  
+  // Function to handle exterior subcategory change
+  const handleExteriorSubcategoryChange = (subcategory: string) => {
+    setExteriorSubcategory(subcategory);
   };
   
   // Function to handle color selection
@@ -212,19 +257,84 @@ const Arena: React.FC = () => {
     }
   };
   
+  // Function to add item to cart
+  const handleAddToCart = (item: CartItem) => {
+    // Check if the item is already in the cart
+    if (!cartItems.some(cartItem => cartItem.id === item.id)) {
+      setCartItems([...cartItems, item]);
+    }
+  };
+  
+  // Function to remove item from cart
+  const handleRemoveFromCart = (id: string) => {
+    setCartItems(cartItems.filter(item => item.id !== id));
+  };
+  
+  // Function to toggle like status
+  const handleToggleLike = (id: string) => {
+    if (likedItems.includes(id)) {
+      setLikedItems(likedItems.filter(item => item !== id));
+    } else {
+      setLikedItems([...likedItems, id]);
+    }
+  };
+  
+  // Function to handle checkout
+  const handleCheckout = () => {
+    setActiveTab('summary');
+  };
+  
   // Function to reset selections and go back to vehicle selection
   const handleReset = () => {
     setSelectedVehicle(null);
     setActiveTab('vehicle-selection');
+    setMainCategory('exterior');
+    setExteriorSubcategory('body-kits');
     setSelectedBodyKit('stock');
     setSelectedSpoiler('none');
     setVehicleColor('#1E40AF');
     setColorFinish('gloss');
+    setCartItems([]);
+    setLikedItems([]);
+  };
+  
+  // Function to add body kit to cart
+  const handleAddBodyKitToCart = () => {
+    if (selectedBodyKit !== 'stock') {
+      const bodyKit = bodyKitOptions.find(option => option.id === selectedBodyKit);
+      if (bodyKit) {
+        handleAddToCart({
+          id: `bodykit-${bodyKit.id}`,
+          name: bodyKit.name,
+          price: bodyKit.discount 
+            ? bodyKit.price - (bodyKit.price * bodyKit.discount / 100) 
+            : bodyKit.price,
+          category: 'Body Kit'
+        });
+      }
+    }
+  };
+  
+  // Function to add spoiler to cart
+  const handleAddSpoilerToCart = () => {
+    if (selectedSpoiler !== 'none') {
+      const spoiler = spoilerOptions.find(option => option.id === selectedSpoiler);
+      if (spoiler) {
+        handleAddToCart({
+          id: `spoiler-${spoiler.id}`,
+          name: spoiler.name,
+          price: spoiler.discount 
+            ? spoiler.price - (spoiler.price * spoiler.discount / 100) 
+            : spoiler.price,
+          category: 'Spoiler'
+        });
+      }
+    }
   };
   
   return (
     <ArenaWrapper>
-      <div className="container max-w-7xl mx-auto py-6">
+      <div className="container max-w-7xl mx-auto py-6 px-4">
         {/* Page header */}
         <motion.div 
           className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6"
@@ -254,24 +364,26 @@ const Arena: React.FC = () => {
         
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto mb-6 sticky top-0 z-10 bg-background py-2">
-            <TabsTrigger value="vehicle-selection" disabled={activeTab !== 'vehicle-selection' && !selectedVehicle}>
-              <Car className="h-4 w-4 mr-2" />
-              Vehicle
-            </TabsTrigger>
-            <TabsTrigger value="customization" disabled={!selectedVehicle}>
-              <Palette className="h-4 w-4 mr-2" />
-              Customize
-            </TabsTrigger>
-            <TabsTrigger value="performance" disabled={!selectedVehicle}>
-              <Gauge className="h-4 w-4 mr-2" />
-              Performance
-            </TabsTrigger>
-            <TabsTrigger value="summary" disabled={!selectedVehicle}>
-              <ShieldCheck className="h-4 w-4 mr-2" />
-              Summary
-            </TabsTrigger>
-          </TabsList>
+          <div className={`sticky ${isUpperTabsSticky ? 'top-0' : 'top-0'} z-20 bg-background py-2 border-b mb-6 -mx-4 px-4`}>
+            <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto">
+              <TabsTrigger value="vehicle-selection" disabled={activeTab !== 'vehicle-selection' && !selectedVehicle}>
+                <Car className="h-4 w-4 mr-2" />
+                Vehicle
+              </TabsTrigger>
+              <TabsTrigger value="customization" disabled={!selectedVehicle}>
+                <Palette className="h-4 w-4 mr-2" />
+                Customize
+              </TabsTrigger>
+              <TabsTrigger value="performance" disabled={!selectedVehicle}>
+                <Gauge className="h-4 w-4 mr-2" />
+                Performance
+              </TabsTrigger>
+              <TabsTrigger value="summary" disabled={!selectedVehicle}>
+                <ShieldCheck className="h-4 w-4 mr-2" />
+                Summary
+              </TabsTrigger>
+            </TabsList>
+          </div>
           
           {/* Vehicle Selection Tab */}
           <TabsContent value="vehicle-selection">
@@ -296,10 +408,27 @@ const Arena: React.FC = () => {
                 >
                   <Card className="cursor-pointer hover:border-primary transition-colors h-full flex flex-col">
                     <CardHeader>
-                      <CardTitle className="flex items-center text-lg">
-                        <span className="text-4xl mr-2">{vehicle.thumbnail}</span>
-                        {vehicle.name}
-                      </CardTitle>
+                      <div className="flex justify-between items-start">
+                        <CardTitle className="flex items-center text-lg">
+                          <span className="text-4xl mr-2">{vehicle.thumbnail}</span>
+                          {vehicle.name}
+                        </CardTitle>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8 rounded-full"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleToggleLike(`vehicle-${vehicle.id}`);
+                          }}
+                        >
+                          <Heart className={`h-4 w-4 ${
+                            likedItems.includes(`vehicle-${vehicle.id}`) 
+                              ? 'fill-red-500 text-red-500' 
+                              : 'text-muted-foreground'
+                          }`} />
+                        </Button>
+                      </div>
                       <CardDescription>{vehicle.brand} {vehicle.type}</CardDescription>
                     </CardHeader>
                     <CardContent className="flex-grow">
@@ -331,7 +460,24 @@ const Arena: React.FC = () => {
                         </div>
                       </div>
                     </CardContent>
-                    <CardFooter>
+                    <CardFooter className="flex gap-2">
+                      <Button 
+                        variant="outline"
+                        size="icon"
+                        className="flex-none"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const price = vehicle.id * 1000000; // Example price based on ID
+                          handleAddToCart({
+                            id: `vehicle-${vehicle.id}`,
+                            name: `${vehicle.brand} ${vehicle.name}`,
+                            price: price,
+                            category: 'Vehicle'
+                          });
+                        }}
+                      >
+                        <ShoppingCart className="h-4 w-4" />
+                      </Button>
                       <Button 
                         onClick={() => handleSelectVehicle(vehicle)} 
                         className="w-full"
@@ -370,7 +516,7 @@ const Arena: React.FC = () => {
                 </div>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                  {/* Customization Categories Menu */}
+                  {/* Left Sidebar */}
                   <div className="lg:col-span-3 space-y-6">
                     {/* Preview card */}
                     <PreviewCard
@@ -383,80 +529,141 @@ const Arena: React.FC = () => {
                     />
                     
                     {/* Categories */}
-                    <Card className="h-fit sticky top-24">
-                      <CardHeader>
-                        <CardTitle>Customization Categories</CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-0">
-                        <div className="space-y-1">
-                          <Button 
-                            variant={customizationCategory === 'exterior' ? 'default' : 'ghost'}
-                            className="w-full justify-start"
-                            onClick={() => handleCategoryChange('exterior')}
-                          >
-                            <PaintBucket className="h-4 w-4 mr-2" />
-                            Exterior
-                          </Button>
-                          <Button 
-                            variant={customizationCategory === 'interior' ? 'default' : 'ghost'}
-                            className="w-full justify-start"
-                            onClick={() => handleCategoryChange('interior')}
-                          >
-                            <Sofa className="h-4 w-4 mr-2" />
-                            Interior
-                          </Button>
-                          <Button 
-                            variant={customizationCategory === 'performance' ? 'default' : 'ghost'}
-                            className="w-full justify-start"
-                            onClick={() => handleCategoryChange('performance')}
-                          >
-                            <Activity className="h-4 w-4 mr-2" />
-                            Performance
-                          </Button>
-                          <Button 
-                            variant={customizationCategory === 'wheels' ? 'default' : 'ghost'}
-                            className="w-full justify-start"
-                            onClick={() => handleCategoryChange('wheels')}
-                          >
-                            <CircleDot className="h-4 w-4 mr-2" />
-                            Wheels & Tires
-                          </Button>
-                          <Button 
-                            variant={customizationCategory === 'visualization' ? 'default' : 'ghost'}
-                            className="w-full justify-start"
-                            onClick={() => handleCategoryChange('visualization')}
-                          >
-                            <StopCircle className="h-4 w-4 mr-2" />
-                            Visualization
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
+                    <div className="sticky top-24 space-y-6">
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">Customization Categories</CardTitle>
+                        </CardHeader>
+                        <CardContent className="p-0">
+                          <div className="space-y-1">
+                            <Button 
+                              variant={mainCategory === 'exterior' ? 'default' : 'ghost'}
+                              className="w-full justify-start"
+                              onClick={() => handleCategoryChange('exterior')}
+                            >
+                              <PaintBucket className="h-4 w-4 mr-2" />
+                              Exterior
+                            </Button>
+                            <Button 
+                              variant={mainCategory === 'interior' ? 'default' : 'ghost'}
+                              className="w-full justify-start"
+                              onClick={() => handleCategoryChange('interior')}
+                            >
+                              <Sofa className="h-4 w-4 mr-2" />
+                              Interior
+                            </Button>
+                            <Button 
+                              variant={mainCategory === 'performance' ? 'default' : 'ghost'}
+                              className="w-full justify-start"
+                              onClick={() => handleCategoryChange('performance')}
+                            >
+                              <Activity className="h-4 w-4 mr-2" />
+                              Performance
+                            </Button>
+                            <Button 
+                              variant={mainCategory === 'wheels-tires' ? 'default' : 'ghost'}
+                              className="w-full justify-start"
+                              onClick={() => handleCategoryChange('wheels-tires')}
+                            >
+                              <CircleDot className="h-4 w-4 mr-2" />
+                              Wheels & Tires
+                            </Button>
+                            <Button 
+                              variant={mainCategory === 'visualization' ? 'default' : 'ghost'}
+                              className="w-full justify-start"
+                              onClick={() => handleCategoryChange('visualization')}
+                            >
+                              <StopCircle className="h-4 w-4 mr-2" />
+                              Visualization
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      
+                      {/* Exterior subcategories */}
+                      {mainCategory === 'exterior' && (
+                        <Card>
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-base">Exterior Customizations</CardTitle>
+                          </CardHeader>
+                          <CardContent className="p-0">
+                            <div className="space-y-1">
+                              {exteriorCategoryItems.map((item) => (
+                                <Button 
+                                  key={item.id}
+                                  variant={exteriorSubcategory === item.id ? 'default' : 'ghost'}
+                                  className="w-full justify-start"
+                                  onClick={() => handleExteriorSubcategoryChange(item.id)}
+                                >
+                                  <item.icon className="h-4 w-4 mr-2" />
+                                  {item.label}
+                                </Button>
+                              ))}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      )}
+                      
+                      {/* Cart panel */}
+                      <CartPanel 
+                        items={cartItems}
+                        onRemoveItem={handleRemoveFromCart}
+                        onCheckout={handleCheckout}
+                        likedItems={likedItems}
+                        onToggleLike={handleToggleLike}
+                      />
+                    </div>
                   </div>
                   
                   {/* Customization Options */}
                   <div className="lg:col-span-9">
                     <Card>
-                      <CardHeader>
+                      <CardHeader className="border-b">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                           <div>
                             <CardTitle>
-                              {customizationCategory === 'exterior' && 'Exterior Customization'}
-                              {customizationCategory === 'interior' && 'Interior Customization'}
-                              {customizationCategory === 'performance' && 'Performance Components'}
-                              {customizationCategory === 'wheels' && 'Wheel & Tire Customization'}
-                              {customizationCategory === 'visualization' && 'Visualization Options'}
+                              {mainCategory === 'exterior' && (
+                                <>
+                                  {exteriorSubcategory === 'body-kits' && 'Body Kits'}
+                                  {exteriorSubcategory === 'spoilers' && 'Spoilers'}
+                                  {exteriorSubcategory === 'paint-wraps' && 'Paint & Wraps'}
+                                  {exteriorSubcategory === 'lighting' && 'Lighting Customization'}
+                                </>
+                              )}
+                              {mainCategory === 'interior' && 'Interior Customization'}
+                              {mainCategory === 'performance' && 'Performance Components'}
+                              {mainCategory === 'wheels-tires' && 'Wheel & Tire Customization'}
+                              {mainCategory === 'visualization' && 'Visualization Options'}
                             </CardTitle>
                             <CardDescription>
-                              {customizationCategory === 'exterior' && 'Modify the exterior appearance of your vehicle'}
-                              {customizationCategory === 'interior' && 'Customize your vehicle\'s interior space'}
-                              {customizationCategory === 'performance' && 'Upgrade performance components'}
-                              {customizationCategory === 'wheels' && 'Select wheels and tires to match your style'}
-                              {customizationCategory === 'visualization' && 'Choose how to view your customized vehicle'}
+                              {mainCategory === 'exterior' && (
+                                <>
+                                  {exteriorSubcategory === 'body-kits' && 'Customize the look of your vehicle with body kits'}
+                                  {exteriorSubcategory === 'spoilers' && 'Add a spoiler to enhance style and aerodynamics'}
+                                  {exteriorSubcategory === 'paint-wraps' && 'Choose from premium paints and custom wraps'}
+                                  {exteriorSubcategory === 'lighting' && 'Upgrade your vehicle lighting for style and visibility'}
+                                </>
+                              )}
+                              {mainCategory === 'interior' && 'Customize your vehicle\'s interior space'}
+                              {mainCategory === 'performance' && 'Upgrade performance components'}
+                              {mainCategory === 'wheels-tires' && 'Select wheels and tires to match your style'}
+                              {mainCategory === 'visualization' && 'Choose how to view your customized vehicle'}
                             </CardDescription>
                           </div>
                           
                           <div className="flex items-center gap-2">
+                            {(mainCategory === 'exterior' && exteriorSubcategory === 'body-kits' && selectedBodyKit !== 'stock') && (
+                              <Button variant="outline" size="sm" onClick={handleAddBodyKitToCart}>
+                                <ShoppingCart className="h-4 w-4 mr-2" />
+                                Add to Cart
+                              </Button>
+                            )}
+                            {(mainCategory === 'exterior' && exteriorSubcategory === 'spoilers' && selectedSpoiler !== 'none') && (
+                              <Button variant="outline" size="sm" onClick={handleAddSpoilerToCart}>
+                                <ShoppingCart className="h-4 w-4 mr-2" />
+                                Add to Cart
+                              </Button>
+                            )}
                             <Button variant="outline" size="sm">
                               <Heart className="h-4 w-4 mr-2" />
                               Save Options
@@ -469,10 +676,10 @@ const Arena: React.FC = () => {
                         </div>
                       </CardHeader>
                       
-                      <CardContent>
-                        {customizationCategory === 'exterior' && (
+                      <CardContent className="pt-6">
+                        {/* Exterior - Body Kits */}
+                        {mainCategory === 'exterior' && exteriorSubcategory === 'body-kits' && (
                           <div className="space-y-8">
-                            {/* Body Kits */}
                             <CustomizationPackage 
                               title="Body Kits"
                               options={bodyKitOptions}
@@ -480,7 +687,44 @@ const Arena: React.FC = () => {
                               onSelectOption={setSelectedBodyKit}
                             />
                             
-                            {/* Spoilers */}
+                            {selectedBodyKit !== 'stock' && (
+                              <div className="p-4 bg-muted/50 rounded-lg flex flex-col sm:flex-row justify-between items-center gap-4">
+                                <div>
+                                  <h3 className="font-medium">Selected: {bodyKitOptions.find(o => o.id === selectedBodyKit)?.name}</h3>
+                                  <p className="text-sm text-muted-foreground">
+                                    Price: {formatPrice(bodyKitOptions.find(o => o.id === selectedBodyKit)?.price || 0)}
+                                  </p>
+                                </div>
+                                <div className="flex gap-2">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => handleToggleLike(`bodykit-${selectedBodyKit}`)}
+                                  >
+                                    <Heart className={`h-4 w-4 mr-2 ${
+                                      likedItems.includes(`bodykit-${selectedBodyKit}`) 
+                                        ? 'fill-red-500 text-red-500' 
+                                        : ''
+                                    }`} />
+                                    {likedItems.includes(`bodykit-${selectedBodyKit}`) ? 'Liked' : 'Like'}
+                                  </Button>
+                                  <Button 
+                                    variant="default" 
+                                    size="sm"
+                                    onClick={handleAddBodyKitToCart}
+                                  >
+                                    <Plus className="h-4 w-4 mr-2" />
+                                    Add to Cart
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
+                        {/* Exterior - Spoilers */}
+                        {mainCategory === 'exterior' && exteriorSubcategory === 'spoilers' && (
+                          <div className="space-y-8">
                             <CustomizationPackage 
                               title="Spoilers"
                               options={spoilerOptions}
@@ -488,7 +732,44 @@ const Arena: React.FC = () => {
                               onSelectOption={setSelectedSpoiler}
                             />
                             
-                            {/* Colors */}
+                            {selectedSpoiler !== 'none' && (
+                              <div className="p-4 bg-muted/50 rounded-lg flex flex-col sm:flex-row justify-between items-center gap-4">
+                                <div>
+                                  <h3 className="font-medium">Selected: {spoilerOptions.find(o => o.id === selectedSpoiler)?.name}</h3>
+                                  <p className="text-sm text-muted-foreground">
+                                    Price: {formatPrice(spoilerOptions.find(o => o.id === selectedSpoiler)?.price || 0)}
+                                  </p>
+                                </div>
+                                <div className="flex gap-2">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => handleToggleLike(`spoiler-${selectedSpoiler}`)}
+                                  >
+                                    <Heart className={`h-4 w-4 mr-2 ${
+                                      likedItems.includes(`spoiler-${selectedSpoiler}`) 
+                                        ? 'fill-red-500 text-red-500' 
+                                        : ''
+                                    }`} />
+                                    {likedItems.includes(`spoiler-${selectedSpoiler}`) ? 'Liked' : 'Like'}
+                                  </Button>
+                                  <Button 
+                                    variant="default" 
+                                    size="sm"
+                                    onClick={handleAddSpoilerToCart}
+                                  >
+                                    <Plus className="h-4 w-4 mr-2" />
+                                    Add to Cart
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
+                        {/* Exterior - Paint & Wraps */}
+                        {mainCategory === 'exterior' && exteriorSubcategory === 'paint-wraps' && (
+                          <div className="space-y-8">
                             <div>
                               <h3 className="text-lg font-medium mb-4">Paint Options</h3>
                               <EnhancedColorSelector 
@@ -498,46 +779,160 @@ const Arena: React.FC = () => {
                               />
                             </div>
                             
+                            <div className="p-4 bg-muted/50 rounded-lg">
+                              <h3 className="text-lg font-medium mb-2">Custom Vinyl Wraps</h3>
+                              <p className="text-muted-foreground mb-4">
+                                Upload your own design or choose from our premium wrap patterns 
+                                for a unique look.
+                              </p>
+                              
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <Button variant="outline" className="h-auto py-6 flex flex-col items-center justify-center">
+                                  <div className="bg-muted rounded-lg p-4 mb-2">
+                                    <Paintbrush className="h-10 w-10 text-primary" />
+                                  </div>
+                                  <span>Upload Custom Design</span>
+                                  <span className="text-xs text-muted-foreground mt-1">JPG, PNG formats</span>
+                                </Button>
+                                
+                                <Button variant="outline" className="h-auto py-6 flex flex-col items-center justify-center">
+                                  <div className="bg-muted rounded-lg p-4 mb-2">
+                                    <Sparkles className="h-10 w-10 text-primary" />
+                                  </div>
+                                  <span>Premium Wrap Patterns</span>
+                                  <span className="text-xs text-muted-foreground mt-1">100+ designs</span>
+                                </Button>
+                              </div>
+                            </div>
+                            
                             <Separator />
                             
-                            {/* Cost Summary */}
+                            {/* Paint Cost Summary */}
                             <div className="bg-muted p-4 rounded-md">
-                              <h3 className="font-medium text-lg mb-4">Customization Summary</h3>
+                              <h3 className="font-medium text-lg mb-3">Paint Selection</h3>
                               
-                              <div className="space-y-2 mb-4">
-                                {selectedBodyKit !== 'stock' && (
-                                  <div className="flex justify-between">
-                                    <span>Body Kit: {bodyKitOptions.find(o => o.id === selectedBodyKit)?.name}</span>
-                                    <span>{formatPrice(bodyKitOptions.find(o => o.id === selectedBodyKit)?.price || 0)}</span>
-                                  </div>
-                                )}
-                                
-                                {selectedSpoiler !== 'none' && (
-                                  <div className="flex justify-between">
-                                    <span>Spoiler: {spoilerOptions.find(o => o.id === selectedSpoiler)?.name}</span>
-                                    <span>{formatPrice(spoilerOptions.find(o => o.id === selectedSpoiler)?.price || 0)}</span>
-                                  </div>
-                                )}
-                                
-                                {colorFinish !== 'gloss' && (
-                                  <div className="flex justify-between">
-                                    <span>Premium {colorFinish} Paint Finish</span>
-                                    <span>₹25,000</span>
-                                  </div>
-                                )}
+                              <div className="flex items-center gap-3 mb-3">
+                                <div 
+                                  className="w-8 h-8 rounded-full border"
+                                  style={{ backgroundColor: vehicleColor }}
+                                ></div>
+                                <div>
+                                  <div className="font-medium">Custom Color</div>
+                                  <div className="text-sm text-muted-foreground capitalize">{colorFinish} Finish</div>
+                                </div>
                               </div>
                               
-                              <Separator className="my-2" />
+                              {colorFinish !== 'gloss' && (
+                                <div className="flex justify-between text-sm mb-2">
+                                  <span>Premium {colorFinish} Paint Finish</span>
+                                  <span>₹25,000</span>
+                                </div>
+                              )}
                               
-                              <div className="flex justify-between font-bold">
-                                <span>Total Customization Cost</span>
-                                <span>{formatPrice(getTotalPrice())}</span>
+                              <div className="flex gap-2 mt-4">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => handleToggleLike(`paint-${vehicleColor}-${colorFinish}`)}
+                                >
+                                  <Heart className={`h-4 w-4 mr-2 ${
+                                    likedItems.includes(`paint-${vehicleColor}-${colorFinish}`) 
+                                      ? 'fill-red-500 text-red-500' 
+                                      : ''
+                                  }`} />
+                                  {likedItems.includes(`paint-${vehicleColor}-${colorFinish}`) ? 'Liked' : 'Like'}
+                                </Button>
+                                
+                                {colorFinish !== 'gloss' && (
+                                  <Button 
+                                    variant="default" 
+                                    size="sm"
+                                    onClick={() => handleAddToCart({
+                                      id: `paint-${vehicleColor}-${colorFinish}`,
+                                      name: `Premium ${colorFinish} Paint`,
+                                      price: 25000,
+                                      category: 'Paint'
+                                    })}
+                                  >
+                                    <Plus className="h-4 w-4 mr-2" />
+                                    Add to Cart
+                                  </Button>
+                                )}
                               </div>
                             </div>
                           </div>
                         )}
                         
-                        {customizationCategory === 'interior' && (
+                        {/* Exterior - Lighting */}
+                        {mainCategory === 'exterior' && exteriorSubcategory === 'lighting' && (
+                          <div className="space-y-6">
+                            <div>
+                              <h3 className="text-lg font-medium mb-2">Headlight Options</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <Button variant="outline" className="h-auto py-6 flex flex-col items-center justify-center">
+                                  <div className="bg-muted rounded-lg p-4 mb-2">
+                                    <Lightbulb className="h-10 w-10 text-primary" />
+                                  </div>
+                                  <span>Standard Halogen</span>
+                                  <span className="text-xs text-muted-foreground mt-1">₹0</span>
+                                </Button>
+                                <Button variant="outline" className="h-auto py-6 flex flex-col items-center justify-center">
+                                  <div className="bg-muted rounded-lg p-4 mb-2">
+                                    <Lightbulb className="h-10 w-10 text-primary" />
+                                  </div>
+                                  <span>Premium LED</span>
+                                  <span className="text-xs text-muted-foreground mt-1">₹25,000</span>
+                                </Button>
+                                <Button variant="outline" className="h-auto py-6 flex flex-col items-center justify-center">
+                                  <div className="bg-muted rounded-lg p-4 mb-2">
+                                    <Lightbulb className="h-10 w-10 text-primary" />
+                                  </div>
+                                  <span>Adaptive Matrix</span>
+                                  <span className="text-xs text-muted-foreground mt-1">₹45,000</span>
+                                </Button>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <h3 className="text-lg font-medium mb-2">Taillight Options</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <Button variant="outline" className="justify-start">
+                                  <span className="bg-muted p-2 rounded mr-2">💡</span>
+                                  Standard
+                                </Button>
+                                <Button variant="outline" className="justify-start">
+                                  <span className="bg-muted p-2 rounded mr-2">💡</span>
+                                  LED Lights
+                                </Button>
+                                <Button variant="outline" className="justify-start">
+                                  <span className="bg-muted p-2 rounded mr-2">💡</span>
+                                  Sequential
+                                </Button>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <h3 className="text-lg font-medium mb-2">Ambient Lighting</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <Button variant="outline" className="justify-start">
+                                  <span className="bg-muted p-2 rounded mr-2">💡</span>
+                                  None
+                                </Button>
+                                <Button variant="outline" className="justify-start">
+                                  <span className="bg-muted p-2 rounded mr-2">💡</span>
+                                  RGB Underglow
+                                </Button>
+                                <Button variant="outline" className="justify-start">
+                                  <span className="bg-muted p-2 rounded mr-2">💡</span>
+                                  Full Ambient Kit
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Interior Customization */}
+                        {mainCategory === 'interior' && (
                           <div className="space-y-6">
                             <div>
                               <h3 className="text-lg font-medium mb-2">Seat Options</h3>
@@ -577,7 +972,8 @@ const Arena: React.FC = () => {
                           </div>
                         )}
                         
-                        {customizationCategory === 'performance' && (
+                        {/* Performance Customization */}
+                        {mainCategory === 'performance' && (
                           <div className="space-y-6">
                             <div>
                               <h3 className="text-lg font-medium mb-2">Engine Modifications</h3>
@@ -619,7 +1015,8 @@ const Arena: React.FC = () => {
                           </div>
                         )}
                         
-                        {customizationCategory === 'wheels' && (
+                        {/* Wheels & Tires Customization */}
+                        {mainCategory === 'wheels-tires' && (
                           <div className="space-y-6">
                             <div>
                               <h3 className="text-lg font-medium mb-2">Rim Selection</h3>
@@ -665,7 +1062,8 @@ const Arena: React.FC = () => {
                           </div>
                         )}
                         
-                        {customizationCategory === 'visualization' && (
+                        {/* Visualization Options */}
+                        {mainCategory === 'visualization' && (
                           <div className="space-y-6">
                             <div>
                               <h3 className="text-lg font-medium mb-2">Environment Settings</h3>
@@ -696,7 +1094,7 @@ const Arena: React.FC = () => {
                         )}
                       </CardContent>
                       
-                      <CardFooter className="flex justify-between">
+                      <CardFooter className="flex justify-between border-t pt-6">
                         <Button variant="outline" onClick={handleReset}>
                           Cancel
                         </Button>
@@ -798,6 +1196,20 @@ const Arena: React.FC = () => {
                         </div>
                       </div>
                       
+                      {cartItems.length > 0 && (
+                        <div className="bg-muted p-4 rounded-md">
+                          <h3 className="font-medium">Cart Items</h3>
+                          <div className="space-y-2 mt-2">
+                            {cartItems.map((item) => (
+                              <div key={item.id} className="flex justify-between">
+                                <span className="text-sm">{item.name}</span>
+                                <span>{formatPrice(item.price)}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
                       <div className="bg-muted p-4 rounded-md">
                         <h3 className="font-medium">Cost Breakdown</h3>
                         <div className="space-y-2 mt-2">
@@ -820,6 +1232,19 @@ const Arena: React.FC = () => {
                               <span className="text-sm">Premium {colorFinish} Paint Finish</span>
                               <span>₹25,000</span>
                             </div>
+                          )}
+                          
+                          {cartItems.length > 0 && (
+                            <>
+                              <Separator className="my-2" />
+                              
+                              {cartItems.map((item) => (
+                                <div key={item.id} className="flex justify-between">
+                                  <span className="text-sm">{item.name}</span>
+                                  <span>{formatPrice(item.price)}</span>
+                                </div>
+                              ))}
+                            </>
                           )}
                           
                           <Separator className="my-2" />
