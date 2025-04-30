@@ -733,120 +733,154 @@ const DashboardEnhanced = () => {
               </div>
             </motion.div>
             
-            {/* Service Health Tracker */}
+            {/* Service Health Tracker - Completely Fresh Design */}
             <motion.div 
-              className="border rounded-xl overflow-hidden hover:shadow-md transition-shadow p-4"
-              whileHover={{ y: -3 }}
+              className="relative rounded-xl overflow-hidden bg-gradient-to-br from-indigo-900 to-purple-900 shadow-lg p-0"
+              whileHover={{ y: -5 }}
+              transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="font-medium text-gray-900 flex items-center">
-                  <Wrench className="h-4 w-4 text-purple-500 mr-2" />
-                  Service Health Tracker
-                </h4>
-                <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200">
-                  Next 60 Days
-                </Badge>
+              {/* Decorative background elements */}
+              <div className="absolute inset-0 overflow-hidden">
+                <motion.div 
+                  className="absolute -right-16 -bottom-16 w-32 h-32 rounded-full bg-purple-600 opacity-20"
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: [0.8, 1.2, 0.8], rotate: [0, 180, 360] }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                />
+                <motion.div 
+                  className="absolute -left-8 -top-8 w-24 h-24 rounded-full bg-indigo-500 opacity-20"
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: [0.8, 1.2, 0.8], rotate: [360, 180, 0] }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
               </div>
               
-              <div className="h-48 w-full relative">
-                {/* Main content area */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  {/* Pie Chart */}
-                  <div className="relative w-[110px] h-[110px] mb-2 pt-3">
-                    {/* Simple animated orbs */}
-                    <motion.div 
-                      className="absolute -left-6 top-12 w-3 h-3 rounded-full bg-purple-400"
-                      animate={{ 
-                        y: [-2, 2, -2],
-                        opacity: [0.7, 1, 0.7]
-                      }}
-                      transition={{ repeat: Infinity, duration: 3 }}
-                    />
-                    <motion.div 
-                      className="absolute -right-6 top-6 w-3 h-3 rounded-full bg-emerald-400"
-                      animate={{ 
-                        y: [-2, 2, -2],
-                        opacity: [0.7, 1, 0.7]
-                      }}
-                      transition={{ repeat: Infinity, duration: 2.5, delay: 0.5 }}
-                    />
-                    <motion.div 
-                      className="absolute top-24 right-4 w-3 h-3 rounded-full bg-yellow-400"
-                      animate={{ 
-                        y: [-2, 2, -2],
-                        opacity: [0.7, 1, 0.7]
-                      }}
-                      transition={{ repeat: Infinity, duration: 3.2, delay: 1 }}
-                    />
-                    <motion.div 
-                      className="absolute top-8 left-24 w-3 h-3 rounded-full bg-purple-300"
-                      animate={{ 
-                        y: [-2, 2, -2],
-                        opacity: [0.7, 1, 0.7]
-                      }}
-                      transition={{ repeat: Infinity, duration: 2.8, delay: 1.5 }}
-                    />
-
-                    {/* Exact match pie chart */}
-                    <svg viewBox="0 0 100 100" className="w-full h-full">
-                      {/* Green segment - 50% */}
-                      <path
-                        d="M50,50 L50,0 A50,50 0 0,1 100,50 L50,50 Z"
-                        fill="#10B981"
-                      />
-                      
-                      {/* Yellow segment - 25% */}
-                      <path
-                        d="M50,50 L100,50 A50,50 0 0,1 75,93.3 L50,50 Z"
-                        fill="#F59E0B"
-                      />
-                      
-                      {/* Red segment - 25% */}
-                      <path
-                        d="M50,50 L75,93.3 A50,50 0 0,1 0,50 L50,50 Z"
-                        fill="#EF4444"
-                      />
-                    </svg>
-                    
-                    {/* White circle with number 3 - exact position */}
-                    <div className="absolute bottom-0 right-0 w-14 h-14 rounded-full bg-white shadow-md flex flex-col items-center justify-center z-20">
-                      <span className="text-2xl font-bold text-purple-600">3</span>
-                      <span className="text-[10px] text-gray-500 mt-[-3px]">Due Services</span>
-                    </div>
+              {/* Header section with glowing title */}
+              <div className="relative p-4 flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-white/10 backdrop-blur-sm rounded-lg">
+                    <motion.div
+                      animate={{ rotate: [0, 360] }}
+                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    >
+                      <Wrench className="h-5 w-5 text-purple-300" />
+                    </motion.div>
                   </div>
-                  
-                  {/* Service details boxes */}
-                  <div className="grid grid-cols-3 gap-2 w-full">
-                    <div className="bg-emerald-50 rounded p-2 text-center">
-                      <div className="text-sm font-medium text-emerald-700">2</div>
-                      <div className="text-[10px] text-gray-500">Up to Date</div>
-                    </div>
-                    <div className="bg-amber-50 rounded p-2 text-center">
-                      <div className="text-sm font-medium text-amber-700">1</div>
-                      <div className="text-[10px] text-gray-500">Due Soon</div>
-                    </div>
-                    <div className="bg-rose-50 rounded p-2 text-center">
-                      <div className="text-sm font-medium text-rose-700">0</div>
-                      <div className="text-[10px] text-gray-500">Overdue</div>
-                    </div>
+                  <div>
+                    <h3 className="font-bold text-white text-shadow">Service Health</h3>
+                    <div className="text-xs text-purple-200">Vehicle maintenance status</div>
                   </div>
+                </div>
+                
+                <div className="text-xs font-medium text-white bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full">
+                  Next 60 Days
                 </div>
               </div>
               
-              <div className="mt-1 border-t pt-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Calendar className="h-3.5 w-3.5 text-amber-500 mr-1" />
-                    <span className="text-xs text-amber-600">Next Service: Honda City in 14 days</span>
+              {/* Main interactive service visualization */}
+              <div className="relative px-4 pt-2 pb-4">
+                {/* Service status indicators with neon glow */}
+                <div className="flex justify-around mb-4">
+                  {[
+                    { status: 'Complete', count: 2, color: 'bg-emerald-500', glow: 'emerald' },
+                    { status: 'Due Soon', count: 1, color: 'bg-amber-500', glow: 'amber' },
+                    { status: 'Overdue', count: 0, color: 'bg-rose-500', glow: 'rose' }
+                  ].map((item, i) => (
+                    <motion.div 
+                      key={i}
+                      className="flex flex-col items-center relative"
+                      whileHover={{ y: -3 }}
+                    >
+                      <motion.div 
+                        className={`w-10 h-10 ${item.color} rounded-full flex items-center justify-center relative`}
+                        initial={{ scale: 1 }}
+                        whileHover={{ scale: 1.1 }}
+                      >
+                        <motion.div 
+                          className={`absolute inset-0 rounded-full bg-${item.glow}-500 opacity-60 blur-sm`}
+                          animate={{ 
+                            scale: [0.8, 1.2, 0.8],
+                            opacity: [0.3, 0.6, 0.3] 
+                          }}
+                          transition={{ duration: 3, repeat: Infinity }}
+                        />
+                        <span className="text-white font-bold text-lg relative z-10">{item.count}</span>
+                      </motion.div>
+                      <span className="text-xs text-white/80 mt-2">{item.status}</span>
+                    </motion.div>
+                  ))}
+                </div>
+                
+                {/* Interactive 3D-like service bars */}
+                <div className="relative bg-white/5 backdrop-blur-md rounded-xl p-4 mt-2">
+                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/10 to-transparent rounded-xl" />
+                  
+                  {/* Service Status Bars */}
+                  <div className="space-y-3">
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-white/80">Honda City</span>
+                        <span className="text-white font-medium">14 days</span>
+                      </div>
+                      <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                        <motion.div 
+                          className="h-full bg-gradient-to-r from-amber-500 to-amber-400 rounded-full"
+                          style={{ width: '70%' }}
+                          initial={{ x: -100 }}
+                          animate={{ x: 0 }}
+                          transition={{ duration: 1, ease: "easeOut" }}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-white/80">Tata Nexon</span>
+                        <span className="text-white font-medium">30 days</span>
+                      </div>
+                      <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                        <motion.div 
+                          className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
+                          style={{ width: '45%' }}
+                          initial={{ x: -100 }}
+                          animate={{ x: 0 }}
+                          transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-white/80">Maruti Swift</span>
+                        <span className="text-white font-medium">Complete</span>
+                      </div>
+                      <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                        <motion.div 
+                          className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
+                          style={{ width: '100%' }}
+                          initial={{ x: -100 }}
+                          animate={{ x: 0 }}
+                          transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-xs px-2 h-7" 
-                    onClick={() => navigateTo('/book-service')}
+                  
+                  {/* Action Button */}
+                  <motion.div 
+                    className="mt-4 w-full"
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    Schedule Now
-                  </Button>
+                    <Button 
+                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white border-0 hover:from-purple-700 hover:to-indigo-700"
+                      onClick={() => navigateTo('/book-service')}
+                    >
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Schedule Service
+                    </Button>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
