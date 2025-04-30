@@ -21,6 +21,8 @@ import {
 
 interface AchievementSystemProps {
   userPoints: number;
+  onPointsEarned?: (points: number) => void;
+  onAchievementComplete?: (achievementId: number) => void;
 }
 
 // Mock achievement data

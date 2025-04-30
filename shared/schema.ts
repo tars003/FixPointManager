@@ -2,6 +2,9 @@ import { pgTable, text, serial, integer, boolean, timestamp, varchar, jsonb, dat
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Export type for Arena Customization Platform
+export type VehicleCategory = 'two-wheeler' | 'four-wheeler' | 'special';
+
 // User schema
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),

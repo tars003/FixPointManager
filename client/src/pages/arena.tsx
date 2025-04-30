@@ -1,41 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { useLocation } from 'wouter';
 import { 
-  Car, 
-  Wrench, 
-  PaintBucket, 
-  Palette, 
-  Gauge, 
-  Share2, 
-  Zap, 
-  Award, 
-  Plus, 
-  UserPlus, 
-  Save,
-  ChevronRight,
-  Sparkles,
-  Image,
-  RotateCw,
-  Download
-} from 'lucide-react';
-
-// UI Components
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
+  Tabs, 
+  TabsContent, 
+  TabsList, 
+  TabsTrigger 
+} from '@/components/ui/tabs';
 import { 
   Card, 
   CardContent, 
-  CardHeader, 
-  CardTitle, 
   CardDescription, 
-  CardFooter 
+  CardFooter, 
+  CardHeader, 
+  CardTitle 
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent,
+  DropdownMenuItem, 
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { 
+  Palette, 
+  Layers, 
+  PanelLeft, 
+  Plus, 
+  Save, 
+  Share2, 
+  ChevronDown, 
+  Settings2, 
+  Car,
+  Award,
+  Zap
+} from 'lucide-react';
+import { motion } from 'framer-motion';
 
-// Arena Components
+// Import Arena components
 import Vehicle3DViewer from '@/components/arena/3d-viewer/Vehicle3DViewer';
 import ArenaVehicleSelector from '@/components/arena/ArenaVehicleSelector';
 import CustomizationPanel from '@/components/arena/CustomizationPanel';
@@ -46,459 +47,389 @@ import VehicleSpecifications from '@/components/arena/VehicleSpecifications';
 import SaveProjectPanel from '@/components/arena/SaveProjectPanel';
 import ColorSelector from '@/components/arena/ColorSelector';
 
-// Types
-import { VehicleCategory } from '@shared/schema';
+export type CustomizationCategory = 'exterior' | 'interior' | 'performance' | 'wheels' | 'lighting';
+export type CustomizationSubcategory = 
+  // Exterior
+  'body-kits' | 'spoilers' | 'hoods' | 'mirrors' | 'wraps' | 
+  // Interior
+  'seats' | 'dashboard' | 'steering' | 'trim' | 'audio' | 
+  // Performance
+  'engine' | 'suspension' | 'exhaust' | 'intake' | 'brakes' | 
+  // Wheels
+  'rims' | 'tires' | 'spacers' | 
+  // Lighting
+  'headlights' | 'taillights' | 'underglow' | 'interior-lighting';
 
-// Demo data for initial development
-const demoVehicleCategories: VehicleCategory[] = [
-  'two-wheeler',
-  'three-wheeler',
-  'four-wheeler',
-  'heavy-vehicle'
+// Type for customization data
+type CustomizationMenuCategory = {
+  id: CustomizationCategory;
+  name: string;
+  icon: React.FC<{ className?: string }>;
+  subcategories: {
+    id: CustomizationSubcategory;
+    name: string;
+  }[];
+};
+
+// Customization menu categories
+const customizationMenu: CustomizationMenuCategory[] = [
+  {
+    id: 'exterior',
+    name: 'Exterior',
+    icon: Car,
+    subcategories: [
+      { id: 'body-kits', name: 'Body Kits' },
+      { id: 'spoilers', name: 'Spoilers' },
+      { id: 'hoods', name: 'Hoods' },
+      { id: 'mirrors', name: 'Mirrors' },
+      { id: 'wraps', name: 'Wraps' }
+    ]
+  },
+  {
+    id: 'interior',
+    name: 'Interior',
+    icon: Layers,
+    subcategories: [
+      { id: 'seats', name: 'Seats' },
+      { id: 'dashboard', name: 'Dashboard' },
+      { id: 'steering', name: 'Steering Wheel' },
+      { id: 'trim', name: 'Trim' },
+      { id: 'audio', name: 'Audio System' }
+    ]
+  },
+  {
+    id: 'performance',
+    name: 'Performance',
+    icon: Zap,
+    subcategories: [
+      { id: 'engine', name: 'Engine' },
+      { id: 'suspension', name: 'Suspension' },
+      { id: 'exhaust', name: 'Exhaust' },
+      { id: 'intake', name: 'Intake' },
+      { id: 'brakes', name: 'Brakes' }
+    ]
+  },
+  {
+    id: 'wheels',
+    name: 'Wheels',
+    icon: Settings2,
+    subcategories: [
+      { id: 'rims', name: 'Rims' },
+      { id: 'tires', name: 'Tires' },
+      { id: 'spacers', name: 'Spacers' }
+    ]
+  },
+  {
+    id: 'lighting',
+    name: 'Lighting',
+    icon: Palette,
+    subcategories: [
+      { id: 'headlights', name: 'Headlights' },
+      { id: 'taillights', name: 'Taillights' },
+      { id: 'underglow', name: 'Underglow' },
+      { id: 'interior-lighting', name: 'Interior Lighting' }
+    ]
+  }
 ];
 
-const ArenaPage: React.FC = () => {
-  const [, setLocation] = useLocation();
-  
-  // State for vehicle customization
-  const [selectedVehicleCategory, setSelectedVehicleCategory] = useState<VehicleCategory>('four-wheeler');
+// Arena Studio Page
+const Arena: React.FC = () => {
+  // State variables
   const [selectedVehicleId, setSelectedVehicleId] = useState<number | null>(null);
-  const [activeCustomizationTab, setActiveCustomizationTab] = useState<string>('exterior');
-  const [showNewProjectModal, setShowNewProjectModal] = useState<boolean>(false);
-  const [currentProjectName, setCurrentProjectName] = useState<string>('My Custom Vehicle');
-  const [viewMode, setViewMode] = useState<'3d' | 'showcase'>('3d');
-  const [cameraAngle, setCameraAngle] = useState<string>('front');
+  const [selectedCategory, setSelectedCategory] = useState<CustomizationCategory>('exterior');
+  const [selectedSubcategory, setSelectedSubcategory] = useState<CustomizationSubcategory>('body-kits');
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>('showroom');
+  const [vehicleColor, setVehicleColor] = useState<string>('#1E40AF');
+  const [showNewProjectModal, setShowNewProjectModal] = useState<boolean>(false);
+  const [projectName, setProjectName] = useState<string>('My Custom Vehicle');
   const [userPoints, setUserPoints] = useState<number>(250);
-
-  // Create new project
-  const handleNewProject = () => {
-    setShowNewProjectModal(true);
+  const [activeTab, setActiveTab] = useState<string>('vehicle');
+  
+  // Set default subcategory when category changes
+  useEffect(() => {
+    const category = customizationMenu.find(cat => cat.id === selectedCategory);
+    if (category && category.subcategories.length > 0) {
+      setSelectedSubcategory(category.subcategories[0].id);
+    }
+  }, [selectedCategory]);
+  
+  // Handle vehicle selection
+  const handleSelectVehicle = (id: number) => {
+    setSelectedVehicleId(id);
+    // Award points for selecting a vehicle
+    if (selectedVehicleId === null) {
+      setUserPoints(prev => prev + 10);
+    }
   };
-
-  // Save current project
+  
+  // Handle color selection
+  const handleColorChange = (color: string, finish?: string) => {
+    setVehicleColor(color);
+    // Award points for changing color
+    setUserPoints(prev => prev + 5);
+  };
+  
+  // Handle new project creation
+  const handleCreateProject = (name: string, vehicleType: VehicleCategory) => {
+    setProjectName(name);
+    setShowNewProjectModal(false);
+    // Award points for creating a project
+    setUserPoints(prev => prev + 25);
+  };
+  
+  // Handle project save
   const handleSaveProject = () => {
-    // Implementation for saving project
-    console.log('Saving project:', currentProjectName);
+    // In a real app, this would save to a database
+    console.log('Saving project:', projectName);
+    // Award points for saving project
+    setUserPoints(prev => prev + 15);
   };
-
+  
+  // Handle subcategory selection
+  const handleSelectSubcategory = (subcategory: CustomizationSubcategory) => {
+    setSelectedSubcategory(subcategory);
+  };
+  
+  // Find active subcategories based on selected category
+  const activeSubcategories = 
+    customizationMenu.find(cat => cat.id === selectedCategory)?.subcategories || [];
+  
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
-      {/* Arena header with points and actions */}
-      <div className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-sm">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => setLocation('/')}
-            >
-              <Car className="h-4 w-4 mr-2" />
-              Return to Dashboard
-            </Button>
-            <Separator orientation="vertical" className="h-6" />
-            <h1 className="text-xl font-bold tracking-tight">
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                Arena
-              </span> Studio
-            </h1>
-          </div>
+    <div className="container max-w-7xl mx-auto py-6">
+      {/* Page header */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Arena Studio</h1>
+          <p className="text-muted-foreground mt-1">
+            Transform your vehicle with advanced customization tools
+          </p>
+        </div>
+        
+        <div className="flex items-center gap-2 mt-4 md:mt-0">
+          <Button 
+            variant="outline" 
+            className="flex items-center gap-2"
+            onClick={() => setShowNewProjectModal(true)}
+          >
+            <Plus className="h-4 w-4" />
+            New Project
+          </Button>
           
-          <div className="flex items-center gap-3">
-            <div className="bg-amber-50 border border-amber-100 rounded-full px-4 py-1 flex items-center">
-              <Sparkles className="h-4 w-4 text-amber-500 mr-2" />
-              <span className="font-semibold text-amber-700">{userPoints} points</span>
-            </div>
-            
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={handleSaveProject}
-            >
-              <Save className="h-4 w-4 mr-2" />
-              Save
-            </Button>
-            
-            <Button
-              size="sm"
-              onClick={handleNewProject}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              New Project
-            </Button>
-          </div>
+          <Button 
+            variant="outline" 
+            className="flex items-center gap-2"
+          >
+            <Share2 className="h-4 w-4" />
+            <span className="hidden sm:inline">Share</span>
+          </Button>
+          
+          <Button className="flex items-center gap-2">
+            <Save className="h-4 w-4" />
+            <span className="hidden sm:inline">Save Project</span>
+          </Button>
         </div>
       </div>
       
-      {/* Main content area */}
-      <div className="container mx-auto flex flex-1 gap-6 py-6">
-        {/* Left sidebar - Vehicle selector & options */}
-        <div className="w-64 shrink-0">
-          <Card className="mb-4">
-            <CardHeader className="pb-3">
-              <CardTitle>Vehicle Type</CardTitle>
-              <CardDescription>Select vehicle category</CardDescription>
+      {/* Main content */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Sidebar */}
+        <div className="lg:col-span-1 space-y-6">
+          {/* Tabs for vehicle selection or achievement tracking */}
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="vehicle" className="flex items-center gap-1">
+                <Car className="h-4 w-4" />
+                Vehicle
+              </TabsTrigger>
+              <TabsTrigger value="achievements" className="flex items-center gap-1">
+                <Award className="h-4 w-4" />
+                Achievements
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="vehicle" className="space-y-4 mt-0">
+              <ArenaVehicleSelector
+                onSelectVehicle={handleSelectVehicle}
+                selectedVehicleId={selectedVehicleId}
+              />
+              
+              {selectedVehicleId && (
+                <VehicleSpecifications vehicleId={selectedVehicleId} />
+              )}
+            </TabsContent>
+            
+            <TabsContent value="achievements" className="mt-0">
+              <AchievementSystem userPoints={userPoints} />
+            </TabsContent>
+          </Tabs>
+          
+          {/* Save project panel */}
+          <SaveProjectPanel 
+            projectName={projectName}
+            onChangeProjectName={setProjectName}
+            onSave={handleSaveProject}
+          />
+        </div>
+        
+        {/* Main visualization and customization area */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* 3D Viewer */}
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Vehicle Preview</CardTitle>
+              <CardDescription>
+                Explore your vehicle in 3D
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 gap-2">
-                {demoVehicleCategories.map((category) => (
+              <Vehicle3DViewer 
+                vehicleId={selectedVehicleId} 
+                vehicleColor={vehicleColor}
+                environmentPreset={selectedEnvironment}
+              />
+            </CardContent>
+            <CardFooter className="flex-col items-start gap-4">
+              <div className="w-full">
+                <h4 className="text-sm font-medium mb-2">Environment</h4>
+                <EnvironmentSelector 
+                  selectedEnvironment={selectedEnvironment}
+                  onSelectEnvironment={setSelectedEnvironment}
+                />
+              </div>
+              
+              <div className="w-full">
+                <h4 className="text-sm font-medium mb-2">Body Color</h4>
+                <ColorSelector
+                  onSelectColor={(color) => handleColorChange(color)}
+                  defaultColor={vehicleColor}
+                />
+              </div>
+            </CardFooter>
+          </Card>
+          
+          {/* Customization options */}
+          <Card>
+            <CardHeader className="pb-4">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg">Customization Options</CardTitle>
+                
+                <div className="flex items-center gap-2">
+                  {/* Category dropdown for mobile */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="flex items-center gap-1 lg:hidden"
+                      >
+                        Category
+                        <ChevronDown className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {customizationMenu.map((category) => (
+                        <DropdownMenuItem 
+                          key={category.id}
+                          onClick={() => setSelectedCategory(category.id)}
+                          className="flex items-center gap-2"
+                        >
+                          <category.icon className="h-4 w-4" />
+                          {category.name}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  
+                  {/* Subcategory dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="flex items-center gap-1"
+                      >
+                        {activeSubcategories.find(sub => sub.id === selectedSubcategory)?.name || 'Options'}
+                        <ChevronDown className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {activeSubcategories.map((subcategory) => (
+                        <DropdownMenuItem 
+                          key={subcategory.id}
+                          onClick={() => handleSelectSubcategory(subcategory.id)}
+                        >
+                          {subcategory.name}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
+              
+              {/* Category tabs - desktop only */}
+              <div className="hidden lg:flex mt-2 space-x-1">
+                {customizationMenu.map((category) => (
                   <Button
-                    key={category}
-                    variant={selectedVehicleCategory === category ? "default" : "outline"}
+                    key={category.id}
+                    variant={selectedCategory === category.id ? 'default' : 'ghost'}
                     size="sm"
-                    className="justify-start"
-                    onClick={() => setSelectedVehicleCategory(category)}
+                    className="flex items-center gap-1.5"
+                    onClick={() => setSelectedCategory(category.id)}
                   >
-                    <Car className="h-4 w-4 mr-2" />
-                    {category.split('-').map(word => 
-                      word.charAt(0).toUpperCase() + word.slice(1)
-                    ).join(' ')}
+                    <category.icon className="h-4 w-4" />
+                    {category.name}
                   </Button>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-          
-          <ArenaVehicleSelector
-            category={selectedVehicleCategory}
-            onSelectVehicle={(id) => setSelectedVehicleId(id)}
-            selectedVehicleId={selectedVehicleId}
-          />
-          
-          <Card className="mt-4">
-            <CardHeader className="pb-3">
-              <CardTitle>Environment</CardTitle>
-              <CardDescription>Background setting</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <EnvironmentSelector
-                selectedEnvironment={selectedEnvironment}
-                onSelectEnvironment={setSelectedEnvironment}
-              />
-            </CardContent>
-          </Card>
-          
-          <Card className="mt-4">
-            <CardHeader className="pb-3">
-              <CardTitle>Project</CardTitle>
-              <CardDescription>Save or share your work</CardDescription>
-            </CardHeader>
-            <CardContent className="pb-2">
-              <SaveProjectPanel
-                projectName={currentProjectName}
-                onChangeProjectName={setCurrentProjectName}
-                onSave={handleSaveProject}
-              />
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button variant="outline" size="sm">
-                <UserPlus className="h-4 w-4 mr-2" />
-                Invite
-              </Button>
-              <Button variant="outline" size="sm">
-                <Share2 className="h-4 w-4 mr-2" />
-                Share
-              </Button>
-              <Button variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Export
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
-        
-        {/* Center - Main 3D viewer */}
-        <div className="flex-1 flex flex-col">
-          <Card className="flex-1 mb-4">
-            <CardHeader className="pb-3 border-b flex flex-row items-center justify-between">
-              <div>
-                <CardTitle>{currentProjectName}</CardTitle>
-                <CardDescription>360° interactive vehicle designer</CardDescription>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => setCameraAngle('front')}>
-                  Front
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => setCameraAngle('side')}>
-                  Side
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => setCameraAngle('rear')}>
-                  Rear
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => setCameraAngle('top')}>
-                  Top
-                </Button>
-                <Button variant="outline" size="icon" onClick={() => setCameraAngle('orbit')}>
-                  <RotateCw className="h-4 w-4" />
-                </Button>
+              
+              {/* Subcategory pills - desktop only */}
+              <div className="hidden lg:flex flex-wrap gap-2 mt-3">
+                {activeSubcategories.map((subcategory) => (
+                  <Button
+                    key={subcategory.id}
+                    variant={selectedSubcategory === subcategory.id ? 'secondary' : 'outline'}
+                    size="sm"
+                    className="h-7 px-2 text-xs"
+                    onClick={() => handleSelectSubcategory(subcategory.id)}
+                  >
+                    {subcategory.name}
+                  </Button>
+                ))}
               </div>
             </CardHeader>
             
-            <CardContent className="p-0 flex-1 min-h-[500px] relative">
-              <Vehicle3DViewer
-                vehicleId={selectedVehicleId}
-                environment={selectedEnvironment}
-                cameraAngle={cameraAngle}
-                className="w-full h-full"
-              />
+            <Separator />
+            
+            <CardContent className="pt-4">
+              {selectedVehicleId ? (
+                <CustomizationPanel
+                  category={selectedCategory}
+                  subcategory={selectedSubcategory}
+                  vehicleId={selectedVehicleId}
+                />
+              ) : (
+                <div className="text-center py-12">
+                  <PanelLeft className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                  <h3 className="text-lg font-medium">Select a Vehicle</h3>
+                  <p className="text-muted-foreground mt-1">
+                    Choose a vehicle from the sidebar to start customizing
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
-          
-          {/* Vehicle Specifications */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle>Specifications</CardTitle>
-              <CardDescription>Technical details and performance</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <VehicleSpecifications vehicleId={selectedVehicleId} />
-            </CardContent>
-          </Card>
-        </div>
-        
-        {/* Right sidebar - Customization options */}
-        <div className="w-80 shrink-0">
-          <Card className="mb-4">
-            <CardHeader className="pb-3">
-              <CardTitle>Customization</CardTitle>
-              <CardDescription>Modify your vehicle design</CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <Tabs defaultValue="exterior" onValueChange={setActiveCustomizationTab}>
-                <TabsList className="grid grid-cols-5 h-auto p-0">
-                  <TabsTrigger value="exterior" className="h-10 rounded-none rounded-tl-md data-[state=active]:bg-slate-50">
-                    <PaintBucket className="h-4 w-4" />
-                  </TabsTrigger>
-                  <TabsTrigger value="interior" className="h-10 rounded-none data-[state=active]:bg-slate-50">
-                    <Palette className="h-4 w-4" />
-                  </TabsTrigger>
-                  <TabsTrigger value="performance" className="h-10 rounded-none data-[state=active]:bg-slate-50">
-                    <Gauge className="h-4 w-4" />
-                  </TabsTrigger>
-                  <TabsTrigger value="wheels" className="h-10 rounded-none data-[state=active]:bg-slate-50">
-                    <RotateCw className="h-4 w-4" />
-                  </TabsTrigger>
-                  <TabsTrigger value="wraps" className="h-10 rounded-none rounded-tr-md data-[state=active]:bg-slate-50">
-                    <Image className="h-4 w-4" />
-                  </TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="exterior" className="p-4 border-t-0 border-slate-200 bg-slate-50">
-                  <ScrollArea className="h-[450px] pr-4">
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Paint Color</h4>
-                        <ColorSelector />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Body Kits</h4>
-                        <CustomizationPanel
-                          category="exterior"
-                          subcategory="body-kits"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Spoilers</h4>
-                        <CustomizationPanel
-                          category="exterior"
-                          subcategory="spoilers"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Headlights</h4>
-                        <CustomizationPanel
-                          category="exterior"
-                          subcategory="headlights"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-                
-                <TabsContent value="interior" className="p-4 border-t-0 border-slate-200 bg-slate-50">
-                  <ScrollArea className="h-[450px] pr-4">
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Seat Material</h4>
-                        <CustomizationPanel
-                          category="interior"
-                          subcategory="seats"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Dashboard</h4>
-                        <CustomizationPanel
-                          category="interior"
-                          subcategory="dashboard"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Steering Wheel</h4>
-                        <CustomizationPanel
-                          category="interior"
-                          subcategory="steering"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-                
-                <TabsContent value="performance" className="p-4 border-t-0 border-slate-200 bg-slate-50">
-                  <ScrollArea className="h-[450px] pr-4">
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Engine</h4>
-                        <CustomizationPanel
-                          category="performance"
-                          subcategory="engine"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Suspension</h4>
-                        <CustomizationPanel
-                          category="performance"
-                          subcategory="suspension"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Exhaust</h4>
-                        <CustomizationPanel
-                          category="performance"
-                          subcategory="exhaust"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-                
-                <TabsContent value="wheels" className="p-4 border-t-0 border-slate-200 bg-slate-50">
-                  <ScrollArea className="h-[450px] pr-4">
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Rim Style</h4>
-                        <CustomizationPanel
-                          category="wheels"
-                          subcategory="rims"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Tire Type</h4>
-                        <CustomizationPanel
-                          category="wheels"
-                          subcategory="tires"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Brake Calipers</h4>
-                        <CustomizationPanel
-                          category="wheels"
-                          subcategory="brakes"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-                
-                <TabsContent value="wraps" className="p-4 border-t-0 border-slate-200 bg-slate-50">
-                  <ScrollArea className="h-[450px] pr-4">
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Custom Wraps</h4>
-                        <div className="space-y-2">
-                          <Button className="w-full">
-                            <Plus className="h-4 w-4 mr-2" />
-                            Upload Custom Wrap
-                          </Button>
-                          <p className="text-xs text-muted-foreground">
-                            Upload your own design to apply as a vehicle wrap
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Preset Designs</h4>
-                        <CustomizationPanel
-                          category="wraps"
-                          subcategory="presets"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Decals</h4>
-                        <CustomizationPanel
-                          category="wraps"
-                          subcategory="decals"
-                          vehicleId={selectedVehicleId}
-                        />
-                      </div>
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
-          
-          <AchievementSystem userPoints={userPoints} />
         </div>
       </div>
       
-      {/* New Project Modal */}
+      {/* New project modal */}
       {showNewProjectModal && (
-        <NewProjectModal
+        <NewProjectModal 
           onClose={() => setShowNewProjectModal(false)}
-          onCreate={(name, vehicleType) => {
-            setCurrentProjectName(name);
-            setSelectedVehicleCategory(vehicleType as VehicleCategory);
-            setShowNewProjectModal(false);
-          }}
+          onCreate={handleCreateProject}
         />
       )}
     </div>
   );
 };
 
-export default ArenaPage;
+export default Arena;
