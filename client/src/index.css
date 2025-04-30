@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Launch Arena speed line animations */
+.speed-lines-horizontal {
+  background-image: linear-gradient(90deg, transparent 10%, rgba(255, 255, 255, 0.8) 10%, rgba(255, 255, 255, 0.8) 11%, transparent 11%);
+  background-size: 150px 100%;
+  animation: speed-lines-horizontal 0.5s infinite linear;
+}
+
+.speed-lines-diagonal {
+  background-image: linear-gradient(135deg, transparent 10%, rgba(255, 255, 255, 0.8) 10%, rgba(255, 255, 255, 0.8) 11%, transparent 11%);
+  background-size: 150px 150px;
+  animation: speed-lines-diagonal 1s infinite linear;
+}
+
+@keyframes speed-lines-horizontal {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -150px 0;
+  }
+}
+
+@keyframes speed-lines-diagonal {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -150px 150px;
+  }
+}
+
 /* Pre-owned vehicle styles */
 .preowned-theme h2 {
   @apply bg-gradient-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent;
@@ -30,13 +61,13 @@
 /* Custom 3D animation for Arena page */
 @keyframes float {
   0% {
-    transform: translateY(0px) rotateX(15deg) rotateY(var(--rotation-y));
+    transform: translateY(0px) rotateX(15deg) rotateY(10deg);
   }
   50% {
-    transform: translateY(-10px) rotateX(20deg) rotateY(calc(var(--rotation-y) + 5deg));
+    transform: translateY(-10px) rotateX(20deg) rotateY(15deg);
   }
   100% {
-    transform: translateY(0px) rotateX(15deg) rotateY(var(--rotation-y));
+    transform: translateY(0px) rotateX(15deg) rotateY(10deg);
   }
 }
 
@@ -142,7 +173,7 @@
     text-wrap: balance;
   }
   
-  /* Animations for Sector Launch Arena */
+  /* Animations for Launch Arena */
   @keyframes twinkle {
     0%, 100% {
       opacity: 1;
@@ -184,6 +215,50 @@
   
   .animate-spin-slow {
     animation: spin-slow 120s linear infinite;
+  }
+  
+  .animate-pulse-delayed {
+    animation: pulse-slow 3s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+  
+  /* Speed lines animations for automotive effect */
+  .speed-lines-horizontal {
+    background-image: linear-gradient(to right, 
+      transparent 45%, 
+      rgba(255, 255, 255, 0.5) 50%, 
+      transparent 55%);
+    background-size: 200px 100%;
+    animation: speed-lines-move 1s linear infinite;
+  }
+  
+  .speed-lines-diagonal {
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 20px,
+      rgba(255, 255, 255, 0.2) 20px,
+      rgba(255, 255, 255, 0.2) 21px
+    );
+    animation: speed-lines-diagonal-move 3s linear infinite;
+  }
+  
+  @keyframes speed-lines-move {
+    0% {
+      background-position: 200px 0;
+    }
+    100% {
+      background-position: 0 0;
+    }
+  }
+  
+  @keyframes speed-lines-diagonal-move {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100px 100px;
+    }
   }
 }
 
