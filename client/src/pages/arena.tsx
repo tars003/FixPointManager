@@ -163,7 +163,28 @@ const exteriorCategoryItems = [
 ];
 
 // Vehicle Categories
+// Define types
 type CustomizationCategory = 'exterior' | 'interior' | 'performance' | 'wheels-tires' | 'visualization';
+
+interface CustomizationItem {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: 'in-stock' | 'limited' | 'out-of-stock';
+  installTime: string;
+  discount?: number;
+  popular?: boolean;
+  rating?: number;
+  recommended?: boolean;
+}
+
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  category: string;
+}
 
 // Enhanced Arena Studio Page
 const Arena: React.FC = () => {

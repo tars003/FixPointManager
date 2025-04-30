@@ -15,7 +15,7 @@ interface ProjectControlsProps {
   currentStep: number;
   totalSteps: number;
   onSave: (projectName: string, projectDesc: string) => void;
-  onResume?: () => void;
+  onResume?: (project: CustomizationProject) => void;
   vehicleModel?: string;
   customizations?: Record<string, any>;
 }
@@ -99,7 +99,7 @@ const ProjectControls: React.FC<ProjectControlsProps> = ({
 
   const handleResumeProject = (project: CustomizationProject) => {
     if (onResume) {
-      onResume();
+      onResume(project);
       setResumeDialogOpen(false);
       
       toast({
