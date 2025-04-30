@@ -13,6 +13,7 @@ import {
   customizationProjects,
   insertCustomizationProjectSchema
 } from "@shared/schema";
+import { resetDashboardModules } from "../client/src/services/dashboardPreferences";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 import { eq, and, desc } from "drizzle-orm";
@@ -323,6 +324,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     res.json(updatedIncident);
+  });
+
+  // Dashboard preferences reset endpoint
+  apiRouter.post("/reset-dashboard-preferences", (req, res) => {
+    try {
+      resetDashboardModules();
+      res.status(200).json({ message: "Dashboard preferences reset successfully" });
+    } catch (error) {
+      console.error("Error resetting dashboard preferences:", error);
+      res.status(500).json({ message: "Failed to reset dashboard preferences" });
+    }
   });
 
   // Mock auth routes for demo purposes

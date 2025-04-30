@@ -44,7 +44,8 @@ import {
   Share2,
   Activity,
   BarChart2,
-  XCircle
+  XCircle,
+  CreditCard
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -1024,6 +1025,145 @@ const DashboardEnhanced = () => {
       
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4">
+        
+        {/* FixPoint Membership Card */}
+        {(() => {
+          // Find membership module
+          const membershipModule = dashboardModules.find(m => m.id === 'membership');
+          // Only render if module exists and is visible
+          if (membershipModule && membershipModule.visible) {
+            return (
+              <motion.div 
+                className="mb-10 p-6 rounded-xl bg-gradient-to-br from-indigo-900 to-purple-900 shadow-lg overflow-hidden relative"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                {/* Background effects */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <motion.div 
+                    className="absolute -right-16 -bottom-16 w-40 h-40 rounded-full bg-purple-600 opacity-20"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                  />
+                  <motion.div 
+                    className="absolute -left-10 -top-10 w-32 h-32 rounded-full bg-blue-500 opacity-20"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                </div>
+                
+                <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center gap-6">
+                  <div className="lg:w-1/2">
+                    <h2 className="text-2xl font-bold text-white mb-2 flex items-center">
+                      FixPoint Premium Card
+                      <motion.span 
+                        className="inline-block ml-2"
+                        animate={{ rotate: [0, 15, 0, -15, 0] }}
+                        transition={{ duration: 5, repeat: Infinity }}
+                      >
+                        <Sparkles className="h-5 w-5 text-yellow-300" />
+                      </motion.span>
+                    </h2>
+                    <p className="text-indigo-200 mb-6 max-w-md">
+                      Unlock premium vehicle services with priority booking, nationwide roadside assistance, and exclusive discounts. Earn points on every service.
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      <Button 
+                        className="bg-white/20 hover:bg-white/30 text-white" 
+                        onClick={() => navigateTo('/membership')}
+                      >
+                        View Membership
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="bg-transparent border-white/30 text-white hover:bg-white/10"
+                        onClick={() => navigateTo('/membership')}
+                      >
+                        Upgrade Benefits
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="w-full lg:w-1/2 max-w-sm mx-auto lg:mx-0 scale-90 lg:scale-100 transform lg:translate-y-0">
+                    <div className="relative w-full perspective-1000">
+                      <motion.div 
+                        className="relative w-full overflow-hidden rounded-xl shadow-xl"
+                        style={{ transform: 'rotateY(-8deg) rotateX(5deg)' }}
+                        whileHover={{ rotateY: 0, rotateX: 0 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-700 p-5 min-h-[200px] relative">
+                          {/* Animated card glow effect */}
+                          <motion.div 
+                            className="absolute right-0 top-0 w-40 h-20 rotate-45 translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                            animate={{
+                              x: ['-100%', '300%'],
+                              opacity: [0, 0.1, 0.2, 0.1, 0],
+                            }}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              repeatDelay: 8,
+                            }}
+                          />
+                          
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <div className="flex items-center">
+                                <h3 className="text-white text-xl font-bold">FixPoint</h3>
+                                <Sparkles className="h-5 w-5 ml-1 text-yellow-300" />
+                              </div>
+                              <p className="text-white/70 text-xs uppercase tracking-wider font-medium">
+                                Premium Membership
+                              </p>
+                            </div>
+                            
+                            <div className="flex items-center">
+                              <Car className="h-7 w-7 text-white/80" />
+                              <CreditCard className="h-6 w-6 ml-1 text-white/80" />
+                            </div>
+                          </div>
+
+                          <div className="mt-8">
+                            <div className="flex justify-between items-center mb-1">
+                              <p className="text-white/90 uppercase text-sm tracking-wider font-medium">Member</p>
+                              <p className="text-white/90 text-sm">Since April 2025</p>
+                            </div>
+                            <h2 className="text-white text-lg font-medium">{user.name}</h2>
+                          </div>
+
+                          <div className="mt-5">
+                            <p className="text-white/90 text-sm font-mono tracking-wider">
+                              2241 8891 •••• ••••
+                            </p>
+                            
+                            <div className="flex justify-between items-center mt-3">
+                              <div>
+                                <p className="text-white/70 text-xs">Vehicles</p>
+                                <p className="text-white text-sm font-medium">{stats.totalVehicles}</p>
+                              </div>
+                              <div>
+                                <p className="text-white/70 text-xs">Points</p>
+                                <p className="text-white text-sm font-medium">{stats.totalPoints}</p>
+                              </div>
+                              <div>
+                                <p className="text-white/70 text-xs">Exp</p>
+                                <p className="text-white text-sm font-medium">04/28</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          }
+          return null;
+        })()}
         
         {/* Key Feature Modules */}
         <section className="mb-16">
