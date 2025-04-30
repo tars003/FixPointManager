@@ -1041,7 +1041,7 @@ const DashboardEnhanced = () => {
           </div>
           
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8"
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8 auto-rows-auto"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -1054,7 +1054,17 @@ const DashboardEnhanced = () => {
             }).map((module, index) => (
               <motion.div
                 key={module.id}
-                className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border"
+                className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border ${
+                  // Apply size classes based on dashboard module settings
+                  (() => {
+                    const dashModule = dashboardModules.find(m => m.id === module.id);
+                    if (dashModule) {
+                      if (dashModule.size === 'small') return 'col-span-1';
+                      if (dashModule.size === 'large') return 'col-span-2 md:col-span-2';
+                    }
+                    return 'col-span-1 md:col-span-1'; // Default medium size
+                  })()
+                }`}
                 onClick={() => navigateTo(module.path)}
                 variants={itemVariants}
                 whileHover={{ y: -4 }}
@@ -1111,12 +1121,17 @@ const DashboardEnhanced = () => {
           </div>
           
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 auto-rows-auto"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            {essentialTools.map((tool, index) => {
+            {essentialTools.filter(tool => {
+              // Find the module in dashboardModules
+              const dashModule = dashboardModules.find(m => m.id === tool.id);
+              // If found and visible is false, filter it out, otherwise keep it
+              return !dashModule || dashModule.visible !== false;
+            }).map((tool, index) => {
               // Define clean, vibrant colors for tool cards
               const toolColors = {
                 'nearby': 'bg-rose-500',
@@ -1130,7 +1145,17 @@ const DashboardEnhanced = () => {
               return (
                 <motion.div
                   key={tool.id}
-                  className="cursor-pointer rounded-xl overflow-hidden bg-white shadow-md hover:shadow-lg"
+                  className={`cursor-pointer rounded-xl overflow-hidden bg-white shadow-md hover:shadow-lg ${
+                    // Apply size classes based on dashboard module settings
+                    (() => {
+                      const dashModule = dashboardModules.find(m => m.id === tool.id);
+                      if (dashModule) {
+                        if (dashModule.size === 'small') return 'col-span-1';
+                        if (dashModule.size === 'large') return 'col-span-2 md:col-span-2';
+                      }
+                      return 'col-span-1 md:col-span-1'; // Default medium size
+                    })()
+                  }`}
                   onClick={() => navigateTo(tool.path)}
                   variants={itemVariants}
                   whileHover={{ y: -3 }}
@@ -1276,12 +1301,17 @@ const DashboardEnhanced = () => {
           </div>
           
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5"
+            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5 auto-rows-auto"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            {additionalModules.map((module, index) => {
+            {additionalModules.filter(module => {
+              // Find the module in dashboardModules
+              const dashModule = dashboardModules.find(m => m.id === module.id);
+              // If found and visible is false, filter it out, otherwise keep it
+              return !dashModule || dashModule.visible !== false;
+            }).map((module, index) => {
               // Define module colors - vibrant solid colors inspired by Canva
               const moduleColors = {
                 'commercial': { bg: 'bg-emerald-500', text: 'text-white' },
@@ -1301,7 +1331,16 @@ const DashboardEnhanced = () => {
                   variants={itemVariants}
                   whileHover={{ y: -3 }}
                   transition={{ duration: 0.2 }}
-                  className="cursor-pointer rounded-xl overflow-hidden shadow-md bg-white hover:shadow-lg"
+                  className={`cursor-pointer rounded-xl overflow-hidden shadow-md bg-white hover:shadow-lg ${
+                    // Apply size classes based on dashboard module settings
+                    (() => {
+                      const dashModule = dashboardModules.find(m => m.id === module.id);
+                      if (dashModule && dashModule.size === 'large') {
+                        return 'col-span-2 md:col-span-2';
+                      }
+                      return 'col-span-1'; // Default small/medium size for these compact cards
+                    })()
+                  }`}
                   onClick={() => navigateTo(module.path)}
                 >
                   {/* Clean header with icon and automotive animations */}
