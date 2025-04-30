@@ -611,123 +611,233 @@ const DashboardEnhanced = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Current Trends */}
+            {/* Current Trends - New Design */}
             <motion.div 
-              className="border rounded-xl overflow-hidden hover:shadow-md transition-shadow p-4"
-              whileHover={{ y: -3 }}
+              className="relative rounded-xl overflow-hidden bg-gradient-to-br from-indigo-900 to-purple-900 shadow-lg p-0"
+              whileHover={{ y: -5 }}
+              transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="font-medium text-gray-900 flex items-center">
-                  <BarChart3 className="h-4 w-4 text-purple-500 mr-2" />
-                  Current Trends
-                </h4>
-                <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200">
-                  Automotive News
-                </Badge>
+              {/* Decorative background elements */}
+              <div className="absolute inset-0 overflow-hidden">
+                <motion.div 
+                  className="absolute -right-16 -bottom-16 w-32 h-32 rounded-full bg-indigo-600 opacity-20"
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: [0.8, 1.2, 0.8], rotate: [0, 180, 360] }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                />
+                <motion.div 
+                  className="absolute -left-8 -top-8 w-24 h-24 rounded-full bg-purple-500 opacity-20"
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: [0.8, 1.2, 0.8], rotate: [360, 180, 0] }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
               </div>
               
-              <div className="h-48 w-full overflow-auto pr-1">
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3 bg-purple-50 p-2 rounded-md">
-                    <div className="w-2 h-2 rounded-full bg-purple-500 mt-1.5 flex-shrink-0"></div>
-                    <div>
-                      <h5 className="text-sm font-medium text-gray-900">EV Market Growing at 26% CAGR</h5>
-                      <p className="text-xs text-gray-600 mt-0.5">Electric vehicle adoption surges as new models hit Indian market</p>
-                    </div>
+              {/* Header section */}
+              <div className="relative p-4 flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-white/10 backdrop-blur-sm rounded-lg">
+                    <motion.div
+                      animate={{ rotate: [0, 360] }}
+                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    >
+                      <BarChart3 className="h-5 w-5 text-purple-300" />
+                    </motion.div>
                   </div>
-                  
-                  <div className="flex items-start gap-3 bg-blue-50 p-2 rounded-md">
-                    <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0"></div>
-                    <div>
-                      <h5 className="text-sm font-medium text-gray-900">New Fuel Efficiency Standards</h5>
-                      <p className="text-xs text-gray-600 mt-0.5">Government announces stricter emission norms for vehicles</p>
-                    </div>
+                  <div>
+                    <h3 className="font-bold text-white">Current Trends</h3>
+                    <div className="text-xs text-purple-200">Automotive news & updates</div>
                   </div>
-                  
-                  <div className="flex items-start gap-3 bg-emerald-50 p-2 rounded-md">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></div>
-                    <div>
-                      <h5 className="text-sm font-medium text-gray-900">Connected Car Technology Surges</h5>
-                      <p className="text-xs text-gray-600 mt-0.5">IoT integration becoming standard in mid-range vehicles</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3 bg-amber-50 p-2 rounded-md">
-                    <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 flex-shrink-0"></div>
-                    <div>
-                      <h5 className="text-sm font-medium text-gray-900">Auto Parts Market Forecast</h5>
-                      <p className="text-xs text-gray-600 mt-0.5">Aftermarket expected to grow 12% by end of year</p>
-                    </div>
-                  </div>
+                </div>
+                
+                <div className="text-xs font-medium text-white bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full">
+                  Latest News
                 </div>
               </div>
               
-              <div className="pt-2 mt-2 border-t flex items-center justify-between">
-                <span className="text-xs text-gray-500">Updated 3 hours ago</span>
-                <Button variant="ghost" size="sm" className="text-xs h-7 px-2">
-                  View All News
-                </Button>
+              {/* News content with glassmorphism */}
+              <div className="relative px-4 pt-2 pb-4">
+                <div className="relative bg-white/5 backdrop-blur-md rounded-xl p-4">
+                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/10 to-transparent rounded-xl" />
+                  
+                  <div className="space-y-3 max-h-44 overflow-auto pr-1 relative z-10">
+                    {[
+                      {
+                        title: "EV Market Growing at 26% CAGR",
+                        desc: "Electric vehicle adoption surges as new models hit Indian market",
+                        color: "purple"
+                      },
+                      {
+                        title: "New Fuel Efficiency Standards",
+                        desc: "Government announces stricter emission norms for vehicles",
+                        color: "blue"
+                      },
+                      {
+                        title: "Connected Car Technology Surges",
+                        desc: "IoT integration becoming standard in mid-range vehicles",
+                        color: "emerald"
+                      },
+                      {
+                        title: "Auto Parts Market Forecast",
+                        desc: "Aftermarket expected to grow 12% by end of year",
+                        color: "amber"
+                      }
+                    ].map((item, i) => (
+                      <motion.div 
+                        key={i}
+                        className="flex items-start gap-3 bg-white/5 p-3 backdrop-blur-sm rounded-lg cursor-pointer"
+                        whileHover={{ x: 3, backgroundColor: "rgba(255,255,255,0.1)" }}
+                      >
+                        <motion.div 
+                          className={`w-2 h-2 rounded-full bg-${item.color}-400 mt-1.5 flex-shrink-0`}
+                          animate={{ 
+                            scale: [1, 1.5, 1],
+                            opacity: [0.7, 1, 0.7] 
+                          }}
+                          transition={{ 
+                            duration: 2,
+                            repeat: Infinity,
+                            delay: i * 0.5 
+                          }}
+                        />
+                        <div>
+                          <h5 className="text-sm font-medium text-white">{item.title}</h5>
+                          <p className="text-xs text-white/70 mt-0.5">{item.desc}</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+                    <div className="flex items-center text-white/70">
+                      <Clock className="h-3 w-3 mr-1" />
+                      <span className="text-xs">Updated 3 hours ago</span>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20"
+                    >
+                      View All
+                    </Button>
+                  </div>
+                </div>
               </div>
             </motion.div>
             
-            {/* Overall Vehicle Net Value Chart */}
+            {/* Overall Vehicle Net Value - New Design */}
             <motion.div 
-              className="border rounded-xl overflow-hidden hover:shadow-md transition-shadow p-4"
-              whileHover={{ y: -3 }}
+              className="relative rounded-xl overflow-hidden bg-gradient-to-br from-blue-900 to-teal-900 shadow-lg p-0"
+              whileHover={{ y: -5 }}
+              transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="font-medium text-gray-900 flex items-center">
-                  <CircleDollarSign className="h-4 w-4 text-blue-500 mr-2" />
-                  Overall Vehicle Net Value
-                </h4>
-                <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
-                  As of Today
-                </Badge>
+              {/* Decorative background elements */}
+              <div className="absolute inset-0 overflow-hidden">
+                <motion.div 
+                  className="absolute -right-16 -bottom-16 w-32 h-32 rounded-full bg-teal-600 opacity-20"
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: [0.8, 1.2, 0.8], rotate: [0, 180, 360] }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                />
+                <motion.div 
+                  className="absolute -left-8 -top-8 w-24 h-24 rounded-full bg-blue-500 opacity-20"
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: [0.8, 1.2, 0.8], rotate: [360, 180, 0] }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
               </div>
               
-              <div className="h-48 w-full relative">
-                {/* Value Chart */}
-                <div className="absolute inset-0 p-4">
-                  <div className="flex flex-col h-full justify-center">
-                    <div className="text-center mb-4">
-                      <div className="text-3xl font-bold text-blue-600">₹32,85,000</div>
-                      <div className="text-xs text-gray-500 mt-1">Total Value Across All Vehicles</div>
-                    </div>
-                    
-                    <div className="w-full bg-gray-100 rounded-full h-6 relative overflow-hidden mb-4">
-                      <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 to-blue-300" style={{ width: '65%' }}>
-                        <div className="absolute inset-0 flex items-center pl-2">
-                          <span className="text-xs font-medium text-white">Active Value</span>
-                        </div>
-                      </div>
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-2">
-                        <span className="text-xs font-medium text-gray-500">Depreciation</span>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-blue-50 rounded-md p-2">
-                        <div className="text-sm text-blue-800 font-semibold">₹21,35,250</div>
-                        <div className="text-xs text-gray-500">Current Value</div>
-                      </div>
-                      <div className="bg-red-50 rounded-md p-2">
-                        <div className="text-sm text-red-600 font-semibold">₹11,49,750</div>
-                        <div className="text-xs text-gray-500">Depreciation</div>
-                      </div>
-                    </div>
+              {/* Header section */}
+              <div className="relative p-4 flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-white/10 backdrop-blur-sm rounded-lg">
+                    <motion.div
+                      animate={{ 
+                        rotate: [0, 360],
+                        scale: [1, 1.1, 1]
+                      }}
+                      transition={{ 
+                        rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+                        scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                      }}
+                    >
+                      <IndianRupee className="h-5 w-5 text-teal-300" />
+                    </motion.div>
                   </div>
+                  <div>
+                    <h3 className="font-bold text-white">Vehicle Net Value</h3>
+                    <div className="text-xs text-teal-200">Market valuation trends</div>
+                  </div>
+                </div>
+                
+                <div className="text-xs font-medium text-white bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full">
+                  As of Today
                 </div>
               </div>
               
-              <div className="mt-2 border-t pt-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="h-2 w-2 rounded-full bg-blue-500 mr-1"></div>
-                    <span className="text-xs text-gray-600">Purchase Value: ₹32,85,000</span>
-                  </div>
-                  <div className="flex items-center">
-                    <ArrowUpRight className="h-3 w-3 text-green-500 mr-1" />
-                    <span className="text-xs text-green-600">+₹2,50,000 this year</span>
+              {/* Value display with glassmorphism */}
+              <div className="relative px-4 pt-2 pb-4">
+                <div className="relative bg-white/5 backdrop-blur-md rounded-xl p-4">
+                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/10 to-transparent rounded-xl" />
+                  
+                  <div className="relative z-10">
+                    {/* Total value */}
+                    <motion.div 
+                      className="text-center py-3"
+                      initial={{ scale: 0.9 }}
+                      animate={{ scale: [0.9, 1, 0.9] }}
+                      transition={{ repeat: Infinity, duration: 3 }}
+                    >
+                      <div className="text-3xl font-bold bg-gradient-to-r from-blue-300 via-teal-200 to-blue-300 text-transparent bg-clip-text">
+                        ₹32,85,000
+                      </div>
+                      <div className="text-xs text-white/70 mt-1">Total Fleet Value</div>
+                    </motion.div>
+                    
+                    {/* Value progress bar */}
+                    <div className="w-full h-2 bg-white/10 rounded-full mt-3 mb-5 overflow-hidden">
+                      <motion.div 
+                        className="h-full bg-gradient-to-r from-teal-400 to-blue-400"
+                        style={{ width: '65%' }}
+                        initial={{ x: -100 }}
+                        animate={{ x: 0 }}
+                        transition={{ duration: 1 }}
+                      />
+                    </div>
+                    
+                    {/* Value breakdown */}
+                    <div className="grid grid-cols-3 gap-3">
+                      {[
+                        { label: "Current", value: "₹21,35,250", color: "white" },
+                        { label: "Appreciation", value: "+₹2,50,000", color: "emerald-400" },
+                        { label: "Depreciation", value: "₹11,49,750", color: "rose-400" }
+                      ].map((item, i) => (
+                        <motion.div 
+                          key={i}
+                          className="p-2 rounded-lg bg-white/5 text-center backdrop-blur-sm"
+                          whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.1)' }}
+                        >
+                          <div className={`text-sm font-medium text-${item.color}`}>{item.value}</div>
+                          <div className="text-[10px] text-white/60">{item.label}</div>
+                        </motion.div>
+                      ))}
+                    </div>
+                    
+                    <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+                      <div className="flex items-center text-white/70">
+                        <RefreshCw className="h-3 w-3 mr-1" />
+                        <span className="text-xs">Last updated: Today</span>
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20"
+                      >
+                        View Details
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
