@@ -827,27 +827,6 @@ const DashboardEnhanced = () => {
       
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4">
-        {/* Interactive Vehicle Value Trend Predictor */}
-        <section className="mb-12">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">Vehicle Value Insights</h2>
-            <Badge className="bg-indigo-100 text-indigo-700 rounded-full">
-              New Feature
-            </Badge>
-          </div>
-          <ValueTrendPredictor vehicles={vehicleQuickAccess.map(v => ({
-            id: v.id,
-            name: v.name,
-            make: v.name.split(' ')[0],
-            model: v.name.split(' ')[1] || '',
-            year: 2021,
-            purchaseValue: v.id === 1 ? 1200000 : v.id === 2 ? 850000 : 1500000,
-            currentValue: v.id === 1 ? 950000 : v.id === 2 ? 750000 : 1100000,
-            monthlyDepreciation: v.id === 1 ? 8500 : v.id === 2 ? 5000 : 11000,
-            color: v.id === 1 ? 'White' : v.id === 2 ? 'Red' : 'Blue',
-            condition: v.healthScore >= 90 ? 'excellent' : v.healthScore >= 75 ? 'good' : 'fair',
-          }))} />
-        </section>
         
         {/* Key Feature Modules */}
         <section className="mb-16">
