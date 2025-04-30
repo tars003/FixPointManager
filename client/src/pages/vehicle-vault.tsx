@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { Vehicle } from '@shared/schema';
@@ -19,7 +19,19 @@ import {
   Award,
   AlertTriangle,
   Calendar,
-  CircleDollarSign
+  CircleDollarSign,
+  Activity,
+  ShoppingBag,
+  Clock3,
+  Warehouse,
+  AlertOctagon,
+  KeySquare,
+  Tag,
+  ShieldOff,
+  Trash2,
+  MoreHorizontal,
+  Truck,
+  Ban
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -28,18 +40,111 @@ import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { apiRequest } from '@/lib/queryClient';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog";
+import { useToast } from '@/hooks/use-toast';
+
+// Type definitions for vehicle status categories
+type VehicleStatus = 
+  | 'active' 
+  | 'recently-purchased' 
+  | 'pre-owned' 
+  | 'in-maintenance' 
+  | 'garage-stored' 
+  | 'out-of-service' 
+  | 'commercial-fleet' 
+  | 'leased-out' 
+  | 'for-sale' 
+  | 'sold' 
+  | 'impounded' 
+  | 'under-legal-hold' 
+  | 'stolen' 
+  | 'scrapped'
+  | 'totaled';
+
+// Enhanced vehicle type with status
+interface EnhancedVehicle extends Vehicle {
+  status?: VehicleStatus;
+}
 
 const VehicleVault = () => {
   const [, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState<string>('list');
+  const [statusFilter, setStatusFilter] = useState<VehicleStatus | 'all'>('active');
+  const [showStatusDialog, setShowStatusDialog] = useState(false);
+  const [selectedVehicle, setSelectedVehicle] = useState<EnhancedVehicle | null>(null);
+  const [newStatus, setNewStatus] = useState<VehicleStatus | ''>('');
+  
+  // For toast notifications
+  const { toast } = useToast();
+  // Access query client for cache invalidation
+  const queryClient = useQueryClient();
   
   // Query for user's vehicles
-  const { data: vehicles, isLoading } = useQuery<Vehicle[]>({
+  const { data: vehicles, isLoading } = useQuery<EnhancedVehicle[]>({
     queryKey: ['/api/vehicles'],
   });
   
+  // Mutation for updating vehicle status
+  const updateVehicleStatusMutation = useMutation({
+    mutationFn: async (data: { vehicleId: number, newStatus: VehicleStatus }) => {
+      const response = await apiRequest('PATCH', `/api/vehicles/${data.vehicleId}/status`, { status: data.newStatus });
+      return response.json();
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['/api/vehicles'] });
+      toast({
+        title: "Vehicle status updated",
+        description: `The vehicle was moved to ${formatStatus(newStatus as VehicleStatus)} category.`,
+      });
+      // Close dialog
+      setShowStatusDialog(false);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error updating vehicle status",
+        description: error.message || "Failed to update vehicle status. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+  
+  // Handle status change
+  const handleStatusChange = () => {
+    if (selectedVehicle && newStatus) {
+      updateVehicleStatusMutation.mutate({ 
+        vehicleId: selectedVehicle.id, 
+        newStatus: newStatus as VehicleStatus 
+      });
+    }
+  };
+  
+  // Format status for display
+  const formatStatus = (status: VehicleStatus): string => {
+    return status
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+  
   // Mock vehicle data if API doesn't return anything
-  const vehicleData = [
+  const vehicleData: EnhancedVehicle[] = [
     {
       id: 1,
       name: 'Honda City',
@@ -57,6 +162,7 @@ const VehicleVault = () => {
       monthlyDepreciation: 8500,
       color: 'White',
       condition: 'good',
+      status: 'active'
     },
     {
       id: 2,
@@ -75,6 +181,7 @@ const VehicleVault = () => {
       monthlyDepreciation: 11000,
       color: 'Blue',
       condition: 'fair',
+      status: 'in-maintenance'
     },
     {
       id: 3,
@@ -93,10 +200,240 @@ const VehicleVault = () => {
       monthlyDepreciation: 5000,
       color: 'Red',
       condition: 'excellent',
+      status: 'active'
+    },
+    {
+      id: 4,
+      name: 'Toyota Fortuner',
+      licensePlate: 'GJ05CD7890',
+      healthScore: 88,
+      serviceStatus: 'up-to-date',
+      fuelType: 'diesel',
+      lastUpdate: '1 day ago',
+      imageSrc: '',
+      make: 'Toyota',
+      model: 'Fortuner',
+      year: 2019,
+      purchaseValue: 3200000,
+      currentValue: 2600000,
+      monthlyDepreciation: 16000,
+      color: 'Black',
+      condition: 'good',
+      status: 'commercial-fleet'
+    },
+    {
+      id: 5,
+      name: 'Tata Nexon',
+      licensePlate: 'MH14GH5678',
+      healthScore: 90,
+      serviceStatus: 'up-to-date',
+      fuelType: 'petrol',
+      lastUpdate: '2 days ago',
+      imageSrc: '',
+      make: 'Tata',
+      model: 'Nexon',
+      year: 2022,
+      purchaseValue: 1100000,
+      currentValue: 950000,
+      monthlyDepreciation: 6000,
+      color: 'White',
+      condition: 'excellent',
+      status: 'recently-purchased'
+    },
+    {
+      id: 6,
+      name: 'Kia Seltos',
+      licensePlate: 'DL08KL1234',
+      healthScore: 65,
+      serviceStatus: 'overdue',
+      fuelType: 'diesel',
+      lastUpdate: '10 days ago',
+      imageSrc: '',
+      make: 'Kia',
+      model: 'Seltos',
+      year: 2020,
+      purchaseValue: 1450000,
+      currentValue: 1050000,
+      monthlyDepreciation: 8000,
+      color: 'Silver',
+      condition: 'fair',
+      status: 'out-of-service'
+    },
+    {
+      id: 7,
+      name: 'Mahindra XUV700',
+      licensePlate: 'KA09MN4567',
+      healthScore: 85,
+      serviceStatus: 'up-to-date',
+      fuelType: 'diesel',
+      lastUpdate: '5 days ago',
+      imageSrc: '',
+      make: 'Mahindra',
+      model: 'XUV700',
+      year: 2022,
+      purchaseValue: 1800000,
+      currentValue: 1650000,
+      monthlyDepreciation: 7500,
+      color: 'Red',
+      condition: 'good',
+      status: 'active'
+    },
+    {
+      id: 8,
+      name: 'Honda Amaze',
+      licensePlate: 'TN07DE8901',
+      healthScore: 78,
+      serviceStatus: 'due',
+      fuelType: 'petrol',
+      lastUpdate: '7 days ago',
+      imageSrc: '',
+      make: 'Honda',
+      model: 'Amaze',
+      year: 2019,
+      purchaseValue: 900000,
+      currentValue: 650000,
+      monthlyDepreciation: 5000,
+      color: 'Grey',
+      condition: 'fair',
+      status: 'for-sale'
+    },
+    {
+      id: 9,
+      name: 'Maruti Baleno',
+      licensePlate: 'HR26PQ3456',
+      healthScore: 91,
+      serviceStatus: 'up-to-date',
+      fuelType: 'petrol',
+      lastUpdate: '1 day ago',
+      imageSrc: '',
+      make: 'Maruti',
+      model: 'Baleno',
+      year: 2021,
+      purchaseValue: 850000,
+      currentValue: 720000,
+      monthlyDepreciation: 4500,
+      color: 'Blue',
+      condition: 'excellent',
+      status: 'active'
     }
   ];
   
+  // Status categories with icons and counts
+  const statusCategories = [
+    { 
+      id: 'active', 
+      label: 'Active', 
+      icon: <Activity className="h-4 w-4 text-emerald-600" />,
+      count: 9,
+      bgClass: 'bg-emerald-50 border-emerald-200'
+    },
+    { 
+      id: 'recently-purchased', 
+      label: 'Recently Purchased', 
+      icon: <ShoppingBag className="h-4 w-4 text-blue-600" />,
+      count: 5,
+      bgClass: 'bg-blue-50 border-blue-200'
+    },
+    { 
+      id: 'pre-owned', 
+      label: 'Pre-owned', 
+      icon: <Clock3 className="h-4 w-4 text-indigo-600" />,
+      count: 6,
+      bgClass: 'bg-indigo-50 border-indigo-200'
+    },
+    { 
+      id: 'in-maintenance', 
+      label: 'In Maintenance', 
+      icon: <Wrench className="h-4 w-4 text-amber-600" />,
+      count: 3,
+      bgClass: 'bg-amber-50 border-amber-200'
+    },
+    { 
+      id: 'garage-stored', 
+      label: 'Garage Stored', 
+      icon: <Warehouse className="h-4 w-4 text-cyan-600" />,
+      count: 4,
+      bgClass: 'bg-cyan-50 border-cyan-200'
+    },
+    { 
+      id: 'out-of-service', 
+      label: 'Out of Service', 
+      icon: <AlertOctagon className="h-4 w-4 text-gray-600" />,
+      count: 3,
+      bgClass: 'bg-gray-50 border-gray-200'
+    },
+    { 
+      id: 'commercial-fleet', 
+      label: 'Commercial Fleet', 
+      icon: <Truck className="h-4 w-4 text-violet-600" />,
+      count: 7,
+      bgClass: 'bg-violet-50 border-violet-200'
+    },
+    { 
+      id: 'leased-out', 
+      label: 'Leased Out', 
+      icon: <KeySquare className="h-4 w-4 text-green-600" />,
+      count: 5,
+      bgClass: 'bg-green-50 border-green-200'
+    },
+    { 
+      id: 'for-sale', 
+      label: 'For Sale', 
+      icon: <Tag className="h-4 w-4 text-rose-600" />,
+      count: 4,
+      bgClass: 'bg-rose-50 border-rose-200'
+    },
+    { 
+      id: 'sold', 
+      label: 'Sold', 
+      icon: <CheckCircle className="h-4 w-4 text-blue-600" />,
+      count: 8,
+      bgClass: 'bg-blue-50 border-blue-200'
+    },
+    { 
+      id: 'impounded', 
+      label: 'Impounded', 
+      icon: <AlertTriangle className="h-4 w-4 text-red-600" />,
+      count: 4,
+      bgClass: 'bg-red-50 border-red-200'
+    },
+    { 
+      id: 'under-legal-hold', 
+      label: 'Under Legal Hold', 
+      icon: <Shield className="h-4 w-4 text-amber-600" />,
+      count: 3,
+      bgClass: 'bg-amber-50 border-amber-200'
+    },
+    { 
+      id: 'stolen', 
+      label: 'Stolen', 
+      icon: <ShieldOff className="h-4 w-4 text-red-600" />,
+      count: 2,
+      bgClass: 'bg-red-50 border-red-200'
+    },
+    { 
+      id: 'scrapped', 
+      label: 'Scrapped', 
+      icon: <Trash2 className="h-4 w-4 text-gray-600" />,
+      count: 3,
+      bgClass: 'bg-gray-50 border-gray-200'
+    },
+    { 
+      id: 'totaled', 
+      label: 'Totaled', 
+      icon: <Ban className="h-4 w-4 text-gray-600" />,
+      count: 2,
+      bgClass: 'bg-gray-50 border-gray-200'
+    },
+  ];
+  
+  // Get all vehicles or filter by status
   const vehiclesList = vehicles && vehicles.length > 0 ? vehicles : vehicleData;
+  
+  // Filter vehicles by selected status
+  const filteredVehicles = statusFilter === 'all' 
+    ? vehiclesList 
+    : vehiclesList.filter(v => v.status === statusFilter);
   
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -149,6 +486,35 @@ const VehicleVault = () => {
         <p className="text-gray-600">Manage all your vehicles, documents and service history</p>
       </div>
       
+      {/* Status Categories Header */}
+      <div className="mb-8 overflow-x-auto">
+        <div className="min-w-max grid grid-cols-5 lg:grid-cols-9 xl:grid-cols-11 2xl:grid-cols-15 gap-3 py-2">
+          {statusCategories.map((category) => (
+            <button
+              key={category.id}
+              className={`relative flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all
+                ${statusFilter === category.id as VehicleStatus ? 
+                  `${category.bgClass} ring-2 ring-offset-2 ring-${category.bgClass.split('-')[1]}-400` : 
+                  'bg-white hover:bg-gray-50 border border-gray-200'
+                }`}
+              onClick={() => setStatusFilter(category.id as VehicleStatus)}
+            >
+              {category.icon}
+              <span>{category.label}</span>
+              <Badge 
+                className={`ml-1 ${
+                  statusFilter === category.id as VehicleStatus ? 
+                  'bg-white text-gray-700' : 
+                  'bg-gray-100 text-gray-700'
+                }`}
+              >
+                {category.count}
+              </Badge>
+            </button>
+          ))}
+        </div>
+      </div>
+      
       <Tabs 
         defaultValue="list" 
         value={activeTab}
@@ -183,77 +549,140 @@ const VehicleVault = () => {
         </div>
         
         <TabsContent value="list" className="space-y-6">
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {vehiclesList.map(vehicle => (
-              <motion.div 
-                key={vehicle.id}
-                className="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer"
-                variants={itemVariants}
-                whileHover={{ y: -4 }}
-                onClick={() => navigate(`/vehicle-vault/${vehicle.id}`)}
-              >
-                <div className="h-40 bg-gray-100 relative">
-                  {vehicle.imageSrc ? (
-                    <img 
-                      src={vehicle.imageSrc} 
-                      alt={vehicle.name} 
-                      className="w-full h-full object-cover" 
-                    />
-                  ) : (
-                    <div className="h-full w-full flex items-center justify-center">
-                      <Car className="h-20 w-20 text-gray-300" />
+          {filteredVehicles.length === 0 ? (
+            <div className="text-center py-10 border rounded-lg">
+              <Car className="h-12 w-12 mx-auto text-gray-300 mb-4" />
+              <h3 className="text-lg font-medium text-gray-700 mb-2">No vehicles found</h3>
+              <p className="text-gray-500 mb-4">There are no vehicles in the selected category</p>
+              <Button onClick={() => setStatusFilter('all')}>View All Vehicles</Button>
+            </div>
+          ) : (
+            <motion.div 
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {filteredVehicles.map(vehicle => (
+                <motion.div 
+                  key={vehicle.id}
+                  className="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all relative group"
+                  variants={itemVariants}
+                  whileHover={{ y: -4 }}
+                >
+                  {/* Action dropdown menu */}
+                  <div className="absolute right-3 top-3 z-10">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="icon" className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem onClick={() => navigate(`/vehicle-vault/${vehicle.id}`)}>
+                          <Eye className="h-4 w-4 mr-2" />
+                          View Details
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedVehicle(vehicle);
+                            setShowStatusDialog(true);
+                          }}
+                        >
+                          <Activity className="h-4 w-4 mr-2" />
+                          Change Status
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                          <FileText className="h-4 w-4 mr-2" />
+                          Documents
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Wrench className="h-4 w-4 mr-2" />
+                          Service History
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  
+                  {/* Status badge */}
+                  {vehicle.status && (
+                    <div className="absolute left-3 top-3 z-10">
+                      <Badge 
+                        className={`
+                          ${vehicle.status === 'active' ? 'bg-emerald-100 text-emerald-700' : ''}
+                          ${vehicle.status === 'recently-purchased' ? 'bg-blue-100 text-blue-700' : ''}
+                          ${vehicle.status === 'in-maintenance' ? 'bg-amber-100 text-amber-700' : ''}
+                          ${vehicle.status === 'out-of-service' ? 'bg-gray-100 text-gray-700' : ''}
+                          ${vehicle.status === 'commercial-fleet' ? 'bg-violet-100 text-violet-700' : ''}
+                          ${vehicle.status === 'for-sale' ? 'bg-rose-100 text-rose-700' : ''}
+                          ${vehicle.status === 'stolen' ? 'bg-red-100 text-red-700' : ''}
+                        `}
+                      >
+                        {formatStatus(vehicle.status)}
+                      </Badge>
                     </div>
                   )}
-                  <Badge 
-                    className="absolute top-3 right-3"
-                    variant="outline"
-                  >
-                    {vehicle.fuelType}
-                  </Badge>
-                </div>
-                
-                <div className="p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h3 className="font-medium text-lg">{vehicle.name}</h3>
-                      <p className="text-gray-500 text-sm">{vehicle.licensePlate}</p>
-                    </div>
-                    <Badge className={getHealthScoreColor(vehicle.healthScore)}>
-                      {vehicle.healthScore}%
+                  
+                  <div className="h-40 bg-gray-100 relative cursor-pointer" onClick={() => navigate(`/vehicle-vault/${vehicle.id}`)}>
+                    {vehicle.imageSrc ? (
+                      <img 
+                        src={vehicle.imageSrc} 
+                        alt={vehicle.name} 
+                        className="w-full h-full object-cover" 
+                      />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center">
+                        <Car className="h-20 w-20 text-gray-300" />
+                      </div>
+                    )}
+                    <Badge 
+                      className="absolute bottom-3 right-3"
+                      variant="outline"
+                    >
+                      {vehicle.fuelType}
                     </Badge>
                   </div>
                   
-                  <Separator className="my-3" />
-                  
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div className="flex items-center text-gray-600">
-                      <CarFront className="h-3.5 w-3.5 mr-1.5" />
-                      <span>{vehicle.make} {vehicle.model}</span>
+                  <div className="p-4 cursor-pointer" onClick={() => navigate(`/vehicle-vault/${vehicle.id}`)}>
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h3 className="font-medium text-lg">{vehicle.name}</h3>
+                        <p className="text-gray-500 text-sm">{vehicle.licensePlate}</p>
+                      </div>
+                      <Badge className={getHealthScoreColor(vehicle.healthScore || 0)}>
+                        {vehicle.healthScore || 0}%
+                      </Badge>
                     </div>
-                    <div className="flex items-center text-gray-600">
-                      <Calendar className="h-3.5 w-3.5 mr-1.5" />
-                      <span>{vehicle.year}</span>
+                    
+                    <Separator className="my-3" />
+                    
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="flex items-center text-gray-600">
+                        <CarFront className="h-3.5 w-3.5 mr-1.5" />
+                        <span>{vehicle.make} {vehicle.model}</span>
+                      </div>
+                      <div className="flex items-center text-gray-600">
+                        <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                        <span>{vehicle.year}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 flex items-center justify-between">
+                      <div className={`flex items-center text-xs ${getServiceStatusColor(vehicle.serviceStatus || 'unknown')}`}>
+                        {getServiceStatusIcon(vehicle.serviceStatus || 'unknown')}
+                        <span>Service {vehicle.serviceStatus || 'unknown'}</span>
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Updated {vehicle.lastUpdate || 'recently'}
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="mt-4 flex items-center justify-between">
-                    <div className={`flex items-center text-xs ${getServiceStatusColor(vehicle.serviceStatus)}`}>
-                      {getServiceStatusIcon(vehicle.serviceStatus)}
-                      <span>Service {vehicle.serviceStatus}</span>
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      Updated {vehicle.lastUpdate}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </TabsContent>
         
         <TabsContent value="value-trends">
@@ -318,6 +747,64 @@ const VehicleVault = () => {
           </div>
         </TabsContent>
       </Tabs>
+      
+      {/* Status Change Dialog */}
+      <Dialog open={showStatusDialog} onOpenChange={setShowStatusDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Change Vehicle Status</DialogTitle>
+            <DialogDescription>
+              Select a new status for {selectedVehicle?.name}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid grid-cols-2 gap-3 py-4">
+            {statusCategories.map((category) => (
+              <button
+                key={category.id}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all border
+                  ${newStatus === category.id ? 
+                    `${category.bgClass} ring-2 ring-offset-1 ring-${category.bgClass.split('-')[1]}-400` : 
+                    'bg-white hover:bg-gray-50 border-gray-200'
+                  }`}
+                onClick={() => setNewStatus(category.id as VehicleStatus)}
+              >
+                {category.icon}
+                <span>{category.label}</span>
+              </button>
+            ))}
+          </div>
+          
+          <DialogFooter className="flex items-center justify-between sm:justify-between">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setNewStatus('');
+                setShowStatusDialog(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleStatusChange}
+              disabled={!newStatus || updateVehicleStatusMutation.isPending}
+              className="min-w-[100px]"
+            >
+              {updateVehicleStatusMutation.isPending ? (
+                <div className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Processing
+                </div>
+              ) : (
+                'Save Changes'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
