@@ -18,6 +18,9 @@ import PremiumColorSelector, { ColorOption } from '@/components/arena/PremiumCol
 import OptionPackageSelector, { OptionPackage } from '@/components/arena/OptionPackageSelector';
 import ConfigurationSummary, { ConfigItem } from '@/components/arena/ConfigurationSummary';
 import CartPanel, { CartItem } from '@/components/arena/CartPanel';
+import DraggableCustomizer from '@/components/arena/DraggableCustomizer';
+import ThreeDVisualizer from '@/components/arena/ThreeDVisualizer';
+import RecommendationEngine from '@/components/arena/RecommendationEngine';
 
 // Premium vehicle list
 const premiumVehicles = [
@@ -284,6 +287,86 @@ const PremiumArena: React.FC = () => {
             />
             
             {/* Content based on active tab */}
+            {activeTab === 'design' && (
+              <div>
+                <h2 className="text-2xl font-bold mb-6">3D Visualization</h2>
+                <ThreeDVisualizer 
+                  vehicleColor={selectedColorHex}
+                  parts={[
+                    // Example custom parts - in a real app these would be dynamic
+                    {
+                      id: 'spoiler-1',
+                      type: 'spoiler',
+                      position: [0, 1.2, -1.5],
+                      rotation: [0, 0, 0],
+                      scale: 1,
+                      color: selectedColorHex
+                    },
+                    {
+                      id: 'bodykit-1',
+                      type: 'bodkit',
+                      position: [0, 0.1, 0],
+                      rotation: [0, 0, 0],
+                      scale: 1.05,
+                      color: selectedColorHex
+                    }
+                  ]}
+                />
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold mb-4">Drag & Drop Customization</h3>
+                  <DraggableCustomizer 
+                    vehicleEmoji={selectedVehicle.thumbnail}
+                    vehicleColor={selectedColorHex}
+                    availableParts={[
+                      {
+                        id: 'spoiler-1',
+                        name: 'Sport Spoiler',
+                        type: 'spoiler',
+                        position: { x: 0, y: 30 },
+                        rotation: 0,
+                        scale: 1,
+                        color: selectedColorHex,
+                        active: true
+                      },
+                      {
+                        id: 'wheel-1',
+                        name: 'Alloy Wheel',
+                        type: 'wheel',
+                        position: { x: -70, y: 80 },
+                        rotation: 0,
+                        scale: 1,
+                        color: '#333',
+                        active: true
+                      },
+                      {
+                        id: 'decal-1',
+                        name: 'Racing Stripe',
+                        type: 'decal',
+                        position: { x: 0, y: 0 },
+                        rotation: 0,
+                        scale: 1,
+                        color: '#e53e3e',
+                        active: false
+                      },
+                      {
+                        id: 'bodykit-1',
+                        name: 'Wide Body Kit',
+                        type: 'bodykit',
+                        position: { x: 0, y: 60 },
+                        rotation: 0,
+                        scale: 1,
+                        color: selectedColorHex,
+                        active: true
+                      }
+                    ]}
+                    onPartChange={(part) => {
+                      console.log('Part changed:', part);
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+            
             {activeTab === 'exterior' && (
               <div>
                 <h2 className="text-2xl font-bold mb-6">Exterior Colors</h2>
@@ -326,6 +409,19 @@ const PremiumArena: React.FC = () => {
                       category: 'Package'
                     });
                   }}
+                />
+              </div>
+            )}
+            
+            {activeTab === 'accessories' && (
+              <div>
+                <h2 className="text-2xl font-bold mb-6">Personalized Recommendations</h2>
+                <RecommendationEngine 
+                  onSelectVehicle={(vehicle) => {
+                    console.log('Selected vehicle from recommendations:', vehicle);
+                    // In a real app, this would switch to the selected vehicle
+                  }}
+                  formatPrice={formatPrice}
                 />
               </div>
             )}
