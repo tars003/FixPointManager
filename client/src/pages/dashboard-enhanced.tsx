@@ -611,67 +611,62 @@ const DashboardEnhanced = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* User Activity Chart */}
+            {/* Current Trends */}
             <motion.div 
               className="border rounded-xl overflow-hidden hover:shadow-md transition-shadow p-4"
               whileHover={{ y: -3 }}
             >
               <div className="flex items-center justify-between mb-3">
                 <h4 className="font-medium text-gray-900 flex items-center">
-                  <Activity className="h-4 w-4 text-purple-500 mr-2" />
-                  User Activity
+                  <BarChart3 className="h-4 w-4 text-purple-500 mr-2" />
+                  Current Trends
                 </h4>
                 <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200">
-                  Last 30 days
+                  Automotive News
                 </Badge>
               </div>
               
-              <div className="h-48 w-full relative">
-                {/* Activity Doughnut Chart */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative w-32 h-32">
-                    {/* Purple segment - 40% */}
-                    <div className="absolute inset-0 rounded-full border-8 border-purple-500" style={{ 
-                      clipPath: 'polygon(50% 50%, 100% 50%, 100% 0, 50% 0)'
-                    }}></div>
-                    {/* Cyan segment - 25% */}
-                    <div className="absolute inset-0 rounded-full border-8 border-cyan-500" style={{ 
-                      clipPath: 'polygon(50% 50%, 50% 0, 75% 0, 75% 50%)'
-                    }}></div>
-                    {/* Green segment - 20% */}
-                    <div className="absolute inset-0 rounded-full border-8 border-green-500" style={{ 
-                      clipPath: 'polygon(50% 50%, 50% 100%, 25% 100%, 25% 50%)'
-                    }}></div>
-                    {/* Orange segment - 15% */}
-                    <div className="absolute inset-0 rounded-full border-8 border-orange-500" style={{ 
-                      clipPath: 'polygon(50% 50%, 15% 50%, 15% 85%, 50% 85%)'
-                    }}></div>
-                    
-                    {/* Center white circle */}
-                    <div className="absolute inset-0 m-3 rounded-full bg-white flex items-center justify-center">
-                      <span className="text-lg font-bold">452</span>
+              <div className="h-48 w-full overflow-auto pr-1">
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3 bg-purple-50 p-2 rounded-md">
+                    <div className="w-2 h-2 rounded-full bg-purple-500 mt-1.5 flex-shrink-0"></div>
+                    <div>
+                      <h5 className="text-sm font-medium text-gray-900">EV Market Growing at 26% CAGR</h5>
+                      <p className="text-xs text-gray-600 mt-0.5">Electric vehicle adoption surges as new models hit Indian market</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 bg-blue-50 p-2 rounded-md">
+                    <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0"></div>
+                    <div>
+                      <h5 className="text-sm font-medium text-gray-900">New Fuel Efficiency Standards</h5>
+                      <p className="text-xs text-gray-600 mt-0.5">Government announces stricter emission norms for vehicles</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 bg-emerald-50 p-2 rounded-md">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></div>
+                    <div>
+                      <h5 className="text-sm font-medium text-gray-900">Connected Car Technology Surges</h5>
+                      <p className="text-xs text-gray-600 mt-0.5">IoT integration becoming standard in mid-range vehicles</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 bg-amber-50 p-2 rounded-md">
+                    <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 flex-shrink-0"></div>
+                    <div>
+                      <h5 className="text-sm font-medium text-gray-900">Auto Parts Market Forecast</h5>
+                      <p className="text-xs text-gray-600 mt-0.5">Aftermarket expected to grow 12% by end of year</p>
                     </div>
                   </div>
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 gap-2 mt-2">
-                <div className="flex items-center">
-                  <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
-                  <span className="text-xs">Vehicle Checks</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 rounded-full bg-cyan-500 mr-2"></div>
-                  <span className="text-xs">Service Bookings</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                  <span className="text-xs">Arena Projects</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 rounded-full bg-orange-500 mr-2"></div>
-                  <span className="text-xs">Parts Ordered</span>
-                </div>
+              <div className="pt-2 mt-2 border-t flex items-center justify-between">
+                <span className="text-xs text-gray-500">Updated 3 hours ago</span>
+                <Button variant="ghost" size="sm" className="text-xs h-7 px-2">
+                  View All News
+                </Button>
               </div>
             </motion.div>
             
