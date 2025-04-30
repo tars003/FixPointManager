@@ -54,6 +54,10 @@ import PreviewCard from '@/components/arena/PreviewCard';
 import EnhancedColorSelector from '@/components/arena/EnhancedColorSelector';
 import CustomizationPackage from '@/components/arena/CustomizationPackage';
 import CartPanel, { CartItem } from '@/components/arena/CartPanel';
+import ProjectControls from '@/components/arena/ProjectControls';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { apiRequest, queryClient } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
 
 // Available vehicle models
 const vehicleModels = [
@@ -178,6 +182,12 @@ const Arena: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [likedItems, setLikedItems] = useState<string[]>([]);
   const [isUpperTabsSticky, setIsUpperTabsSticky] = useState(false);
+  
+  // Project related state
+  const [projectId, setProjectId] = useState<number | undefined>(undefined);
+  const [projectName, setProjectName] = useState('');
+  const [projectDesc, setProjectDesc] = useState('');
+  const { toast } = useToast();
 
   // Effect to handle scroll and make upper tabs sticky
   useEffect(() => {
@@ -338,6 +348,172 @@ const Arena: React.FC = () => {
     }
   };
   
+  // Get customization projects for the user
+  const { data: projectsData } = useQuery({
+    queryKey: ['/api/customization-projects'],
+    queryFn: async () => {
+      const res = await fetch('/api/customization-projects');
+      if (!res.ok) {
+        throw new Error('Failed to fetch projects');
+      }
+      return res.json();
+    },
+    enabled: true, // Only fetch when component mounts
+  });
+  
+  // Save project mutation
+  const saveProjectMutation = useMutation({
+    mutationFn: async (projectData: { 
+      name: string; 
+      description: string; 
+      vehicleId: number;
+      customizations: any;
+    }) => {
+      const res = await apiRequest('POST', '/api/customization-projects', projectData);
+      return res.json();
+    },
+    onSuccess: (data) => {
+      setProjectId(data.id);
+      toast({
+        title: 'Project Saved',
+        description: 'Your customization project has been saved successfully.',
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/customization-projects'] });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error Saving Project',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
+  });
+  
+  // Update project mutation
+  const updateProjectMutation = useMutation({
+    mutationFn: async (projectData: { 
+      id: number;
+      name: string; 
+      description: string; 
+      customizations: any;
+    }) => {
+      const res = await apiRequest('PUT', `/api/customization-projects/${projectData.id}`, {
+        name: projectData.name,
+        description: projectData.description,
+        customizations: projectData.customizations
+      });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: 'Project Updated',
+        description: 'Your customization project has been updated successfully.',
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/customization-projects'] });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error Updating Project',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
+  });
+  
+  // Handle save project
+  const handleSaveProject = (name: string, description: string) => {
+    if (!selectedVehicle) {
+      toast({
+        title: 'No Vehicle Selected',
+        description: 'Please select a vehicle before saving your project.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
+    const customizations = {
+      vehicleColor,
+      colorFinish,
+      selectedBodyKit,
+      selectedSpoiler,
+      cartItems,
+      mainCategory,
+      exteriorSubcategory,
+    };
+    
+    if (projectId) {
+      // Update existing project
+      updateProjectMutation.mutate({
+        id: projectId,
+        name,
+        description,
+        customizations
+      });
+    } else {
+      // Create new project
+      saveProjectMutation.mutate({
+        name,
+        description,
+        vehicleId: selectedVehicle.id,
+        customizations
+      });
+    }
+  };
+  
+  // Handle resume project
+  const handleResumeProject = (project: any) => {
+    setProjectId(project.id);
+    setProjectName(project.name);
+    setProjectDesc(project.description || '');
+    
+    // Find the vehicle by ID
+    const vehicle = vehicleModels.find(v => v.id === project.vehicleId);
+    if (vehicle) {
+      setSelectedVehicle(vehicle);
+    }
+    
+    // Restore customizations if available
+    if (project.customizations) {
+      const customizations = project.customizations;
+      
+      if (customizations.vehicleColor) {
+        setVehicleColor(customizations.vehicleColor);
+      }
+      
+      if (customizations.colorFinish) {
+        setColorFinish(customizations.colorFinish);
+      }
+      
+      if (customizations.selectedBodyKit) {
+        setSelectedBodyKit(customizations.selectedBodyKit);
+      }
+      
+      if (customizations.selectedSpoiler) {
+        setSelectedSpoiler(customizations.selectedSpoiler);
+      }
+      
+      if (customizations.cartItems) {
+        setCartItems(customizations.cartItems);
+      }
+      
+      if (customizations.mainCategory) {
+        setMainCategory(customizations.mainCategory);
+      }
+      
+      if (customizations.exteriorSubcategory) {
+        setExteriorSubcategory(customizations.exteriorSubcategory);
+      }
+    }
+    
+    // Navigate to customization tab
+    setActiveTab('customization');
+    
+    toast({
+      title: 'Project Loaded',
+      description: 'Your customization project has been loaded successfully.',
+    });
+  };
+  
   return (
     <ArenaWrapper>
       <div className="container max-w-7xl mx-auto py-6 px-4">
@@ -365,10 +541,21 @@ const Arena: React.FC = () => {
               <Share2 className="h-4 w-4 mr-2" />
               Share
             </Button>
-            <Button>
-              <Download className="h-4 w-4 mr-2" />
-              Save Project
-            </Button>
+            <ProjectControls
+              projectId={projectId}
+              currentStep={activeTab === 'vehicle-selection' ? 1 : activeTab === 'customization' ? 2 : activeTab === 'performance' ? 3 : 4}
+              totalSteps={4}
+              onSave={handleSaveProject}
+              onResume={projectsData?.length ? () => {} : undefined}
+              vehicleModel={selectedVehicle?.name}
+              customizations={{
+                bodyKit: selectedBodyKit !== 'stock' ? bodyKitOptions.find(kit => kit.id === selectedBodyKit)?.name : 'Stock',
+                spoiler: selectedSpoiler !== 'none' ? spoilerOptions.find(spoiler => spoiler.id === selectedSpoiler)?.name : 'None',
+                color: vehicleColor,
+                finish: colorFinish,
+                itemCount: cartItems.length
+              }}
+            />
           </div>
         </motion.div>
         
