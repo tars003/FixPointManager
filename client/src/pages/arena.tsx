@@ -64,7 +64,7 @@ const Arena: React.FC = () => {
   };
   
   return (
-    <div className="container max-w-7xl mx-auto py-6">
+    <div className="container max-w-7xl mx-auto py-6 mb-32">
       {/* Page header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
         <div>
@@ -82,7 +82,7 @@ const Arena: React.FC = () => {
       
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto mb-6">
+        <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto mb-6 sticky top-0 z-10 bg-background py-2">
           <TabsTrigger value="vehicle-selection" disabled={activeTab !== 'vehicle-selection' && !selectedVehicle}>
             <Car className="h-4 w-4 mr-2" />
             Vehicle
@@ -146,7 +146,7 @@ const Arena: React.FC = () => {
               
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {/* Customization Categories Menu */}
-                <Card className="lg:col-span-1">
+                <Card className="lg:col-span-1 h-fit sticky top-24">
                   <CardHeader>
                     <CardTitle>Customization Categories</CardTitle>
                   </CardHeader>
