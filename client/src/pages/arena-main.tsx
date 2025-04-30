@@ -27,6 +27,17 @@ const featureCards = [
     route: '/arena-studio'
   },
   {
+    id: 'premium-features',
+    title: 'Premium Features',
+    description: 'Experience our enhanced customization tools with personalized recommendations.',
+    icon: <Award className="h-8 w-8 text-amber-500" />,
+    color: 'bg-amber-50',
+    borderColor: 'border-amber-100',
+    iconBg: 'bg-amber-100',
+    route: '/enhanced-arena-features',
+    badge: 'NEW'
+  },
+  {
     id: 'custom-wraps',
     title: 'Custom Wraps',
     description: 'Upload your own designs and apply them to your vehicle.',
@@ -131,7 +142,12 @@ const ArenaMain: React.FC = () => {
                 transition: { duration: 0.2 }
               }}
             >
-              <Card className={`border ${card.borderColor} h-full flex flex-col`}>
+              <Card className={`border ${card.borderColor} h-full flex flex-col relative`}>
+                {card.badge && (
+                  <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    {card.badge}
+                  </div>
+                )}
                 <CardContent className="pt-6 flex-grow">
                   <div className={`rounded-full ${card.iconBg} p-3 w-16 h-16 flex items-center justify-center mb-4`}>
                     {card.icon}
