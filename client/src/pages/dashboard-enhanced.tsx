@@ -740,12 +740,7 @@ const DashboardEnhanced = () => {
             >
               <div className="flex items-center justify-between mb-3">
                 <h4 className="font-medium text-gray-900 flex items-center">
-                  <motion.div
-                    animate={{ rotate: [0, 10, 0] }}
-                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                  >
-                    <Wrench className="h-4 w-4 text-purple-500 mr-2" />
-                  </motion.div>
+                  <Wrench className="h-4 w-4 text-purple-500 mr-2" />
                   Service Health Tracker
                 </h4>
                 <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200">
@@ -754,118 +749,94 @@ const DashboardEnhanced = () => {
               </div>
               
               <div className="h-48 w-full relative">
-                {/* Service tracker with circular display */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative w-32 h-32">
-                    {/* Main circular pie chart - fixed and clean */}
+                {/* Main content area */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  {/* Pie Chart */}
+                  <div className="relative w-[110px] h-[110px] mb-2 pt-3">
+                    {/* Simple animated orbs */}
+                    <motion.div 
+                      className="absolute -left-6 top-12 w-3 h-3 rounded-full bg-purple-400"
+                      animate={{ 
+                        y: [-2, 2, -2],
+                        opacity: [0.7, 1, 0.7]
+                      }}
+                      transition={{ repeat: Infinity, duration: 3 }}
+                    />
+                    <motion.div 
+                      className="absolute -right-6 top-6 w-3 h-3 rounded-full bg-emerald-400"
+                      animate={{ 
+                        y: [-2, 2, -2],
+                        opacity: [0.7, 1, 0.7]
+                      }}
+                      transition={{ repeat: Infinity, duration: 2.5, delay: 0.5 }}
+                    />
+                    <motion.div 
+                      className="absolute top-24 right-4 w-3 h-3 rounded-full bg-yellow-400"
+                      animate={{ 
+                        y: [-2, 2, -2],
+                        opacity: [0.7, 1, 0.7]
+                      }}
+                      transition={{ repeat: Infinity, duration: 3.2, delay: 1 }}
+                    />
+                    <motion.div 
+                      className="absolute top-8 left-24 w-3 h-3 rounded-full bg-purple-300"
+                      animate={{ 
+                        y: [-2, 2, -2],
+                        opacity: [0.7, 1, 0.7]
+                      }}
+                      transition={{ repeat: Infinity, duration: 2.8, delay: 1.5 }}
+                    />
+
+                    {/* Exact match pie chart */}
                     <svg viewBox="0 0 100 100" className="w-full h-full">
-                      {/* Green segment - Up to date (180 degrees) */}
+                      {/* Green segment - 50% */}
                       <path
                         d="M50,50 L50,0 A50,50 0 0,1 100,50 L50,50 Z"
                         fill="#10B981"
                       />
                       
-                      {/* Yellow segment - Due soon (90 degrees) */}
+                      {/* Yellow segment - 25% */}
                       <path
-                        d="M50,50 L100,50 A50,50 0 0,1 50,100 L50,50 Z"
+                        d="M50,50 L100,50 A50,50 0 0,1 75,93.3 L50,50 Z"
                         fill="#F59E0B"
                       />
                       
-                      {/* Red segment - Overdue (90 degrees) */}
+                      {/* Red segment - 25% */}
                       <path
-                        d="M50,50 L50,100 A50,50 0 0,1 0,50 L50,50 Z"
+                        d="M50,50 L75,93.3 A50,50 0 0,1 0,50 L50,50 Z"
                         fill="#EF4444"
                       />
                     </svg>
                     
-                    {/* Animated orbit particles */}
-                    <motion.div
-                      className="absolute inset-0"
-                      animate={{ rotate: 360 }}
-                      transition={{ 
-                        repeat: Infinity, 
-                        duration: 15,
-                        ease: "linear" 
-                      }}
-                    >
-                      {[45, 135, 225, 315].map((angle, i) => (
-                        <motion.div 
-                          key={i}
-                          className="absolute w-2 h-2 rounded-full"
-                          style={{ 
-                            top: `calc(50% + ${Math.sin(angle * Math.PI / 180) * 85}%)`,
-                            left: `calc(50% + ${Math.cos(angle * Math.PI / 180) * 85}%)`,
-                            backgroundColor: ['#A855F7', '#F59E0B', '#10B981', '#F43F5E'][i % 4]
-                          }}
-                          animate={{ 
-                            scale: [1, 1.5, 1],
-                            opacity: [0.6, 1, 0.6]
-                          }}
-                          transition={{ 
-                            repeat: Infinity, 
-                            duration: 2,
-                            delay: i * 0.5,
-                            ease: "easeInOut" 
-                          }}
-                        />
-                      ))}
-                    </motion.div>
-                    
-                    {/* White circle positioned at the bottom right quadrant */}
-                    <motion.div 
-                      className="absolute right-4 bottom-4 w-16 h-16 rounded-full bg-white shadow-md flex flex-col items-center justify-center z-20"
-                      animate={{ 
-                        scale: [0.95, 1, 0.95]
-                      }}
-                      transition={{ 
-                        repeat: Infinity, 
-                        duration: 2, 
-                        ease: "easeInOut"
-                      }}
-                    >
+                    {/* White circle with number 3 - exact position */}
+                    <div className="absolute bottom-0 right-0 w-14 h-14 rounded-full bg-white shadow-md flex flex-col items-center justify-center z-20">
                       <span className="text-2xl font-bold text-purple-600">3</span>
-                      <span className="text-xs text-gray-500 text-center">Due<br/>Services</span>
-                    </motion.div>
+                      <span className="text-[10px] text-gray-500 mt-[-3px]">Due Services</span>
+                    </div>
                   </div>
-                </div>
-                
-                {/* Service details */}
-                <div className="absolute bottom-0 inset-x-0 px-2">
-                  <div className="grid grid-cols-3 gap-1 mb-1">
-                    <motion.div 
-                      className="bg-emerald-50 rounded p-1 text-center border border-emerald-100 shadow-sm"
-                      whileHover={{ y: -2 }}
-                    >
-                      <div className="text-xs font-medium text-emerald-700">2</div>
+                  
+                  {/* Service details boxes */}
+                  <div className="grid grid-cols-3 gap-2 w-full">
+                    <div className="bg-emerald-50 rounded p-2 text-center">
+                      <div className="text-sm font-medium text-emerald-700">2</div>
                       <div className="text-[10px] text-gray-500">Up to Date</div>
-                    </motion.div>
-                    <motion.div 
-                      className="bg-amber-50 rounded p-1 text-center border border-amber-100 shadow-sm"
-                      whileHover={{ y: -2 }}
-                    >
-                      <div className="text-xs font-medium text-amber-700">1</div>
+                    </div>
+                    <div className="bg-amber-50 rounded p-2 text-center">
+                      <div className="text-sm font-medium text-amber-700">1</div>
                       <div className="text-[10px] text-gray-500">Due Soon</div>
-                    </motion.div>
-                    <motion.div 
-                      className="bg-rose-50 rounded p-1 text-center border border-rose-100 shadow-sm"
-                      whileHover={{ y: -2 }}
-                    >
-                      <div className="text-xs font-medium text-rose-700">0</div>
+                    </div>
+                    <div className="bg-rose-50 rounded p-2 text-center">
+                      <div className="text-sm font-medium text-rose-700">0</div>
                       <div className="text-[10px] text-gray-500">Overdue</div>
-                    </motion.div>
+                    </div>
                   </div>
                 </div>
               </div>
               
-              <div className="mt-2 border-t pt-2">
+              <div className="mt-1 border-t pt-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <motion.div
-                      animate={{ y: [0, -2, 0] }}
-                      transition={{ repeat: Infinity, duration: 1.5 }}
-                    >
-                      <Calendar className="h-3.5 w-3.5 text-amber-500 mr-1" />
-                    </motion.div>
+                    <Calendar className="h-3.5 w-3.5 text-amber-500 mr-1" />
                     <span className="text-xs text-amber-600">Next Service: Honda City in 14 days</span>
                   </div>
                   <Button 
@@ -874,14 +845,7 @@ const DashboardEnhanced = () => {
                     className="text-xs px-2 h-7" 
                     onClick={() => navigateTo('/book-service')}
                   >
-                    <span className="relative">
-                      <motion.span
-                        className="absolute -inset-1 rounded-full bg-amber-100 opacity-40"
-                        animate={{ scale: [0.9, 1.1, 0.9] }}
-                        transition={{ repeat: Infinity, duration: 2 }}
-                      />
-                      Schedule Now
-                    </span>
+                    Schedule Now
                   </Button>
                 </div>
               </div>
