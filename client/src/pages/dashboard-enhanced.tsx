@@ -83,6 +83,21 @@ const DashboardEnhanced = () => {
   // Key feature modules
   const featureModules = [
     {
+      id: 'vehiclevault',
+      name: 'Vehicle Vault',
+      tagline: 'Manage your fleet in one secure place',
+      description: 'Store, organize, and monitor all your vehicles with detailed profiles, service history, and document management.',
+      icon: <Shield className="h-6 w-6 text-white" />,
+      bgClass: 'bg-gradient-to-br from-violet-600 to-purple-700',
+      accentColor: 'bg-violet-500',
+      path: '/vehicle-vault',
+      stats: [
+        { label: 'Vehicles', value: '4', trend: 'up' },
+        { label: 'Documents', value: '16', trend: 'up' },
+        { label: 'Reminders', value: '3', trend: 'stable' }
+      ]
+    },
+    {
       id: 'drishti',
       name: 'Drishti Intelligence',
       tagline: 'Smart diagnostics & preventive insights',
