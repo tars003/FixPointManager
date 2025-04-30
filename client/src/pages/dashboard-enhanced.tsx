@@ -98,6 +98,21 @@ const DashboardEnhanced = () => {
       ]
     },
     {
+      id: 'marketplace',
+      name: 'Parts Marketplace',
+      tagline: 'Shop genuine parts & accessories',
+      description: 'Browse, compare, and purchase certified automotive parts and accessories with verified quality and competitive pricing.',
+      icon: <ShoppingBag className="h-6 w-6 text-white" />,
+      bgClass: 'bg-gradient-to-br from-cyan-500 to-sky-600',
+      accentColor: 'bg-cyan-500',
+      path: '/marketplace',
+      stats: [
+        { label: 'Trending Parts', value: '57', trend: 'up' },
+        { label: 'Verified Sellers', value: '128', trend: 'up' },
+        { label: 'Avg. Savings', value: '₹1,850', trend: 'up' }
+      ]
+    },
+    {
       id: 'drishti',
       name: 'Drishti Intelligence',
       tagline: 'Smart diagnostics & preventive insights',
