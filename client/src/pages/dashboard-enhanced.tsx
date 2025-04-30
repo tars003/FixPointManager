@@ -811,9 +811,9 @@ const DashboardEnhanced = () => {
                       ))}
                     </motion.div>
                     
-                    {/* White center circle */}
+                    {/* White circle positioned at the bottom right quadrant */}
                     <motion.div 
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white shadow-md flex flex-col items-center justify-center z-20"
+                      className="absolute right-4 bottom-4 w-16 h-16 rounded-full bg-white shadow-md flex flex-col items-center justify-center z-20"
                       animate={{ 
                         scale: [0.95, 1, 0.95]
                       }}
@@ -824,7 +824,7 @@ const DashboardEnhanced = () => {
                       }}
                     >
                       <span className="text-2xl font-bold text-purple-600">3</span>
-                      <span className="text-xs text-gray-500">Due Services</span>
+                      <span className="text-xs text-gray-500 text-center">Due<br/>Services</span>
                     </motion.div>
                   </div>
                 </div>
