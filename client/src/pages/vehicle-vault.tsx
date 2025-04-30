@@ -344,7 +344,7 @@ const VehicleVault = () => {
     { 
       id: 'in-maintenance', 
       label: 'In Maintenance', 
-      icon: <Wrench className="h-4 w-4 text-amber-600" />,
+      icon: <Clock className="h-4 w-4 text-amber-600" />,
       count: 3,
       bgClass: 'bg-amber-50 border-amber-200'
     },
@@ -581,7 +581,7 @@ const VehicleVault = () => {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem onClick={() => navigate(`/vehicle-vault/${vehicle.id}`)}>
-                          <Eye className="h-4 w-4 mr-2" />
+                          <Search className="h-4 w-4 mr-2" />
                           View Details
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -599,7 +599,7 @@ const VehicleVault = () => {
                           Documents
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Wrench className="h-4 w-4 mr-2" />
+                          <Clock className="h-4 w-4 mr-2" />
                           Service History
                         </DropdownMenuItem>
                       </DropdownMenuContent>
