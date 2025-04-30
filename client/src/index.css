@@ -141,6 +141,50 @@
   .text-balance {
     text-wrap: balance;
   }
+  
+  /* Animations for Sector Launch Arena */
+  @keyframes twinkle {
+    0%, 100% {
+      opacity: 1;
+      background-position: 0% 0%;
+    }
+    50% {
+      opacity: 0.7;
+      background-position: 100% 100%;
+    }
+  }
+  
+  @keyframes pulse-slow {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+  }
+  
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .animate-twinkle {
+    animation: twinkle 10s ease-in-out infinite;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+  
+  .animate-spin-slow {
+    animation: spin-slow 120s linear infinite;
+  }
 }
 
 @layer base {

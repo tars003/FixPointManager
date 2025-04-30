@@ -168,15 +168,50 @@ const ArenaMain: React.FC = () => {
           ))}
         </motion.div>
         
-        {/* Launch Arena Button */}
-        <div className="flex justify-center">
-          <Button 
-            size="lg"
-            className="bg-blue-600 hover:bg-blue-700 font-bold text-lg px-8"
-            onClick={handleLaunchArena}
+        {/* Sector Launch Arena - Full Animation */}
+        <div className="mt-12 relative overflow-hidden rounded-3xl bg-black h-[400px] shadow-2xl">
+          {/* Background Animation */}
+          <div 
+            className="absolute inset-0 z-0 bg-cover bg-center" 
+            style={{ 
+              backgroundImage: `url('${import.meta.env.BASE_URL}attached_assets/Screenshot 2025-04-30 152409.png')`,
+              backgroundSize: 'cover' 
+            }}
           >
-            <Play className="mr-2 h-5 w-5" /> Launch Arena
-          </Button>
+            {/* Stars animation overlay */}
+            <div className="absolute inset-0 bg-[radial-gradient(white,_rgba(255,255,255,.2)_2px,_transparent_40px)] bg-[length:50px_50px] animate-twinkle"></div>
+            
+            {/* Animated gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-900/50 via-purple-900/30 to-indigo-900/50 animate-pulse"></div>
+          </div>
+          
+          {/* Earth image as foreground element */}
+          <div className="absolute bottom-0 right-0 w-[300px] h-[300px] opacity-80">
+            <div 
+              className="w-full h-full rounded-full bg-cover bg-center animate-spin-slow"
+              style={{ 
+                backgroundImage: `url('${import.meta.env.BASE_URL}attached_assets/Screenshot 2025-04-30 152417.png')`
+              }}
+            ></div>
+          </div>
+          
+          {/* Content */}
+          <div className="relative z-10 flex flex-col justify-center items-center h-full text-white px-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-purple-300">
+              Sector Launch Arena
+            </h2>
+            <p className="text-center text-white/80 max-w-2xl text-lg mb-8">
+              Enter a new dimension of vehicle customization with our immersive 3D studio. 
+              Create, customize and share your dream vehicles with unprecedented detail.
+            </p>
+            <Button 
+              size="lg"
+              className="bg-blue-600 hover:bg-blue-700 font-bold text-lg px-12 py-6 rounded-full animate-pulse-slow"
+              onClick={handleLaunchArena}
+            >
+              <Play className="mr-2 h-6 w-6" /> Launch Arena
+            </Button>
+          </div>
         </div>
       </div>
     </ArenaWrapper>
