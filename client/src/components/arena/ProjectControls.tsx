@@ -8,7 +8,19 @@ import { Save, Play, Undo, ShoppingCart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { CustomizationProject } from '@shared/schema';
+
+// Define CustomizationProject interface
+interface CustomizationProject {
+  id: number;
+  name: string;
+  description?: string | null;
+  vehicleId: number;
+  customizations?: Record<string, any>;
+  status?: string;
+  updatedAt?: string;
+  visibility?: string | null;
+  userId?: number;
+}
 
 interface ProjectControlsProps {
   projectId?: number;

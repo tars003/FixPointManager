@@ -188,6 +188,8 @@ interface CustomizationProject {
   customizations?: Record<string, any>;
   status?: string;
   updatedAt?: string;
+  visibility?: string | null;
+  userId?: number;
 }
 
 // Moved to @/components/arena/CartPanel.tsx
