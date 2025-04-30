@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'wouter';
+import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { 
@@ -32,7 +32,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({
   brand = '',
   showBackButton = true
 }) => {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   
   const tabs = [
     { id: 'design', label: 'Design', icon: <Car className="h-4 w-4" /> },
@@ -102,7 +102,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({
                 variant="ghost" 
                 size="sm" 
                 className="gap-1"
-                onClick={() => navigate('/')}
+                onClick={() => setLocation('/')}
               >
                 <ChevronLeft className="h-4 w-4" />
                 <span>Back</span>

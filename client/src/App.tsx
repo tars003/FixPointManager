@@ -31,6 +31,7 @@ import FastagEchallan from "@/pages/fastag-echallan";
 import EducationalPage from "@/pages/educational";
 import Marketplace from "@/pages/marketplace";
 import Arena from "@/pages/arena";
+import PremiumArena from "@/pages/premium-arena";
 import ArenaHome from "@/pages/arena/index";
 import ArenaVehicleSelection from "@/pages/arena/vehicle-selection";
 import ArenaCustomize from "@/pages/arena/customize";
@@ -422,6 +423,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <Arena />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/arena-studio/premium">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <PremiumArena />
               </motion.div>
             )}
           </Route>

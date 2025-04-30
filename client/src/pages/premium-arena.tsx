@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'wouter';
+import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { 
@@ -137,7 +137,7 @@ const optionPackages: OptionPackage[] = [
 
 // Premium Arena Page
 const PremiumArena: React.FC = () => {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   
   // State
   const [activeTab, setActiveTab] = useState('exterior');
@@ -353,7 +353,7 @@ const PremiumArena: React.FC = () => {
             {/* Navigation buttons */}
             {activeTab !== 'summary' && (
               <div className="flex justify-between pt-4 border-t">
-                <Button variant="outline" onClick={() => navigate('/arena')}>
+                <Button variant="outline" onClick={() => setLocation('/arena-studio')}>
                   <ChevronLeft className="h-4 w-4 mr-2" />
                   Standard Configurator
                 </Button>
