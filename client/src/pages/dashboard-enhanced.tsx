@@ -1181,6 +1181,81 @@ const DashboardEnhanced = () => {
           return null;
         })()}
         
+        {/* Membership Card Section */}
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold">FixPoint Membership</h2>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              className="text-gray-500 hover:text-gray-700"
+              onClick={() => navigateTo('/membership')}
+            >
+              Manage Membership
+              <CreditCard className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="col-span-1 md:col-span-2">
+              <FixPointCard
+                userName="Rajesh Kumar"
+                membershipType="premium"
+                membershipNumber="2241 8891 4412 5551"
+                vehicleCount={2}
+                points={1250}
+                onActivate={() => navigateTo('/membership')}
+                onManage={() => navigateTo('/membership')}
+              />
+            </div>
+            
+            <div className="col-span-1 bg-gray-50 rounded-xl p-6 border">
+              <h3 className="font-bold text-lg mb-4">Membership Benefits</h3>
+              
+              <div className="space-y-3">
+                <div className="flex items-start">
+                  <div className="bg-indigo-100 p-2 rounded-lg mr-3">
+                    <Shield className="h-5 w-5 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm">Premium Roadside Assistance</h4>
+                    <p className="text-sm text-gray-600">24/7 emergency assistance with faster response times</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="bg-indigo-100 p-2 rounded-lg mr-3">
+                    <Zap className="h-5 w-5 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm">Priority Service Booking</h4>
+                    <p className="text-sm text-gray-600">Skip the queue with priority scheduling at authorized centers</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="bg-indigo-100 p-2 rounded-lg mr-3">
+                    <Star className="h-5 w-5 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm">Rewards Program</h4>
+                    <p className="text-sm text-gray-600">Earn points on every service and redeem for benefits</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 pt-4 border-t">
+                <Button 
+                  onClick={() => navigateTo('/membership')}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                >
+                  View All Benefits
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+        
         {/* Key Feature Modules */}
         <section className="mb-16">
           <div className="flex items-center justify-between mb-6">
