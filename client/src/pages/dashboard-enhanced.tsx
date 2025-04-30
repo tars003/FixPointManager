@@ -756,14 +756,15 @@ const DashboardEnhanced = () => {
               <div className="h-48 w-full relative">
                 {/* Service tracker with circular display */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative">
+                  <div className="relative h-40 w-40">
+                    {/* Background decorative elements - first star */}
                     <motion.div
-                      className="absolute -inset-4"
-                      initial={{ opacity: 0.5, scale: 1 }}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-full h-full"
+                      initial={{ opacity: 0.3, scale: 0.9, rotate: 0 }}
                       animate={{ 
-                        opacity: [0.2, 0.5, 0.2],
-                        scale: [1, 1.05, 1],
-                        rotate: [0, 360]
+                        opacity: [0.15, 0.3, 0.15],
+                        scale: [0.9, 1, 0.9],
+                        rotate: 360
                       }}
                       transition={{ 
                         repeat: Infinity, 
@@ -771,24 +772,25 @@ const DashboardEnhanced = () => {
                         ease: "linear" 
                       }}
                     >
-                      <svg viewBox="0 0 100 100" className="w-40 h-40 opacity-10">
+                      <svg viewBox="0 0 100 100" className="w-full h-full">
                         <defs>
-                          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <linearGradient id="star-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stopColor="#8B5CF6" />
                             <stop offset="50%" stopColor="#EC4899" />
                             <stop offset="100%" stopColor="#3B82F6" />
                           </linearGradient>
                         </defs>
-                        <path d="M50,0 L60,30 L90,30 L65,50 L75,80 L50,65 L25,80 L35,50 L10,30 L40,30 Z" fill="url(#gradient)" />
+                        <path d="M50,0 L60,30 L90,30 L65,50 L75,80 L50,65 L25,80 L35,50 L10,30 L40,30 Z" fill="url(#star-gradient)" />
                       </svg>
                     </motion.div>
                     
+                    {/* Second decorative element - circles */}
                     <motion.div
-                      className="absolute -inset-2"
-                      initial={{ opacity: 0.5, scale: 1 }}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[90%] h-[90%]"
+                      initial={{ opacity: 0.3, rotate: 0 }}
                       animate={{ 
-                        opacity: [0.4, 0.7, 0.4],
-                        rotate: [0, -180]
+                        opacity: [0.2, 0.4, 0.2],
+                        rotate: -180
                       }}
                       transition={{ 
                         repeat: Infinity, 
@@ -796,76 +798,177 @@ const DashboardEnhanced = () => {
                         ease: "linear" 
                       }}
                     >
-                      <svg viewBox="0 0 100 100" className="w-36 h-36 opacity-10">
+                      <svg viewBox="0 0 100 100" className="w-full h-full">
                         <circle cx="50" cy="50" r="45" stroke="#6366F1" strokeWidth="2" fill="none" />
-                        <circle cx="20" cy="20" r="5" fill="#EC4899" />
-                        <circle cx="80" cy="80" r="5" fill="#8B5CF6" />
-                        <circle cx="80" cy="20" r="5" fill="#3B82F6" />
-                        <circle cx="20" cy="80" r="5" fill="#F97316" />
+                        <motion.circle 
+                          cx="20" cy="20" r="5" fill="#EC4899" 
+                          animate={{ r: [5, 6, 5] }}
+                          transition={{ repeat: Infinity, duration: 2, delay: 0 }}
+                        />
+                        <motion.circle 
+                          cx="80" cy="80" r="5" fill="#8B5CF6" 
+                          animate={{ r: [5, 6, 5] }}
+                          transition={{ repeat: Infinity, duration: 2, delay: 0.5 }}
+                        />
+                        <motion.circle 
+                          cx="80" cy="20" r="5" fill="#3B82F6" 
+                          animate={{ r: [5, 6, 5] }}
+                          transition={{ repeat: Infinity, duration: 2, delay: 1 }}
+                        />
+                        <motion.circle 
+                          cx="20" cy="80" r="5" fill="#F97316" 
+                          animate={{ r: [5, 6, 5] }}
+                          transition={{ repeat: Infinity, duration: 2, delay: 1.5 }}
+                        />
                       </svg>
                     </motion.div>
                     
-                    {/* Circular indicator with gauge */}
-                    <div className="w-32 h-32 rounded-full relative z-10">
-                      {/* Colorful background with gradient */}
+                    {/* Third decorative element - rotating particles */}
+                    <motion.div
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[80%] h-[80%]"
+                      animate={{ rotate: 360 }}
+                      transition={{ 
+                        repeat: Infinity, 
+                        duration: 30,
+                        ease: "linear" 
+                      }}
+                    >
+                      {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+                        <motion.div 
+                          key={i}
+                          className="absolute w-1.5 h-1.5 rounded-full"
+                          style={{ 
+                            top: `calc(50% + ${Math.sin(angle * Math.PI / 180) * 55}%)`,
+                            left: `calc(50% + ${Math.cos(angle * Math.PI / 180) * 55}%)`,
+                            backgroundColor: ['#F472B6', '#F59E0B', '#10B981', '#3B82F6'][i % 4]
+                          }}
+                          animate={{ 
+                            scale: [1, 1.5, 1],
+                            opacity: [0.4, 0.8, 0.4]
+                          }}
+                          transition={{ 
+                            repeat: Infinity, 
+                            duration: 2,
+                            delay: i * 0.25,
+                            ease: "easeInOut" 
+                          }}
+                        />
+                      ))}
+                    </motion.div>
+                    
+                    {/* Main circular indicator with gauge */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full z-10">
+                      {/* Circular Background with gradient */}
+                      <div className="absolute inset-0 rounded-full overflow-hidden">
+                        <motion.div 
+                          className="absolute inset-0"
+                          style={{ 
+                            background: 'conic-gradient(from 180deg, rgba(16, 185, 129, 0.7) 0deg, rgba(16, 185, 129, 0.7) 180deg, rgba(245, 158, 11, 0.7) 180deg, rgba(245, 158, 11, 0.7) 270deg, rgba(239, 68, 68, 0.7) 270deg, rgba(239, 68, 68, 0.7) 360deg)'
+                          }}
+                          animate={{ rotate: [0, 360] }}
+                          transition={{ 
+                            repeat: Infinity, 
+                            duration: 30, 
+                            ease: "linear"
+                          }}
+                        />
+                      </div>
+                      
+                      {/* Animated glowing ring effect */}
                       <motion.div 
-                        className="absolute inset-0 rounded-full"
+                        className="absolute -inset-1 rounded-full opacity-30"
                         style={{ 
-                          background: 'conic-gradient(from 180deg, #10B981 0deg, #10B981 180deg, #F59E0B 180deg, #F59E0B 270deg, #EF4444 270deg, #EF4444 360deg)',
-                          opacity: 0.2
+                          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.8) 0%, rgba(16, 185, 129, 0) 70%)'
                         }}
-                        animate={{ rotate: [0, 360] }}
+                        animate={{ 
+                          scale: [0.9, 1.1, 0.9],
+                        }}
                         transition={{ 
                           repeat: Infinity, 
-                          duration: 60, 
-                          ease: "linear"
+                          duration: 3,
+                          ease: "easeInOut" 
                         }}
                       />
                       
-                      {/* Green portion - up to date */}
-                      <motion.div 
-                        className="absolute top-0 left-0 w-full h-full rounded-full border-[10px]"
-                        style={{ 
-                          clipPath: 'polygon(50% 50%, 100% 50%, 100% 0, 0 0, 0 50%)',
-                          borderColor: '#10B981'
-                        }}
-                        initial={{ opacity: 0.7 }}
-                        animate={{ opacity: [0.7, 1, 0.7] }}
-                        transition={{ repeat: Infinity, duration: 3 }}
-                      />
+                      {/* Segment indicators with dynamic animations */}
+                      <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full">
+                        {/* Green Arc - Up to date */}
+                        <motion.path
+                          d="M50,50 L100,50 A50,50 0 0,0 50,0 L50,50 Z"
+                          fill="#10B981"
+                          initial={{ opacity: 0.7 }}
+                          animate={{ 
+                            opacity: [0.7, 0.9, 0.7],
+                            scale: [1, 1.02, 1],
+                          }}
+                          style={{ transformOrigin: 'center' }}
+                          transition={{ repeat: Infinity, duration: 3 }}
+                        />
+                        
+                        {/* Yellow Arc - Due soon */}
+                        <motion.path
+                          d="M50,50 L0,50 A50,50 0 0,0 12.5,87.5 L50,50 Z"
+                          fill="#F59E0B"
+                          initial={{ opacity: 0.7 }}
+                          animate={{ 
+                            opacity: [0.7, 0.9, 0.7],
+                            scale: [1, 1.02, 1],
+                          }}
+                          style={{ transformOrigin: 'center' }}
+                          transition={{ repeat: Infinity, duration: 3, delay: 1 }}
+                        />
+                        
+                        {/* Red Arc - Overdue */}
+                        <motion.path
+                          d="M50,50 L12.5,87.5 A50,50 0 0,0 100,50 L50,50 Z"
+                          fill="#EF4444"
+                          initial={{ opacity: 0.7 }}
+                          animate={{ 
+                            opacity: [0.7, 0.9, 0.7],
+                            scale: [1, 1.02, 1],
+                          }}
+                          style={{ transformOrigin: 'center' }}
+                          transition={{ repeat: Infinity, duration: 3, delay: 2 }}
+                        />
+                      </svg>
                       
-                      {/* Yellow portion - due soon */}
+                      {/* Animated white circle in center */}
                       <motion.div 
-                        className="absolute top-0 left-0 w-full h-full rounded-full border-[10px]"
-                        style={{ 
-                          clipPath: 'polygon(50% 50%, 0 50%, 0 100%, 25% 100%)',
-                          borderColor: '#F59E0B'
-                        }}
-                        initial={{ opacity: 0.7 }}
-                        animate={{ opacity: [0.7, 1, 0.7] }}
-                        transition={{ repeat: Infinity, duration: 3, delay: 1 }}
-                      />
-                      
-                      {/* Red portion - overdue */}
-                      <motion.div 
-                        className="absolute top-0 left-0 w-full h-full rounded-full border-[10px]"
-                        style={{ 
-                          clipPath: 'polygon(50% 50%, 25% 100%, 100% 100%, 100% 50%)',
-                          borderColor: '#EF4444'
-                        }}
-                        initial={{ opacity: 0.7 }}
-                        animate={{ opacity: [0.7, 1, 0.7] }}
-                        transition={{ repeat: Infinity, duration: 3, delay: 2 }}
-                      />
-                      
-                      {/* Center of gauge */}
-                      <motion.div 
-                        className="absolute inset-0 m-[10px] rounded-full bg-white flex flex-col items-center justify-center shadow-inner"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] rounded-full bg-white shadow-inner flex flex-col items-center justify-center z-20"
                         initial={{ scale: 0.9 }}
-                        animate={{ scale: [0.9, 1, 0.9] }}
-                        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                        animate={{ 
+                          scale: [0.95, 1, 0.95],
+                          boxShadow: [
+                            "inset 0 0 5px rgba(0,0,0,0.1)",
+                            "inset 0 0 15px rgba(0,0,0,0.2)",
+                            "inset 0 0 5px rgba(0,0,0,0.1)"
+                          ]
+                        }}
+                        transition={{ 
+                          repeat: Infinity, 
+                          duration: 4, 
+                          ease: "easeInOut"
+                        }}
                       >
-                        <span className="text-2xl font-bold bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 text-transparent bg-clip-text">3</span>
+                        <motion.span 
+                          className="text-2xl font-bold"
+                          animate={{
+                            background: [
+                              "linear-gradient(to right, #8B5CF6, #6366F1)",
+                              "linear-gradient(to right, #6366F1, #EC4899)",
+                              "linear-gradient(to right, #EC4899, #8B5CF6)"
+                            ],
+                            backgroundClip: "text",
+                            WebkitBackgroundClip: "text",
+                            color: "transparent",
+                          }}
+                          transition={{
+                            repeat: Infinity,
+                            duration: 3,
+                          }}
+                        >
+                          3
+                        </motion.span>
                         <span className="text-xs text-gray-500">Due Services</span>
                       </motion.div>
                     </div>
