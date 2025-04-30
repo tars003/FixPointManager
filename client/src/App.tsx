@@ -344,7 +344,7 @@ function Router() {
                 variants={pageVariants}
                 transition={{ duration: 0.3 }}
               >
-                <ArenaHome />
+                <ArenaMain />
               </motion.div>
             )}
           </Route>
