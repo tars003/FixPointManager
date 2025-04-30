@@ -37,7 +37,11 @@ import {
   Search,
   ArrowUpRight,
   CheckCircle,
-  MessageCircle
+  MessageCircle,
+  Share2,
+  Activity,
+  BarChart2,
+  XCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -590,92 +594,222 @@ const DashboardEnhanced = () => {
             </svg>
           </motion.div>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-lg">Your Vehicles</h3>
+            <h3 className="font-semibold text-lg">Overall Summary</h3>
             <Button 
               variant="ghost" 
               size="sm"
-              onClick={() => navigateTo('/vehicle-vault')}
+              onClick={() => {
+                /* Share functionality would be implemented here */
+                alert('Sharing dashboard summary...');
+              }}
               className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
             >
-              View All
-              <ChevronRight className="ml-1 h-4 w-4" />
+              Share
+              <Share2 className="ml-1 h-4 w-4" />
             </Button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {vehicleQuickAccess.map(vehicle => (
-              <motion.div 
-                key={vehicle.id}
-                className="border rounded-xl overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
-                whileHover={{ y: -3 }}
-                onClick={() => navigateTo(`/vehicle-vault/${vehicle.id}`)}
-              >
-                <div className="h-24 bg-gray-100 flex items-center justify-center relative">
-                  {vehicle.imageSrc ? (
-                    <img 
-                      src={vehicle.imageSrc} 
-                      alt={vehicle.name} 
-                      className="w-full h-full object-cover" 
-                    />
-                  ) : (
-                    <Car className="h-10 w-10 text-gray-400" />
-                  )}
-                  <Badge 
-                    className={`absolute top-2 right-2 ${
-                      vehicle.fuelType === 'electric' 
-                        ? 'bg-blue-100 text-blue-600'
-                        : vehicle.fuelType === 'diesel'
-                          ? 'bg-amber-100 text-amber-600'
-                          : 'bg-green-100 text-green-600'
-                    }`}
-                  >
-                    {vehicle.fuelType}
+            {/* User Activity Chart */}
+            <motion.div 
+              className="border rounded-xl overflow-hidden hover:shadow-md transition-shadow p-4"
+              whileHover={{ y: -3 }}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="font-medium text-gray-900 flex items-center">
+                  <Activity className="h-4 w-4 text-purple-500 mr-2" />
+                  User Activity
+                </h4>
+                <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200">
+                  Last 30 days
+                </Badge>
+              </div>
+              
+              <div className="h-48 w-full relative">
+                {/* Activity Doughnut Chart */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative w-32 h-32">
+                    {/* Purple segment - 40% */}
+                    <div className="absolute inset-0 rounded-full border-8 border-purple-500" style={{ 
+                      clipPath: 'polygon(50% 50%, 100% 50%, 100% 0, 50% 0)'
+                    }}></div>
+                    {/* Cyan segment - 25% */}
+                    <div className="absolute inset-0 rounded-full border-8 border-cyan-500" style={{ 
+                      clipPath: 'polygon(50% 50%, 50% 0, 75% 0, 75% 50%)'
+                    }}></div>
+                    {/* Green segment - 20% */}
+                    <div className="absolute inset-0 rounded-full border-8 border-green-500" style={{ 
+                      clipPath: 'polygon(50% 50%, 50% 100%, 25% 100%, 25% 50%)'
+                    }}></div>
+                    {/* Orange segment - 15% */}
+                    <div className="absolute inset-0 rounded-full border-8 border-orange-500" style={{ 
+                      clipPath: 'polygon(50% 50%, 15% 50%, 15% 85%, 50% 85%)'
+                    }}></div>
+                    
+                    {/* Center white circle */}
+                    <div className="absolute inset-0 m-3 rounded-full bg-white flex items-center justify-center">
+                      <span className="text-lg font-bold">452</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
+                  <span className="text-xs">Vehicle Checks</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full bg-cyan-500 mr-2"></div>
+                  <span className="text-xs">Service Bookings</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                  <span className="text-xs">Arena Projects</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full bg-orange-500 mr-2"></div>
+                  <span className="text-xs">Parts Ordered</span>
+                </div>
+              </div>
+            </motion.div>
+            
+            {/* Usage Distribution Chart */}
+            <motion.div 
+              className="border rounded-xl overflow-hidden hover:shadow-md transition-shadow p-4"
+              whileHover={{ y: -3 }}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="font-medium text-gray-900 flex items-center">
+                  <BarChart2 className="h-4 w-4 text-blue-500 mr-2" />
+                  Feature Usage
+                </h4>
+                <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+                  Weekly Trend
+                </Badge>
+              </div>
+              
+              <div className="h-48 w-full">
+                {/* Bar Chart */}
+                <div className="h-full w-full flex items-end justify-between px-2">
+                  <div className="flex flex-col items-center">
+                    <div className="w-8 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-md" style={{ height: '75%' }}></div>
+                    <span className="text-xs mt-1">Mon</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="w-8 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-md" style={{ height: '50%' }}></div>
+                    <span className="text-xs mt-1">Tue</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="w-8 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-md" style={{ height: '85%' }}></div>
+                    <span className="text-xs mt-1">Wed</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="w-8 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-md" style={{ height: '65%' }}></div>
+                    <span className="text-xs mt-1">Thu</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="w-8 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-md" style={{ height: '90%' }}></div>
+                    <span className="text-xs mt-1">Fri</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="w-8 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-md" style={{ height: '45%' }}></div>
+                    <span className="text-xs mt-1">Sat</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="w-8 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-md" style={{ height: '35%' }}></div>
+                    <span className="text-xs mt-1">Sun</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Weekly average:</span>
+                  <span className="font-semibold">64 sessions</span>
+                </div>
+                <div className="flex items-center mt-1">
+                  <ArrowUpRight className="h-3.5 w-3.5 text-green-500 mr-1" />
+                  <span className="text-xs text-green-600">12% increase from last week</span>
+                </div>
+              </div>
+            </motion.div>
+            
+            {/* Vehicle Distribution Chart */}
+            <motion.div 
+              className="border rounded-xl overflow-hidden hover:shadow-md transition-shadow p-4"
+              whileHover={{ y: -3 }}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="font-medium text-gray-900 flex items-center">
+                  <PieChart className="h-4 w-4 text-emerald-500 mr-2" />
+                  Vehicle Distribution
+                </h4>
+                <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-200">
+                  By Type
+                </Badge>
+              </div>
+              
+              <div className="h-48 w-full relative">
+                {/* Semi-circle progress bars */}
+                <div className="absolute inset-0 flex flex-col justify-evenly p-4">
+                  {/* Sedan - 45% */}
+                  <div className="relative h-10 flex items-center">
+                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-500 rounded-full" style={{ width: '45%' }}></div>
+                    </div>
+                    <div className="ml-2 flex items-center justify-between min-w-[70px]">
+                      <span className="text-xs">Sedan</span>
+                      <Badge className="ml-1 bg-emerald-100 text-emerald-600 text-xs">45%</Badge>
+                    </div>
+                  </div>
+                  
+                  {/* SUV - 30% */}
+                  <div className="relative h-10 flex items-center">
+                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-blue-500 rounded-full" style={{ width: '30%' }}></div>
+                    </div>
+                    <div className="ml-2 flex items-center justify-between min-w-[70px]">
+                      <span className="text-xs">SUV</span>
+                      <Badge className="ml-1 bg-blue-100 text-blue-600 text-xs">30%</Badge>
+                    </div>
+                  </div>
+                  
+                  {/* Hatchback - 15% */}
+                  <div className="relative h-10 flex items-center">
+                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-violet-500 rounded-full" style={{ width: '15%' }}></div>
+                    </div>
+                    <div className="ml-2 flex items-center justify-between min-w-[70px]">
+                      <span className="text-xs">Hatchback</span>
+                      <Badge className="ml-1 bg-violet-100 text-violet-600 text-xs">15%</Badge>
+                    </div>
+                  </div>
+                  
+                  {/* Motorcycle - 10% */}
+                  <div className="relative h-10 flex items-center">
+                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-amber-500 rounded-full" style={{ width: '10%' }}></div>
+                    </div>
+                    <div className="ml-2 flex items-center justify-between min-w-[70px]">
+                      <span className="text-xs">Motorcycle</span>
+                      <Badge className="ml-1 bg-amber-100 text-amber-600 text-xs">10%</Badge>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-2 flex justify-between items-center">
+                <div className="flex items-center">
+                  <Badge variant="outline" className="text-xs border-dashed">
+                    Total: 183 vehicles
                   </Badge>
                 </div>
-                <div className="p-3">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h4 className="font-medium text-gray-900">{vehicle.name}</h4>
-                      <p className="text-xs text-gray-500">{vehicle.licensePlate}</p>
-                    </div>
-                    <Badge 
-                      className={vehicle.healthScore >= 90
-                        ? 'bg-emerald-100 text-emerald-700'
-                        : vehicle.healthScore >= 75
-                          ? 'bg-amber-100 text-amber-700'
-                          : 'bg-rose-100 text-rose-700'
-                      }
-                    >
-                      {vehicle.healthScore}%
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <div className={`flex items-center ${
-                      vehicle.serviceStatus === 'up-to-date'
-                        ? 'text-emerald-600'
-                        : vehicle.serviceStatus === 'due'
-                          ? 'text-amber-600'
-                          : 'text-rose-600'
-                    }`}>
-                      {vehicle.serviceStatus === 'up-to-date' ? (
-                        <CheckCircle className="h-3 w-3 mr-1" />
-                      ) : (
-                        <Clock className="h-3 w-3 mr-1" />
-                      )}
-                      <span>
-                        {vehicle.serviceStatus === 'up-to-date' 
-                          ? 'Service up to date' 
-                          : vehicle.serviceStatus === 'due'
-                            ? 'Service due'
-                            : 'Service overdue'
-                        }
-                      </span>
-                    </div>
-                    <span className="text-gray-400">Updated {vehicle.lastUpdate}</span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                <Button variant="ghost" size="sm" className="text-xs px-2 h-7" onClick={() => navigateTo('/vehicle-vault')}>
+                  View Details
+                </Button>
+              </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>
