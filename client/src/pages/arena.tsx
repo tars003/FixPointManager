@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -160,6 +161,9 @@ type CustomizationCategory = 'exterior' | 'interior' | 'performance' | 'wheels-t
 
 // Enhanced Arena Studio Page
 const Arena: React.FC = () => {
+  // Location and navigation hooks
+  const [, setLocation] = useLocation();
+  
   // State for navigation and selections
   const [activeTab, setActiveTab] = useState('vehicle-selection');
   const [selectedVehicle, setSelectedVehicle] = useState<null | typeof vehicleModels[0]>(null);
@@ -351,6 +355,10 @@ const Arena: React.FC = () => {
           
           <div className="flex items-center gap-2 mt-4 md:mt-0">
             <Button variant="outline" onClick={handleReset}>New Project</Button>
+            <Button variant="outline" onClick={() => setLocation("/arena-studio/premium")}>
+              <Sparkles className="h-4 w-4 mr-2" />
+              Premium Studio
+            </Button>
             <Button variant="outline">
               <Share2 className="h-4 w-4 mr-2" />
               Share
