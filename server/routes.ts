@@ -355,43 +355,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
   apiRouter.get("/customization-projects", async (req, res) => {
     try {
       // For authenticated users, get their actual projects from the database
-      if (req.isAuthenticated()) {
+      if (req.isAuthenticated() && req.user) {
         const userId = req.user.id;
-        const projects = await db.select()
-          .from(customizationProjects)
-          .where(eq(customizationProjects.userId, userId))
-          .orderBy(desc(customizationProjects.updatedAt));
-        
-        return res.json(projects);
+        try {
+          const projects = await db.select()
+            .from(customizationProjects)
+            .where(eq(customizationProjects.userId, userId))
+            .orderBy(desc(customizationProjects.updatedAt));
+          
+          return res.json(projects);
+        } catch (dbError) {
+          console.error("Database query error:", dbError);
+          // Fall back to demo data if database query fails
+        }
       }
       
-      // For demo purposes (non-authenticated users)
+      // For demo purposes (non-authenticated users or if DB query fails)
       const projects = [
         {
-          id: 1,
+          id: 101,
           name: "Honda City Sport Package",
           vehicleId: 1,
-          userId: 1,
+          userId: 999,
           description: "Sport package with custom rims and body kit",
-          customizations: { exterior: { color: "red", rims: "sport" } },
-          thumbnailUrl: "/images/arena/honda-city.jpg",
+          customizations: JSON.stringify({ 
+            vehicleColor: "#FF5733",
+            colorFinish: "metallic",
+            selectedBodyKit: "sport",
+            selectedSpoiler: "mid",
+            cartItems: [],
+            mainCategory: "exterior",
+            exteriorSubcategory: "body-kits"
+          }),
           status: "in-progress",
           visibility: "public",
-          totalPoints: 1250,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          id: 2,
+          id: 102,
           name: "Royal Enfield Classic Overhaul",
           vehicleId: 2,
-          userId: 1,
+          userId: 999,
           description: "Classic look with chrome accents",
-          customizations: { exterior: { color: "black", handlebar: "cruiser" } },
-          thumbnailUrl: "/images/arena/royal-enfield.jpg",
+          customizations: JSON.stringify({ 
+            vehicleColor: "#000000",
+            colorFinish: "matte",
+            selectedBodyKit: "premium", 
+            selectedSpoiler: "none",
+            cartItems: [],
+            mainCategory: "exterior",
+            exteriorSubcategory: "paint-wraps"
+          }),
           status: "draft",
           visibility: "private",
-          totalPoints: 650,
           createdAt: new Date(Date.now() - 86400000),
           updatedAt: new Date(Date.now() - 86400000)
         }
