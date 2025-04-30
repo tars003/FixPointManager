@@ -38,7 +38,7 @@ const ProjectControls: React.FC<ProjectControlsProps> = ({
 
   // Query draft projects
   const { data: draftProjects, isLoading } = useQuery<CustomizationProject[]>({
-    queryKey: ['/api/arena/projects/drafts'],
+    queryKey: ['/api/customization-projects'],
     enabled: resumeDialogOpen, // Only fetch when the resume dialog is open
   });
 
@@ -52,8 +52,8 @@ const ProjectControls: React.FC<ProjectControlsProps> = ({
       status: 'draft' | 'in-progress' | 'completed';
     }) => {
       const res = await apiRequest(
-        projectId ? 'PATCH' : 'POST',
-        projectId ? `/api/arena/projects/${projectId}` : '/api/arena/projects',
+        projectId ? 'PUT' : 'POST',
+        projectId ? `/api/customization-projects/${projectId}` : '/api/customization-projects',
         data
       );
       return await res.json();
@@ -64,7 +64,7 @@ const ProjectControls: React.FC<ProjectControlsProps> = ({
         description: "Your project has been saved as a draft",
       });
       setSaveDialogOpen(false);
-      queryClient.invalidateQueries({ queryKey: ['/api/arena/projects'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/customization-projects'] });
     },
     onError: (error: Error) => {
       toast({

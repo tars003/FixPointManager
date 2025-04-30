@@ -351,8 +351,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.use("/api", apiRouter);
 
-  // Arena Dashboard API Routes
-  apiRouter.get("/arena/projects", async (req, res) => {
+  // Customization Projects API Routes
+  apiRouter.get("/customization-projects", async (req, res) => {
     try {
       // For authenticated users, get their actual projects from the database
       if (req.isAuthenticated()) {

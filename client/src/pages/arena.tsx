@@ -546,7 +546,7 @@ const Arena: React.FC = () => {
               currentStep={activeTab === 'vehicle-selection' ? 1 : activeTab === 'customization' ? 2 : activeTab === 'performance' ? 3 : 4}
               totalSteps={4}
               onSave={handleSaveProject}
-              onResume={projectsData?.length ? () => {} : undefined}
+              onResume={handleResumeProject}
               vehicleModel={selectedVehicle?.name}
               customizations={{
                 bodyKit: selectedBodyKit !== 'stock' ? bodyKitOptions.find(kit => kit.id === selectedBodyKit)?.name : 'Stock',
