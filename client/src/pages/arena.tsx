@@ -53,7 +53,7 @@ import ArenaWrapper from '@/components/arena/ArenaWrapper';
 import PreviewCard from '@/components/arena/PreviewCard';
 import EnhancedColorSelector from '@/components/arena/EnhancedColorSelector';
 import CustomizationPackage from '@/components/arena/CustomizationPackage';
-import CartPanel, { CartItem } from '@/components/arena/CartPanel';
+import CartPanel, { CartItem as CartPanelItem } from '@/components/arena/CartPanel';
 import ProjectControls from '@/components/arena/ProjectControls';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '@/lib/queryClient';
@@ -68,7 +68,7 @@ const vehicleModels = [
 ];
 
 // Example body kit options
-const bodyKitOptions = [
+const bodyKitOptions: CustomizationItem[] = [
   {
     id: 'stock',
     name: 'Factory Standard',
@@ -116,7 +116,7 @@ const bodyKitOptions = [
 ];
 
 // Example spoiler options
-const spoilerOptions = [
+const spoilerOptions: CustomizationItem[] = [
   {
     id: 'none',
     name: 'No Spoiler',
@@ -150,7 +150,8 @@ const spoilerOptions = [
     price: 45000,
     recommended: true,
     stock: 'in-stock' as const,
-    installTime: '3-4 hrs'
+    installTime: '3-4 hrs',
+    discount: 5
   }
 ];
 
@@ -179,12 +180,17 @@ interface CustomizationItem {
   recommended?: boolean;
 }
 
-interface CartItem {
-  id: string;
+interface CustomizationProject {
+  id: number;
   name: string;
-  price: number;
-  category: string;
+  description?: string | null;
+  vehicleId: number;
+  customizations?: Record<string, any>;
+  status?: string;
+  updatedAt?: string;
 }
+
+// Moved to @/components/arena/CartPanel.tsx
 
 // Enhanced Arena Studio Page
 const Arena: React.FC = () => {
@@ -200,7 +206,7 @@ const Arena: React.FC = () => {
   const [selectedSpoiler, setSelectedSpoiler] = useState('none');
   const [vehicleColor, setVehicleColor] = useState('#1E40AF');
   const [colorFinish, setColorFinish] = useState<'gloss' | 'matte' | 'metallic' | 'pearlescent' | 'satin'>('gloss');
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartPanelItem[]>([]);
   const [likedItems, setLikedItems] = useState<string[]>([]);
   const [isUpperTabsSticky, setIsUpperTabsSticky] = useState(false);
   
@@ -295,7 +301,7 @@ const Arena: React.FC = () => {
   };
   
   // Function to add item to cart
-  const handleAddToCart = (item: CartItem) => {
+  const handleAddToCart = (item: CartPanelItem) => {
     // Check if the item is already in the cart
     if (!cartItems.some(cartItem => cartItem.id === item.id)) {
       setCartItems([...cartItems, item]);
@@ -482,7 +488,7 @@ const Arena: React.FC = () => {
   };
   
   // Handle resume project
-  const handleResumeProject = (project: any) => {
+  const handleResumeProject = (project: CustomizationProject) => {
     setProjectId(project.id);
     setProjectName(project.name);
     setProjectDesc(project.description || '');
