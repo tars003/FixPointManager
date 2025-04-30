@@ -40,6 +40,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     };
   };
 
+  // Membership Routes
+  apiRouter.get("/membership-status", async (req, res) => {
+    // If userId is not provided, use 1 as the default (demo user)
+    const userIdParam = req.query.userId || '1';
+    const userId = parseInt(userIdParam as string);
+    
+    if (isNaN(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+    
+    try {
+      // In a real app, this would check a membership table in the database
+      // For now, we'll simulate a response based on user ID
+      // User 1 has no membership, user 2 has basic, user 3 has premium
+      let hasMembership = false;
+      let membershipData = null;
+      
+      // For demo purposes, even userIDs have membership
+      if (userId % 2 === 0) {
+        hasMembership = true;
+        membershipData = {
+          userId,
+          membershipType: userId % 3 === 0 ? "elite" : "premium",
+          membershipNumber: "2241 8891 4412 5551",
+          memberSince: "April 2025",
+          points: 1250,
+          vehicleCount: 2,
+          expiryDate: "04/28",
+          status: "active"
+        };
+      }
+      
+      res.status(200).json({ hasMembership, membershipData });
+    } catch (error) {
+      console.error("Error fetching membership status:", error);
+      res.status(500).json({ message: "Error fetching membership status" });
+    }
+  });
+  
   // Vehicle Routes
   apiRouter.get("/vehicles", async (req, res) => {
     // If userId is not provided, use 1 as the default (demo user)
