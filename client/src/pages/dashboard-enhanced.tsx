@@ -740,7 +740,12 @@ const DashboardEnhanced = () => {
             >
               <div className="flex items-center justify-between mb-3">
                 <h4 className="font-medium text-gray-900 flex items-center">
-                  <Wrench className="h-4 w-4 text-purple-500 mr-2" />
+                  <motion.div
+                    animate={{ rotate: [0, 10, 0] }}
+                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                  >
+                    <Wrench className="h-4 w-4 text-purple-500 mr-2" />
+                  </motion.div>
                   Service Health Tracker
                 </h4>
                 <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200">
@@ -752,40 +757,117 @@ const DashboardEnhanced = () => {
                 {/* Service tracker with circular display */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="relative">
+                    <motion.div
+                      className="absolute -inset-4"
+                      initial={{ opacity: 0.5, scale: 1 }}
+                      animate={{ 
+                        opacity: [0.2, 0.5, 0.2],
+                        scale: [1, 1.05, 1],
+                        rotate: [0, 360]
+                      }}
+                      transition={{ 
+                        repeat: Infinity, 
+                        duration: 20,
+                        ease: "linear" 
+                      }}
+                    >
+                      <svg viewBox="0 0 100 100" className="w-40 h-40 opacity-10">
+                        <defs>
+                          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#8B5CF6" />
+                            <stop offset="50%" stopColor="#EC4899" />
+                            <stop offset="100%" stopColor="#3B82F6" />
+                          </linearGradient>
+                        </defs>
+                        <path d="M50,0 L60,30 L90,30 L65,50 L75,80 L50,65 L25,80 L35,50 L10,30 L40,30 Z" fill="url(#gradient)" />
+                      </svg>
+                    </motion.div>
+                    
+                    <motion.div
+                      className="absolute -inset-2"
+                      initial={{ opacity: 0.5, scale: 1 }}
+                      animate={{ 
+                        opacity: [0.4, 0.7, 0.4],
+                        rotate: [0, -180]
+                      }}
+                      transition={{ 
+                        repeat: Infinity, 
+                        duration: 15,
+                        ease: "linear" 
+                      }}
+                    >
+                      <svg viewBox="0 0 100 100" className="w-36 h-36 opacity-10">
+                        <circle cx="50" cy="50" r="45" stroke="#6366F1" strokeWidth="2" fill="none" />
+                        <circle cx="20" cy="20" r="5" fill="#EC4899" />
+                        <circle cx="80" cy="80" r="5" fill="#8B5CF6" />
+                        <circle cx="80" cy="20" r="5" fill="#3B82F6" />
+                        <circle cx="20" cy="80" r="5" fill="#F97316" />
+                      </svg>
+                    </motion.div>
+                    
                     {/* Circular indicator with gauge */}
-                    <div className="w-32 h-32 rounded-full border-8 border-gray-100 relative">
+                    <div className="w-32 h-32 rounded-full relative z-10">
+                      {/* Colorful background with gradient */}
+                      <motion.div 
+                        className="absolute inset-0 rounded-full"
+                        style={{ 
+                          background: 'conic-gradient(from 180deg, #10B981 0deg, #10B981 180deg, #F59E0B 180deg, #F59E0B 270deg, #EF4444 270deg, #EF4444 360deg)',
+                          opacity: 0.2
+                        }}
+                        animate={{ rotate: [0, 360] }}
+                        transition={{ 
+                          repeat: Infinity, 
+                          duration: 60, 
+                          ease: "linear"
+                        }}
+                      />
+                      
                       {/* Green portion - up to date */}
-                      <div 
-                        className="absolute top-0 left-0 w-full h-full rounded-full border-8 border-emerald-500" 
+                      <motion.div 
+                        className="absolute top-0 left-0 w-full h-full rounded-full border-[10px]"
                         style={{ 
                           clipPath: 'polygon(50% 50%, 100% 50%, 100% 0, 0 0, 0 50%)',
-                          borderColor: 'transparent transparent transparent transparent'
+                          borderColor: '#10B981'
                         }}
-                      ></div>
+                        initial={{ opacity: 0.7 }}
+                        animate={{ opacity: [0.7, 1, 0.7] }}
+                        transition={{ repeat: Infinity, duration: 3 }}
+                      />
                       
                       {/* Yellow portion - due soon */}
-                      <div 
-                        className="absolute top-0 left-0 w-full h-full rounded-full border-8 border-amber-500" 
+                      <motion.div 
+                        className="absolute top-0 left-0 w-full h-full rounded-full border-[10px]"
                         style={{ 
                           clipPath: 'polygon(50% 50%, 0 50%, 0 100%, 25% 100%)',
-                          borderColor: 'transparent transparent transparent transparent'
+                          borderColor: '#F59E0B'
                         }}
-                      ></div>
+                        initial={{ opacity: 0.7 }}
+                        animate={{ opacity: [0.7, 1, 0.7] }}
+                        transition={{ repeat: Infinity, duration: 3, delay: 1 }}
+                      />
                       
                       {/* Red portion - overdue */}
-                      <div 
-                        className="absolute top-0 left-0 w-full h-full rounded-full border-8 border-rose-500" 
+                      <motion.div 
+                        className="absolute top-0 left-0 w-full h-full rounded-full border-[10px]"
                         style={{ 
                           clipPath: 'polygon(50% 50%, 25% 100%, 100% 100%, 100% 50%)',
-                          borderColor: 'transparent transparent transparent transparent'
+                          borderColor: '#EF4444'
                         }}
-                      ></div>
+                        initial={{ opacity: 0.7 }}
+                        animate={{ opacity: [0.7, 1, 0.7] }}
+                        transition={{ repeat: Infinity, duration: 3, delay: 2 }}
+                      />
                       
                       {/* Center of gauge */}
-                      <div className="absolute inset-0 m-1 rounded-full bg-white flex flex-col items-center justify-center">
-                        <span className="text-2xl font-bold text-gray-800">3</span>
+                      <motion.div 
+                        className="absolute inset-0 m-[10px] rounded-full bg-white flex flex-col items-center justify-center shadow-inner"
+                        initial={{ scale: 0.9 }}
+                        animate={{ scale: [0.9, 1, 0.9] }}
+                        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                      >
+                        <span className="text-2xl font-bold bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 text-transparent bg-clip-text">3</span>
                         <span className="text-xs text-gray-500">Due Services</span>
-                      </div>
+                      </motion.div>
                     </div>
                   </div>
                 </div>
@@ -793,18 +875,27 @@ const DashboardEnhanced = () => {
                 {/* Service details */}
                 <div className="absolute bottom-0 inset-x-0 px-2">
                   <div className="grid grid-cols-3 gap-1 mb-1">
-                    <div className="bg-emerald-50 rounded p-1 text-center">
+                    <motion.div 
+                      className="bg-emerald-50 rounded p-1 text-center border border-emerald-100 shadow-sm"
+                      whileHover={{ y: -2 }}
+                    >
                       <div className="text-xs font-medium text-emerald-700">2</div>
                       <div className="text-[10px] text-gray-500">Up to Date</div>
-                    </div>
-                    <div className="bg-amber-50 rounded p-1 text-center">
+                    </motion.div>
+                    <motion.div 
+                      className="bg-amber-50 rounded p-1 text-center border border-amber-100 shadow-sm"
+                      whileHover={{ y: -2 }}
+                    >
                       <div className="text-xs font-medium text-amber-700">1</div>
                       <div className="text-[10px] text-gray-500">Due Soon</div>
-                    </div>
-                    <div className="bg-rose-50 rounded p-1 text-center">
+                    </motion.div>
+                    <motion.div 
+                      className="bg-rose-50 rounded p-1 text-center border border-rose-100 shadow-sm"
+                      whileHover={{ y: -2 }}
+                    >
                       <div className="text-xs font-medium text-rose-700">0</div>
                       <div className="text-[10px] text-gray-500">Overdue</div>
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
               </div>
@@ -812,11 +903,28 @@ const DashboardEnhanced = () => {
               <div className="mt-2 border-t pt-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <Calendar className="h-3.5 w-3.5 text-amber-500 mr-1" />
+                    <motion.div
+                      animate={{ y: [0, -2, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.5 }}
+                    >
+                      <Calendar className="h-3.5 w-3.5 text-amber-500 mr-1" />
+                    </motion.div>
                     <span className="text-xs text-amber-600">Next Service: Honda City in 14 days</span>
                   </div>
-                  <Button variant="ghost" size="sm" className="text-xs px-2 h-7" onClick={() => navigateTo('/book-service')}>
-                    Schedule Now
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-xs px-2 h-7" 
+                    onClick={() => navigateTo('/book-service')}
+                  >
+                    <span className="relative">
+                      <motion.span
+                        className="absolute -inset-1 rounded-full bg-amber-100 opacity-40"
+                        animate={{ scale: [0.9, 1.1, 0.9] }}
+                        transition={{ repeat: Infinity, duration: 2 }}
+                      />
+                      Schedule Now
+                    </span>
                   </Button>
                 </div>
               </div>
