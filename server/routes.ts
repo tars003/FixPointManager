@@ -405,7 +405,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Get draft projects for current user
-  apiRouter.get("/arena/projects/drafts", async (req, res) => {
+  apiRouter.get("/customization-projects/drafts", async (req, res) => {
     try {
       if (!req.isAuthenticated()) {
         return res.status(401).json({ error: "Not authenticated" });
@@ -429,7 +429,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Get a specific project
-  apiRouter.get("/arena/projects/:id", async (req, res) => {
+  apiRouter.get("/customization-projects/:id", async (req, res) => {
     try {
       const projectId = parseInt(req.params.id);
       
@@ -463,7 +463,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Create a new project
-  apiRouter.post("/arena/projects", async (req, res) => {
+  apiRouter.post("/customization-projects", async (req, res) => {
     try {
       if (!req.isAuthenticated()) {
         return res.status(401).json({ error: "Not authenticated" });
@@ -500,7 +500,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Update a project
-  apiRouter.patch("/arena/projects/:id", async (req, res) => {
+  apiRouter.put("/customization-projects/:id", async (req, res) => {
     try {
       if (!req.isAuthenticated()) {
         return res.status(401).json({ error: "Not authenticated" });
