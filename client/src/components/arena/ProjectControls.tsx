@@ -197,7 +197,7 @@ const ProjectControls: React.FC<ProjectControlsProps> = ({
                       <h3 className="font-medium">{project.name}</h3>
                       <p className="text-sm text-gray-500">{project.description}</p>
                       <div className="flex justify-between mt-2 text-xs text-gray-400">
-                        <span>Last updated: {new Date(project.updatedAt).toLocaleDateString()}</span>
+                        <span>Last updated: {project.updatedAt && new Date(project.updatedAt).toLocaleDateString()}</span>
                         <span>Status: {project.status}</span>
                       </div>
                     </motion.div>

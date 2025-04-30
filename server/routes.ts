@@ -2,16 +2,20 @@ import express, { type Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from 'ws';
 import { storage } from "./storage";
+import { db } from "./db";
 import { 
   insertVehicleSchema, 
   insertServiceBookingSchema, 
   insertAvailabilitySchema,
   insertInspectionSchema,
   insertEmergencyProfileSchema,
-  insertEmergencyIncidentSchema
+  insertEmergencyIncidentSchema,
+  customizationProjects,
+  insertCustomizationProjectSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
+import { eq, and, desc } from "drizzle-orm";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const apiRouter = express.Router();
@@ -349,33 +353,194 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Arena Dashboard API Routes
   apiRouter.get("/arena/projects", async (req, res) => {
-    // Mock projects for demo
-    const projects = [
-      {
-        id: 1,
-        title: "Honda City Sport Package",
-        vehicleId: 1,
-        userId: 1,
-        progress: 65,
-        lastEdited: new Date().toISOString(),
-        totalCost: 85000,
-        isPublic: true,
-        status: "in-progress"
-      },
-      {
-        id: 2,
-        title: "Royal Enfield Classic Overhaul",
-        vehicleId: 2,
-        userId: 1,
-        progress: 30,
-        lastEdited: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-        totalCost: 42000,
-        isPublic: false,
-        status: "in-progress"
+    try {
+      // For authenticated users, get their actual projects from the database
+      if (req.isAuthenticated()) {
+        const userId = req.user.id;
+        const projects = await db.select()
+          .from(customizationProjects)
+          .where(eq(customizationProjects.userId, userId))
+          .orderBy(desc(customizationProjects.updatedAt));
+        
+        return res.json(projects);
       }
-    ];
-    
-    res.json(projects);
+      
+      // For demo purposes (non-authenticated users)
+      const projects = [
+        {
+          id: 1,
+          name: "Honda City Sport Package",
+          vehicleId: 1,
+          userId: 1,
+          description: "Sport package with custom rims and body kit",
+          customizations: { exterior: { color: "red", rims: "sport" } },
+          thumbnailUrl: "/images/arena/honda-city.jpg",
+          status: "in-progress",
+          visibility: "public",
+          totalPoints: 1250,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          id: 2,
+          name: "Royal Enfield Classic Overhaul",
+          vehicleId: 2,
+          userId: 1,
+          description: "Classic look with chrome accents",
+          customizations: { exterior: { color: "black", handlebar: "cruiser" } },
+          thumbnailUrl: "/images/arena/royal-enfield.jpg",
+          status: "draft",
+          visibility: "private",
+          totalPoints: 650,
+          createdAt: new Date(Date.now() - 86400000),
+          updatedAt: new Date(Date.now() - 86400000)
+        }
+      ];
+      
+      res.json(projects);
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      res.status(500).json({ error: "Failed to fetch projects" });
+    }
+  });
+  
+  // Get draft projects for current user
+  apiRouter.get("/arena/projects/drafts", async (req, res) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const userId = req.user.id;
+      
+      const projects = await db.select()
+        .from(customizationProjects)
+        .where(and(
+          eq(customizationProjects.userId, userId),
+          eq(customizationProjects.status, "draft")
+        ))
+        .orderBy(desc(customizationProjects.updatedAt));
+      
+      return res.status(200).json(projects);
+    } catch (error) {
+      console.error("Error fetching draft projects:", error);
+      return res.status(500).json({ error: "Failed to fetch draft projects" });
+    }
+  });
+  
+  // Get a specific project
+  apiRouter.get("/arena/projects/:id", async (req, res) => {
+    try {
+      const projectId = parseInt(req.params.id);
+      
+      if (isNaN(projectId)) {
+        return res.status(400).json({ error: "Invalid project ID" });
+      }
+      
+      const [project] = await db.select()
+        .from(customizationProjects)
+        .where(eq(customizationProjects.id, projectId));
+      
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      
+      // If user is authenticated, check if the project belongs to them or is public
+      if (req.isAuthenticated()) {
+        const userId = req.user.id;
+        if (project.userId !== userId && project.visibility !== "public") {
+          return res.status(403).json({ error: "Access denied" });
+        }
+      } else if (project.visibility !== "public") {
+        return res.status(403).json({ error: "Access denied" });
+      }
+      
+      return res.status(200).json(project);
+    } catch (error) {
+      console.error("Error fetching project:", error);
+      return res.status(500).json({ error: "Failed to fetch project" });
+    }
+  });
+  
+  // Create a new project
+  apiRouter.post("/arena/projects", async (req, res) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const userId = req.user.id;
+      
+      // Prepare project data
+      const projectData = {
+        ...req.body,
+        userId,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      
+      // Validate with schema
+      const validatedData = insertCustomizationProjectSchema.parse(projectData);
+      
+      // Insert into database
+      const [createdProject] = await db.insert(customizationProjects)
+        .values(validatedData)
+        .returning();
+      
+      return res.status(201).json(createdProject);
+    } catch (error) {
+      console.error("Error creating project:", error);
+      
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      
+      return res.status(500).json({ error: "Failed to create project" });
+    }
+  });
+  
+  // Update a project
+  apiRouter.patch("/arena/projects/:id", async (req, res) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const userId = req.user.id;
+      const projectId = parseInt(req.params.id);
+      
+      if (isNaN(projectId)) {
+        return res.status(400).json({ error: "Invalid project ID" });
+      }
+      
+      // Check if project exists and belongs to user
+      const [existingProject] = await db.select()
+        .from(customizationProjects)
+        .where(and(
+          eq(customizationProjects.id, projectId),
+          eq(customizationProjects.userId, userId)
+        ));
+      
+      if (!existingProject) {
+        return res.status(404).json({ error: "Project not found or access denied" });
+      }
+      
+      // Update project
+      const projectData = {
+        ...req.body,
+        updatedAt: new Date()
+      };
+      
+      const [updatedProject] = await db.update(customizationProjects)
+        .set(projectData)
+        .where(eq(customizationProjects.id, projectId))
+        .returning();
+      
+      return res.status(200).json(updatedProject);
+    } catch (error) {
+      console.error("Error updating project:", error);
+      return res.status(500).json({ error: "Failed to update project" });
+    }
   });
   
   apiRouter.get("/arena/trending", async (req, res) => {
