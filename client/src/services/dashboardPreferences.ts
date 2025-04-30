@@ -6,10 +6,19 @@ const DASHBOARD_PREFERENCES_KEY = 'fixpoint_dashboard_preferences';
 // Default dashboard modules
 const DEFAULT_DASHBOARD_MODULES: DashboardModule[] = [
   {
+    id: 'membership',
+    name: 'FixPoint Membership',
+    visible: true,
+    position: 0,
+    size: 'large',
+    type: 'feature',
+    section: 'top'
+  },
+  {
     id: 'overall-summary',
     name: 'Overall Summary',
     visible: true,
-    position: 0,
+    position: 1,
     size: 'medium',
     type: 'chart',
     section: 'top'

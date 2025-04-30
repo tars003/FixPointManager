@@ -493,6 +493,13 @@ function Router() {
               </motion.div>
             )}
           </Route>
+          <Route path="/membership">
+            {() => (
+              <PageTransition type="complex" duration={0.6}>
+                <MembershipPage />
+              </PageTransition>
+            )}
+          </Route>
           <Route>
             {() => (
               <motion.div
