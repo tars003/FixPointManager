@@ -17,6 +17,7 @@ import {
   TabsTrigger 
 } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Car,
   Settings,
@@ -28,12 +29,15 @@ import {
   Gauge,
   ChevronRight,
   PaintBucket,
+  Sparkles,
+  Zap,
+  Award,
+  AreaChart,
   Sofa,
   BadgePercent,
   StopCircle,
   CircleDot,
   ShieldCheck,
-  Award,
   DollarSign,
   Share2,
   Download,
@@ -43,10 +47,8 @@ import {
   ShoppingCart,
   Lightbulb,
   Paintbrush,
-  Plus,
-  Sparkles
+  Plus
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 import ArenaWrapper from '@/components/arena/ArenaWrapper';
 import PreviewCard from '@/components/arena/PreviewCard';
 import EnhancedColorSelector from '@/components/arena/EnhancedColorSelector';
@@ -395,6 +397,95 @@ const Arena: React.FC = () => {
           
           {/* Vehicle Selection Tab */}
           <TabsContent value="vehicle-selection">
+            {/* Hero section */}
+            <motion.div 
+              className="relative rounded-lg overflow-hidden mb-12 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
+              <div className="absolute h-full w-full bg-gradient-to-r from-blue-500/20 via-purple-500/5 to-transparent"></div>
+              
+              <div className="relative px-6 py-12 md:py-20 flex flex-col md:flex-row items-center justify-between">
+                <div className="md:max-w-md z-10">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.5 }}
+                  >
+                    <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
+                      Your Dream Vehicle <br/>
+                      <span className="text-blue-200">Begins Here</span>
+                    </h2>
+                    <p className="text-blue-100 mb-6">
+                      Choose your vehicle below and transform it with our advanced customization tools.
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      <Badge className="bg-blue-700/40 hover:bg-blue-700/60 text-blue-100 border-blue-500/20 px-3 py-1 flex items-center">
+                        <Sparkles className="h-3 w-3 mr-1" />
+                        Premium Customization
+                      </Badge>
+                      <Badge className="bg-purple-700/40 hover:bg-purple-700/60 text-purple-100 border-purple-500/20 px-3 py-1 flex items-center">
+                        <Zap className="h-3 w-3 mr-1" />
+                        Performance Tuning
+                      </Badge>
+                      <Badge className="bg-indigo-700/40 hover:bg-indigo-700/60 text-indigo-100 border-indigo-500/20 px-3 py-1 flex items-center">
+                        <AreaChart className="h-3 w-3 mr-1" />
+                        Real-time Preview
+                      </Badge>
+                    </div>
+                  </motion.div>
+                </div>
+                
+                <motion.div 
+                  className="relative mt-8 md:mt-0 z-10"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                >
+                  <div className="text-[180px] md:text-[220px] leading-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.4)]">🏎️</div>
+                  <div className="absolute -bottom-6 left-0 right-0 h-12 bg-gradient-to-t from-blue-900 to-transparent"></div>
+                </motion.div>
+                
+                {/* Animated elements */}
+                <motion.div
+                  className="absolute top-8 right-8 text-white/20 text-6xl"
+                  animate={{ 
+                    y: [0, -10, 0],
+                    opacity: [0.1, 0.2, 0.1],
+                  }}
+                  transition={{ 
+                    repeat: Infinity,
+                    duration: 4, 
+                    ease: "easeInOut" 
+                  }}
+                >
+                  ✨
+                </motion.div>
+                <motion.div
+                  className="absolute bottom-12 left-12 text-white/20 text-4xl"
+                  animate={{ 
+                    y: [0, 8, 0],
+                    opacity: [0.1, 0.15, 0.1],
+                  }}
+                  transition={{ 
+                    repeat: Infinity,
+                    duration: 5,
+                    ease: "easeInOut",
+                    delay: 1
+                  }}
+                >
+                  🛠️
+                </motion.div>
+              </div>
+            </motion.div>
+            
+            <h3 className="text-2xl font-bold mb-6 flex items-center">
+              <Car className="h-5 w-5 mr-2 text-blue-600" />
+              Select Your Vehicle
+            </h3>
+            
             <motion.div 
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
               initial={{ opacity: 0 }}
@@ -413,62 +504,67 @@ const Arena: React.FC = () => {
                     delay: index * 0.1,
                     duration: 0.3
                   }}
+                  whileHover={{ 
+                    scale: 1.03,
+                    transition: { duration: 0.2 }
+                  }}
                 >
-                  <Card className="cursor-pointer hover:border-primary transition-colors h-full flex flex-col">
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
-                        <CardTitle className="flex items-center text-lg">
-                          <span className="text-4xl mr-2">{vehicle.thumbnail}</span>
-                          {vehicle.name}
-                        </CardTitle>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-8 w-8 rounded-full"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleToggleLike(`vehicle-${vehicle.id}`);
-                          }}
-                        >
-                          <Heart className={`h-4 w-4 ${
-                            likedItems.includes(`vehicle-${vehicle.id}`) 
-                              ? 'fill-red-500 text-red-500' 
-                              : 'text-muted-foreground'
-                          }`} />
-                        </Button>
-                      </div>
-                      <CardDescription>{vehicle.brand} {vehicle.type}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-grow">
-                      <div className="flex flex-wrap gap-1 mb-4">
-                        <Badge variant="outline" className="bg-primary/10 text-primary">
-                          {vehicle.type}
-                        </Badge>
-                        <Badge variant="outline" className="bg-green-100 text-green-800">
-                          Customizable
-                        </Badge>
-                      </div>
+                  <Card className="cursor-pointer hover:border-primary hover:shadow-md transition-all h-full flex flex-col overflow-hidden">
+                    <div className="absolute right-3 top-3 z-10">
+                      <Badge className="bg-blue-100 hover:bg-blue-100 text-blue-700 hover:text-blue-800 border-blue-200">
+                        {vehicle.type}
+                      </Badge>
+                    </div>
+                    
+                    <div className="pt-6 px-6 bg-gradient-to-b from-slate-50 to-white relative">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-8 w-8 rounded-full absolute left-2 top-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleToggleLike(`vehicle-${vehicle.id}`);
+                        }}
+                      >
+                        <Heart className={`h-4 w-4 ${
+                          likedItems.includes(`vehicle-${vehicle.id}`) 
+                            ? 'fill-red-500 text-red-500' 
+                            : 'text-muted-foreground'
+                        }`} />
+                      </Button>
                       
-                      <div className="grid grid-cols-2 gap-2 text-sm">
-                        <div>
-                          <div className="text-muted-foreground text-xs">Engine</div>
-                          <div>2.0L Turbo</div>
+                      <motion.div 
+                        className="flex items-center justify-center py-8"
+                        whileHover={{ scale: 1.05, rotate: 2 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <div className="text-8xl filter drop-shadow-md">
+                          {vehicle.thumbnail}
                         </div>
-                        <div>
-                          <div className="text-muted-foreground text-xs">Power</div>
-                          <div>250 bhp</div>
+                      </motion.div>
+                    </div>
+                    
+                    <CardContent className="pt-4">
+                      <h4 className="text-xl font-bold">{vehicle.name}</h4>
+                      <p className="text-muted-foreground">{vehicle.brand}</p>
+                      
+                      <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-muted-foreground">
+                        <div className="flex flex-col items-center justify-center p-2 bg-slate-50 rounded-md">
+                          <Gauge className="h-4 w-4 mb-1 text-blue-500" />
+                          <span>Performance</span>
                         </div>
-                        <div>
-                          <div className="text-muted-foreground text-xs">Top Speed</div>
-                          <div>220 km/h</div>
+                        <div className="flex flex-col items-center justify-center p-2 bg-slate-50 rounded-md">
+                          <PaintBucket className="h-4 w-4 mb-1 text-blue-500" />
+                          <span>12 Colors</span>
                         </div>
-                        <div>
-                          <div className="text-muted-foreground text-xs">Year</div>
-                          <div>2023</div>
+                        <div className="flex flex-col items-center justify-center p-2 bg-slate-50 rounded-md">
+                          <Component className="h-4 w-4 mb-1 text-blue-500" />
+                          <span>25+ Parts</span>
                         </div>
                       </div>
                     </CardContent>
-                    <CardFooter className="flex gap-2">
+                    
+                    <CardFooter className="border-t mt-auto pt-4 flex gap-2">
                       <Button 
                         variant="outline"
                         size="icon"
@@ -487,8 +583,8 @@ const Arena: React.FC = () => {
                         <ShoppingCart className="h-4 w-4" />
                       </Button>
                       <Button 
-                        onClick={() => handleSelectVehicle(vehicle)} 
-                        className="w-full"
+                        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                        onClick={() => handleSelectVehicle(vehicle)}
                       >
                         Select Vehicle
                         <ChevronRight className="h-4 w-4 ml-2" />
@@ -498,6 +594,69 @@ const Arena: React.FC = () => {
                 </motion.div>
               ))}
             </motion.div>
+            
+            {/* Additional Features Section */}
+            <div className="mt-16 mb-8">
+              <h3 className="text-2xl font-bold mb-8 text-center">Premium Features</h3>
+              
+              <motion.div 
+                className="grid grid-cols-1 md:grid-cols-3 gap-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+              >
+                <Card className="border-blue-100 bg-gradient-to-b from-white to-blue-50">
+                  <CardHeader>
+                    <div className="rounded-full w-12 h-12 bg-blue-100 flex items-center justify-center mb-2">
+                      <PanelLeft className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <CardTitle>Drag & Drop Editor</CardTitle>
+                    <CardDescription>
+                      Intuitive interface for positioning and adjusting vehicle parts
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      Our advanced editor allows you to precisely position, scale, and rotate components in real-time.
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border-indigo-100 bg-gradient-to-b from-white to-indigo-50">
+                  <CardHeader>
+                    <div className="rounded-full w-12 h-12 bg-indigo-100 flex items-center justify-center mb-2">
+                      <Activity className="h-6 w-6 text-indigo-600" />
+                    </div>
+                    <CardTitle>3D Visualization</CardTitle>
+                    <CardDescription>
+                      Interactive 3D models with realistic lighting and animations
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      Experience your vehicle in full 3D with controls for lighting, environment, and camera animations.
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border-purple-100 bg-gradient-to-b from-white to-purple-50">
+                  <CardHeader>
+                    <div className="rounded-full w-12 h-12 bg-purple-100 flex items-center justify-center mb-2">
+                      <Sparkles className="h-6 w-6 text-purple-600" />
+                    </div>
+                    <CardTitle>Smart Recommendations</CardTitle>
+                    <CardDescription>
+                      Personalized vehicle and part suggestions based on your preferences
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      Our recommendation engine analyzes your style and needs to suggest perfect matches.
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
           </TabsContent>
           
           {/* Customization Tab */}
