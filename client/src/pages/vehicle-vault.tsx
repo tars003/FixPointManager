@@ -473,193 +473,406 @@ const VehicleVault = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-6">
-        <div className="flex items-center mb-2">
-          <button 
-            onClick={() => navigate('/')}
-            className="text-gray-500 hover:text-gray-700 mr-2"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <h1 className="text-2xl font-bold">Vehicle Vault</h1>
+      <div className="mb-6 relative overflow-hidden p-6 rounded-2xl bg-gradient-to-br from-blue-900/90 to-indigo-900/90 shadow-xl border border-blue-700/30 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.8))]"></div>
+        <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-20 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl"></div>
+        
+        <div className="relative flex justify-between">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => navigate('/')}
+              className="flex items-center justify-center h-10 w-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-colors"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            
+            <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-inner">
+              <Car className="h-8 w-8 text-blue-100" />
+            </div>
+            
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight text-white">Vehicle Vault</h1>
+              <p className="text-blue-100/80">Manage all your vehicles, documents and service history</p>
+            </div>
+          </div>
+          
+          <div className="flex gap-4">
+            <div className="flex flex-col items-center justify-center p-3 bg-white/10 backdrop-blur-md rounded-lg border border-white/20">
+              <div className="text-xs text-blue-100/70">Total Assets</div>
+              <div className="font-semibold text-white">₹ 1.24 Cr</div>
+            </div>
+            
+            <div className="flex flex-col items-center justify-center p-3 bg-white/10 backdrop-blur-md rounded-lg border border-white/20">
+              <div className="text-xs text-blue-100/70">Vehicles</div>
+              <div className="font-semibold text-white">15</div>
+            </div>
+            
+            <div className="flex flex-col items-center justify-center p-3 bg-white/10 backdrop-blur-md rounded-lg border border-white/20">
+              <div className="text-xs text-blue-100/70">Service Due</div>
+              <div className="font-semibold text-amber-300">3</div>
+            </div>
+          </div>
         </div>
-        <p className="text-gray-600">Manage all your vehicles, documents and service history</p>
       </div>
       
       {/* Status Categories Header - Fixed layout based on screenshot */}
-      <div className="mb-8">
-        <div className="grid grid-cols-7 gap-2 mb-2">
+      <div className="mb-8 p-6 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 shadow-sm border border-gray-200/60">
+        <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center">
+          <ListFilter className="h-5 w-5 mr-2 text-blue-600" />
+          Vehicle Status Categories
+        </h3>
+        
+        <div className="grid grid-cols-7 gap-3 mb-3">
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'active' ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'active' 
+                ? 'bg-gradient-to-r from-emerald-500/90 to-green-600/90 text-white border-0' 
+                : 'bg-white hover:bg-emerald-50 border border-gray-200 hover:border-emerald-200'
+            }`}
             onClick={() => setStatusFilter('active')}
           >
-            <Activity className="h-4 w-4 text-emerald-600" />
-            <span>Active</span>
-            <Badge className={`ml-1 ${statusFilter === 'active' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'active' ? 'bg-white/20' : 'bg-emerald-100'
+              }`}>
+                <Activity className="h-4 w-4 text-emerald-600" />
+              </div>
+              <span>Active</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'active' ? 'bg-white text-emerald-700' : 'bg-emerald-100 text-emerald-700'
+            }`}>
               9
             </Badge>
           </button>
           
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'recently-purchased' ? 'bg-blue-50 border-blue-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'recently-purchased' 
+                ? 'bg-gradient-to-r from-blue-500/90 to-blue-600/90 text-white border-0' 
+                : 'bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-200'
+            }`}
             onClick={() => setStatusFilter('recently-purchased')}
           >
-            <ShoppingBag className="h-4 w-4 text-blue-600" />
-            <span>Recently Purchased</span>
-            <Badge className={`ml-1 ${statusFilter === 'recently-purchased' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'recently-purchased' ? 'bg-white/20' : 'bg-blue-100'
+              }`}>
+                <ShoppingBag className="h-4 w-4 text-blue-600" />
+              </div>
+              <span>Recently Purchased</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'recently-purchased' ? 'bg-white text-blue-700' : 'bg-blue-100 text-blue-700'
+            }`}>
               5
             </Badge>
           </button>
           
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'pre-owned' ? 'bg-indigo-50 border-indigo-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'pre-owned' 
+                ? 'bg-gradient-to-r from-indigo-500/90 to-indigo-600/90 text-white border-0' 
+                : 'bg-white hover:bg-indigo-50 border border-gray-200 hover:border-indigo-200'
+            }`}
             onClick={() => setStatusFilter('pre-owned')}
           >
-            <Clock3 className="h-4 w-4 text-indigo-600" />
-            <span>Pre-owned</span>
-            <Badge className={`ml-1 ${statusFilter === 'pre-owned' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'pre-owned' ? 'bg-white/20' : 'bg-indigo-100'
+              }`}>
+                <Clock3 className="h-4 w-4 text-indigo-600" />
+              </div>
+              <span>Pre-owned</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'pre-owned' ? 'bg-white text-indigo-700' : 'bg-indigo-100 text-indigo-700'
+            }`}>
               6
             </Badge>
           </button>
           
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'in-maintenance' ? 'bg-amber-50 border-amber-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'in-maintenance' 
+                ? 'bg-gradient-to-r from-amber-500/90 to-amber-600/90 text-white border-0' 
+                : 'bg-white hover:bg-amber-50 border border-gray-200 hover:border-amber-200'
+            }`}
             onClick={() => setStatusFilter('in-maintenance')}
           >
-            <Clock className="h-4 w-4 text-amber-600" />
-            <span>In Maintenance</span>
-            <Badge className={`ml-1 ${statusFilter === 'in-maintenance' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'in-maintenance' ? 'bg-white/20' : 'bg-amber-100'
+              }`}>
+                <Clock className="h-4 w-4 text-amber-600" />
+              </div>
+              <span>In Maintenance</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'in-maintenance' ? 'bg-white text-amber-700' : 'bg-amber-100 text-amber-700'
+            }`}>
               3
             </Badge>
           </button>
           
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'garage-stored' ? 'bg-cyan-50 border-cyan-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'garage-stored' 
+                ? 'bg-gradient-to-r from-cyan-500/90 to-cyan-600/90 text-white border-0' 
+                : 'bg-white hover:bg-cyan-50 border border-gray-200 hover:border-cyan-200'
+            }`}
             onClick={() => setStatusFilter('garage-stored')}
           >
-            <Warehouse className="h-4 w-4 text-cyan-600" />
-            <span>Garage Stored</span>
-            <Badge className={`ml-1 ${statusFilter === 'garage-stored' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'garage-stored' ? 'bg-white/20' : 'bg-cyan-100'
+              }`}>
+                <Warehouse className="h-4 w-4 text-cyan-600" />
+              </div>
+              <span>Garage Stored</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'garage-stored' ? 'bg-white text-cyan-700' : 'bg-cyan-100 text-cyan-700'
+            }`}>
               4
             </Badge>
           </button>
           
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'out-of-service' ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'out-of-service' 
+                ? 'bg-gradient-to-r from-gray-500/90 to-gray-600/90 text-white border-0' 
+                : 'bg-white hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
+            }`}
             onClick={() => setStatusFilter('out-of-service')}
           >
-            <AlertOctagon className="h-4 w-4 text-gray-600" />
-            <span>Out of Service</span>
-            <Badge className={`ml-1 ${statusFilter === 'out-of-service' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'out-of-service' ? 'bg-white/20' : 'bg-gray-100'
+              }`}>
+                <AlertOctagon className="h-4 w-4 text-gray-600" />
+              </div>
+              <span>Out of Service</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'out-of-service' ? 'bg-white text-gray-700' : 'bg-gray-200 text-gray-700'
+            }`}>
               3
             </Badge>
           </button>
           
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'commercial-fleet' ? 'bg-violet-50 border-violet-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'commercial-fleet' 
+                ? 'bg-gradient-to-r from-violet-500/90 to-violet-600/90 text-white border-0' 
+                : 'bg-white hover:bg-violet-50 border border-gray-200 hover:border-violet-200'
+            }`}
             onClick={() => setStatusFilter('commercial-fleet')}
           >
-            <Truck className="h-4 w-4 text-violet-600" />
-            <span>Commercial Fleet</span>
-            <Badge className={`ml-1 ${statusFilter === 'commercial-fleet' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'commercial-fleet' ? 'bg-white/20' : 'bg-violet-100'
+              }`}>
+                <Truck className="h-4 w-4 text-violet-600" />
+              </div>
+              <span>Commercial Fleet</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'commercial-fleet' ? 'bg-white text-violet-700' : 'bg-violet-100 text-violet-700'
+            }`}>
               7
             </Badge>
           </button>
         </div>
         
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-3">
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'leased-out' ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'leased-out' 
+                ? 'bg-gradient-to-r from-green-500/90 to-green-600/90 text-white border-0' 
+                : 'bg-white hover:bg-green-50 border border-gray-200 hover:border-green-200'
+            }`}
             onClick={() => setStatusFilter('leased-out')}
           >
-            <KeySquare className="h-4 w-4 text-green-600" />
-            <span>Leased Out</span>
-            <Badge className={`ml-1 ${statusFilter === 'leased-out' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'leased-out' ? 'bg-white/20' : 'bg-green-100'
+              }`}>
+                <KeySquare className="h-4 w-4 text-green-600" />
+              </div>
+              <span>Leased Out</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'leased-out' ? 'bg-white text-green-700' : 'bg-green-100 text-green-700'
+            }`}>
               5
             </Badge>
           </button>
 
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'for-sale' ? 'bg-rose-50 border-rose-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'for-sale' 
+                ? 'bg-gradient-to-r from-rose-500/90 to-rose-600/90 text-white border-0' 
+                : 'bg-white hover:bg-rose-50 border border-gray-200 hover:border-rose-200'
+            }`}
             onClick={() => setStatusFilter('for-sale')}
           >
-            <Tag className="h-4 w-4 text-rose-600" />
-            <span>For Sale</span>
-            <Badge className={`ml-1 ${statusFilter === 'for-sale' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'for-sale' ? 'bg-white/20' : 'bg-rose-100'
+              }`}>
+                <Tag className="h-4 w-4 text-rose-600" />
+              </div>
+              <span>For Sale</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'for-sale' ? 'bg-white text-rose-700' : 'bg-rose-100 text-rose-700'
+            }`}>
               4
             </Badge>
           </button>
           
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'sold' ? 'bg-blue-50 border-blue-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'sold' 
+                ? 'bg-gradient-to-r from-blue-500/90 to-sky-600/90 text-white border-0' 
+                : 'bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-200'
+            }`}
             onClick={() => setStatusFilter('sold')}
           >
-            <CheckCircle className="h-4 w-4 text-blue-600" />
-            <span>Sold</span>
-            <Badge className={`ml-1 ${statusFilter === 'sold' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'sold' ? 'bg-white/20' : 'bg-blue-100'
+              }`}>
+                <CheckCircle className="h-4 w-4 text-blue-600" />
+              </div>
+              <span>Sold</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'sold' ? 'bg-white text-blue-700' : 'bg-blue-100 text-blue-700'
+            }`}>
               8
             </Badge>
           </button>
           
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'impounded' ? 'bg-red-50 border-red-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'impounded' 
+                ? 'bg-gradient-to-r from-red-500/90 to-red-600/90 text-white border-0' 
+                : 'bg-white hover:bg-red-50 border border-gray-200 hover:border-red-200'
+            }`}
             onClick={() => setStatusFilter('impounded')}
           >
-            <AlertTriangle className="h-4 w-4 text-red-600" />
-            <span>Impounded</span>
-            <Badge className={`ml-1 ${statusFilter === 'impounded' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'impounded' ? 'bg-white/20' : 'bg-red-100'
+              }`}>
+                <AlertTriangle className="h-4 w-4 text-red-600" />
+              </div>
+              <span>Impounded</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'impounded' ? 'bg-white text-red-700' : 'bg-red-100 text-red-700'
+            }`}>
               4
             </Badge>
           </button>
           
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'under-legal-hold' ? 'bg-amber-50 border-amber-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'under-legal-hold' 
+                ? 'bg-gradient-to-r from-amber-500/90 to-orange-600/90 text-white border-0' 
+                : 'bg-white hover:bg-amber-50 border border-gray-200 hover:border-amber-200'
+            }`}
             onClick={() => setStatusFilter('under-legal-hold')}
           >
-            <Shield className="h-4 w-4 text-amber-600" />
-            <span>Under Legal Hold</span>
-            <Badge className={`ml-1 ${statusFilter === 'under-legal-hold' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'under-legal-hold' ? 'bg-white/20' : 'bg-amber-100'
+              }`}>
+                <Shield className="h-4 w-4 text-amber-600" />
+              </div>
+              <span>Under Legal Hold</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'under-legal-hold' ? 'bg-white text-amber-700' : 'bg-amber-100 text-amber-700'
+            }`}>
               3
             </Badge>
           </button>
           
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'stolen' ? 'bg-red-50 border-red-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'stolen' 
+                ? 'bg-gradient-to-r from-red-500/90 to-red-600/90 text-white border-0' 
+                : 'bg-white hover:bg-red-50 border border-gray-200 hover:border-red-200'
+            }`}
             onClick={() => setStatusFilter('stolen')}
           >
-            <ShieldOff className="h-4 w-4 text-red-600" />
-            <span>Stolen</span>
-            <Badge className={`ml-1 ${statusFilter === 'stolen' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'stolen' ? 'bg-white/20' : 'bg-red-100'
+              }`}>
+                <ShieldOff className="h-4 w-4 text-red-600" />
+              </div>
+              <span>Stolen</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'stolen' ? 'bg-white text-red-700' : 'bg-red-100 text-red-700'
+            }`}>
               2
             </Badge>
           </button>
           
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'scrapped' ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'scrapped' 
+                ? 'bg-gradient-to-r from-gray-500/90 to-gray-600/90 text-white border-0' 
+                : 'bg-white hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
+            }`}
             onClick={() => setStatusFilter('scrapped')}
           >
-            <Trash2 className="h-4 w-4 text-gray-600" />
-            <span>Scrapped</span>
-            <Badge className={`ml-1 ${statusFilter === 'scrapped' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'scrapped' ? 'bg-white/20' : 'bg-gray-100'
+              }`}>
+                <Trash2 className="h-4 w-4 text-gray-600" />
+              </div>
+              <span>Scrapped</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'scrapped' ? 'bg-white text-gray-700' : 'bg-gray-200 text-gray-700'
+            }`}>
               3
             </Badge>
           </button>
         </div>
         
-        <div className="mt-2">
+        <div className="mt-3">
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'totaled' ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200'}`}
+            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+              statusFilter === 'totaled' 
+                ? 'bg-gradient-to-r from-gray-500/90 to-gray-600/90 text-white border-0' 
+                : 'bg-white hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
+            }`}
             onClick={() => setStatusFilter('totaled')}
           >
-            <Ban className="h-4 w-4 text-gray-600" />
-            <span>Totaled</span>
-            <Badge className={`ml-1 ${statusFilter === 'totaled' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-center w-7 h-7 rounded-full ${
+                statusFilter === 'totaled' ? 'bg-white/20' : 'bg-gray-100'
+              }`}>
+                <Ban className="h-4 w-4 text-gray-600" />
+              </div>
+              <span>Totaled</span>
+            </div>
+            <Badge className={`${
+              statusFilter === 'totaled' ? 'bg-white text-gray-700' : 'bg-gray-200 text-gray-700'
+            }`}>
               2
             </Badge>
           </button>
         </div>
-        
-        <Separator className="my-4 opacity-50" />
       </div>
       
       <Tabs 
@@ -668,28 +881,60 @@ const VehicleVault = () => {
         onValueChange={setActiveTab}
         className="space-y-6"
       >
-        <div className="flex justify-between items-center">
-          <TabsList>
-            <TabsTrigger value="list">Vehicle List</TabsTrigger>
-            <TabsTrigger value="value-trends">Value Insights</TabsTrigger>
-            <TabsTrigger value="documents">Documents</TabsTrigger>
-            <TabsTrigger value="reminders">Reminders</TabsTrigger>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 rounded-xl p-4 bg-white shadow-sm border border-gray-100">
+          <TabsList className="bg-blue-100/50 p-1 rounded-lg">
+            <TabsTrigger 
+              value="list" 
+              className={`${activeTab === 'list' ? 'bg-blue-600 text-white shadow-md' : 'text-blue-700 hover:bg-blue-100'}`}
+            >
+              <Car className="h-4 w-4 mr-2" />
+              Vehicle List
+            </TabsTrigger>
+            <TabsTrigger 
+              value="value-trends" 
+              className={`${activeTab === 'value-trends' ? 'bg-blue-600 text-white shadow-md' : 'text-blue-700 hover:bg-blue-100'}`}
+            >
+              <CircleDollarSign className="h-4 w-4 mr-2" />
+              Value Insights
+            </TabsTrigger>
+            <TabsTrigger 
+              value="documents" 
+              className={`${activeTab === 'documents' ? 'bg-blue-600 text-white shadow-md' : 'text-blue-700 hover:bg-blue-100'}`}
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Documents
+            </TabsTrigger>
+            <TabsTrigger 
+              value="reminders" 
+              className={`${activeTab === 'reminders' ? 'bg-blue-600 text-white shadow-md' : 'text-blue-700 hover:bg-blue-100'}`}
+            >
+              <Calendar className="h-4 w-4 mr-2" />
+              Reminders
+            </TabsTrigger>
           </TabsList>
           
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <div className="relative flex-1 md:w-64">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 text-blue-500" />
+              </div>
               <Input
                 type="text"
-                placeholder="Search vehicles..."
-                className="w-64 pl-9"
+                placeholder="Search vehicles by name, make, plate..."
+                className="w-full pl-10 border-blue-200 focus:ring-blue-500 focus:border-blue-500 rounded-lg"
               />
             </div>
-            <Button variant="outline" size="icon">
-              <Filter className="h-4 w-4" />
+            <Button 
+              variant="outline" 
+              size="icon"
+              className="rounded-lg border-blue-200 hover:bg-blue-50 h-10 w-10"
+            >
+              <Filter className="h-4 w-4 text-blue-600" />
             </Button>
-            <Button>
-              <Plus className="h-4 w-4 mr-1" />
+            <Button 
+              className="rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border-0"
+            >
+              <Plus className="h-4 w-4 mr-2" />
               Add Vehicle
             </Button>
           </div>
