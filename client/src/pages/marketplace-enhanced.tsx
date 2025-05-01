@@ -1162,8 +1162,24 @@ const MarketplaceEnhanced: React.FC = () => {
                 size="sm"
                 className="hover:bg-blue-50 border-blue-200 text-blue-700"
                 onClick={() => {
-                  setFilters({...filters, category: 'wipers'});
-                  applyFilters();
+                  // Show all monsoon related products
+                  const monsoonProducts = products.filter(p => 
+                    p.category === 'wipers' || 
+                    p.tags.includes('monsoon') || 
+                    p.tags.includes('rain')
+                  );
+                  setDisplayedProducts(monsoonProducts);
+                  
+                  // Provide user feedback
+                  setNotificationText(`Showing all ${monsoonProducts.length} monsoon special products`);
+                  setShowNotification(true);
+                  setTimeout(() => setShowNotification(false), 3000);
+                  
+                  // Scroll to product grid
+                  window.scrollTo({
+                    top: document.getElementById('products-grid')?.offsetTop || 0,
+                    behavior: 'smooth'
+                  });
                 }}
               >
                 View All <ArrowRight className="h-3.5 w-3.5 ml-1" />
@@ -1481,6 +1497,20 @@ const MarketplaceEnhanced: React.FC = () => {
               <Button 
                 variant="outline" 
                 className="gap-1 border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300"
+                onClick={() => {
+                  // Apply filter to show all featured products
+                  const featuredProducts = products.filter(p => p.isFeatured);
+                  setDisplayedProducts(featuredProducts);
+                  setNotificationText(`Showing all ${featuredProducts.length} featured products`);
+                  setShowNotification(true);
+                  setTimeout(() => setShowNotification(false), 3000);
+                  
+                  // Scroll to displayed products
+                  window.scrollTo({
+                    top: document.getElementById('products-grid')?.offsetTop || 0,
+                    behavior: 'smooth'
+                  });
+                }}
               >
                 View All <ArrowRight className="h-3 w-3" />
               </Button>
