@@ -999,6 +999,135 @@ const MarketplaceEnhanced: React.FC = () => {
     return `₹${price.toLocaleString('en-IN')}`;
   };
   
+  // Render Monsoon Special section
+  const renderMonsoonSpecial = () => {
+    // For demo purposes, select products for monsoon section
+    const monsoonProducts = products
+      .filter(p => p.tags?.includes('monsoon') || p.category === 'wipers' || p.subCategory === 'lights')
+      .slice(0, 4);
+    
+    return (
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.6 }}
+        className="my-12 relative overflow-hidden"
+      >
+        {/* Cloud and rain effects */}
+        <div className="absolute -top-10 -left-10 w-full h-full overflow-hidden pointer-events-none">
+          <motion.div 
+            className="absolute top-0 left-10 w-16 h-12 bg-gray-200 rounded-full opacity-40"
+            animate={{
+              x: [0, 15, 0],
+              y: [0, 5, 0],
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity,
+              repeatType: "reverse"
+            }}
+          />
+          <motion.div 
+            className="absolute top-2 left-20 w-24 h-12 bg-gray-200 rounded-full opacity-30"
+            animate={{
+              x: [0, -15, 0],
+              y: [0, 8, 0],
+            }}
+            transition={{ 
+              duration: 10, 
+              repeat: Infinity,
+              repeatType: "reverse",
+              delay: 0.5
+            }}
+          />
+          <motion.div 
+            className="absolute top-0 right-40 w-20 h-10 bg-gray-200 rounded-full opacity-30"
+            animate={{
+              x: [0, 20, 0],
+              y: [0, 5, 0],
+            }}
+            transition={{ 
+              duration: 7, 
+              repeat: Infinity,
+              repeatType: "reverse",
+              delay: 1
+            }}
+          />
+          
+          {/* Rain effects */}
+          {Array.from({ length: 10 }).map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-0.5 h-6 bg-blue-400 opacity-30 rounded-full"
+              style={{ 
+                left: `${10 + Math.random() * 80}%`, 
+                top: `-20px`,
+              }}
+              animate={{
+                y: [0, 100],
+                opacity: [0, 0.4, 0]
+              }}
+              transition={{
+                duration: 1 + Math.random(),
+                repeat: Infinity,
+                delay: Math.random() * 5,
+                ease: "linear"
+              }}
+            />
+          ))}
+        </div>
+        
+        <div className="bg-gradient-to-r from-sky-50 to-blue-50 rounded-xl p-6 border border-blue-100 relative shadow-md">
+          <div className="flex justify-between items-center mb-6 relative">
+            <div>
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent inline-flex items-center">
+                <BatteryCharging className="h-6 w-6 mr-2 text-blue-600" />
+                Monsoon Special
+              </h2>
+              <p className="text-gray-600">Stay safe this rainy season with essential vehicle accessories</p>
+            </div>
+            
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="hover:bg-blue-50 border-blue-200 text-blue-700"
+                onClick={() => {
+                  setFilters({...filters, category: 'wipers'});
+                  applyFilters();
+                }}
+              >
+                View All <ArrowRight className="h-3.5 w-3.5 ml-1" />
+              </Button>
+            </motion.div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {monsoonProducts.map((product, index) => (
+              <div key={product.id} onClick={() => handleProductClick(product)}>
+                {renderProductCard(product, index, true)}
+              </div>
+            ))}
+          </div>
+          
+          {/* Info banner */}
+          <div className="mt-8 p-4 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-xl flex items-center justify-between">
+            <div className="flex items-center">
+              <Info className="h-5 w-5 text-blue-600 mr-2" />
+              <span className="text-blue-800 text-sm">
+                <strong>Drive safe!</strong> Prepare your vehicle for the rainy season with our top-rated products
+              </span>
+            </div>
+            <Badge variant="secondary" className="bg-white text-blue-700">Limited Time Offers</Badge>
+          </div>
+        </div>
+      </motion.div>
+    );
+  };
+  
   // Render product cards with animations and 3D effects
   const renderProductCard = (product: Product, index: number, isFeatured: boolean = false) => {
     const isInWishlist = wishlistItems.includes(product.id);
@@ -1958,6 +2087,9 @@ const MarketplaceEnhanced: React.FC = () => {
             </div>
           </div>
         </motion.div>
+        
+        {/* Monsoon Special Section */}
+        {renderMonsoonSpecial()}
         
         {/* Featured Products Section */}
         {renderFeaturedProducts()}
