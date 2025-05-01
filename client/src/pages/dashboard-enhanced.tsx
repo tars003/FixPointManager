@@ -638,18 +638,29 @@ const DashboardEnhanced = () => {
           </motion.div>
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-lg">Overall Summary</h3>
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={() => {
-                /* Share functionality would be implemented here */
-                alert('Sharing dashboard summary...');
-              }}
-              className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
-            >
-              Share
-              <Share2 className="ml-1 h-4 w-4" />
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => navigate('/overall-summary')}
+                className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+              >
+                View Details
+                <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => {
+                  /* Share functionality would be implemented here */
+                  alert('Sharing dashboard summary...');
+                }}
+                className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
+              >
+                Share
+                <Share2 className="ml-1 h-4 w-4" />
+              </Button>
+            </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -766,6 +777,7 @@ const DashboardEnhanced = () => {
                   </div>
                 </div>
               </div>
+              <div className="absolute inset-0 cursor-pointer" onClick={() => navigate('/overall-summary')}></div>
             </motion.div>
             
             {/* Overall Vehicle Net Value - New Design */}

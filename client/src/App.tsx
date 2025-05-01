@@ -48,6 +48,7 @@ import AnimationDemo from "@/pages/animation-demo";
 import ProfilePage from "@/pages/profile";
 import SettingsPage from "@/pages/settings";
 import MembershipPage from "@/pages/membership";
+import OverallSummary from "@/pages/overall-summary";
 
 function Router() {
   const [location] = useLocation();
@@ -497,6 +498,13 @@ function Router() {
             {() => (
               <PageTransition type="complex" duration={0.6}>
                 <MembershipPage />
+              </PageTransition>
+            )}
+          </Route>
+          <Route path="/overall-summary">
+            {() => (
+              <PageTransition type="complex" duration={0.6}>
+                <OverallSummary />
               </PageTransition>
             )}
           </Route>
