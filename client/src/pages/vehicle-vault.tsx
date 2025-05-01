@@ -488,7 +488,7 @@ const VehicleVault = () => {
       
       {/* Status Categories Header - Fixed layout based on screenshot */}
       <div className="mb-8">
-        <div className="grid grid-cols-4 gap-2 mb-2">
+        <div className="grid grid-cols-7 gap-2 mb-2">
           <button
             className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'active' ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-gray-200'}`}
             onClick={() => setStatusFilter('active')}
@@ -532,9 +532,7 @@ const VehicleVault = () => {
               3
             </Badge>
           </button>
-        </div>
-        
-        <div className="grid grid-cols-4 gap-2 mb-2">
+          
           <button
             className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'garage-stored' ? 'bg-cyan-50 border-cyan-200' : 'bg-white border-gray-200'}`}
             onClick={() => setStatusFilter('garage-stored')}
@@ -547,18 +545,51 @@ const VehicleVault = () => {
           </button>
           
           <button
-            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'scrapped' ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200'}`}
-            onClick={() => setStatusFilter('scrapped')}
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'out-of-service' ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('out-of-service')}
           >
-            <Trash2 className="h-4 w-4 text-gray-600" />
-            <span>Scrapped</span>
-            <Badge className={`ml-1 ${statusFilter === 'scrapped' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+            <AlertOctagon className="h-4 w-4 text-gray-600" />
+            <span>Out of Service</span>
+            <Badge className={`ml-1 ${statusFilter === 'out-of-service' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
               3
+            </Badge>
+          </button>
+          
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'commercial-fleet' ? 'bg-violet-50 border-violet-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('commercial-fleet')}
+          >
+            <Truck className="h-4 w-4 text-violet-600" />
+            <span>Commercial Fleet</span>
+            <Badge className={`ml-1 ${statusFilter === 'commercial-fleet' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              7
             </Badge>
           </button>
         </div>
         
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-7 gap-2">
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'leased-out' ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('leased-out')}
+          >
+            <KeySquare className="h-4 w-4 text-green-600" />
+            <span>Leased Out</span>
+            <Badge className={`ml-1 ${statusFilter === 'leased-out' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              5
+            </Badge>
+          </button>
+
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'for-sale' ? 'bg-rose-50 border-rose-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('for-sale')}
+          >
+            <Tag className="h-4 w-4 text-rose-600" />
+            <span>For Sale</span>
+            <Badge className={`ml-1 ${statusFilter === 'for-sale' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              4
+            </Badge>
+          </button>
+          
           <button
             className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'sold' ? 'bg-blue-50 border-blue-200' : 'bg-white border-gray-200'}`}
             onClick={() => setStatusFilter('sold')}
@@ -599,6 +630,30 @@ const VehicleVault = () => {
             <ShieldOff className="h-4 w-4 text-red-600" />
             <span>Stolen</span>
             <Badge className={`ml-1 ${statusFilter === 'stolen' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              2
+            </Badge>
+          </button>
+          
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'scrapped' ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('scrapped')}
+          >
+            <Trash2 className="h-4 w-4 text-gray-600" />
+            <span>Scrapped</span>
+            <Badge className={`ml-1 ${statusFilter === 'scrapped' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              3
+            </Badge>
+          </button>
+        </div>
+        
+        <div className="mt-2">
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'totaled' ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('totaled')}
+          >
+            <Ban className="h-4 w-4 text-gray-600" />
+            <span>Totaled</span>
+            <Badge className={`ml-1 ${statusFilter === 'totaled' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
               2
             </Badge>
           </button>
