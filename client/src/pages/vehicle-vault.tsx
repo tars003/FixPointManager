@@ -42,7 +42,10 @@ import {
   Upload,
   ClipboardCheck,
   Leaf,
-  Droplets
+  Droplets,
+  Brain,
+  Users,
+  GitBranch
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from '@/components/ui/button';
@@ -1448,6 +1451,34 @@ const VehicleVault = () => {
                   </div>
                 </div>
                 <div className="flex gap-3">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="bg-white/10 hover:bg-white/20 text-white rounded-lg">
+                        <Award className="h-4 w-4 mr-1" />
+                        Smart Features
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                      <DropdownMenuLabel>Advanced Document Tools</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="flex items-center">
+                        <Brain className="h-4 w-4 mr-2" />
+                        <span>AI Document Recommendations</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="flex items-center">
+                        <Users className="h-4 w-4 mr-2" />
+                        <span>Collaborative Annotations</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="flex items-center">
+                        <Activity className="h-4 w-4 mr-2" />
+                        <span>Document Health Insights</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="flex items-center">
+                        <GitBranch className="h-4 w-4 mr-2" />
+                        <span>Workflow Visualizer</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   <Button variant="ghost" className="bg-white/10 hover:bg-white/20 text-white rounded-lg">
                     <Search className="h-4 w-4 mr-1" />
                     Search All
@@ -1563,10 +1594,33 @@ const VehicleVault = () => {
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" className="rounded-lg border-blue-200 text-blue-700">
-                          <Download className="h-4 w-4 mr-1" />
-                          Export All
-                        </Button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="sm" className="rounded-lg border-blue-200 text-blue-700">
+                              <Share className="h-4 w-4 mr-1" />
+                              Smart Share
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="w-56">
+                            <DropdownMenuItem className="flex items-center">
+                              <Users className="h-4 w-4 mr-2 text-blue-600" />
+                              <span>Share with Collaborators</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="flex items-center">
+                              <Shield className="h-4 w-4 mr-2 text-emerald-600" />
+                              <span>Privacy Controls</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="flex items-center">
+                              <GitBranch className="h-4 w-4 mr-2 text-amber-600" />
+                              <span>Document Workflow</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="flex items-center">
+                              <Download className="h-4 w-4 mr-2" />
+                              <span>Export All Documents</span>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                         <Button size="sm" className="rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600">
                           <Plus className="h-4 w-4 mr-1" />
                           Upload New
@@ -1649,6 +1703,84 @@ const VehicleVault = () => {
                             <Button variant="ghost" size="sm" className="rounded-lg text-blue-700">
                               View History
                             </Button>
+                          </div>
+                          
+                          {/* Collaborative Document Annotation Platform */}
+                          <div className="p-3 rounded-lg border border-green-100 bg-gradient-to-br from-green-50/60 to-emerald-50/60">
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="font-medium text-green-800 flex items-center">
+                                <Users className="h-4 w-4 mr-1.5 text-green-600" />
+                                Collaborative Annotations
+                              </h4>
+                              <Badge variant="outline" className="border-green-200 text-green-700 text-xs">
+                                Smart Feature
+                              </Badge>
+                            </div>
+                            
+                            <div className="bg-white rounded-lg border border-green-100 p-2 mb-3">
+                              <div className="flex items-center mb-2">
+                                <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-xs font-medium mr-2">
+                                  RJ
+                                </div>
+                                <div>
+                                  <span className="text-sm font-medium">Rajesh Kumar</span>
+                                  <span className="text-xs text-gray-500 ml-2">Transport Officer</span>
+                                </div>
+                              </div>
+                              <p className="text-sm text-gray-600 mb-1">Please verify section 4.2 of the document for compliance with latest RTO regulations.</p>
+                              <div className="flex justify-between items-center">
+                                <span className="text-xs text-gray-500">Added 2 days ago</span>
+                                <Button variant="ghost" size="sm" className="h-6 text-xs rounded-lg text-green-700">
+                                  Respond
+                                </Button>
+                              </div>
+                            </div>
+                            
+                            <Button size="sm" variant="outline" className="w-full rounded-lg border-green-200 text-green-700">
+                              <Users className="h-3.5 w-3.5 mr-1" />
+                              Start Collaboration Session
+                            </Button>
+                          </div>
+                          
+                          {/* Interactive Workflow Visualizer */}
+                          <div className="p-3 rounded-lg border border-purple-100 bg-gradient-to-br from-purple-50/60 to-pink-50/60">
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="font-medium text-purple-800 flex items-center">
+                                <GitBranch className="h-4 w-4 mr-1.5 text-purple-600" />
+                                Document Workflow Status
+                              </h4>
+                              <Badge variant="outline" className="border-purple-200 text-purple-700 text-xs">
+                                Interactive
+                              </Badge>
+                            </div>
+                            
+                            <div className="relative">
+                              <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-purple-200"></div>
+                              
+                              <div className="pl-8 pb-4 relative">
+                                <div className="absolute left-3 top-1 w-3 h-3 rounded-full bg-purple-500 border-2 border-white"></div>
+                                <div className="bg-white rounded-lg p-2 border border-purple-100">
+                                  <h5 className="text-sm font-medium text-purple-800">Document Submitted</h5>
+                                  <p className="text-xs text-gray-500">15 Mar 2025 • Transport Department</p>
+                                </div>
+                              </div>
+                              
+                              <div className="pl-8 pb-4 relative">
+                                <div className="absolute left-3 top-1 w-3 h-3 rounded-full bg-purple-500 border-2 border-white"></div>
+                                <div className="bg-white rounded-lg p-2 border border-purple-100">
+                                  <h5 className="text-sm font-medium text-purple-800">RTO Verification</h5>
+                                  <p className="text-xs text-gray-500">18 Mar 2025 • Approved</p>
+                                </div>
+                              </div>
+                              
+                              <div className="pl-8 relative">
+                                <div className="absolute left-3 top-1 w-3 h-3 rounded-full bg-purple-500 border-2 border-white"></div>
+                                <div className="bg-white rounded-lg p-2 border border-purple-100">
+                                  <h5 className="text-sm font-medium text-purple-800">Digital Certificate Issued</h5>
+                                  <p className="text-xs text-gray-500">20 Mar 2025 • Govt. Portal</p>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       )}
@@ -1739,6 +1871,76 @@ const VehicleVault = () => {
                               <Button size="sm" variant="outline" className="rounded-lg border-amber-200 text-amber-700">
                                 Check Status
                               </Button>
+                            </div>
+                          </div>
+                          
+                          {/* AI Document Recommendation */}
+                          <div className="p-3 rounded-lg border border-blue-100 bg-gradient-to-r from-blue-50/70 to-indigo-50/70">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="font-medium text-blue-800 flex items-center">
+                                <Brain className="h-4 w-4 mr-1.5 text-blue-600" />
+                                AI Document Recommendations
+                              </h4>
+                              <Badge variant="outline" className="border-blue-200 text-blue-700 text-xs">
+                                Smart Feature
+                              </Badge>
+                            </div>
+                            <div className="space-y-2 mb-3">
+                              <div className="p-2 bg-white rounded-lg border border-blue-100 flex items-center">
+                                <div className="flex-shrink-0 p-1.5 bg-blue-100 rounded-md text-blue-700 mr-2">
+                                  <FileText className="h-3.5 w-3.5" />
+                                </div>
+                                <div className="text-sm">
+                                  <span className="text-gray-900">Insurance Policy Tax Benefit Form</span>
+                                  <span className="text-xs text-gray-500 ml-2">Recommended</span>
+                                </div>
+                              </div>
+                              <div className="p-2 bg-white rounded-lg border border-blue-100 flex items-center">
+                                <div className="flex-shrink-0 p-1.5 bg-blue-100 rounded-md text-blue-700 mr-2">
+                                  <FileText className="h-3.5 w-3.5" />
+                                </div>
+                                <div className="text-sm">
+                                  <span className="text-gray-900">Insurance Cancellation NOC Template</span>
+                                  <span className="text-xs text-gray-500 ml-2">Based on your activity</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex justify-end">
+                              <Button size="sm" variant="ghost" className="text-xs h-7 rounded-lg text-blue-700">
+                                View All Recommendations
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          {/* Document Health Insights */}
+                          <div className="p-3 rounded-lg border border-indigo-100 bg-gradient-to-br from-indigo-50/60 to-purple-50/60">
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="font-medium text-indigo-800 flex items-center">
+                                <Activity className="h-4 w-4 mr-1.5 text-indigo-600" />
+                                Document Health Insights
+                              </h4>
+                              <Badge variant="outline" className="text-xs border-indigo-200 text-indigo-700">
+                                2 Attention Points
+                              </Badge>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-2 mb-3">
+                              <div className="p-2 bg-white rounded-lg border border-indigo-100">
+                                <div className="text-xs text-gray-500 mb-1">Completion Status</div>
+                                <div className="flex items-center justify-between">
+                                  <span className="font-medium text-indigo-700">60%</span>
+                                  <div className="w-20 h-1.5 bg-indigo-100 rounded-full overflow-hidden">
+                                    <div className="h-full bg-indigo-500 rounded-full" style={{ width: '60%' }}></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="p-2 bg-white rounded-lg border border-indigo-100">
+                                <div className="text-xs text-gray-500 mb-1">Required Documents</div>
+                                <div className="flex items-center justify-between">
+                                  <span className="font-medium text-indigo-700">2 of 3</span>
+                                  <CheckCircle className="h-3.5 w-3.5 text-indigo-600" />
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
