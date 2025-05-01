@@ -321,8 +321,8 @@ const OverallSummary = () => {
       {/* Main Content Area */}
       <div className="container mx-auto px-4 -mt-10">
         {/* Tabs Navigation */}
-        <div className="bg-white rounded-lg shadow-lg p-1 mb-6">
-          <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <div className="bg-white rounded-lg shadow-lg p-1 mb-6">
             <TabsList className="grid grid-cols-5 w-full">
               <TabsTrigger value="dashboard" className="data-[state=active]:bg-blue-50">
                 <LayoutGrid className="h-4 w-4 mr-2" />
@@ -345,11 +345,10 @@ const OverallSummary = () => {
                 Documents
               </TabsTrigger>
             </TabsList>
-          </Tabs>
-        </div>
-        
-        {/* Dashboard Tab */}
-        <TabsContent value="dashboard" className="space-y-6 mt-4">
+          </div>
+          
+          {/* Dashboard Tab */}
+          <TabsContent value="dashboard" className="space-y-6 mt-4">
           {/* Key Metrics */}
           <motion.div 
             className="grid grid-cols-1 md:grid-cols-4 gap-4"
@@ -894,9 +893,9 @@ const OverallSummary = () => {
             </motion.div>
           </div>
         </TabsContent>
-        
-        {/* Health Tab */}
-        <TabsContent value="health" className="space-y-6 mt-4">
+          
+          {/* Health Tab */}
+          <TabsContent value="health" className="space-y-6 mt-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
               <CardHeader className="pb-2">
@@ -1123,6 +1122,7 @@ const OverallSummary = () => {
             </Card>
           </div>
         </TabsContent>
+      </Tabs>
       </div>
     </div>
   );
