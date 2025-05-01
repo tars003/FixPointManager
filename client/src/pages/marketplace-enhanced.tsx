@@ -915,7 +915,7 @@ const MarketplaceEnhanced: React.FC = () => {
     return `₹${price.toLocaleString('en-IN')}`;
   };
   
-  // Render product cards with animations
+  // Render product cards with animations and 3D effects
   const renderProductCard = (product: Product, index: number, isFeatured: boolean = false) => {
     const isInWishlist = wishlistItems.includes(product.id);
     const hasDiscount = !!product.discount && product.discount > 0;
@@ -926,117 +926,214 @@ const MarketplaceEnhanced: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.05 }}
-        whileHover={{ y: -5 }}
-        className={`bg-white rounded-xl border shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 ${isFeatured ? 'h-full' : ''}`}
+        whileHover={{ 
+          y: -8, 
+          scale: 1.02,
+          boxShadow: "0 20px 30px rgba(0, 0, 0, 0.08)",
+          transition: { duration: 0.3 }
+        }}
+        className={`bg-white rounded-xl border shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 ${isFeatured ? 'h-full' : ''} relative`}
+        style={{ perspective: "1000px" }}
       >
-        <div className="relative">
-          <img
-            src={product.images[0]}
-            alt={product.name}
-            className="w-full h-48 object-cover"
-          />
-          
-          <Button
-            variant={isInWishlist ? "destructive" : "outline"}
-            size="icon"
-            className="absolute top-2 right-2 rounded-full bg-white shadow-sm h-8 w-8"
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleWishlist(product.id);
-            }}
+        {/* Product Image with 3D hover effect */}
+        <div className="relative overflow-hidden">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.5 }}
+            className="relative"
           >
-            <Heart className={`h-4 w-4 ${isInWishlist ? 'fill-current' : ''}`} />
-          </Button>
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="w-full h-48 object-cover"
+            />
+            
+            {/* Subtle glossy overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/5"></div>
+          </motion.div>
           
+          {/* Wishlist Button with animation */}
+          <motion.div
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+            className="absolute top-2 right-2 z-10"
+          >
+            <Button
+              variant={isInWishlist ? "destructive" : "outline"}
+              size="icon"
+              className="rounded-full bg-white/80 backdrop-blur-sm shadow-sm h-8 w-8"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleWishlist(product.id);
+              }}
+            >
+              <motion.div
+                animate={isInWishlist ? { scale: [1, 1.2, 1] } : {}}
+                transition={{ duration: 0.4 }}
+              >
+                <Heart className={`h-4 w-4 ${isInWishlist ? 'fill-current' : ''}`} />
+              </motion.div>
+            </Button>
+          </motion.div>
+          
+          {/* Discount Badge with pulsing animation */}
           {hasDiscount && (
-            <Badge className="absolute top-2 left-2 bg-red-500">
-              {product.discount}% OFF
-            </Badge>
+            <motion.div
+              className="absolute top-2 left-2"
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+            >
+              <Badge className="bg-gradient-to-r from-red-500 to-rose-500 shadow-md">
+                {product.discount}% OFF
+              </Badge>
+            </motion.div>
           )}
           
+          {/* Trending Tag with flame animation */}
           {product.trending && (
-            <div className="absolute bottom-2 left-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-2 py-1 rounded-md text-xs font-medium flex items-center">
-              <Flame className="h-3 w-3 mr-1" />
+            <motion.div 
+              className="absolute bottom-2 left-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-2 py-1 rounded-md text-xs font-medium flex items-center shadow-md"
+              initial={{ opacity: 0.9 }}
+              animate={{ opacity: [0.9, 1, 0.9] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+            >
+              <motion.div
+                animate={{ rotate: [-5, 5, -5] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+              >
+                <Flame className="h-3 w-3 mr-1" />
+              </motion.div>
               Trending
-            </div>
+            </motion.div>
           )}
         </div>
         
-        <div className="p-4">
-          <div className="flex justify-between items-start gap-2 mb-1">
-            <h3 className="font-semibold text-sm line-clamp-2 flex-1">{product.name}</h3>
-            <Badge variant="outline" className="bg-blue-50 text-blue-700 text-xs border-blue-100">
-              {product.type === 'oem' ? 'OEM' : 'Aftermarket'}
-            </Badge>
-          </div>
+        <div className="p-4 relative">
+          {/* Soft glow for premium products */}
+          {product.rating > 4.5 && (
+            <div className="absolute -top-10 right-0 w-20 h-20 bg-blue-400/10 rounded-full blur-xl z-0"></div>
+          )}
           
-          <div className="flex justify-between items-center mb-3">
-            <div className="flex items-center">
-              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-              <span className="text-sm font-medium ml-1">{product.rating.toFixed(1)}</span>
-              <span className="text-xs text-gray-500 ml-1">({product.reviewCount})</span>
+          <div className="relative z-10">
+            <div className="flex justify-between items-start gap-2 mb-1">
+              <h3 className="font-semibold text-sm line-clamp-2 flex-1">{product.name}</h3>
+              <Badge 
+                variant="outline" 
+                className={`${
+                  product.type === 'oem' 
+                    ? 'bg-blue-50 text-blue-700 border-blue-100' 
+                    : 'bg-green-50 text-green-700 border-green-100'
+                } text-xs`}
+              >
+                {product.type === 'oem' ? 'OEM' : 'Aftermarket'}
+              </Badge>
             </div>
-            <span className="text-xs text-gray-500">{product.brand}</span>
-          </div>
-          
-          <div className="text-gray-700 text-xs mb-3 line-clamp-2">{product.description}</div>
-          
-          <div className="flex items-end justify-between mb-3">
-            <div>
-              <div className="font-bold text-lg">
-                {renderPrice(product.price)}
+            
+            <div className="flex justify-between items-center mb-3">
+              <div className="flex items-center">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star 
+                    key={i} 
+                    className={`h-3 w-3 ${
+                      i < Math.floor(product.rating) 
+                        ? 'fill-yellow-400 text-yellow-400' 
+                        : i < product.rating 
+                          ? 'fill-yellow-400/50 text-yellow-400/50'
+                          : 'text-gray-300'
+                    }`} 
+                  />
+                ))}
+                <span className="text-sm font-medium ml-1">{product.rating.toFixed(1)}</span>
+                <span className="text-xs text-gray-500 ml-1">({product.reviewCount})</span>
               </div>
-              {hasDiscount && product.oldPrice && (
-                <div className="text-gray-500 text-xs line-through">
-                  {renderPrice(product.oldPrice)}
+              <motion.span 
+                className="text-xs font-medium px-1.5 py-0.5 rounded bg-gray-100"
+                whileHover={{ backgroundColor: "#f0f9ff", color: "#3b82f6" }}
+              >
+                {product.brand}
+              </motion.span>
+            </div>
+            
+            <div className="text-gray-700 text-xs mb-3 line-clamp-2">{product.description}</div>
+            
+            <div className="flex items-end justify-between mb-3">
+              <div>
+                <div className="font-bold text-lg bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
+                  {renderPrice(product.price)}
+                </div>
+                {hasDiscount && product.oldPrice && (
+                  <div className="text-gray-500 text-xs line-through">
+                    {renderPrice(product.oldPrice)}
+                  </div>
+                )}
+              </div>
+              
+              {stockWarning && (
+                <motion.div 
+                  className="text-amber-600 text-xs flex items-center"
+                  animate={{ opacity: [0.7, 1, 0.7] }}
+                  transition={{ repeat: Infinity, duration: 2 }}
+                >
+                  <Clock className="h-3 w-3 mr-1" />
+                  Only {Math.floor(Math.random() * 5) + 1} left
+                </motion.div>
+              )}
+              
+              {product.stockStatus === 'out_of_stock' && (
+                <div className="text-red-500 text-xs font-medium">
+                  Out of Stock
                 </div>
               )}
             </div>
             
-            {stockWarning && (
-              <div className="text-amber-600 text-xs flex items-center">
-                <Clock className="h-3 w-3 mr-1" />
-                Only {Math.floor(Math.random() * 5) + 1} left
-              </div>
-            )}
-            
-            {product.stockStatus === 'out_of_stock' && (
-              <div className="text-red-500 text-xs">
-                Out of Stock
-              </div>
-            )}
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Button 
-              variant="default" 
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-              onClick={(e) => {
-                e.stopPropagation();
-                addToCart(product);
-              }}
-              disabled={product.stockStatus === 'out_of_stock'}
-            >
-              {product.stockStatus === 'out_of_stock' ? 'Notify Me' : 'Add to Cart'}
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleProductClick(product);
-              }}
-            >
-              <Info className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center gap-2">
+              <motion.div 
+                className="flex-1"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button 
+                  variant="default" 
+                  className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md hover:shadow-blue-300/30"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToCart(product);
+                  }}
+                  disabled={product.stockStatus === 'out_of_stock'}
+                >
+                  {product.stockStatus === 'out_of_stock' ? 'Notify Me' : 'Add to Cart'}
+                </Button>
+              </motion.div>
+              
+              <motion.div
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  className="border-blue-200 text-blue-700 hover:bg-blue-50"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleProductClick(product);
+                  }}
+                >
+                  <Info className="h-4 w-4" />
+                </Button>
+              </motion.div>
+            </div>
           </div>
         </div>
+        
+        {/* 3D perspective effect for featured products */}
+        {isFeatured && (
+          <div className="absolute inset-0 pointer-events-none" style={{ transform: "translateZ(-10px)" }}></div>
+        )}
       </motion.div>
     );
   };
   
-  // Render featured products section with animations
+  // Render featured products section with enhanced 3D animations
   const renderFeaturedProducts = () => {
     const featuredProducts = products
       .filter(p => p.isFeatured)
@@ -1050,50 +1147,111 @@ const MarketplaceEnhanced: React.FC = () => {
         animate={featuredControls}
         className="mb-12"
       >
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <motion.h2 
-              className="text-2xl font-bold"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              Featured Products
-            </motion.h2>
-            <motion.p 
-              className="text-gray-500"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              Handpicked by our experts for your vehicle
-            </motion.p>
-          </div>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <Button variant="outline" className="gap-1">
-              View All <ArrowRight className="h-3 w-3" />
-            </Button>
-          </motion.div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProducts.map((product, index) => (
+        {/* 3D Background Elements */}
+        <div className="relative">
+          <motion.div 
+            className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-blue-100 opacity-50 blur-3xl -z-10"
+            animate={{ 
+              scale: [1, 1.2, 1],
+              rotate: 360
+            }}
+            transition={{
+              scale: { duration: 8, repeat: Infinity, repeatType: "reverse" },
+              rotate: { duration: 20, repeat: Infinity, ease: "linear" }
+            }}
+          />
+          
+          <motion.div 
+            className="absolute top-40 -left-20 w-60 h-60 rounded-full bg-indigo-100 opacity-50 blur-3xl -z-10"
+            animate={{ 
+              scale: [1, 1.3, 1],
+              rotate: -360
+            }}
+            transition={{
+              scale: { duration: 10, repeat: Infinity, repeatType: "reverse", delay: 1 },
+              rotate: { duration: 25, repeat: Infinity, ease: "linear" }
+            }}
+          />
+          
+          <div className="flex justify-between items-center mb-6 relative">
+            <div>
+              <motion.h2 
+                className="text-3xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                Featured Products
+              </motion.h2>
+              <motion.p 
+                className="text-gray-600"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                Handpicked by our experts for your vehicle
+              </motion.p>
+            </div>
             <motion.div
-              key={product.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 + index * 0.1 }}
-              whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)' }}
-              className="bg-white rounded-xl border shadow-sm overflow-hidden h-full"
-              onClick={() => handleProductClick(product)}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
             >
-              {renderProductCard(product, index, true)}
+              <Button 
+                variant="outline" 
+                className="gap-1 border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300"
+              >
+                View All <ArrowRight className="h-3 w-3" />
+              </Button>
             </motion.div>
-          ))}
+          </div>
+          
+          {/* Featured Products with 3D Effect */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative perspective">
+            {featuredProducts.map((product, index) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 40, rotateX: 10 }}
+                animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                transition={{ 
+                  delay: 0.2 + index * 0.15,
+                  type: "spring", 
+                  stiffness: 100,
+                  damping: 15
+                }}
+                whileHover={{ 
+                  y: -10, 
+                  boxShadow: '0 20px 30px rgba(0, 0, 0, 0.1)',
+                  transition: { type: "spring", stiffness: 300 }
+                }}
+                className="bg-white rounded-xl border border-blue-50 shadow-blue-100/50 shadow-lg overflow-hidden h-full transform-gpu"
+                onClick={() => handleProductClick(product)}
+                style={{ transformStyle: "preserve-3d" }}
+              >
+                <div className="h-full" style={{ transform: "translateZ(0px)" }}>
+                  {renderProductCard(product, index, true)}
+                </div>
+                
+                {/* Pseudo 3D effect elements */}
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-b from-white/0 to-blue-50/20 pointer-events-none"
+                  style={{ transform: "translateZ(2px)" }}
+                />
+                
+                {/* Product highlight glow */}
+                <motion.div 
+                  className={`absolute -inset-1 bg-gradient-to-r ${
+                    index % 2 === 0 ? 'from-blue-600/5 to-indigo-600/5' : 'from-indigo-600/5 to-blue-600/5'
+                  } rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 0.5, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, repeatType: "reverse", delay: index * 0.5 }}
+                />
+              </motion.div>
+            ))}
+          </div>
         </div>
       </motion.div>
     );
@@ -1618,48 +1776,101 @@ const MarketplaceEnhanced: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="mb-10"
+          className="mt-4 mb-10"
         >
-          <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl p-4 md:p-6 border border-blue-100">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl p-4 md:p-6 border border-blue-100 relative overflow-hidden shadow-lg">
+            {/* 3D Floating Elements */}
+            <motion.div 
+              className="absolute w-32 h-32 rounded-full bg-blue-300 opacity-20 blur-xl"
+              style={{ top: '-10%', right: '-5%' }}
+              animate={{ 
+                rotate: 360,
+                scale: [1, 1.2, 1],
+              }}
+              transition={{ 
+                rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+                scale: { duration: 8, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }
+              }}
+            />
+            
+            <motion.div 
+              className="absolute w-24 h-24 rounded-full bg-indigo-400 opacity-20 blur-xl"
+              style={{ bottom: '-10%', left: '5%' }}
+              animate={{ 
+                rotate: -360,
+                scale: [1, 1.3, 1],
+              }}
+              transition={{ 
+                rotate: { duration: 15, repeat: Infinity, ease: "linear" },
+                scale: { duration: 7, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: 1 }
+              }}
+            />
+            
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
               <div className="flex items-start gap-4">
-                <div className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white p-3 rounded-xl">
+                <motion.div 
+                  className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white p-3 rounded-xl"
+                  whileHover={{ scale: 1.05, rotate: 5 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <BadgePercent className="h-6 w-6" />
-                </div>
+                </motion.div>
                 
                 <div>
-                  <h3 className="text-xl font-bold text-blue-800">{currentPromotion.title}</h3>
+                  <motion.h3 
+                    className="text-xl font-bold text-blue-800 bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4, duration: 0.6 }}
+                  >
+                    {currentPromotion.title}
+                  </motion.h3>
                   <p className="text-blue-700 mb-2">{currentPromotion.description}</p>
                   
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge className="bg-blue-100 text-blue-800 border-0">
+                    <Badge className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0">
                       {currentPromotion.discount}% OFF
                     </Badge>
                     
-                    <div className="bg-white px-2 py-1 rounded border border-blue-200 font-mono text-sm text-blue-800">
+                    <motion.div 
+                      className="bg-white px-2 py-1 rounded border border-blue-200 font-mono text-sm text-blue-800"
+                      whileHover={{ 
+                        scale: 1.05, 
+                        boxShadow: "0 0 8px rgba(59, 130, 246, 0.5)" 
+                      }}
+                    >
                       {currentPromotion.code}
-                    </div>
+                    </motion.div>
                     
-                    <div className="text-xs text-blue-700 flex items-center">
+                    <motion.div 
+                      className="text-xs text-blue-700 flex items-center"
+                      animate={{ opacity: [0.7, 1, 0.7] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
                       <Clock className="h-3 w-3 mr-1" />
                       Expires in {currentPromotion.expiresIn} hours
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
               </div>
               
-              <Button 
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
-                onClick={() => {
-                  navigator.clipboard.writeText(currentPromotion.code);
-                  setNotificationText(`Copied code ${currentPromotion.code} to clipboard!`);
-                  setShowNotification(true);
-                  setTimeout(() => setShowNotification(false), 2000);
-                }}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <Megaphone className="h-4 w-4 mr-2" />
-                Copy & Apply
-              </Button>
+                <Button 
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-blue-300/50"
+                  onClick={() => {
+                    navigator.clipboard.writeText(currentPromotion.code);
+                    setNotificationText(`Copied code ${currentPromotion.code} to clipboard!`);
+                    setShowNotification(true);
+                    setTimeout(() => setShowNotification(false), 2000);
+                  }}
+                >
+                  <Megaphone className="h-4 w-4 mr-2" />
+                  Copy & Apply
+                </Button>
+              </motion.div>
             </div>
           </div>
         </motion.div>
