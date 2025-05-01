@@ -117,28 +117,28 @@ const OverallSummary = () => {
   ];
   
   // Helper functions
-  const getHealthScoreColor = (score) => {
+  const getHealthScoreColor = (score: number): string => {
     if (score >= 90) return 'text-emerald-600';
     if (score >= 75) return 'text-green-600';
     if (score >= 60) return 'text-amber-600';
     return 'text-rose-600';
   };
   
-  const getHealthScoreBgColor = (score) => {
+  const getHealthScoreBgColor = (score: number): string => {
     if (score >= 90) return 'bg-emerald-100';
     if (score >= 75) return 'bg-green-100';
     if (score >= 60) return 'bg-amber-100';
     return 'bg-rose-100';
   };
   
-  const getHealthScoreTextColor = (score) => {
+  const getHealthScoreTextColor = (score: number): string => {
     if (score >= 90) return 'text-emerald-700';
     if (score >= 75) return 'text-green-700';
     if (score >= 60) return 'text-amber-700';
     return 'text-rose-700';
   };
   
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string): string => {
     switch (status) {
       case 'upcoming':
         return 'bg-amber-100 text-amber-700';
@@ -687,7 +687,7 @@ const OverallSummary = () => {
                               View Details
                             </Button>
                             <Button 
-                              variant="primary" 
+                              variant="default" 
                               size="sm" 
                               className="text-xs h-7 px-3 text-white bg-purple-600 hover:bg-purple-700 border border-purple-500 rounded-full"
                               onClick={() => setActiveTab('maintenance')}

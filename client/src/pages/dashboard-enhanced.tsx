@@ -888,7 +888,8 @@ const DashboardEnhanced = () => {
                       <Button 
                         variant="ghost" 
                         size="sm" 
-                        className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20"
+                        className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20 rounded-full"
+                        onClick={() => navigateTo('/overall-summary')}
                       >
                         View Details
                       </Button>
@@ -1039,10 +1040,9 @@ const DashboardEnhanced = () => {
                     whileTap={{ scale: 0.98 }}
                   >
                     <Button 
-                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white border-0 hover:from-purple-700 hover:to-indigo-700"
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white border-0 rounded-full"
                       onClick={() => navigateTo('/book-service')}
                     >
-                      <Calendar className="h-4 w-4 mr-2" />
                       Schedule Service
                     </Button>
                   </motion.div>
