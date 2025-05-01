@@ -589,6 +589,9 @@ const MarketplaceEnhanced: React.FC = () => {
   
   // Initialize Flash Sale
   useEffect(() => {
+    // Only proceed if we have products loaded
+    if (products.length === 0) return;
+    
     const featuredProducts = products.filter(p => p.isFeatured);
     if (featuredProducts.length > 0) {
       const randomProduct = featuredProducts[Math.floor(Math.random() * featuredProducts.length)];
