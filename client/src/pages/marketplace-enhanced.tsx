@@ -43,7 +43,8 @@ import {
   Megaphone,
   PiggyBank,
   ShoppingBag,
-  Smartphone
+  Smartphone,
+  Package
 } from 'lucide-react';
 import BannerSlider from '@/components/marketplace/banner-slider';
 
@@ -2604,44 +2605,44 @@ const MarketplaceEnhanced: React.FC = () => {
             </div>
             
             {/* Products Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
-              {displayedProducts.map((product, index) => (
-                <div key={product.id} onClick={() => handleProductClick(product)}>
-                  {renderProductCard(product, index)}
+            <div id="products-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+              {displayedProducts.length > 0 ? (
+                displayedProducts.map((product, index) => (
+                  <div key={product.id} onClick={() => handleProductClick(product)}>
+                    {renderProductCard(product, index)}
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-full flex flex-col items-center justify-center py-12 text-center">
+                  <Package className="h-12 w-12 text-gray-300 mb-3" />
+                  <h3 className="text-lg font-medium text-gray-800 mb-1">No products found</h3>
+                  <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+                  <Button 
+                    variant="outline"
+                    className="mt-4"
+                    onClick={() => {
+                      setFilters({
+                        vehicleId: null,
+                        category: null,
+                        subCategory: null,
+                        type: null,
+                        priceRange: null,
+                        brands: [],
+                        inStock: false,
+                        rating: null,
+                        sortBy: 'relevance'
+                      });
+                      setDisplayedProducts(products);
+                      setActiveCategory('all');
+                    }}
+                  >
+                    Clear Filters
+                  </Button>
                 </div>
-              ))}
+              )}
             </div>
             
-            {/* Empty State */}
-            {displayedProducts.length === 0 && (
-              <div className="text-center p-10 border rounded-lg bg-gray-50">
-                <div className="flex justify-center mb-4">
-                  <Search className="h-12 w-12 text-gray-400" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">No products found</h3>
-                <p className="text-gray-500 mb-4">Try adjusting your filters or search term</p>
-                <Button 
-                  variant="outline"
-                  onClick={() => {
-                    setFilters({
-                      vehicleId: null,
-                      category: null,
-                      subCategory: null,
-                      type: null,
-                      priceRange: null,
-                      brands: [],
-                      inStock: false,
-                      rating: null,
-                      sortBy: 'relevance'
-                    });
-                    setDisplayedProducts(products);
-                    setActiveCategory('all');
-                  }}
-                >
-                  Clear Filters
-                </Button>
-              </div>
-            )}
+            {/* Empty State handling moved inside the grid component */}
             
             {/* Load More */}
             {displayedProducts.length > 0 && displayedProducts.length < products.length && (
