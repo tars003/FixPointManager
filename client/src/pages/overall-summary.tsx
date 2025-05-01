@@ -1033,7 +1033,7 @@ const OverallSummary = () => {
                   className="w-full rounded-full"
                   onClick={() => setActiveTab('maintenance')}
                 >
-                  View Service Schedule
+                  Schedule Service
                 </Button>
               </CardFooter>
             </Card>
