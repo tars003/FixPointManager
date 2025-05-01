@@ -2015,30 +2015,35 @@ const MarketplaceEnhanced: React.FC = () => {
                 <Button 
                   size="lg"
                   className="bg-white text-red-600 hover:bg-white/90 hover:text-red-700"
-                  onClick={() => addToCart(flashSaleProduct)}
+                  onClick={() => flashSaleProduct && addToCart(flashSaleProduct)}
                 >
                   <Flame className="h-4 w-4 mr-2" />
                   Grab This Deal
                 </Button>
               </div>
               
-              <div className="bg-white p-4 rounded-xl shadow-xl max-w-xs">
-                <img 
-                  src={flashSaleProduct.images[0]} 
-                  alt={flashSaleProduct.name}
-                  className="h-48 w-full object-contain"
-                />
-                <div className="mt-2">
-                  <Badge className="bg-red-100 text-red-700 border-0">Best Seller</Badge>
-                  <div className="flex items-center mt-1">
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm ml-1">({flashSaleProduct.reviewCount})</span>
+              <div className="flex flex-col">
+                {flashSaleProduct && (
+                  <div className="bg-white p-4 rounded-xl shadow-xl max-w-xs">
+                    <img 
+                      src={flashSaleProduct.images?.[0] || 'https://via.placeholder.com/400x300?text=Product+Image'} 
+                      alt={flashSaleProduct.name}
+                      className="h-48 w-full object-contain"
+                    />
+                    
+                    <div className="mt-2">
+                      <Badge className="bg-red-100 text-red-700 border-0">Best Seller</Badge>
+                      <div className="flex items-center mt-1">
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm ml-1">({flashSaleProduct.reviewCount || 0})</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
                 
                 <Progress value={65} className="mt-3 h-2" />
                 <p className="text-xs text-gray-500 mt-1">65% Sold out</p>
