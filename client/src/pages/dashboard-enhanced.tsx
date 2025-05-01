@@ -770,7 +770,8 @@ const DashboardEnhanced = () => {
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20"
+                      className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20 rounded-full"
+                      onClick={() => navigateTo('/automotive-news')}
                     >
                       View All
                     </Button>

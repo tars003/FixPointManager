@@ -420,6 +420,7 @@ const OverallSummary = () => {
                           variant="ghost" 
                           size="sm" 
                           className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20 rounded-full"
+                          onClick={() => window.open('/automotive-news', '_blank')}
                         >
                           View All
                         </Button>
@@ -676,14 +677,24 @@ const OverallSummary = () => {
                             <RefreshCw className="h-3 w-3 mr-1" />
                             <span className="text-xs">Last updated: Today</span>
                           </div>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20 rounded-full"
-                            onClick={() => setActiveTab('health')}
-                          >
-                            View Details
-                          </Button>
+                          <div className="flex space-x-2">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20 rounded-full"
+                              onClick={() => setActiveTab('health')}
+                            >
+                              View Details
+                            </Button>
+                            <Button 
+                              variant="primary" 
+                              size="sm" 
+                              className="text-xs h-7 px-3 text-white bg-purple-600 hover:bg-purple-700 border border-purple-500 rounded-full"
+                              onClick={() => setActiveTab('maintenance')}
+                            >
+                              Schedule Service
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </div>
