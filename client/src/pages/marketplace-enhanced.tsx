@@ -213,6 +213,59 @@ interface Promotion {
   maxDiscount?: number;
 }
 
+// Helper functions for product generation
+const brands = [
+  'Bosch', 'Denso', 'NGK', 'Continental', 'Bridgestone', 'Michelin', 'Castrol', 'Shell', 
+  'Exide', 'Amaron', 'CEAT', 'MRF', 'Minda', 'TVS', 'Valeo', 'Lucas', 'TATA', 'Mahindra'
+];
+
+const sellers = [
+  'AutoParts India', 'CarZone', 'Genuine Spares', 'SpeedMart', 'AutoX',
+  'MotoZone', 'Parts Depot', 'Premium Auto', 'Capital Auto', 'Parts Galaxy'
+];
+
+const subCategories: Record<string, string[]> = {
+  'Engine Parts': ['Oil Filters', 'Air Filters', 'Spark Plugs', 'Belts', 'Hoses'],
+  'Brakes': ['Brake Pads', 'Brake Discs', 'Brake Fluid', 'Calipers', 'Brake Lines'],
+  'Suspension': ['Shock Absorbers', 'Struts', 'Springs', 'Control Arms', 'Bushings'],
+  'Transmission': ['Clutch Kits', 'Gearbox Parts', 'Transmission Fluid', 'Differentials'],
+  'Electrical': ['Batteries', 'Alternators', 'Starters', 'Sensors', 'Switches'],
+  'Cooling': ['Radiators', 'Coolant', 'Thermostats', 'Water Pumps', 'Fans'],
+  'Body Parts': ['Bumpers', 'Fenders', 'Mirrors', 'Grills', 'Door Handles'],
+  'Lights': ['Headlights', 'Tail Lights', 'Fog Lights', 'Indicators', 'Bulbs'],
+  'Exhaust': ['Mufflers', 'Catalytic Converters', 'Exhaust Pipes', 'Gaskets'],
+  'Interior': ['Seats', 'Floor Mats', 'Steering Wheels', 'Dashboard Covers'],
+  'Wheels': ['Alloys', 'Steel Rims', 'Hub Caps', 'Wheel Bearings'],
+  'Tires': ['Summer Tires', 'Winter Tires', 'All-Season', 'Off-Road Tires'],
+  'Filters': ['Air Filters', 'Oil Filters', 'Cabin Filters', 'Fuel Filters'],
+  'Wipers': ['Wiper Blades', 'Wiper Motors', 'Washer Fluid', 'Arms & Linkage']
+};
+
+const getProductNameByCategory = (category: string): string => {
+  const categoryMap: Record<string, string[]> = {
+    'Brakes': ['Brake Pad Set', 'Brake Rotor', 'Brake Caliper', 'Brake Line Kit', 'Brake Fluid'],
+    'Engine Parts': ['Oil Filter', 'Air Filter', 'Spark Plug Set', 'Timing Belt', 'Engine Gasket'],
+    'Suspension': ['Shock Absorber', 'Strut Assembly', 'Coil Spring', 'Control Arm', 'Ball Joint'],
+    'Transmission': ['Clutch Kit', 'Transmission Filter', 'CV Axle', 'Differential Seal', 'Shift Cable'],
+    'Electrical': ['Battery', 'Alternator', 'Starter Motor', 'Ignition Coil', 'Relay Switch'],
+    'Cooling': ['Radiator', 'Coolant', 'Thermostat', 'Water Pump', 'Cooling Fan'],
+    'Body Parts': ['Bumper Cover', 'Fender', 'Side Mirror', 'Door Handle', 'Hood Latch'],
+    'Lights': ['Headlight Assembly', 'Tail Light Assembly', 'Fog Light Kit', 'Signal Light', 'LED Bulb Set'],
+    'Exhaust': ['Muffler', 'Catalytic Converter', 'Exhaust Pipe', 'Exhaust Gasket', 'Oxygen Sensor'],
+    'Interior': ['Seat Cover Set', 'Floor Mat', 'Steering Wheel Cover', 'Dashboard Cover', 'Interior LED Kit'],
+    'Wheels': ['Alloy Wheel', 'Steel Wheel', 'Wheel Hub Assembly', 'Lug Nut Set', 'Wheel Spacer'],
+    'Tires': ['All-Season Tire', 'Performance Tire', 'Winter Tire', 'Off-Road Tire', 'Run-Flat Tire'],
+    'Filters': ['Premium Air Filter', 'Oil Filter', 'Cabin Air Filter', 'Fuel Filter', 'Filter Set'],
+    'Wipers': ['Wiper Blade Set', 'Rear Wiper Blade', 'Wiper Motor', 'Windshield Washer Pump', 'Washer Fluid']
+  };
+  
+  if (categoryMap[category]) {
+    return categoryMap[category][Math.floor(Math.random() * categoryMap[category].length)];
+  }
+  
+  return `${category} Part`;
+};
+
 // Sample Data
 const sampleVehicles: Vehicle[] = [
   {
