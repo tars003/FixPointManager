@@ -38,7 +38,11 @@ import {
   CircleDot,
   Download,
   Share,
-  X
+  X,
+  Upload,
+  ClipboardCheck,
+  Leaf,
+  Droplets
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from '@/components/ui/button';
@@ -97,6 +101,7 @@ const VehicleVault = () => {
   const [showStatusDialog, setShowStatusDialog] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<EnhancedVehicle | null>(null);
   const [newStatus, setNewStatus] = useState<VehicleStatus | ''>('');
+  const [selectedDocCategory, setSelectedDocCategory] = useState<string>('');
   
   // For toast notifications
   const { toast } = useToast();
@@ -477,6 +482,305 @@ const VehicleVault = () => {
     if (score >= 90) return 'bg-emerald-100 text-emerald-700';
     if (score >= 75) return 'bg-amber-100 text-amber-700';
     return 'bg-rose-100 text-rose-700';
+  };
+  
+  // Get document categories based on vehicle status
+  const getDocumentCategoriesByStatus = (status: VehicleStatus) => {
+    switch(status) {
+      case 'scrapped':
+        return [
+          {
+            name: 'Deregistration Certificate',
+            required: true,
+            description: 'Official certificate confirming the vehicle has been deregistered from RTO records',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Scrapping Certificate',
+            required: true,
+            description: 'Certificate issued by authorized recycling facility confirming vehicle scrapping',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Insurance Closure Documents',
+            required: true,
+            description: 'Documents confirming cancellation of insurance policy',
+            docCount: 2,
+            status: 'pending',
+            icon: <Clock className="h-4 w-4" />
+          },
+          {
+            name: 'Loan Clearance Certificate',
+            required: false,
+            description: 'Certificate confirming full repayment of any outstanding vehicle loan',
+            docCount: 0,
+            status: 'not-applicable',
+            icon: <Ban className="h-4 w-4" />
+          },
+          {
+            name: 'Tax Refund Documents',
+            required: false,
+            description: 'Documents for claiming refund of road tax (if applicable)',
+            docCount: 1,
+            status: 'in-progress',
+            icon: <Clock className="h-4 w-4" />
+          },
+          {
+            name: 'Environment Compliance Certificate',
+            required: true,
+            description: 'Certificate confirming environment-friendly disposal',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Recycling Value Receipt',
+            required: false,
+            description: 'Receipt for any value recovered from recycling',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          }
+        ];
+      case 'totaled':
+        return [
+          {
+            name: 'Insurance Total Loss Report',
+            required: true,
+            description: 'Official report from insurance company declaring vehicle as total loss',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Insurance Settlement Documents',
+            required: true,
+            description: 'Documents detailing settlement amount and terms',
+            docCount: 2,
+            status: 'in-progress',
+            icon: <Clock className="h-4 w-4" />
+          },
+          {
+            name: 'Vehicle Ownership Transfer',
+            required: true,
+            description: 'Documents transferring ownership to insurance company',
+            docCount: 0,
+            status: 'pending',
+            icon: <Clock className="h-4 w-4" />
+          },
+          {
+            name: 'Accident Report',
+            required: true,
+            description: 'Police or official accident report',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Vehicle Valuation Report',
+            required: true,
+            description: 'Pre-accident value assessment report',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Loan Closure Documents',
+            required: false,
+            description: 'Documents confirming settlement of any outstanding loan',
+            docCount: 0,
+            status: 'not-applicable',
+            icon: <Ban className="h-4 w-4" />
+          }
+        ];
+      case 'stolen':
+        return [
+          {
+            name: 'Police FIR',
+            required: true,
+            description: 'First Information Report filed with police',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Insurance Claim Documents',
+            required: true,
+            description: 'Documents submitted to insurance for theft claim',
+            docCount: 3,
+            status: 'in-progress',
+            icon: <Clock className="h-4 w-4" />
+          },
+          {
+            name: 'Police Non-Recovery Certificate',
+            required: true,
+            description: 'Certificate issued if vehicle not recovered after investigation period',
+            docCount: 0,
+            status: 'pending',
+            icon: <Clock className="h-4 w-4" />
+          },
+          {
+            name: 'RTO Notification',
+            required: true,
+            description: 'Notification to RTO about vehicle theft',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Insurance Settlement Letter',
+            required: true,
+            description: 'Final settlement letter from insurance company',
+            docCount: 0,
+            status: 'pending',
+            icon: <Clock className="h-4 w-4" />
+          }
+        ];
+      case 'in-maintenance':
+        return [
+          {
+            name: 'Service Request Form',
+            required: true,
+            description: 'Initial service request documentation',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Diagnostic Reports',
+            required: true,
+            description: 'Technical assessment and diagnostic findings',
+            docCount: 2,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Cost Estimate',
+            required: true,
+            description: 'Detailed breakdown of repair costs',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Parts Replacement Orders',
+            required: false,
+            description: 'Orders for replacement parts if required',
+            docCount: 3,
+            status: 'in-progress',
+            icon: <Clock className="h-4 w-4" />
+          },
+          {
+            name: 'Warranty Claims',
+            required: false,
+            description: 'Documentation for warranty coverage if applicable',
+            docCount: 0,
+            status: 'not-applicable',
+            icon: <Ban className="h-4 w-4" />
+          },
+          {
+            name: 'Service Completion Report',
+            required: true,
+            description: 'Final report detailing completed work',
+            docCount: 0,
+            status: 'pending',
+            icon: <Clock className="h-4 w-4" />
+          }
+        ];
+      default:
+        return [
+          {
+            name: 'Registration Certificate',
+            required: true,
+            description: 'Official vehicle registration document from RTO',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Insurance Documents',
+            required: true,
+            description: 'Current insurance policy and related documents',
+            docCount: 2,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Pollution Certificate',
+            required: true,
+            description: 'Valid PUC (Pollution Under Control) certificate',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Service Records',
+            required: false,
+            description: 'History of vehicle service and maintenance',
+            docCount: 4,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          },
+          {
+            name: 'Road Tax Payment',
+            required: true,
+            description: 'Proof of road tax payment',
+            docCount: 1,
+            status: 'completed',
+            icon: <CheckCircle className="h-4 w-4" />
+          }
+        ];
+    }
+  };
+  
+  // Get document status color and style
+  const getDocumentStatusStyle = (status: string) => {
+    switch(status) {
+      case 'completed':
+        return {
+          icon: <CheckCircle className="h-4 w-4" />,
+          bgColor: 'bg-emerald-100',
+          textColor: 'text-emerald-700',
+          borderColor: 'border-emerald-200',
+          label: 'Completed'
+        };
+      case 'in-progress':
+        return {
+          icon: <Clock className="h-4 w-4" />,
+          bgColor: 'bg-blue-100',
+          textColor: 'text-blue-700',
+          borderColor: 'border-blue-200',
+          label: 'In Progress'
+        };
+      case 'pending':
+        return {
+          icon: <Clock className="h-4 w-4" />,
+          bgColor: 'bg-amber-100',
+          textColor: 'text-amber-700',
+          borderColor: 'border-amber-200',
+          label: 'Pending'
+        };
+      case 'not-applicable':
+        return {
+          icon: <Ban className="h-4 w-4" />,
+          bgColor: 'bg-gray-100',
+          textColor: 'text-gray-700',
+          borderColor: 'border-gray-200',
+          label: 'Not Applicable'
+        };
+      default:
+        return {
+          icon: <AlertCircle className="h-4 w-4" />,
+          bgColor: 'bg-red-100',
+          textColor: 'text-red-700',
+          borderColor: 'border-red-200',
+          label: 'Missing'
+        };
+    }
   };
 
   return (
@@ -1131,377 +1435,470 @@ const VehicleVault = () => {
       
         <TabsContent value="documents">
           <div className="grid grid-cols-1 gap-6">
-            {/* Document Category Filters */}
-            <div className="p-4 bg-white rounded-xl border shadow-sm">
-              <h3 className="text-lg font-semibold text-blue-800 mb-4">Document Categories by Vehicle Status</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="rounded-xl bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-100/60 shadow-sm p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 mr-2">
-                        <Activity className="h-4 w-4 text-emerald-600" />
-                      </div>
-                      <h4 className="font-medium text-emerald-800">Active Vehicles</h4>
-                    </div>
-                    <Badge className="bg-emerald-100 text-emerald-700">
-                      9 Vehicles
-                    </Badge>
+            {/* Document Status Categories Header */}
+            <div className="rounded-xl overflow-hidden bg-gradient-to-r from-blue-800 to-indigo-800 border border-blue-700/30 shadow-lg">
+              <div className="p-4 flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="bg-white/10 rounded-lg p-2 mr-3">
+                    <FileText className="h-5 w-5 text-white" />
                   </div>
-                  <div className="space-y-2">
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-emerald-50 border border-emerald-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-emerald-600 mr-2" />
-                        <span className="text-sm">Service Records</span>
-                      </div>
-                      <Badge className="bg-emerald-100 text-emerald-700">27</Badge>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-emerald-50 border border-emerald-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-emerald-600 mr-2" />
-                        <span className="text-sm">Insurance</span>
-                      </div>
-                      <Badge className="bg-emerald-100 text-emerald-700">9</Badge>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-emerald-50 border border-emerald-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-emerald-600 mr-2" />
-                        <span className="text-sm">Registration</span>
-                      </div>
-                      <Badge className="bg-emerald-100 text-emerald-700">9</Badge>
-                    </button>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white">Vehicle Document Management</h3>
+                    <p className="text-blue-200 text-sm">Manage and track all documents for your {statusFilter === 'all' ? 'vehicles' : formatStatus(statusFilter) + ' vehicles'}</p>
                   </div>
                 </div>
-                
-                <div className="rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100/60 shadow-sm p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 mr-2">
-                        <Clock className="h-4 w-4 text-amber-600" />
-                      </div>
-                      <h4 className="font-medium text-amber-800">In Maintenance</h4>
-                    </div>
-                    <Badge className="bg-amber-100 text-amber-700">
-                      3 Vehicles
-                    </Badge>
-                  </div>
-                  <div className="space-y-2">
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-amber-50 border border-amber-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-amber-600 mr-2" />
-                        <span className="text-sm">Repair Estimates</span>
-                      </div>
-                      <Badge className="bg-amber-100 text-amber-700">5</Badge>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-amber-50 border border-amber-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-amber-600 mr-2" />
-                        <span className="text-sm">Work Orders</span>
-                      </div>
-                      <Badge className="bg-amber-100 text-amber-700">7</Badge>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-amber-50 border border-amber-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-amber-600 mr-2" />
-                        <span className="text-sm">Parts Invoices</span>
-                      </div>
-                      <Badge className="bg-amber-100 text-amber-700">4</Badge>
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100/60 shadow-sm p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 mr-2">
-                        <ShoppingBag className="h-4 w-4 text-blue-600" />
-                      </div>
-                      <h4 className="font-medium text-blue-800">Recently Purchased</h4>
-                    </div>
-                    <Badge className="bg-blue-100 text-blue-700">
-                      5 Vehicles
-                    </Badge>
-                  </div>
-                  <div className="space-y-2">
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-blue-50 border border-blue-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-blue-600 mr-2" />
-                        <span className="text-sm">Purchase Invoices</span>
-                      </div>
-                      <Badge className="bg-blue-100 text-blue-700">5</Badge>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-blue-50 border border-blue-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-blue-600 mr-2" />
-                        <span className="text-sm">Warranty Documents</span>
-                      </div>
-                      <Badge className="bg-blue-100 text-blue-700">5</Badge>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-blue-50 border border-blue-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-blue-600 mr-2" />
-                        <span className="text-sm">Owner Manuals</span>
-                      </div>
-                      <Badge className="bg-blue-100 text-blue-700">3</Badge>
-                    </button>
-                  </div>
+                <div className="flex gap-3">
+                  <Button variant="ghost" className="bg-white/10 hover:bg-white/20 text-white rounded-lg">
+                    <Search className="h-4 w-4 mr-1" />
+                    Search All
+                  </Button>
+                  <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg">
+                    <Plus className="h-4 w-4 mr-1" />
+                    Add Documents
+                  </Button>
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                <div className="rounded-xl bg-gradient-to-br from-violet-50 to-purple-50 border border-violet-100/60 shadow-sm p-4">
-                  <div className="flex items-center justify-between mb-3">
+              <div className="flex overflow-auto bg-blue-900/30 border-t border-white/10 px-2 py-1.5 no-scrollbar">
+                {statusCategories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => setStatusFilter(category.id as VehicleStatus)}
+                    className={`px-3 py-1.5 rounded-lg mx-1 whitespace-nowrap text-sm ${
+                      statusFilter === category.id 
+                        ? 'bg-white/20 text-white' 
+                        : 'text-blue-200 hover:bg-white/10 hover:text-white'
+                    }`}
+                  >
                     <div className="flex items-center">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-violet-100 mr-2">
-                        <Truck className="h-4 w-4 text-violet-600" />
-                      </div>
-                      <h4 className="font-medium text-violet-800">Commercial Fleet</h4>
+                      {category.icon}
+                      <span className="ml-1.5">{category.label}</span>
                     </div>
-                    <Badge className="bg-violet-100 text-violet-700">
-                      7 Vehicles
-                    </Badge>
-                  </div>
-                  <div className="space-y-2">
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-violet-50 border border-violet-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-violet-600 mr-2" />
-                        <span className="text-sm">Commercial License</span>
-                      </div>
-                      <Badge className="bg-violet-100 text-violet-700">7</Badge>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-violet-50 border border-violet-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-violet-600 mr-2" />
-                        <span className="text-sm">Route Permits</span>
-                      </div>
-                      <Badge className="bg-violet-100 text-violet-700">14</Badge>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-violet-50 border border-violet-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-violet-600 mr-2" />
-                        <span className="text-sm">Fitness Certificates</span>
-                      </div>
-                      <Badge className="bg-violet-100 text-violet-700">7</Badge>
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="rounded-xl bg-gradient-to-br from-red-50 to-rose-50 border border-red-100/60 shadow-sm p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-100 mr-2">
-                        <AlertTriangle className="h-4 w-4 text-red-600" />
-                      </div>
-                      <h4 className="font-medium text-red-800">Impounded</h4>
-                    </div>
-                    <Badge className="bg-red-100 text-red-700">
-                      4 Vehicles
-                    </Badge>
-                  </div>
-                  <div className="space-y-2">
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-red-50 border border-red-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-red-600 mr-2" />
-                        <span className="text-sm">Impound Notices</span>
-                      </div>
-                      <Badge className="bg-red-100 text-red-700">4</Badge>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-red-50 border border-red-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-red-600 mr-2" />
-                        <span className="text-sm">Legal Correspondence</span>
-                      </div>
-                      <Badge className="bg-red-100 text-red-700">7</Badge>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-red-50 border border-red-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-red-600 mr-2" />
-                        <span className="text-sm">Release Documents</span>
-                      </div>
-                      <Badge className="bg-red-100 text-red-700">2</Badge>
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100/60 shadow-sm p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 mr-2">
-                        <KeySquare className="h-4 w-4 text-green-600" />
-                      </div>
-                      <h4 className="font-medium text-green-800">Leased Out</h4>
-                    </div>
-                    <Badge className="bg-green-100 text-green-700">
-                      5 Vehicles
-                    </Badge>
-                  </div>
-                  <div className="space-y-2">
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-green-50 border border-green-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-green-600 mr-2" />
-                        <span className="text-sm">Lease Agreements</span>
-                      </div>
-                      <Badge className="bg-green-100 text-green-700">5</Badge>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-green-50 border border-green-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-green-600 mr-2" />
-                        <span className="text-sm">Payment Records</span>
-                      </div>
-                      <Badge className="bg-green-100 text-green-700">23</Badge>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-2 rounded-lg bg-white hover:bg-green-50 border border-green-100 transition-colors">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-green-600 mr-2" />
-                        <span className="text-sm">Handover Checklists</span>
-                      </div>
-                      <Badge className="bg-green-100 text-green-700">5</Badge>
-                    </button>
-                  </div>
-                </div>
+                  </button>
+                ))}
               </div>
             </div>
             
-            {/* Document Viewer */}
-            <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
-              <div className="p-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50 flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/70 backdrop-blur-sm mr-3 border border-blue-200">
-                    <FileText className="h-4 w-4 text-blue-700" />
+            {/* Dynamic Document Requirements & Checklist Based on Status */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-xl border shadow-md overflow-hidden">
+                  <div className="p-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50 flex items-center">
+                    <div className="p-2 rounded-lg bg-gradient-to-br from-blue-100 to-indigo-100 mr-3">
+                      {statusCategories.find(c => c.id === statusFilter)?.icon || 
+                       <FileText className="h-4 w-4 text-blue-600" />}
+                    </div>
+                    <h3 className="text-lg font-semibold text-blue-800">
+                      {statusFilter === 'all' ? 'Document Requirements' : `${formatStatus(statusFilter)} Requirements`}
+                    </h3>
                   </div>
-                  <h3 className="text-lg font-semibold text-blue-800">Document Explorer</h3>
-                </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" className="rounded-lg border-blue-200 text-blue-700">
-                    <FileText className="h-4 w-4 mr-1" />
-                    Export
-                  </Button>
-                  <Button size="sm" className="rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600">
-                    <Plus className="h-4 w-4 mr-1" />
-                    Upload New
-                  </Button>
+                  
+                  <div className="divide-y">
+                    {getDocumentCategoriesByStatus(statusFilter as VehicleStatus).map((doc, i) => {
+                      const statusStyle = getDocumentStatusStyle(doc.status);
+                      return (
+                        <div 
+                          key={i} 
+                          className={`p-4 hover:bg-gray-50 transition-colors cursor-pointer ${
+                            selectedDocCategory === doc.name ? 'bg-blue-50' : ''
+                          }`}
+                          onClick={() => setSelectedDocCategory(doc.name)}
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center">
+                              <div className={`p-1.5 rounded-full ${statusStyle.bgColor} ${statusStyle.textColor} mr-2`}>
+                                {statusStyle.icon}
+                              </div>
+                              <h4 className="font-medium">
+                                {doc.name}
+                                {doc.required && <span className="text-red-500 ml-1">*</span>}
+                              </h4>
+                            </div>
+                            <Badge 
+                              variant={doc.docCount > 0 ? "default" : "outline"} 
+                              className={`${
+                                doc.docCount > 0 
+                                ? statusStyle.bgColor + ' ' + statusStyle.textColor 
+                                : 'border-gray-200 text-gray-700'
+                              }`}
+                            >
+                              {doc.docCount > 0 ? `${doc.docCount} File${doc.docCount > 1 ? 's' : ''}` : 'No Files'}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-gray-500">{doc.description}</p>
+                          <div className="flex mt-2 items-center justify-between">
+                            <div className={`text-xs ${statusStyle.textColor} flex items-center`}>
+                              {statusStyle.icon}
+                              <span className="ml-1">{statusStyle.label}</span>
+                            </div>
+                            <div className="flex gap-1">
+                              {doc.status !== 'not-applicable' && (
+                                <Button variant="ghost" size="sm" className="h-7 rounded-lg text-xs">
+                                  <Plus className="h-3 w-3 mr-1" />
+                                  Add Files
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
               
-              <div className="p-4">
-                <div className="flex flex-col md:flex-row gap-4 mb-4">
-                  <div className="flex-1">
-                    <div className="flex gap-2 mb-3">
-                      <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                        <Input
-                          placeholder="Search documents by name or type..."
-                          className="pl-9 bg-gray-50 border-gray-200"
-                        />
+              <div className="lg:col-span-2">
+                {selectedDocCategory ? (
+                  <div className="bg-white rounded-xl border shadow-md overflow-hidden">
+                    <div className="p-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50 flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/70 backdrop-blur-sm mr-3 border border-blue-200">
+                          <FileText className="h-4 w-4 text-blue-700" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-blue-800">{selectedDocCategory}</h3>
+                          <p className="text-sm text-blue-600">
+                            {statusFilter === 'all' ? 'All Vehicles' : formatStatus(statusFilter) + ' Vehicles'}
+                          </p>
+                        </div>
                       </div>
-                      <div className="bg-gray-50 border border-gray-200 rounded-md px-3 py-2 flex items-center gap-2">
-                        <span className="text-sm text-gray-600">Sort By:</span>
-                        <span className="text-sm font-medium">Date Added ↑</span>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" className="rounded-lg border-blue-200 text-blue-700">
+                          <Download className="h-4 w-4 mr-1" />
+                          Export All
+                        </Button>
+                        <Button size="sm" className="rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600">
+                          <Plus className="h-4 w-4 mr-1" />
+                          Upload New
+                        </Button>
                       </div>
                     </div>
                     
-                    <div className="flex gap-2 mb-4 flex-wrap">
-                      <Badge className="bg-blue-100 text-blue-700 rounded-full px-3 py-1">
-                        <div className="flex items-center gap-1">
-                          <span>Active Vehicles</span>
-                          <X className="h-3 w-3 ml-1" />
-                        </div>
-                      </Badge>
-                      <Badge className="bg-blue-100 text-blue-700 rounded-full px-3 py-1">
-                        <div className="flex items-center gap-1">
-                          <span>Insurance</span>
-                          <X className="h-3 w-3 ml-1" />
-                        </div>
-                      </Badge>
-                      <Badge className="bg-gray-100 text-gray-700 rounded-full px-3 py-1 hover:bg-gray-200 cursor-pointer">
-                        <div className="flex items-center gap-1">
-                          <Plus className="h-3 w-3 mr-1" />
-                          <span>Add Filter</span>
-                        </div>
-                      </Badge>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" className="rounded-lg">
-                      <div className="flex items-center">
-                        <ListFilter className="h-4 w-4 mr-1" />
-                        <span>Filters</span>
-                      </div>
-                    </Button>
-                    <Button variant="outline" size="sm" className="rounded-lg">
-                      <div className="flex items-center">
-                        <Clock className="h-4 w-4 mr-1" />
-                        <span>Recent</span>
-                      </div>
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="space-y-3">
-                  {[
-                    {title: 'Insurance Policy - Honda City.pdf', date: '15 Mar 2025', type: 'Insurance', vehicle: 'Honda City', status: 'Active', size: '1.2 MB'},
-                    {title: 'Insurance Policy - Toyota Fortuner.pdf', date: '10 Feb 2025', type: 'Insurance', vehicle: 'Toyota Fortuner', status: 'Commercial Fleet', size: '1.4 MB'},
-                    {title: 'Insurance Policy - Hyundai Creta.pdf', date: '21 Jan 2025', type: 'Insurance', vehicle: 'Hyundai Creta', status: 'Active', size: '1.3 MB'},
-                    {title: 'Insurance Policy - Maruti Swift.pdf', date: '03 Jan 2025', type: 'Insurance', vehicle: 'Maruti Swift', status: 'Active', size: '1.1 MB'},
-                    {title: 'Insurance Policy - Mahindra XUV700.pdf', date: '28 Dec 2024', type: 'Insurance', vehicle: 'Mahindra XUV700', status: 'Active', size: '1.5 MB'},
-                  ].map((doc, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 border border-gray-100 transition-colors">
-                      <div className="flex items-center">
-                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100 text-blue-700 mr-3">
-                          <FileText className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <div className="font-medium text-gray-900">{doc.title}</div>
-                          <div className="text-xs text-gray-500 flex items-center gap-2">
-                            <span>Added: {doc.date}</span>
-                            <span>•</span>
-                            <span>{doc.size}</span>
-                            <span>•</span>
-                            <span className={`${
-                              doc.status === 'Active' ? 'text-emerald-600' : 
-                              doc.status === 'Commercial Fleet' ? 'text-violet-600' : 'text-gray-600'
-                            }`}>
-                              {doc.status}
-                            </span>
+                    {/* Files List */}
+                    <div className="p-4">
+                      {/* For Scrapped Vehicles */}
+                      {statusFilter === 'scrapped' && selectedDocCategory === 'Deregistration Certificate' && (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 border border-gray-100 transition-colors">
+                            <div className="flex items-center">
+                              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 mr-3">
+                                <FileText className="h-5 w-5" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900">Deregistration_Certificate_KiaSeltos.pdf</div>
+                                <div className="text-xs text-gray-500 flex items-center gap-2">
+                                  <span>Added: 15 Mar 2025</span>
+                                  <span>•</span>
+                                  <span>1.2 MB</span>
+                                  <span>•</span>
+                                  <span className="text-emerald-600">Verified</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="border-emerald-200 text-emerald-700">
+                                Completed
+                              </Badge>
+                              <div className="flex items-center gap-1">
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                  <Download className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                  <Share className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="p-3 rounded-lg border border-blue-100 bg-blue-50/50">
+                            <h4 className="font-medium text-blue-800 flex items-center mb-2">
+                              <AlertCircle className="h-4 w-4 mr-1.5" />
+                              Document Verification Details
+                            </h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Verified By:</span>
+                                <span className="font-medium">Regional Transport Office</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Verification Date:</span>
+                                <span className="font-medium">18 Mar 2025</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Reference Number:</span>
+                                <span className="font-medium">RTO/SC/2025/KS-4472</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Validity:</span>
+                                <span className="font-medium text-emerald-600">Permanent</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="p-3 rounded-lg border border-gray-200 bg-gray-50/50 flex items-center justify-between">
+                            <div className="flex items-center">
+                              <ClipboardCheck className="h-5 w-5 text-gray-500 mr-2" />
+                              <div>
+                                <h4 className="font-medium">Document History</h4>
+                                <p className="text-sm text-gray-500">View revision and submission history</p>
+                              </div>
+                            </div>
+                            <Button variant="ghost" size="sm" className="rounded-lg text-blue-700">
+                              View History
+                            </Button>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="border-blue-200 text-blue-700">
-                          {doc.type}
-                        </Badge>
-                        <div className="flex items-center gap-1">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
-                            <Share className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
+                      )}
+                      
+                      {statusFilter === 'scrapped' && selectedDocCategory === 'Insurance Closure Documents' && (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 border border-gray-100 transition-colors">
+                            <div className="flex items-center">
+                              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100 text-blue-700 mr-3">
+                                <FileText className="h-5 w-5" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900">Insurance_Cancellation_Request.pdf</div>
+                                <div className="text-xs text-gray-500 flex items-center gap-2">
+                                  <span>Added: 10 Mar 2025</span>
+                                  <span>•</span>
+                                  <span>0.8 MB</span>
+                                  <span>•</span>
+                                  <span className="text-blue-600">Submitted</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="border-blue-200 text-blue-700">
+                                In Progress
+                              </Badge>
+                              <div className="flex items-center gap-1">
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                  <Download className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                  <Share className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 border border-gray-100 transition-colors">
+                            <div className="flex items-center">
+                              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100 text-blue-700 mr-3">
+                                <FileText className="h-5 w-5" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900">Insurance_Acknowledgment_Receipt.pdf</div>
+                                <div className="text-xs text-gray-500 flex items-center gap-2">
+                                  <span>Added: 12 Mar 2025</span>
+                                  <span>•</span>
+                                  <span>0.5 MB</span>
+                                  <span>•</span>
+                                  <span className="text-blue-600">Received</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="border-blue-200 text-blue-700">
+                                In Progress
+                              </Badge>
+                              <div className="flex items-center gap-1">
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                  <Download className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                  <Share className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="p-3 rounded-lg border border-amber-100 bg-amber-50/50">
+                            <h4 className="font-medium text-amber-800 flex items-center mb-2">
+                              <AlertCircle className="h-4 w-4 mr-1.5" />
+                              Action Required
+                            </h4>
+                            <p className="text-sm text-amber-700 mb-3">Your insurance cancellation is pending final confirmation from the insurance company. Expected completion by 20 May 2025.</p>
+                            <div className="flex justify-between">
+                              <div>
+                                <div className="text-xs mb-1 text-amber-800">Processing Status</div>
+                                <div className="w-full h-2 bg-amber-100 rounded-full overflow-hidden">
+                                  <div className="h-full bg-amber-500 rounded-full" style={{ width: '60%' }}></div>
+                                </div>
+                              </div>
+                              <Button size="sm" variant="outline" className="rounded-lg border-amber-200 text-amber-700">
+                                Check Status
+                              </Button>
+                            </div>
+                          </div>
                         </div>
+                      )}
+                      
+                      {statusFilter === 'scrapped' && selectedDocCategory === 'Environment Compliance Certificate' && (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 border border-gray-100 transition-colors">
+                            <div className="flex items-center">
+                              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 mr-3">
+                                <FileText className="h-5 w-5" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900">ECO_Disposal_Certificate_CPCB.pdf</div>
+                                <div className="text-xs text-gray-500 flex items-center gap-2">
+                                  <span>Added: 25 Mar 2025</span>
+                                  <span>•</span>
+                                  <span>2.4 MB</span>
+                                  <span>•</span>
+                                  <span className="text-emerald-600">Verified</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="border-emerald-200 text-emerald-700">
+                                Completed
+                              </Badge>
+                              <div className="flex items-center gap-1">
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                  <Download className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                  <Share className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="p-3 rounded-lg border border-emerald-100 bg-emerald-50/50">
+                            <h4 className="font-medium text-emerald-800 flex items-center mb-2">
+                              <CheckCircle className="h-4 w-4 mr-1.5" />
+                              Environmental Impact
+                            </h4>
+                            <div className="mb-4">
+                              <p className="text-sm text-emerald-700 mb-1">Your vehicle has been recycled according to environmental standards:</p>
+                              <div className="grid grid-cols-2 gap-3 mt-2 text-sm">
+                                <div className="flex items-center bg-white p-2 rounded-lg border border-emerald-100">
+                                  <div className="p-1.5 rounded-full bg-emerald-100 text-emerald-700 mr-2">
+                                    <Leaf className="h-4 w-4" />
+                                  </div>
+                                  <div>
+                                    <div className="font-medium">250kg</div>
+                                    <div className="text-xs text-gray-500">Metal Recycled</div>
+                                  </div>
+                                </div>
+                                <div className="flex items-center bg-white p-2 rounded-lg border border-emerald-100">
+                                  <div className="p-1.5 rounded-full bg-emerald-100 text-emerald-700 mr-2">
+                                    <Droplets className="h-4 w-4" />
+                                  </div>
+                                  <div>
+                                    <div className="font-medium">28L</div>
+                                    <div className="text-xs text-gray-500">Fluids Recovered</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <Button size="sm" variant="outline" className="w-full rounded-lg border-emerald-200 text-emerald-700">
+                              <FileText className="h-4 w-4 mr-1" />
+                              View Full Report
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Default case when no specific content is defined */}
+                      {((statusFilter !== 'scrapped') || 
+                        (statusFilter === 'scrapped' && 
+                         !['Deregistration Certificate', 'Insurance Closure Documents', 'Environment Compliance Certificate']
+                           .includes(selectedDocCategory))) && (
+                        <div className="space-y-4">
+                          <div className="space-y-3">
+                            {[1, 2, 3].map((i) => (
+                              <div key={i} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 border border-gray-100 transition-colors">
+                                <div className="flex items-center">
+                                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100 text-blue-700 mr-3">
+                                    <FileText className="h-5 w-5" />
+                                  </div>
+                                  <div>
+                                    <div className="font-medium text-gray-900">{selectedDocCategory}_{i}.pdf</div>
+                                    <div className="text-xs text-gray-500 flex items-center gap-2">
+                                      <span>Added: {new Date().toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: 'numeric'})}</span>
+                                      <span>•</span>
+                                      <span>{(Math.random() * 2 + 0.5).toFixed(1)} MB</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Badge variant="outline" className="border-blue-200 text-blue-700">
+                                    Document
+                                  </Badge>
+                                  <div className="flex items-center gap-1">
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                      <Download className="h-4 w-4" />
+                                    </Button>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                      <Share className="h-4 w-4" />
+                                    </Button>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                                      <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          
+                          <div className="p-4 rounded-lg border border-gray-200 bg-gray-50 text-center">
+                            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-700 mb-3">
+                              <Upload className="h-6 w-6" />
+                            </div>
+                            <h4 className="font-medium mb-1">Upload More {selectedDocCategory} Files</h4>
+                            <p className="text-sm text-gray-500 mb-3">Drag and drop files here or click to browse</p>
+                            <Button size="sm" className="rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600">
+                              <Plus className="h-4 w-4 mr-1" />
+                              Browse Files
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-xl border shadow-md overflow-hidden">
+                    <div className="p-8 text-center">
+                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-700 mb-4">
+                        <FileText className="h-8 w-8" />
+                      </div>
+                      <h3 className="text-xl font-semibold mb-2">Select a Document Category</h3>
+                      <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                        Choose a document category from the list on the left to view, upload, and manage your documents.
+                      </p>
+                      <div className="flex flex-wrap justify-center gap-2">
+                        {getDocumentCategoriesByStatus(statusFilter as VehicleStatus).slice(0, 3).map((doc, i) => (
+                          <Button 
+                            key={i}
+                            variant="outline"
+                            className="rounded-lg border-blue-200 text-blue-700"
+                            onClick={() => setSelectedDocCategory(doc.name)}
+                          >
+                            <FileText className="h-4 w-4 mr-1" />
+                            {doc.name}
+                          </Button>
+                        ))}
                       </div>
                     </div>
-                  ))}
-                </div>
-                
-                <div className="mt-4 flex items-center justify-between">
-                  <div className="text-sm text-gray-500">
-                    Showing 5 of 73 documents
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" className="rounded-lg" disabled>
-                      <ChevronLeft className="h-4 w-4" />
-                      Previous
-                    </Button>
-                    <Button variant="outline" size="sm" className="rounded-lg">
-                      Next
-                      <ChevronRight className="h-4 w-4 ml-1" />
-                    </Button>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
