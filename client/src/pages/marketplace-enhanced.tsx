@@ -744,16 +744,36 @@ const MarketplaceEnhanced: React.FC = () => {
   const handleCategoryFilter = (category: string) => {
     setActiveCategory(category);
     
-    if (category === 'all') {
-      setDisplayedProducts(products.sort((a, b) => (b.popularity || 0) - (a.popularity || 0)).slice(0, 40));
-      return;
-    }
+    // First show loading state
+    setNotificationText(`Loading ${category === 'all' ? 'all products' : category} products...`);
+    setShowNotification(true);
     
-    const filtered = products.filter(product => 
-      product.category === category
-    ).sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
-    
-    setDisplayedProducts(filtered);
+    // Simulate loading with a small delay
+    setTimeout(() => {
+      if (category === 'all') {
+        setDisplayedProducts(products.sort((a, b) => (b.popularity || 0) - (a.popularity || 0)).slice(0, 40));
+      } else {
+        const filtered = products.filter(product => 
+          product.category === category
+        ).sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+        
+        setDisplayedProducts(filtered);
+      }
+      
+      // Hide notification and show success
+      setShowNotification(false);
+      setTimeout(() => {
+        setNotificationText(`Showing ${category === 'all' ? 'all' : category} products`);
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 2000);
+      }, 200);
+      
+      // If we have a selected vehicle, filter by that as well
+      if (selectedVehicle) {
+        setFilters(prev => ({...prev, category: category === 'all' ? null : category}));
+        applyFilters();
+      }
+    }, 500);
   };
   
   const handleSortChange = (sortBy: FilterOptions['sortBy']) => {
@@ -847,57 +867,121 @@ const MarketplaceEnhanced: React.FC = () => {
   };
   
   const applyFilters = () => {
-    let filtered = [...products];
+    setNotificationText("Applying filters...");
+    setShowNotification(true);
     
-    // Apply vehicle filter
-    if (filters.vehicleId) {
-      filtered = filtered.filter(p => 
-        p.compatibleVehicles.includes(filters.vehicleId as number)
-      );
-    }
-    
-    // Apply category filter
-    if (filters.category) {
-      filtered = filtered.filter(p => p.category === filters.category);
-    }
-    
-    // Apply sub-category filter
-    if (filters.subCategory) {
-      filtered = filtered.filter(p => p.subCategory === filters.subCategory);
-    }
-    
-    // Apply type filter
-    if (filters.type) {
-      filtered = filtered.filter(p => p.type === filters.type);
-    }
-    
-    // Apply price range filter
-    if (filters.priceRange) {
-      filtered = filtered.filter(p => 
-        p.price >= filters.priceRange!.min && 
-        p.price <= filters.priceRange!.max
-      );
-    }
-    
-    // Apply brand filter
-    if (filters.brands.length > 0) {
-      filtered = filtered.filter(p => 
-        filters.brands.includes(p.brand)
-      );
-    }
-    
-    // Apply in-stock filter
-    if (filters.inStock) {
-      filtered = filtered.filter(p => p.stockStatus !== 'out_of_stock');
-    }
-    
-    // Apply rating filter
-    if (filters.rating) {
-      filtered = filtered.filter(p => p.rating >= filters.rating!);
-    }
-    
-    setDisplayedProducts(filtered);
-    setMobileFiltersOpen(false);
+    // Simulate loading with a small delay for better UX
+    setTimeout(() => {
+      let filtered = [...products];
+      let appliedFilters = [];
+      
+      // Apply vehicle filter
+      if (filters.vehicleId) {
+        filtered = filtered.filter(p => 
+          p.compatibleVehicles.includes(filters.vehicleId as number)
+        );
+        const vehicle = savedVehicles.find(v => v.id === filters.vehicleId);
+        if (vehicle) {
+          appliedFilters.push(`${vehicle.make} ${vehicle.model}`);
+        }
+      }
+      
+      // Apply category filter
+      if (filters.category) {
+        filtered = filtered.filter(p => p.category === filters.category);
+        appliedFilters.push(filters.category);
+      }
+      
+      // Apply sub-category filter
+      if (filters.subCategory) {
+        filtered = filtered.filter(p => p.subCategory === filters.subCategory);
+        appliedFilters.push(filters.subCategory);
+      }
+      
+      // Apply type filter
+      if (filters.type) {
+        filtered = filtered.filter(p => p.type === filters.type);
+        appliedFilters.push(filters.type === 'oem' ? 'OEM Parts' : 'Aftermarket Parts');
+      }
+      
+      // Apply price range filter
+      if (filters.priceRange) {
+        filtered = filtered.filter(p => 
+          p.price >= filters.priceRange!.min && 
+          p.price <= filters.priceRange!.max
+        );
+        appliedFilters.push(`₹${filters.priceRange.min} - ₹${filters.priceRange.max}`);
+      }
+      
+      // Apply brand filter
+      if (filters.brands.length > 0) {
+        filtered = filtered.filter(p => 
+          filters.brands.includes(p.brand)
+        );
+        if (filters.brands.length === 1) {
+          appliedFilters.push(filters.brands[0]);
+        } else {
+          appliedFilters.push(`${filters.brands.length} brands`);
+        }
+      }
+      
+      // Apply in-stock filter
+      if (filters.inStock) {
+        filtered = filtered.filter(p => p.stockStatus !== 'out_of_stock');
+        appliedFilters.push('In Stock');
+      }
+      
+      // Apply rating filter
+      if (filters.rating) {
+        filtered = filtered.filter(p => p.rating >= filters.rating!);
+        appliedFilters.push(`${filters.rating}+ rating`);
+      }
+      
+      // Apply sort
+      if (filters.sortBy) {
+        let sorted = [...filtered];
+        switch (filters.sortBy) {
+          case 'price_low_high':
+            sorted.sort((a, b) => a.price - b.price);
+            break;
+          case 'price_high_low':
+            sorted.sort((a, b) => b.price - a.price);
+            break;
+          case 'rating':
+            sorted.sort((a, b) => b.rating - a.rating);
+            break;
+          case 'popularity':
+            sorted.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+            break;
+          case 'trending':
+            sorted.sort((a, b) => ((b.trending ? 1 : 0) - (a.trending ? 1 : 0)));
+            break;
+          case 'newest':
+            // For demo, just reverse the current order
+            sorted.reverse();
+            break;
+          default:
+            // Relevance is default order in our sample data
+            break;
+        }
+        filtered = sorted;
+      }
+      
+      setDisplayedProducts(filtered);
+      setMobileFiltersOpen(false);
+      
+      // Display success notification
+      setShowNotification(false);
+      setTimeout(() => {
+        const filterText = appliedFilters.length > 0 
+          ? `Showing ${filtered.length} products filtered by: ${appliedFilters.join(', ')}`
+          : `Showing ${filtered.length} products`;
+        
+        setNotificationText(filterText);
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 3000);
+      }, 200);
+    }, 600);
   };
   
   // Calculate cart badge count
@@ -1692,14 +1776,14 @@ const MarketplaceEnhanced: React.FC = () => {
       </div>
       
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4">
         {/* Flash Sale */}
         {flashSaleActive && flashSaleProduct && (
           <motion.div
             ref={flashSaleRef}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={flashSaleControls}
-            className="mb-10 relative overflow-hidden rounded-xl"
+            className="mb-6 relative overflow-hidden rounded-xl"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-orange-600 animate-pulse-slow" />
             <div className="absolute inset-0 bg-black/10" />
