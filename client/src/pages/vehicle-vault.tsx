@@ -31,7 +31,10 @@ import {
   Trash2,
   MoreHorizontal,
   Truck,
-  Ban
+  Ban,
+  AlertCircle,
+  ActivitySquare,
+  CircleDot
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -1122,20 +1125,253 @@ const VehicleVault = () => {
         </TabsContent>
       
         <TabsContent value="documents">
-          <div className="border rounded-lg p-6 text-center">
-            <FileText className="h-12 w-12 mx-auto text-gray-300 mb-4" />
-            <h3 className="text-lg font-medium text-gray-700 mb-2">Documents Section</h3>
-            <p className="text-gray-500 mb-4">Manage all your vehicle related documents here</p>
-            <Button>Upload Documents</Button>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div className="md:col-span-4">
+              <div className="rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-indigo-100/60 shadow-sm p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-blue-800">Document Categories</h3>
+                  <Button variant="ghost" size="sm" className="text-blue-700 hover:text-blue-900 p-1 h-8 rounded-lg">
+                    <Plus className="h-4 w-4 mr-1" />
+                    New
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  {['Registration', 'Insurance', 'Service Records', 'Purchase Documents', 'Loan/Lease', 'RTO Documents', 'Custom Modifications'].map((category) => (
+                    <button key={category} className="w-full flex items-center justify-between p-3 rounded-lg bg-white hover:bg-blue-50 border border-blue-100 transition-colors">
+                      <div className="flex items-center">
+                        <FileText className="h-4 w-4 text-blue-600 mr-2" />
+                        <span className="text-sm font-medium">{category}</span>
+                      </div>
+                      <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200">
+                        {Math.floor(Math.random() * 5) + 1}
+                      </Badge>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            <div className="md:col-span-8">
+              <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+                <div className="p-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50 flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-blue-800">Vehicle Documents</h3>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" className="rounded-lg border-blue-200 text-blue-700">
+                      <FileText className="h-4 w-4 mr-1" />
+                      Export All
+                    </Button>
+                    <Button size="sm" className="rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600">
+                      <Plus className="h-4 w-4 mr-1" />
+                      Upload
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="p-4">
+                  <div className="relative mb-4">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      placeholder="Search documents by name or type..."
+                      className="pl-9 bg-gray-50 border-gray-200"
+                    />
+                  </div>
+                  
+                  <div className="space-y-3">
+                    {[
+                      {title: 'Vehicle Registration Certificate.pdf', date: '15 Mar 2025', type: 'Registration', size: '1.2 MB'},
+                      {title: 'Comprehensive Insurance Policy.pdf', date: '10 Jan 2025', type: 'Insurance', size: '3.5 MB'},
+                      {title: 'Pollution Under Control Certificate.pdf', date: '05 Feb 2025', type: 'RTO Documents', size: '0.8 MB'},
+                      {title: 'Latest Service Record.pdf', date: '22 Apr 2025', type: 'Service Records', size: '2.1 MB'},
+                      {title: 'Vehicle Purchase Invoice.pdf', date: '18 Dec 2024', type: 'Purchase Documents', size: '1.7 MB'},
+                    ].map((doc, i) => (
+                      <div key={i} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 border border-gray-100 transition-colors">
+                        <div className="flex items-center">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100 text-blue-700 mr-3">
+                            <FileText className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <div className="font-medium text-gray-900">{doc.title}</div>
+                            <div className="text-xs text-gray-500">Added on {doc.date} • {doc.size}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className="border-blue-200 text-blue-700">
+                            {doc.type}
+                          </Badge>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </TabsContent>
-        
+
         <TabsContent value="reminders">
-          <div className="border rounded-lg p-6 text-center">
-            <Clock className="h-12 w-12 mx-auto text-gray-300 mb-4" />
-            <h3 className="text-lg font-medium text-gray-700 mb-2">Reminders Section</h3>
-            <p className="text-gray-500 mb-4">Set up reminders for insurance, service and more</p>
-            <Button>Create Reminder</Button>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div className="md:col-span-8">
+              <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+                <div className="p-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50 flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-blue-800">Upcoming Reminders</h3>
+                  <Button size="sm" className="rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600">
+                    <Plus className="h-4 w-4 mr-1" />
+                    Add Reminder
+                  </Button>
+                </div>
+                
+                <div className="divide-y">
+                  {[
+                    {
+                      title: 'Insurance Renewal',
+                      vehicle: 'Honda City ZX',
+                      date: '18 May 2025',
+                      days: 17,
+                      priority: 'high',
+                      icon: <Shield className="h-4 w-4" />
+                    },
+                    {
+                      title: 'Routine Service',
+                      vehicle: 'Mahindra XUV700',
+                      date: '29 May 2025',
+                      days: 28,
+                      priority: 'medium',
+                      icon: <Clock className="h-4 w-4" />
+                    },
+                    {
+                      title: 'Emission Test',
+                      vehicle: 'Toyota Fortuner',
+                      date: '10 Jun 2025',
+                      days: 40,
+                      priority: 'medium',
+                      icon: <ActivitySquare className="h-4 w-4" />
+                    },
+                    {
+                      title: 'Tire Rotation',
+                      vehicle: 'Honda City ZX',
+                      date: '22 Jun 2025',
+                      days: 52,
+                      priority: 'low',
+                      icon: <CircleDot className="h-4 w-4" />
+                    },
+                    {
+                      title: 'Road Tax Renewal',
+                      vehicle: 'Toyota Fortuner',
+                      date: '15 Jul 2025',
+                      days: 75,
+                      priority: 'high',
+                      icon: <CircleDollarSign className="h-4 w-4" />
+                    }
+                  ].map((reminder, i) => (
+                    <div key={i} className="p-4 flex items-center hover:bg-gray-50 transition-colors">
+                      <div className={`flex-shrink-0 w-2 h-12 rounded-full mr-4 ${
+                        reminder.priority === 'high' ? 'bg-red-500' :
+                        reminder.priority === 'medium' ? 'bg-amber-500' : 'bg-blue-500'
+                      }`}></div>
+                      
+                      <div className="flex-grow">
+                        <div className="flex items-center">
+                          <div className={`mr-2 p-1.5 rounded-full ${
+                            reminder.priority === 'high' ? 'bg-red-100 text-red-600' :
+                            reminder.priority === 'medium' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'
+                          }`}>
+                            {reminder.icon}
+                          </div>
+                          <h4 className="font-medium">{reminder.title}</h4>
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">
+                          {reminder.vehicle} • Due on {reminder.date}
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-3">
+                        <Badge className={`${
+                          reminder.days < 30 ? 'bg-red-100 text-red-700' :
+                          reminder.days < 60 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'
+                        }`}>
+                          {reminder.days} days left
+                        </Badge>
+                        <Button variant="outline" size="sm" className="rounded-lg">
+                          Complete
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-500">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            <div className="md:col-span-4">
+              <div className="space-y-5">
+                <div className="rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-indigo-100/60 shadow-sm p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-blue-800">Quick Summary</h3>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-white rounded-lg p-3 border border-blue-100">
+                      <div className="text-blue-800 font-medium mb-2">This Month</div>
+                      <div className="flex items-center gap-2">
+                        <Badge className="bg-red-100 text-red-700">2 High Priority</Badge>
+                        <Badge className="bg-amber-100 text-amber-700">3 Medium</Badge>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white rounded-lg p-3 border border-blue-100">
+                      <div className="text-blue-800 font-medium mb-2">Categories</div>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge className="bg-indigo-100 text-indigo-700">Service: 4</Badge>
+                        <Badge className="bg-cyan-100 text-cyan-700">Legal: 3</Badge>
+                        <Badge className="bg-emerald-100 text-emerald-700">Maintenance: 5</Badge>
+                      </div>
+                    </div>
+                    
+                    <Button className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      View Calendar
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100/60 shadow-sm p-5">
+                  <div className="flex items-center">
+                    <div className="p-2 bg-amber-100 rounded-lg mr-3">
+                      <AlertCircle className="h-5 w-5 text-amber-600" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-amber-800">Need Attention</h3>
+                  </div>
+                  
+                  <div className="mt-4 space-y-3">
+                    <div className="bg-white rounded-lg p-3 border border-amber-100 flex items-center justify-between">
+                      <div>
+                        <div className="font-medium text-gray-900">Insurance Renewal</div>
+                        <div className="text-xs text-gray-500">Honda City ZX • 17 days left</div>
+                      </div>
+                      <Button size="sm" variant="outline" className="rounded-lg border-amber-200 text-amber-700">
+                        Renew
+                      </Button>
+                    </div>
+                    
+                    <div className="bg-white rounded-lg p-3 border border-amber-100 flex items-center justify-between">
+                      <div>
+                        <div className="font-medium text-gray-900">Road Tax</div>
+                        <div className="text-xs text-gray-500">Toyota Fortuner • 75 days left</div>
+                      </div>
+                      <Button size="sm" variant="outline" className="rounded-lg border-amber-200 text-amber-700">
+                        Pay
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </TabsContent>
       </Tabs>
