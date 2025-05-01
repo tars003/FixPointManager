@@ -486,33 +486,125 @@ const VehicleVault = () => {
         <p className="text-gray-600">Manage all your vehicles, documents and service history</p>
       </div>
       
-      {/* Status Categories Header */}
-      <div className="mb-8 overflow-x-auto">
-        <div className="min-w-max grid grid-cols-5 lg:grid-cols-9 xl:grid-cols-11 2xl:grid-cols-15 gap-3 py-2">
-          {statusCategories.map((category) => (
-            <button
-              key={category.id}
-              className={`relative flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all
-                ${statusFilter === category.id as VehicleStatus ? 
-                  `${category.bgClass} ring-2 ring-offset-2 ring-${category.bgClass.split('-')[1]}-400` : 
-                  'bg-white hover:bg-gray-50 border border-gray-200'
-                }`}
-              onClick={() => setStatusFilter(category.id as VehicleStatus)}
-            >
-              {category.icon}
-              <span>{category.label}</span>
-              <Badge 
-                className={`ml-1 ${
-                  statusFilter === category.id as VehicleStatus ? 
-                  'bg-white text-gray-700' : 
-                  'bg-gray-100 text-gray-700'
-                }`}
-              >
-                {category.count}
-              </Badge>
-            </button>
-          ))}
+      {/* Status Categories Header - Fixed layout based on screenshot */}
+      <div className="mb-8">
+        <div className="grid grid-cols-4 gap-2 mb-2">
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'active' ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('active')}
+          >
+            <Activity className="h-4 w-4 text-emerald-600" />
+            <span>Active</span>
+            <Badge className={`ml-1 ${statusFilter === 'active' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              9
+            </Badge>
+          </button>
+          
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'recently-purchased' ? 'bg-blue-50 border-blue-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('recently-purchased')}
+          >
+            <ShoppingBag className="h-4 w-4 text-blue-600" />
+            <span>Recently Purchased</span>
+            <Badge className={`ml-1 ${statusFilter === 'recently-purchased' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              5
+            </Badge>
+          </button>
+          
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'pre-owned' ? 'bg-indigo-50 border-indigo-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('pre-owned')}
+          >
+            <Clock3 className="h-4 w-4 text-indigo-600" />
+            <span>Pre-owned</span>
+            <Badge className={`ml-1 ${statusFilter === 'pre-owned' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              6
+            </Badge>
+          </button>
+          
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'in-maintenance' ? 'bg-amber-50 border-amber-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('in-maintenance')}
+          >
+            <Clock className="h-4 w-4 text-amber-600" />
+            <span>In Maintenance</span>
+            <Badge className={`ml-1 ${statusFilter === 'in-maintenance' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              3
+            </Badge>
+          </button>
         </div>
+        
+        <div className="grid grid-cols-4 gap-2 mb-2">
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'garage-stored' ? 'bg-cyan-50 border-cyan-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('garage-stored')}
+          >
+            <Warehouse className="h-4 w-4 text-cyan-600" />
+            <span>Garage Stored</span>
+            <Badge className={`ml-1 ${statusFilter === 'garage-stored' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              4
+            </Badge>
+          </button>
+          
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'scrapped' ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('scrapped')}
+          >
+            <Trash2 className="h-4 w-4 text-gray-600" />
+            <span>Scrapped</span>
+            <Badge className={`ml-1 ${statusFilter === 'scrapped' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              3
+            </Badge>
+          </button>
+        </div>
+        
+        <div className="grid grid-cols-4 gap-2">
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'sold' ? 'bg-blue-50 border-blue-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('sold')}
+          >
+            <CheckCircle className="h-4 w-4 text-blue-600" />
+            <span>Sold</span>
+            <Badge className={`ml-1 ${statusFilter === 'sold' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              8
+            </Badge>
+          </button>
+          
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'impounded' ? 'bg-red-50 border-red-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('impounded')}
+          >
+            <AlertTriangle className="h-4 w-4 text-red-600" />
+            <span>Impounded</span>
+            <Badge className={`ml-1 ${statusFilter === 'impounded' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              4
+            </Badge>
+          </button>
+          
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'under-legal-hold' ? 'bg-amber-50 border-amber-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('under-legal-hold')}
+          >
+            <Shield className="h-4 w-4 text-amber-600" />
+            <span>Under Legal Hold</span>
+            <Badge className={`ml-1 ${statusFilter === 'under-legal-hold' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              3
+            </Badge>
+          </button>
+          
+          <button
+            className={`flex items-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all border ${statusFilter === 'stolen' ? 'bg-red-50 border-red-200' : 'bg-white border-gray-200'}`}
+            onClick={() => setStatusFilter('stolen')}
+          >
+            <ShieldOff className="h-4 w-4 text-red-600" />
+            <span>Stolen</span>
+            <Badge className={`ml-1 ${statusFilter === 'stolen' ? 'bg-white text-gray-700' : 'bg-gray-100 text-gray-700'}`}>
+              2
+            </Badge>
+          </button>
+        </div>
+        
+        <Separator className="my-4 opacity-50" />
       </div>
       
       <Tabs 
