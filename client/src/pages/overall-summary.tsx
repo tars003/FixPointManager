@@ -520,7 +520,7 @@ const OverallSummary = () => {
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20"
+                      className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20 rounded-full"
                     >
                       View All
                     </Button>
@@ -636,7 +636,7 @@ const OverallSummary = () => {
                       <Button 
                         variant="ghost" 
                         size="sm" 
-                        className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20"
+                        className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20 rounded-full"
                         onClick={() => setActiveTab('financial')}
                       >
                         View Details
@@ -780,7 +780,7 @@ const OverallSummary = () => {
                       <Button 
                         variant="ghost" 
                         size="sm" 
-                        className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20"
+                        className="text-xs h-7 px-3 text-white hover:bg-white/10 border border-white/20 rounded-full"
                         onClick={() => setActiveTab('health')}
                       >
                         View Details
@@ -836,7 +836,7 @@ const OverallSummary = () => {
                   size="sm" 
                   variant="outline"
                   onClick={() => setActiveTab('maintenance')}
-                  className="text-blue-600"
+                  className="text-blue-600 rounded-full"
                 >
                   View All Services
                 </Button>
@@ -885,7 +885,7 @@ const OverallSummary = () => {
                   size="sm" 
                   variant="outline"
                   onClick={() => setActiveTab('documents')}
-                  className="text-indigo-600"
+                  className="text-indigo-600 rounded-full"
                 >
                   View All Documents
                 </Button>
@@ -1030,7 +1030,7 @@ const OverallSummary = () => {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="w-full"
+                  className="w-full rounded-full"
                   onClick={() => setActiveTab('maintenance')}
                 >
                   View Service Schedule
@@ -1070,7 +1070,7 @@ const OverallSummary = () => {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="w-full"
+                  className="w-full rounded-full"
                 >
                   View All Issues
                 </Button>
@@ -1114,7 +1114,7 @@ const OverallSummary = () => {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="w-full"
+                  className="w-full rounded-full"
                 >
                   View Detailed Analytics
                 </Button>
