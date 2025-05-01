@@ -34,7 +34,7 @@ import {
   RotateCw,
   Users,
   Award,
-  Trend,
+  BarChart3,
   PlusCircle,
   Info,
   BellRing,

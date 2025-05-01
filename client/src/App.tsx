@@ -30,6 +30,7 @@ import DrivingEducation from "@/pages/driving-education";
 import FastagEchallan from "@/pages/fastag-echallan";
 import EducationalPage from "@/pages/educational";
 import Marketplace from "@/pages/marketplace";
+import MarketplaceEnhanced from "@/pages/marketplace-enhanced";
 import Arena from "@/pages/arena";
 import PremiumArena from "@/pages/premium-arena";
 import ArenaHome from "@/pages/arena/index";
@@ -225,7 +226,7 @@ function Router() {
           <Route path="/marketplace">
             {() => (
               <PageTransition type="complex" duration={0.6}>
-                <Marketplace />
+                <MarketplaceEnhanced />
               </PageTransition>
             )}
           </Route>
