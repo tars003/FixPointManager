@@ -529,13 +529,23 @@ const MarketplaceEnhanced: React.FC = () => {
     rating: null,
     sortBy: 'popularity'
   });
-  const [products, setProducts] = useState<Product[]>(sampleProducts);
-  const [displayedProducts, setDisplayedProducts] = useState<Product[]>(
-    sampleProducts
+  
+  // Initialize with empty arrays first to avoid runtime issues
+  const [products, setProducts] = useState<Product[]>([]);
+  const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
+  
+  // Initialize product data on component mount
+  useEffect(() => {
+    const initialProducts = sampleProducts;
+    setProducts(initialProducts);
+    
+    const filtered = initialProducts
       .filter(p => p.isFeatured || p.trending)
       .sort((a, b) => (b.popularity || 0) - (a.popularity || 0))
-      .slice(0, 12)
-  );
+      .slice(0, 12);
+    
+    setDisplayedProducts(filtered);
+  }, []);
   const [cartItems, setCartItems] = useState<{product: Product, quantity: number}[]>([]);
   const [wishlistItems, setWishlistItems] = useState<number[]>([]);
   const [cartOpen, setCartOpen] = useState<boolean>(false);
