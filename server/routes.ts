@@ -11,7 +11,11 @@ import {
   insertEmergencyProfileSchema,
   insertEmergencyIncidentSchema,
   customizationProjects,
-  insertCustomizationProjectSchema
+  insertCustomizationProjectSchema,
+  vehicleModels,
+  customizationParts,
+  insertVehicleModelSchema,
+  insertCustomizationPartSchema
 } from "@shared/schema";
 import { resetDashboardModules } from "../client/src/services/dashboardPreferences";
 import { ZodError } from "zod";
@@ -373,6 +377,208 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error resetting dashboard preferences:", error);
       res.status(500).json({ message: "Failed to reset dashboard preferences" });
+    }
+  });
+  
+  // Arena Vehicle Models API Routes
+  apiRouter.get("/vehicle-models", async (req, res) => {
+    try {
+      const category = req.query.category as string;
+      const manufacturer = req.query.manufacturer as string;
+      const isActive = req.query.isActive === 'true' ? true : undefined;
+      
+      let query = db.select().from(vehicleModels);
+      
+      if (category) {
+        query = query.where(eq(vehicleModels.category, category));
+      }
+      
+      if (manufacturer) {
+        query = query.where(eq(vehicleModels.manufacturer, manufacturer));
+      }
+      
+      if (isActive !== undefined) {
+        query = query.where(eq(vehicleModels.isActive, isActive));
+      }
+      
+      // Sort by popularity descending by default
+      query = query.orderBy(desc(vehicleModels.popularity));
+      
+      const models = await query;
+      res.json(models);
+    } catch (error) {
+      console.error("Error fetching vehicle models:", error);
+      res.status(500).json({ error: "Failed to fetch vehicle models" });
+    }
+  });
+  
+  apiRouter.get("/vehicle-models/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid vehicle model ID" });
+      }
+      
+      const [model] = await db.select()
+        .from(vehicleModels)
+        .where(eq(vehicleModels.id, id));
+      
+      if (!model) {
+        return res.status(404).json({ error: "Vehicle model not found" });
+      }
+      
+      res.json(model);
+    } catch (error) {
+      console.error("Error fetching vehicle model:", error);
+      res.status(500).json({ error: "Failed to fetch vehicle model" });
+    }
+  });
+  
+  apiRouter.post("/vehicle-models", validateRequest(insertVehicleModelSchema), async (req, res) => {
+    try {
+      const [createdModel] = await db.insert(vehicleModels)
+        .values(req.body)
+        .returning();
+      
+      res.status(201).json(createdModel);
+    } catch (error) {
+      console.error("Error creating vehicle model:", error);
+      res.status(500).json({ error: "Failed to create vehicle model" });
+    }
+  });
+  
+  apiRouter.put("/vehicle-models/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid vehicle model ID" });
+      }
+      
+      const [updatedModel] = await db.update(vehicleModels)
+        .set(req.body)
+        .where(eq(vehicleModels.id, id))
+        .returning();
+      
+      if (!updatedModel) {
+        return res.status(404).json({ error: "Vehicle model not found" });
+      }
+      
+      res.json(updatedModel);
+    } catch (error) {
+      console.error("Error updating vehicle model:", error);
+      res.status(500).json({ error: "Failed to update vehicle model" });
+    }
+  });
+  
+  // Arena Customization Parts API Routes
+  apiRouter.get("/customization-parts", async (req, res) => {
+    try {
+      const category = req.query.category as string;
+      const subcategory = req.query.subcategory as string;
+      const vehicleCategory = req.query.vehicleCategory as string;
+      const compatibleModel = req.query.compatibleModel as string;
+      const inStock = req.query.inStock === 'true' ? true : undefined;
+      
+      let query = db.select().from(customizationParts);
+      
+      if (category) {
+        query = query.where(eq(customizationParts.category, category));
+      }
+      
+      if (subcategory) {
+        query = query.where(eq(customizationParts.subcategory, subcategory));
+      }
+      
+      // For other filters that require more complex querying (jsonb fields),
+      // we'll need to fetch all and filter in-memory
+      let parts = await query;
+      
+      // Filter by vehicle category if provided
+      if (vehicleCategory) {
+        parts = parts.filter(part => 
+          part.vehicleCategories && Array.isArray(part.vehicleCategories) && 
+          (part.vehicleCategories as string[]).includes(vehicleCategory)
+        );
+      }
+      
+      // Filter by compatible model if provided
+      if (compatibleModel) {
+        parts = parts.filter(part => 
+          part.compatibleModels && Array.isArray(part.compatibleModels) && 
+          (part.compatibleModels as string[]).includes(compatibleModel)
+        );
+      }
+      
+      // Filter by in-stock status if provided
+      if (inStock !== undefined) {
+        parts = parts.filter(part => part.inStock === inStock);
+      }
+      
+      // Sort by popularity by default
+      parts.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+      
+      res.json(parts);
+    } catch (error) {
+      console.error("Error fetching customization parts:", error);
+      res.status(500).json({ error: "Failed to fetch customization parts" });
+    }
+  });
+  
+  apiRouter.get("/customization-parts/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid part ID" });
+      }
+      
+      const [part] = await db.select()
+        .from(customizationParts)
+        .where(eq(customizationParts.id, id));
+      
+      if (!part) {
+        return res.status(404).json({ error: "Customization part not found" });
+      }
+      
+      res.json(part);
+    } catch (error) {
+      console.error("Error fetching customization part:", error);
+      res.status(500).json({ error: "Failed to fetch customization part" });
+    }
+  });
+  
+  apiRouter.post("/customization-parts", validateRequest(insertCustomizationPartSchema), async (req, res) => {
+    try {
+      const [createdPart] = await db.insert(customizationParts)
+        .values(req.body)
+        .returning();
+      
+      res.status(201).json(createdPart);
+    } catch (error) {
+      console.error("Error creating customization part:", error);
+      res.status(500).json({ error: "Failed to create customization part" });
+    }
+  });
+  
+  apiRouter.put("/customization-parts/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid part ID" });
+      }
+      
+      const [updatedPart] = await db.update(customizationParts)
+        .set(req.body)
+        .where(eq(customizationParts.id, id))
+        .returning();
+      
+      if (!updatedPart) {
+        return res.status(404).json({ error: "Customization part not found" });
+      }
+      
+      res.json(updatedPart);
+    } catch (error) {
+      console.error("Error updating customization part:", error);
+      res.status(500).json({ error: "Failed to update customization part" });
     }
   });
 

@@ -1,6 +1,11 @@
 import { z } from "zod";
 import { createInsertSchema } from "drizzle-zod";
-import { CustomizationProject, VehicleModel, CustomizationPart } from "./schema";
+// Import types from schema but rename them to avoid conflicts
+import { 
+  CustomizationProject as DbCustomizationProject, 
+  VehicleModel as DbVehicleModel, 
+  CustomizationPart as DbCustomizationPart 
+} from "./schema";
 
 // Shared type definitions for Arena customization platform
 export type VehicleCategory = 'two-wheeler' | 'three-wheeler' | 'four-wheeler' | 'special' | 'heavy-vehicle';

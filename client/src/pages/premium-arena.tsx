@@ -492,7 +492,11 @@ const PremiumArena: React.FC = () => {
           setSelectedParts(loadedParts);
           
           // Update vehicle configuration
-          const parts: CustomizationPartInstance[] = projectData.selectedParts.map((selectedPart: {partId: number, position?: Vector3D}) => {
+          const parts: CustomizationPartInstance[] = projectData.selectedParts.map((selectedPart: {
+            partId: number, 
+            position?: { x: number; y: number; z: number },
+            color?: string
+          }) => {
             return {
               id: `part-${selectedPart.partId}`,
               partId: selectedPart.partId,
@@ -725,7 +729,9 @@ const PremiumArena: React.FC = () => {
       return {
         partId: part.partId,
         position: part.transform.position,
-        // Other properties like rotation, etc.
+        color: part.color,
+        rotation: part.transform.rotation,
+        scale: part.transform.scale?.x // Single scale value for simplicity
       };
     });
     
