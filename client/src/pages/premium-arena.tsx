@@ -438,11 +438,7 @@ const PremiumArena: React.FC = () => {
 
   // Format currency
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(amount);
+    return formatIndianPrice(amount);
   };
 
   // Progress percentage calculation
@@ -1159,7 +1155,9 @@ const PremiumArena: React.FC = () => {
                             basePrice: selectedVehicle?.basePrice,
                             totalPrice: calculateTotalPrice(),
                             createdAt: new Date(),
-                            updatedAt: new Date()
+                            updatedAt: new Date(),
+                            customizations: vehicleConfig,
+                            selectedParts: []
                           }}
                           onSave={async (data) => {
                             await handleSaveProject();
