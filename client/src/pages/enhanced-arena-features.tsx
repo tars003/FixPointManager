@@ -140,13 +140,12 @@ const EnhancedArenaFeatures: React.FC = () => {
               <span className="inline md:hidden">Hover</span>
             </TabsTrigger>
           </TabsList>
-        </Tabs>
         
-        {/* Feature Showcase */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Main Feature Area - 8 columns on large screens */}
-          <div className="lg:col-span-8 space-y-6">
-            <TabsContent value="personalized" className="mt-0">
+          {/* Feature Showcase */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+            {/* Main Feature Area - 8 columns on large screens */}
+            <div className="lg:col-span-8 space-y-6">
+              <TabsContent value="personalized" className="mt-0">
               <div className="space-y-4">
                 <div className="flex items-center">
                   <User className="h-5 w-5 text-blue-600 mr-2" />
@@ -690,8 +689,9 @@ const EnhancedArenaFeatures: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
+            </div>
           </div>
-        </div>
+        </Tabs>
       </div>
     </ArenaWrapper>
   );
