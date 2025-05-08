@@ -554,18 +554,52 @@ const PremiumArena: React.FC = () => {
     // Update vehicle configuration
     setVehicleConfig(prev => ({
       ...prev,
-      baseVehicleId: vehicle.id as number
+      baseVehicleId: vehicle.id as number,
+      baseColor: '#1E3A8A' // Default blue color
     }));
+    
+    // Automatically create a default project for the selected vehicle
+    if (!currentProject) {
+      setCurrentProject({
+        id: 0,
+        name: `${vehicle.manufacturer} ${vehicle.name} Customization`,
+        description: 'Premium customization project',
+        userId: 1,
+        vehicleId: vehicle.id as number,
+        status: 'in-progress',
+        visibility: 'private',
+        basePrice: vehicle.basePrice,
+        totalPrice: vehicle.basePrice || 0,
+        customizations: {
+          baseVehicleId: vehicle.id as number,
+          baseColor: vehicle.baseColor || '#1E3A8A',
+          parts: []
+        },
+        selectedParts: [],
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+    }
   };
 
   // Handle continuing to next step
   const handleContinue = () => {
+    // If no vehicle is selected and we're on vehicle step, show an error
+    if (currentStep === 'vehicle' && !selectedVehicle) {
+      toast({
+        title: "Vehicle Required",
+        description: "Please select a vehicle to continue",
+        variant: "destructive"
+      });
+      return;
+    }
+
     const currentIndex = CUSTOMIZATION_STEPS.findIndex(step => step.id === currentStep);
     if (currentIndex < CUSTOMIZATION_STEPS.length - 1) {
-      setCurrentStep(CUSTOMIZATION_STEPS[currentIndex + 1].id);
+      const nextStep = CUSTOMIZATION_STEPS[currentIndex + 1].id;
+      setCurrentStep(nextStep);
       
       // If going to a category step, update selected category
-      const nextStep = CUSTOMIZATION_STEPS[currentIndex + 1].id;
       if (['exterior', 'interior', 'performance', 'wheels', 'lighting'].includes(nextStep)) {
         setSelectedCategory(nextStep as CustomizationCategory);
         
@@ -588,6 +622,18 @@ const PremiumArena: React.FC = () => {
             break;
         }
       }
+      
+      // When reaching review step, make sure to save the project state
+      if (nextStep === 'review') {
+        // Auto-save the project when reaching review page
+        handleSaveProject();
+      }
+      
+      // Show a success message to guide the user
+      toast({
+        title: `Step: ${CUSTOMIZATION_STEPS[currentIndex + 1].label}`,
+        description: `You can now ${nextStep === 'review' ? 'review your selections' : 'customize your vehicle'}`
+      });
     }
   };
 
