@@ -972,7 +972,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   apiRouter.post("/documents", validateRequest(insertVehicleDocumentSchema), async (req, res) => {
     try {
-      const [document] = await db.insert(vehicleDocuments).values(req.body).returning();
+      // Process dates if provided
+      const documentData = { ...req.body };
+      
+      if (documentData.expiryDate) {
+        documentData.expiryDate = new Date(documentData.expiryDate);
+      }
+      
+      if (documentData.issuedDate) {
+        documentData.issuedDate = new Date(documentData.issuedDate);
+      }
+      
+      // Add timestamps
+      documentData.createdAt = new Date();
+      documentData.updatedAt = new Date();
+      
+      const [document] = await db.insert(vehicleDocuments).values(documentData).returning();
       res.status(201).json(document);
     } catch (error) {
       console.error("Error creating document:", error);
