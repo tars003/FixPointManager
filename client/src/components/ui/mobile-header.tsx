@@ -26,8 +26,8 @@ const MobileHeader = () => {
         setTitle('Explore Vehicles');
         setShowBackButton(false);
         break;
-      case location.startsWith('/autovista'):
-        setTitle('AutoVista');
+      case location.startsWith('/testbeforebuy'):
+        setTitle('TestBeforeBuy');
         setShowBackButton(false);
         break;
       case location.startsWith('/learn-driving'):

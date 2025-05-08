@@ -231,7 +231,7 @@ function Router() {
               </PageTransition>
             )}
           </Route>
-          <Route path="/autovista">
+          <Route path="/testbeforebuy">
             {() => (
               <TestBeforeBuy />
             )}

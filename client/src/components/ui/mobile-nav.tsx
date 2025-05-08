@@ -47,10 +47,10 @@ const MobileNav = () => {
           </a>
         </Link>
         
-        <Link href="/autovista">
-          <a className={linkClass('/autovista')}>
+        <Link href="/testbeforebuy">
+          <a className={linkClass('/testbeforebuy')}>
             <Car className="h-6 w-6" />
-            <span className="text-xs mt-1">AutoVista</span>
+            <span className="text-xs mt-1">TestBeforeBuy</span>
           </a>
         </Link>
         
