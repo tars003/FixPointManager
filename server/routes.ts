@@ -1,6 +1,7 @@
 import express, { type Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from 'ws';
+import multer from "multer";
 import { storage } from "./storage";
 import { db } from "./db";
 import { 
@@ -26,13 +27,20 @@ import {
   documentTemplates,
   documentOcrResults,
   documentVerifications,
-  documentAccessLogs
+  documentAccessLogs,
+  // New document feature schemas
+  documentRecommendations,
+  documentAnnotations,
+  documentAutoDetectionRules
 } from "@shared/schema";
 import { registerOrderRoutes } from "./api/orders";
 import { resetDashboardModules } from "../client/src/services/dashboardPreferences";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
-import { eq, and, not, isNull, gt, gte, lte, lt, desc, count } from "drizzle-orm";
+import { eq, and, not, isNull, gt, gte, lte, lt, desc, count, or } from "drizzle-orm";
+
+// Configure multer for memory storage
+const upload = multer({ storage: multer.memoryStorage() });
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const apiRouter = express.Router();
@@ -1643,6 +1651,424 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error checking expiring documents:", error);
       res.status(500).json({ message: "Error checking expiring documents" });
+    }
+  });
+
+  // Intelligent Document Recommendation Engine
+  apiRouter.get("/vehicles/:vehicleId/document-recommendations", async (req, res) => {
+    try {
+      const vehicleId = parseInt(req.params.vehicleId);
+      const userId = req.user?.id || 1; // default to 1 for testing
+      
+      // Get existing recommendations
+      const existingRecommendations = await db.select().from(documentRecommendations)
+        .where(and(
+          eq(documentRecommendations.vehicleId, vehicleId),
+          eq(documentRecommendations.userId, userId),
+          eq(documentRecommendations.status, "pending")
+        ));
+        
+      // If we have existing recommendations, return them
+      if (existingRecommendations.length > 0) {
+        return res.status(200).json(existingRecommendations);
+      }
+      
+      // Get vehicle information
+      const [vehicle] = await db.select().from(vehicles)
+        .where(eq(vehicles.id, vehicleId));
+        
+      if (!vehicle) {
+        return res.status(404).json({ message: "Vehicle not found" });
+      }
+      
+      // Get existing documents for this vehicle
+      const existingDocuments = await db.select().from(vehicleDocuments)
+        .where(eq(vehicleDocuments.vehicleId, vehicleId));
+        
+      // Extract document types that already exist
+      const existingDocumentTypes = existingDocuments.map(doc => doc.documentType);
+      
+      // Create recommended documents based on vehicle type and what's missing
+      const recommendations = [];
+      
+      // Logic for document recommendations based on vehicle type and age
+      const vehicleAge = new Date().getFullYear() - vehicle.year;
+      
+      // Essential documents that all vehicles should have
+      if (!existingDocumentTypes.includes("registration_certificate")) {
+        recommendations.push({
+          userId,
+          vehicleId,
+          documentType: "registration_certificate",
+          recommendationSource: "system",
+          recommendationReason: "Required for all vehicles",
+          priority: 5, // Highest priority
+          status: "pending",
+          title: "Registration Certificate",
+          description: "Registration certificate is a mandatory document for all vehicles."
+        });
+      }
+      
+      if (!existingDocumentTypes.includes("insurance_policy")) {
+        recommendations.push({
+          userId,
+          vehicleId,
+          documentType: "insurance_policy",
+          recommendationSource: "system",
+          recommendationReason: "Required for all vehicles",
+          priority: 5,
+          status: "pending",
+          title: "Insurance Policy",
+          description: "Vehicle insurance is mandatory for all vehicles."
+        });
+      }
+      
+      if (!existingDocumentTypes.includes("pollution_certificate")) {
+        recommendations.push({
+          userId,
+          vehicleId,
+          documentType: "pollution_certificate",
+          recommendationSource: "system",
+          recommendationReason: "Required for all vehicles",
+          priority: 4,
+          status: "pending",
+          title: "Pollution Certificate",
+          description: "Pollution Under Control (PUC) certificate is mandatory for all vehicles."
+        });
+      }
+      
+      // Age-based recommendations
+      if (vehicleAge > 3 && !existingDocumentTypes.includes("fitness_certificate")) {
+        recommendations.push({
+          userId,
+          vehicleId,
+          documentType: "fitness_certificate",
+          recommendationSource: "vehicle-age",
+          recommendationReason: "Recommended for vehicles older than 3 years",
+          priority: 3,
+          status: "pending",
+          title: "Fitness Certificate",
+          description: "Vehicles older than 3 years require fitness certification."
+        });
+      }
+      
+      // Vehicle type-based recommendations
+      if (vehicle.vehicleType === "commercial" && !existingDocumentTypes.includes("road_tax_receipt")) {
+        recommendations.push({
+          userId,
+          vehicleId,
+          documentType: "road_tax_receipt",
+          recommendationSource: "vehicle-type",
+          recommendationReason: "Required for commercial vehicles",
+          priority: 4,
+          status: "pending",
+          title: "Road Tax Receipt",
+          description: "Commercial vehicles require road tax payment receipts."
+        });
+      }
+      
+      // Insert recommendations into the database
+      if (recommendations.length > 0) {
+        await db.insert(documentRecommendations).values(recommendations);
+        
+        // Fetch the inserted recommendations with their IDs
+        const insertedRecommendations = await db.select().from(documentRecommendations)
+          .where(and(
+            eq(documentRecommendations.vehicleId, vehicleId),
+            eq(documentRecommendations.userId, userId),
+            eq(documentRecommendations.status, "pending")
+          ));
+          
+        return res.status(200).json(insertedRecommendations);
+      }
+      
+      return res.status(200).json([]);
+    } catch (error) {
+      console.error("Error generating document recommendations:", error);
+      res.status(500).json({ message: "Error generating document recommendations" });
+    }
+  });
+  
+  apiRouter.post("/documents/recommendations/:id/accept", async (req, res) => {
+    try {
+      const recommendationId = parseInt(req.params.id);
+      
+      // Get the recommendation
+      const [recommendation] = await db.select().from(documentRecommendations)
+        .where(eq(documentRecommendations.id, recommendationId));
+        
+      if (!recommendation) {
+        return res.status(404).json({ message: "Recommendation not found" });
+      }
+      
+      // Create document from recommendation
+      const [document] = await db.insert(vehicleDocuments).values({
+        name: recommendation.title,
+        description: recommendation.description,
+        vehicleId: recommendation.vehicleId,
+        userId: recommendation.userId,
+        documentType: recommendation.documentType,
+        status: "active",
+        reminderEnabled: true,
+        hasExpiryDate: true
+      }).returning();
+      
+      // Update recommendation status
+      await db.update(documentRecommendations)
+        .set({
+          status: "accepted",
+          createdDocumentId: document.id,
+          completedAt: new Date()
+        })
+        .where(eq(documentRecommendations.id, recommendationId));
+      
+      res.status(200).json({ message: "Recommendation accepted", document });
+    } catch (error) {
+      console.error("Error accepting document recommendation:", error);
+      res.status(500).json({ message: "Error accepting document recommendation" });
+    }
+  });
+  
+  apiRouter.post("/documents/recommendations/:id/dismiss", async (req, res) => {
+    try {
+      const recommendationId = parseInt(req.params.id);
+      
+      await db.update(documentRecommendations)
+        .set({
+          status: "dismissed",
+          dismissedAt: new Date()
+        })
+        .where(eq(documentRecommendations.id, recommendationId));
+      
+      res.status(200).json({ message: "Recommendation dismissed" });
+    } catch (error) {
+      console.error("Error dismissing document recommendation:", error);
+      res.status(500).json({ message: "Error dismissing document recommendation" });
+    }
+  });
+  
+  // Document Auto-detection
+  apiRouter.post("/documents/auto-detect", upload.single("file"), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+      
+      const userId = req.user?.id || 1; // default to 1 for testing
+      const vehicleId = parseInt(req.body.vehicleId);
+      
+      // Process the file
+      const fileBuffer = req.file.buffer;
+      const fileType = req.file.mimetype;
+      
+      // Get auto-detection rules
+      const rules = await db.select().from(documentAutoDetectionRules)
+        .where(eq(documentAutoDetectionRules.isActive, true))
+        .orderBy(desc(documentAutoDetectionRules.priority));
+      
+      // For demo purposes, we'll simulate OCR and detection with some predefined patterns
+      // In a real implementation, this would use a proper OCR service
+      const simulatedOcrText = "CERTIFICATE OF REGISTRATION\nVehicle Number: MH02BR5467\nOwner: John Doe\nMake/Model: Honda City\nEngine Number: ABC123456\nChassis Number: XYZ789012\nRegistration Date: 01/01/2020\nRegistration Valid Until: 31/12/2030";
+      
+      // Match against rules
+      let matchedRule = null;
+      let highestConfidence = 0;
+      
+      for (const rule of rules) {
+        const keywordPatterns = rule.keywordPatterns || [];
+        const keywordMatches = keywordPatterns.filter(
+          pattern => simulatedOcrText.toLowerCase().includes(pattern.toLowerCase())
+        ).length;
+        
+        // Calculate confidence based on keyword matches
+        const confidence = keywordMatches > 0 
+          ? Math.min(1, keywordMatches / (keywordPatterns.length || 1)) 
+          : 0;
+          
+        if (confidence > highestConfidence && confidence >= (rule.confidenceThreshold || 0.75)) {
+          highestConfidence = confidence;
+          matchedRule = rule;
+        }
+      }
+      
+      // Extract data using field patterns if we have a match
+      let extractedData = {};
+      if (matchedRule) {
+        // In a real implementation, we would use the field patterns to extract data
+        // For now, we'll simulate some extracted data
+        if (matchedRule.documentType === "registration_certificate") {
+          extractedData = {
+            vehicleNumber: "MH02BR5467",
+            ownerName: "John Doe",
+            makeModel: "Honda City",
+            engineNumber: "ABC123456",
+            chassisNumber: "XYZ789012",
+            registrationDate: "01/01/2020",
+            validUntil: "31/12/2030"
+          };
+        }
+      }
+      
+      // Default values if no rule matched
+      const documentType = matchedRule ? matchedRule.documentType : "other";
+      const confidence = highestConfidence;
+      const suggestedName = matchedRule 
+        ? `${matchedRule.name} - ${new Date().toLocaleDateString()}`
+        : `Uploaded Document - ${new Date().toLocaleDateString()}`;
+      
+      // Create an OCR result entry
+      const [ocrResult] = await db.insert(documentOcrResults).values({
+        documentId: -1, // Temporary value, will be updated when document is created
+        processedText: simulatedOcrText,
+        extractedData,
+        confidence,
+        processingStatus: "completed",
+        processingTime: 1500 // Simulated processing time in ms
+      }).returning();
+      
+      res.status(200).json({
+        detectedType: documentType,
+        confidence,
+        extractedData,
+        suggestedName,
+        ocrText: simulatedOcrText,
+        ocrResultId: ocrResult.id
+      });
+    } catch (error) {
+      console.error("Error in document auto-detection:", error);
+      res.status(500).json({ message: "Error in document auto-detection" });
+    }
+  });
+  
+  // Document Annotations
+  apiRouter.get("/documents/:id/annotations", async (req, res) => {
+    try {
+      const documentId = parseInt(req.params.id);
+      const userId = req.user?.id || 1; // default to 1 for testing
+      
+      // Get annotations - include private ones only if they belong to the current user
+      const annotations = await db.select().from(documentAnnotations)
+        .where(and(
+          eq(documentAnnotations.documentId, documentId),
+          or(
+            eq(documentAnnotations.isPrivate, false),
+            eq(documentAnnotations.userId, userId)
+          )
+        ));
+        
+      res.status(200).json(annotations);
+    } catch (error) {
+      console.error("Error fetching document annotations:", error);
+      res.status(500).json({ message: "Error fetching document annotations" });
+    }
+  });
+  
+  apiRouter.post("/documents/:id/annotations", async (req, res) => {
+    try {
+      const documentId = parseInt(req.params.id);
+      const userId = req.user?.id || 1; // default to 1 for testing
+      
+      // Verify document exists
+      const [document] = await db.select().from(vehicleDocuments)
+        .where(eq(vehicleDocuments.id, documentId));
+        
+      if (!document) {
+        return res.status(404).json({ message: "Document not found" });
+      }
+      
+      // Create annotation
+      const [annotation] = await db.insert(documentAnnotations).values({
+        documentId,
+        userId,
+        annotationType: req.body.annotationType,
+        content: req.body.content,
+        color: req.body.color || "#FFFF00",
+        position: req.body.position,
+        page: req.body.page || 1,
+        rotation: req.body.rotation || 0,
+        opacity: req.body.opacity || 1.0,
+        isPrivate: req.body.isPrivate || false
+      }).returning();
+      
+      // Log access
+      await db.insert(documentAccessLogs).values({
+        documentId,
+        userId,
+        accessType: "annotate",
+        ipAddress: req.ip,
+        userAgent: req.headers["user-agent"]
+      });
+      
+      res.status(201).json(annotation);
+    } catch (error) {
+      console.error("Error creating document annotation:", error);
+      res.status(500).json({ message: "Error creating document annotation" });
+    }
+  });
+  
+  apiRouter.put("/documents/annotations/:id", async (req, res) => {
+    try {
+      const annotationId = parseInt(req.params.id);
+      const userId = req.user?.id || 1; // default to 1 for testing
+      
+      // Verify user owns the annotation
+      const [annotation] = await db.select().from(documentAnnotations)
+        .where(eq(documentAnnotations.id, annotationId));
+        
+      if (!annotation) {
+        return res.status(404).json({ message: "Annotation not found" });
+      }
+      
+      if (annotation.userId !== userId) {
+        return res.status(403).json({ message: "Not authorized to edit this annotation" });
+      }
+      
+      // Update annotation
+      const [updatedAnnotation] = await db.update(documentAnnotations)
+        .set({
+          content: req.body.content || annotation.content,
+          color: req.body.color || annotation.color,
+          position: req.body.position || annotation.position,
+          rotation: req.body.rotation !== undefined ? req.body.rotation : annotation.rotation,
+          opacity: req.body.opacity !== undefined ? req.body.opacity : annotation.opacity,
+          isPrivate: req.body.isPrivate !== undefined ? req.body.isPrivate : annotation.isPrivate,
+          updatedAt: new Date()
+        })
+        .where(eq(documentAnnotations.id, annotationId))
+        .returning();
+        
+      res.status(200).json(updatedAnnotation);
+    } catch (error) {
+      console.error("Error updating document annotation:", error);
+      res.status(500).json({ message: "Error updating document annotation" });
+    }
+  });
+  
+  apiRouter.delete("/documents/annotations/:id", async (req, res) => {
+    try {
+      const annotationId = parseInt(req.params.id);
+      const userId = req.user?.id || 1; // default to 1 for testing
+      
+      // Verify user owns the annotation
+      const [annotation] = await db.select().from(documentAnnotations)
+        .where(eq(documentAnnotations.id, annotationId));
+        
+      if (!annotation) {
+        return res.status(404).json({ message: "Annotation not found" });
+      }
+      
+      if (annotation.userId !== userId) {
+        return res.status(403).json({ message: "Not authorized to delete this annotation" });
+      }
+      
+      // Delete annotation
+      await db.delete(documentAnnotations)
+        .where(eq(documentAnnotations.id, annotationId));
+        
+      res.status(200).json({ message: "Annotation deleted" });
+    } catch (error) {
+      console.error("Error deleting document annotation:", error);
+      res.status(500).json({ message: "Error deleting document annotation" });
     }
   });
 
