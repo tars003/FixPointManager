@@ -33,6 +33,7 @@ import Marketplace from "@/pages/marketplace";
 import MarketplaceEnhanced from "@/pages/marketplace-enhanced";
 import Arena from "@/pages/arena";
 import PremiumArena from "@/pages/premium-arena";
+import ArenaPremium from "@/pages/arena-premium"; 
 import ArenaHome from "@/pages/arena/index";
 import ArenaVehicleSelection from "@/pages/arena/vehicle-selection";
 import ArenaCustomize from "@/pages/arena/customize";
