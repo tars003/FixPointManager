@@ -2,6 +2,24 @@ import { pgTable, text, serial, integer, boolean, timestamp, varchar, jsonb, dat
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Document types enum
+export const documentTypeEnum = pgEnum('document_type', [
+  'registration_certificate',
+  'insurance_policy',
+  'pollution_certificate',
+  'service_record',
+  'warranty_card',
+  'fitness_certificate',
+  'loan_document',
+  'road_tax_receipt',
+  'purchase_invoice',
+  'odometer_reading',
+  'accident_report',
+  'modification_certificate',
+  'driving_license',
+  'other'
+]);
+
 // Export type for Arena Customization Platform
 export type VehicleCategory = 'two-wheeler' | 'three-wheeler' | 'four-wheeler' | 'special' | 'heavy-vehicle';
 
@@ -75,6 +93,70 @@ export const insertVehicleSchema = createInsertSchema(vehicles).pick({
   features: true,
   goals: true,
 });
+
+// Vehicle Documents schema
+export const vehicleDocuments = pgTable("vehicle_documents", {
+  id: serial("id").primaryKey(),
+  vehicleId: integer("vehicle_id").notNull(),
+  userId: integer("user_id").notNull(),
+  documentType: documentTypeEnum("document_type").notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  fileUrl: text("file_url"), // URL to the document file in storage
+  thumbnailUrl: text("thumbnail_url"), // URL to document thumbnail image
+  fileSize: integer("file_size"), // Size in bytes
+  fileType: text("file_type"), // MIME type
+  issuedBy: text("issued_by"), // Authority that issued the document
+  issuedDate: timestamp("issued_date"),
+  expiryDate: timestamp("expiry_date"),
+  documentNumber: text("document_number"), // Registration number, policy number, etc.
+  isVerified: boolean("is_verified").default(false),
+  reminderEnabled: boolean("reminder_enabled").default(true),
+  reminderDays: integer("reminder_days").default(30), // Days before expiry to send reminder
+  hasExpiryDate: boolean("has_expiry_date").default(true),
+  status: text("status").default("active").notNull(), // active, expired, renewed, cancelled
+  tags: text("tags").array(),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertVehicleDocumentSchema = createInsertSchema(vehicleDocuments).pick({
+  vehicleId: true,
+  userId: true,
+  documentType: true,
+  name: true,
+  description: true,
+  fileUrl: true,
+  thumbnailUrl: true,
+  fileSize: true,
+  fileType: true,
+  issuedBy: true,
+  issuedDate: true,
+  expiryDate: true,
+  documentNumber: true,
+  isVerified: true,
+  reminderEnabled: true,
+  reminderDays: true,
+  hasExpiryDate: true,
+  status: true,
+  tags: true,
+  metadata: true,
+});
+
+// Relations
+import { relations } from "drizzle-orm";
+
+export const vehicleRelations = relations(vehicles, ({ many }) => ({
+  documents: many(vehicleDocuments),
+}));
+
+export const vehicleDocumentRelations = relations(vehicleDocuments, ({ one }) => ({
+  vehicle: one(vehicles, {
+    fields: [vehicleDocuments.vehicleId],
+    references: [vehicles.id],
+  }),
+}));
 
 // Service Provider schema
 export const serviceProviders = pgTable("service_providers", {
@@ -382,6 +464,7 @@ export const insertCardTransactionSchema = createInsertSchema(cardTransactions).
   rewardPointsEarned: true,
   referenceNumber: true,
 });
+
 
 // Emergency Profile schema
 export const emergencyProfiles = pgTable("emergency_profiles", {

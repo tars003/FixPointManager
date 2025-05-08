@@ -15,7 +15,9 @@ import {
   vehicleModels,
   customizationParts,
   insertVehicleModelSchema,
-  insertCustomizationPartSchema
+  insertCustomizationPartSchema,
+  vehicleDocuments,
+  insertVehicleDocumentSchema
 } from "@shared/schema";
 import { registerOrderRoutes } from "./api/orders";
 import { resetDashboardModules } from "../client/src/services/dashboardPreferences";
