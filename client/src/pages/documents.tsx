@@ -1457,7 +1457,7 @@ const DocumentVault: React.FC = () => {
       
       {/* Document Scanner Dialog */}
       <Dialog open={isDocumentScannerOpen} onOpenChange={setIsDocumentScannerOpen}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[600px]" aria-describedby="document-scanner-description">
           <DialogHeader>
             <DialogTitle>Scan Document</DialogTitle>
             <DialogDescription>
@@ -1513,7 +1513,7 @@ const DocumentVault: React.FC = () => {
       
       {/* Add Document Dialog */}
       <Dialog open={isAddDocumentOpen} onOpenChange={setIsAddDocumentOpen}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[600px]" aria-describedby="add-document-description">
           <DialogHeader>
             <DialogTitle>Add New Document</DialogTitle>
             <DialogDescription>
@@ -1722,7 +1722,7 @@ const DocumentVault: React.FC = () => {
       
       {/* View Document Dialog */}
       <Dialog open={isViewDocumentOpen} onOpenChange={setIsViewDocumentOpen}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[600px]" aria-describedby="view-document-description">
           {selectedDocument && (
             <>
               <DialogHeader>
