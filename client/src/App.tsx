@@ -37,7 +37,7 @@ import ArenaPremium from "@/pages/arena-premium";
 import ArenaHome from "@/pages/arena/index";
 import ArenaVehicleSelection from "@/pages/arena/vehicle-selection";
 import ArenaCustomize from "@/pages/arena/customize";
-import TestBeforeBuy from "@/pages/autovista";
+import TestBeforeBuy from "@/pages/testbeforebuy";
 import ArenaDashboard from "@/pages/arena-dashboard";
 import NewArenaDashboard from "@/pages/new-arena-dashboard";
 import ArenaDashboardNew from "@/pages/arena-dashboard-new";
