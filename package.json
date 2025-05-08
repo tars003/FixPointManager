@@ -44,6 +44,7 @@
     "@react-three/drei": "^9.57.3",
     "@react-three/fiber": "^8.12.0",
     "@replit/vite-plugin-shadcn-theme-json": "^0.0.4",
+    "@sendgrid/mail": "^8.1.5",
     "@stripe/react-stripe-js": "^3.6.0",
     "@stripe/stripe-js": "^7.2.0",
     "@tailwindcss/vite": "^4.1.3",
