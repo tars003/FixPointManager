@@ -91,266 +91,9 @@ const CUSTOMIZATION_STEPS = [
   { id: 'review', label: 'Review & Checkout', icon: <ShoppingCart size={18} /> }
 ];
 
-// Premium luxury vehicles data (would be fetched from API)
-const mockVehicles: VehicleModelData[] = [
-  {
-    id: 1,
-    name: 'BMW 7 Series',
-    manufacturer: 'BMW',
-    category: 'four-wheeler',
-    subcategory: 'Luxury Sedan',
-    year: 2023,
-    modelCode: 'BMW7-2023',
-    thumbnailUrl: 'https://www.bmw.in/content/dam/bmw/marketIN/bmw_in/all-models/7-series/lci-i7/bmw-7-series-i7-front-view.png.asset.1686123094192.png',
-    description: 'The flagship BMW 7 Series luxury sedan with cutting-edge technology and supreme comfort.',
-    basePrice: 15700000,
-    popularity: 9,
-    colors: [
-      { id: 'black', name: 'Black Sapphire', hex: '#0A0A0A', type: 'metallic', price: 0 },
-      { id: 'silver', name: 'Mineral White', hex: '#E8E8E8', type: 'metallic', price: 0 },
-      { id: 'blue', name: 'Tanzanite Blue', hex: '#0F2852', type: 'metallic', price: 125000 },
-    ]
-  },
-  {
-    id: 2,
-    name: 'Mercedes-Benz S-Class',
-    manufacturer: 'Mercedes-Benz',
-    category: 'four-wheeler',
-    subcategory: 'Luxury Sedan',
-    year: 2023,
-    modelCode: 'SCLASS2023',
-    thumbnailUrl: 'https://stimg.cardekho.com/images/carexteriorimages/930x620/Mercedes-Benz/S-Class/10851/1685003970346/front-left-side-47.jpg',
-    description: 'The epitome of luxury and technology, the Mercedes-Benz S-Class redefines premium motoring.',
-    basePrice: 17500000,
-    popularity: 9,
-    colors: [
-      { id: 'silver', name: 'High-Tech Silver', hex: '#C0C0C0', type: 'metallic', price: 0 },
-      { id: 'black', name: 'Obsidian Black', hex: '#1A1A1A', type: 'metallic', price: 0 },
-      { id: 'blue', name: 'Anthracite Blue', hex: '#1E2940', type: 'metallic', price: 150000 },
-    ]
-  },
-  {
-    id: 3,
-    name: 'Audi A8 L',
-    manufacturer: 'Audi',
-    category: 'four-wheeler',
-    subcategory: 'Luxury Sedan',
-    year: 2023,
-    modelCode: 'A8L-2023',
-    thumbnailUrl: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/141375/a8-l-exterior-right-front-three-quarter.jpeg?isig=0&q=80',
-    description: 'The Audi A8 L delivers sophisticated design, innovative technology and exhilarating driving dynamics.',
-    basePrice: 13200000,
-    popularity: 8,
-    colors: [
-      { id: 'white', name: 'Glacier White', hex: '#F0F0F0', type: 'metallic', price: 0 },
-      { id: 'black', name: 'Mythos Black', hex: '#0A0A0A', type: 'metallic', price: 0 },
-      { id: 'silver', name: 'Floret Silver', hex: '#C5C5C5', type: 'metallic', price: 0 },
-    ]
-  },
-  {
-    id: 4,
-    name: 'Rolls-Royce Phantom',
-    manufacturer: 'Rolls-Royce',
-    category: 'four-wheeler',
-    subcategory: 'Ultra Luxury',
-    year: 2023,
-    modelCode: 'PHANTOM2023',
-    thumbnailUrl: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/132143/phantom-exterior-right-front-three-quarter.jpeg?isig=0&q=80',
-    description: 'The pinnacle of luxury motoring, handcrafted to perfection with unparalleled attention to detail.',
-    basePrice: 89900000,
-    popularity: 10,
-    colors: [
-      { id: 'white', name: 'Arctic White', hex: '#FFFFFF', type: 'standard', price: 0 },
-      { id: 'black', name: 'Diamond Black', hex: '#000000', type: 'standard', price: 0 },
-      { id: 'silver', name: 'Silver Haze', hex: '#D0D0D0', type: 'metallic', price: 250000 },
-      { id: 'blue', name: 'Bespoke Blue', hex: '#1A3C6E', type: 'metallic', price: 500000 },
-    ]
-  },
-  {
-    id: 5,
-    name: 'Lamborghini Urus',
-    manufacturer: 'Lamborghini',
-    category: 'four-wheeler',
-    subcategory: 'Super SUV',
-    year: 2023,
-    modelCode: 'URUS2023',
-    thumbnailUrl: 'https://cdni.autocarindia.com/Utils/ImageResizer.ashx?n=https://cms.haymarketindia.net/model/uploads/modelimages/Lamborghini-Urus-300920221708.jpg',
-    description: 'The world\'s first Super SUV combining Lamborghini DNA with versatility and everyday usability.',
-    basePrice: 43000000,
-    popularity: 9,
-    colors: [
-      { id: 'yellow', name: 'Giallo Auge', hex: '#F7CF10', type: 'metallic', price: 350000 },
-      { id: 'green', name: 'Verde Mantis', hex: '#72B82A', type: 'metallic', price: 350000 },
-      { id: 'black', name: 'Nero Noctis', hex: '#0A0A0A', type: 'metallic', price: 0 },
-    ]
-  }
-];
+// No mockVehicles - we'll fetch from API
 
-// Mock customization parts (would be fetched from API)
-const mockParts: CustomizationPartData[] = [
-  // Exterior - Paint subcategory
-  {
-    id: 101,
-    name: 'Premium Pearl Finish',
-    category: 'exterior',
-    subcategory: 'paint',
-    vehicleCategories: ['four-wheeler'],
-    thumbnailUrl: 'https://cdn11.bigcommerce.com/s-64pb9uhn5u/images/stencil/1280x1280/products/1173/1862/91D0oC4ZJzL._AC_SL1500___50979.1618433797.jpg?c=1',
-    price: 45000,
-    currency: 'INR',
-    description: 'High-end pearl finish paint that changes hue based on viewing angle and lighting conditions.',
-    popularity: 8,
-    installationDifficulty: 3,
-    material: 'Premium Acrylic Urethane'
-  },
-  {
-    id: 102,
-    name: 'Matte Military Wrap',
-    category: 'exterior',
-    subcategory: 'wrap',
-    vehicleCategories: ['four-wheeler'],
-    thumbnailUrl: 'https://m.media-amazon.com/images/I/717iuZXKUzL._AC_UF894,1000_QL80_.jpg',
-    price: 65000,
-    currency: 'INR',
-    description: 'Full vehicle matte military green wrap with scratch-resistant coating.',
-    popularity: 7,
-    installationDifficulty: 4,
-    material: 'High-Grade Vinyl'
-  },
-  // Exterior - Body subcategory
-  {
-    id: 201,
-    name: 'Carbon Fiber Hood',
-    category: 'exterior',
-    subcategory: 'body',
-    vehicleCategories: ['four-wheeler'],
-    thumbnailUrl: 'https://cdn11.bigcommerce.com/s-90c2lk0iz7/images/stencil/1280x1280/products/198/6043/Thar-Carbon-2__92333.1671611256.jpg?c=1',
-    price: 75000,
-    currency: 'INR',
-    description: 'Lightweight carbon fiber hood replacement with air scoop for better cooling.',
-    popularity: 9,
-    installationDifficulty: 2,
-    material: 'Carbon Fiber',
-    manufacturerWarranty: 24
-  },
-  // Exterior - Spoiler subcategory
-  {
-    id: 301,
-    name: 'Aerodynamic Rear Spoiler',
-    category: 'exterior',
-    subcategory: 'spoiler',
-    vehicleCategories: ['four-wheeler'],
-    thumbnailUrl: 'https://m.media-amazon.com/images/I/61OoMRxJOjL._AC_UF894,1000_QL80_.jpg',
-    price: 28000,
-    currency: 'INR',
-    description: 'Performance rear spoiler that improves downforce and stability at high speeds.',
-    popularity: 8,
-    installationDifficulty: 2,
-    material: 'ABS Polymer with Carbon Fiber Finish',
-    manufacturerWarranty: 12,
-    dimensions: {
-      width: 120,
-      height: 15,
-      depth: 30
-    }
-  },
-  // Interior - Seats subcategory
-  {
-    id: 401,
-    name: 'Premium Leather Seat Covers',
-    category: 'interior',
-    subcategory: 'seats',
-    vehicleCategories: ['four-wheeler'],
-    thumbnailUrl: 'https://www.cars24.com/blog/wp-content/uploads/2023/05/premium-seat-cover-1024x630.jpg',
-    price: 35000,
-    currency: 'INR',
-    description: 'Handcrafted premium leather seat covers with custom stitching and embossing.',
-    popularity: 9,
-    installationDifficulty: 1,
-    material: 'Premium Italian Leather',
-    manufacturerWarranty: 36
-  },
-  // Interior - Dashboard subcategory
-  {
-    id: 501,
-    name: 'Carbon Fiber Dashboard Kit',
-    category: 'interior',
-    subcategory: 'dashboard',
-    vehicleCategories: ['four-wheeler'],
-    thumbnailUrl: 'https://cdn.shopify.com/s/files/1/0645/1503/1672/products/real-carbon-fiber-ac-vents-trim-for-mahindra-thar-2020-arshia-motorsport.jpg?v=1676293553',
-    price: 22000,
-    currency: 'INR',
-    description: 'Premium carbon fiber dashboard inserts and trim pieces for a sporty look.',
-    popularity: 7,
-    installationDifficulty: 2,
-    material: 'Real Carbon Fiber'
-  },
-  // Performance - Engine subcategory
-  {
-    id: 601,
-    name: 'Performance ECU Tune',
-    category: 'performance',
-    subcategory: 'engine',
-    vehicleCategories: ['four-wheeler'],
-    thumbnailUrl: 'https://m.media-amazon.com/images/I/61KPX11tKhL._AC_UF894,1000_QL80_.jpg',
-    price: 45000,
-    currency: 'INR',
-    description: 'Professional ECU remapping to optimize power, torque, and fuel efficiency.',
-    popularity: 9,
-    installationDifficulty: 3
-  },
-  // Performance - Exhaust subcategory
-  {
-    id: 701,
-    name: 'Sport Performance Exhaust System',
-    category: 'performance',
-    subcategory: 'exhaust',
-    vehicleCategories: ['four-wheeler'],
-    thumbnailUrl: 'https://5.imimg.com/data5/SELLER/Default/2023/10/349685021/RF/ZB/TL/148072370/straight-pipe-performance-exhaust-system.jpg',
-    price: 60000,
-    currency: 'INR',
-    description: 'Full stainless steel performance exhaust system with improved flow and aggressive sound.',
-    popularity: 8,
-    installationDifficulty: 4,
-    material: 'Stainless Steel',
-    manufacturerWarranty: 24
-  },
-  // Wheels - Rims subcategory
-  {
-    id: 801,
-    name: 'Off-Road Alloy Wheels Set',
-    category: 'wheels',
-    subcategory: 'rims',
-    vehicleCategories: ['four-wheeler'],
-    thumbnailUrl: 'https://i0.wp.com/gomechanic.in/blog/wp-content/uploads/2023/02/image-123-1.jpg?w=800&ssl=1',
-    price: 85000,
-    currency: 'INR',
-    description: 'Set of 4 premium alloy wheels designed for off-road performance and style.',
-    popularity: 9,
-    installationDifficulty: 2,
-    material: 'Forged Aluminum Alloy',
-    dimensions: {
-      width: 22,
-      height: 22,
-      depth: 12
-    }
-  },
-  // Lighting - Headlights subcategory
-  {
-    id: 901,
-    name: 'LED Projector Headlights',
-    category: 'lighting',
-    subcategory: 'headlights',
-    vehicleCategories: ['four-wheeler'],
-    thumbnailUrl: 'https://www.team-bhp.com/forum/attachments/modifications-accessories/1469805d1468850304-mahindra-thar-gets-maini-led-projector-headlights-led-bar-img_7428.jpg',
-    price: 36000,
-    currency: 'INR',
-    description: 'Advanced LED projector headlights with integrated DRLs for better visibility and modern look.',
-    popularity: 9,
-    installationDifficulty: 3,
-    manufacturerWarranty: 24
-  },
-];
+// No mockParts - we'll fetch from API
 
 // Component to render cartItems
 interface CartItemProps {
@@ -423,8 +166,32 @@ const PremiumArena: React.FC = () => {
   const [, params] = useRoute<{ id: string }>('/arena/premium/:id');
   const projectId = params?.id ? parseInt(params.id) : undefined;
 
+  // Query to fetch vehicle models
+  const { 
+    data: vehicleModels = [],
+    isLoading: isVehiclesLoading
+  } = useQuery({
+    queryKey: ['/api/vehicle-models'],
+    queryFn: async () => {
+      const res = await apiRequest('GET', '/api/vehicle-models');
+      return await res.json();
+    }
+  });
+
+  // Query to fetch customization parts
+  const {
+    data: customizationParts = [],
+    isLoading: isPartsLoading
+  } = useQuery({
+    queryKey: ['/api/customization-parts'],
+    queryFn: async () => {
+      const res = await apiRequest('GET', '/api/customization-parts');
+      return await res.json();
+    }
+  });
+
   // Filtered parts based on selected category and subcategory
-  const filteredParts = mockParts.filter(
+  const filteredParts = customizationParts.filter(
     part => part.category === selectedCategory && 
            (!selectedSubcategory || part.subcategory === selectedSubcategory)
   );
@@ -463,12 +230,12 @@ const PremiumArena: React.FC = () => {
 
   // Load project data when available
   useEffect(() => {
-    if (projectData) {
+    if (projectData && vehicleModels.length > 0 && customizationParts.length > 0) {
       setCurrentProject(projectData);
       
-      // If we have a vehicle ID, find that vehicle from our mockVehicles
+      // If we have a vehicle ID, find that vehicle from our API data
       if (projectData.vehicleId) {
-        const vehicle = mockVehicles.find(v => v.id === projectData.vehicleId);
+        const vehicle = vehicleModels.find(v => v.id === projectData.vehicleId);
         if (vehicle) {
           setSelectedVehicle(vehicle);
           
@@ -485,7 +252,7 @@ const PremiumArena: React.FC = () => {
           // Find the actual part data for each selected part
           const loadedParts = projectData.selectedParts
             .map((selectedPart: {partId: number}) => {
-              return mockParts.find(part => part.id === selectedPart.partId);
+              return customizationParts.find(part => part.id === selectedPart.partId);
             })
             .filter((part: CustomizationPartData | undefined) => part !== undefined) as CustomizationPartData[];
           
@@ -519,7 +286,7 @@ const PremiumArena: React.FC = () => {
         }
       }
     }
-  }, [projectData, currentStep]);
+  }, [projectData, currentStep, vehicleModels, customizationParts]);
 
   // Save project mutation
   const saveProjectMutation = useMutation({
@@ -1093,12 +860,19 @@ const PremiumArena: React.FC = () => {
                   <h2 className="text-2xl font-bold text-gray-900">Select Your Vehicle</h2>
                 </div>
                 
-                <VehicleSelector
-                  vehicles={mockVehicles}
-                  selectedVehicle={selectedVehicle?.id as number}
-                  onSelectVehicle={handleVehicleSelect}
-                  onContinue={handleContinue}
-                />
+                {isVehiclesLoading ? (
+                  <div className="flex justify-center items-center h-96">
+                    <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                    <span className="ml-2 text-muted-foreground">Loading vehicles...</span>
+                  </div>
+                ) : (
+                  <VehicleSelector
+                    vehicles={vehicleModels}
+                    selectedVehicle={selectedVehicle?.id as number}
+                    onSelectVehicle={handleVehicleSelect}
+                    onContinue={handleContinue}
+                  />
+                )}
               </div>
             )}
 
@@ -1136,13 +910,20 @@ const PremiumArena: React.FC = () => {
                             layout="accordion"
                           />
                           
-                          <PartSelector
-                            category={selectedCategory}
-                            subcategory={selectedSubcategory}
-                            parts={filteredParts}
-                            selectedParts={selectedParts.map(p => p.id as number)}
-                            onSelectPart={handlePartSelect}
-                          />
+                          {isPartsLoading ? (
+                            <div className="flex justify-center items-center h-40">
+                              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                              <span className="ml-2 text-sm text-muted-foreground">Loading parts...</span>
+                            </div>
+                          ) : (
+                            <PartSelector
+                              category={selectedCategory}
+                              subcategory={selectedSubcategory}
+                              parts={filteredParts}
+                              selectedParts={selectedParts.map(p => p.id as number)}
+                              onSelectPart={handlePartSelect}
+                            />
+                          )}
                         </div>
                       </CardContent>
                       <CardFooter className="flex justify-between border-t pt-4">
