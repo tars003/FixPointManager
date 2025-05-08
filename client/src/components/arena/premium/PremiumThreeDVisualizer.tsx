@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, Component, ReactNode } from 'react';
 import { Canvas, useFrame, useThree, extend } from '@react-three/fiber';
 import { 
   Environment, 
@@ -14,10 +14,42 @@ import {
   CameraShake
 } from '@react-three/drei';
 import { motion } from 'framer-motion';
-import { Suspense } from 'react';
+import { Suspense, ErrorInfo } from 'react';
 import * as THREE from 'three';
 import { Vector3, Quaternion } from 'three';
 import { CustomizationPartInstance, VehicleConfiguration } from '@shared/arena-schema';
+
+// Error Boundary for catching 3D rendering errors
+interface ErrorBoundaryProps {
+  fallback: ReactNode;
+  children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(_: Error): ErrorBoundaryState {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    console.error("3D Rendering Error:", error, errorInfo);
+  }
+
+  render(): ReactNode {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
+}
 
 // Environment options - using built-in presets instead of external HDRs for reliability
 const environments = [
@@ -256,20 +288,22 @@ const PremiumThreeDVisualizer: React.FC<PremiumThreeDVisualizerProps> = ({
           />
           <directionalLight position={[-10, -10, -5]} intensity={0.2} />
           
-          {/* Environment */}
-          <Environment preset="studio" background={false} />
+          {/* Environment - using specific preset to avoid errors */}
+          <Environment preset="city" background={false} />
           
           {/* Vehicle Base Model */}
-          <VehicleBaseMesh color={vehicleConfiguration.baseColor} />
+          <VehicleBaseMesh color={vehicleConfiguration.baseColor || "#1E3A8A"} />
           
-          {/* Custom Parts */}
-          {vehicleConfiguration.parts.map((part) => (
-            <CustomizationPart 
-              key={part.id} 
-              part={part}
-              onClick={onPartClick}
-            />
-          ))}
+          {/* Custom Parts - only render if parts exist */}
+          {vehicleConfiguration.parts && vehicleConfiguration.parts.length > 0 && 
+            vehicleConfiguration.parts.map((part) => (
+              <CustomizationPart 
+                key={part.id} 
+                part={part}
+                onClick={onPartClick}
+              />
+            ))
+          }
           
           {/* Floor with shadows */}
           {enableShadows && (

@@ -540,15 +540,21 @@ const VehicleSelector: React.FC<VehicleSelectorProps> = ({
       
       {/* Continue button */}
       {selectedVehicle && onContinue && (
-        <div className="flex justify-end mt-6">
-          <Button 
-            onClick={onContinue} 
-            size="lg" 
-            className="gap-2"
+        <div className="flex justify-end mt-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
           >
-            Continue to Customization
-            <ArrowRight size={16} />
-          </Button>
+            <Button 
+              onClick={onContinue} 
+              size="lg" 
+              className="gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md px-6 py-6 text-lg"
+            >
+              Continue to Customization
+              <ArrowRight size={18} />
+            </Button>
+          </motion.div>
         </div>
       )}
     </div>
