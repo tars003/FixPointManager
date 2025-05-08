@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, varchar, jsonb, date } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, varchar, jsonb, date, decimal, foreignKey, pgEnum } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -821,3 +821,101 @@ export type InsertProjectCollaborator = typeof projectCollaborators.$inferInsert
 
 export type ShowcaseProject = typeof showcaseProjects.$inferSelect;
 export type InsertShowcaseProject = typeof showcaseProjects.$inferInsert;
+
+// Order status enum
+export const orderStatusEnum = pgEnum('order_status', [
+  'created', 
+  'payment_pending', 
+  'payment_failed', 
+  'payment_completed', 
+  'processing', 
+  'ready_for_pickup', 
+  'shipped', 
+  'delivered', 
+  'cancelled', 
+  'refunded'
+]);
+
+// Item type enum
+export const itemTypeEnum = pgEnum('item_type', ['vehicle', 'part', 'service']);
+
+// Orders schema
+export const orders = pgTable("orders", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  projectId: integer("project_id"),
+  orderNumber: text("order_number"),
+  status: text("status").notNull().default('created'),
+  subtotal: decimal("subtotal", { precision: 10, scale: 2 }).notNull(),
+  tax: decimal("tax", { precision: 10, scale: 2 }).default('0'),
+  shipping: decimal("shipping", { precision: 10, scale: 2 }).default('0'),
+  discount: decimal("discount", { precision: 10, scale: 2 }).default('0'),
+  totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
+  currency: text("currency").default('INR'),
+  paymentMethod: text("payment_method"),
+  paymentId: text("payment_id"),
+  shippingAddress: jsonb("shipping_address"),
+  billingAddressSameAsShipping: boolean("billing_address_same_as_shipping").default(true),
+  billingAddress: jsonb("billing_address"),
+  notes: text("notes"),
+  estimatedDeliveryDate: date("estimated_delivery_date"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertOrderSchema = createInsertSchema(orders).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
+});
+
+// Order Items schema
+export const orderItems = pgTable("order_items", {
+  id: serial("id").primaryKey(),
+  orderId: integer("order_id").notNull().references(() => orders.id),
+  itemType: text("item_type").notNull(),
+  itemId: integer("item_id").notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  quantity: integer("quantity").notNull().default(1),
+  unitPrice: decimal("unit_price", { precision: 10, scale: 2 }).notNull(),
+  totalPrice: decimal("total_price", { precision: 10, scale: 2 }).notNull(),
+  currency: text("currency").default('INR'),
+  thumbnailUrl: text("thumbnail_url"),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertOrderItemSchema = createInsertSchema(orderItems).omit({
+  id: true,
+  createdAt: true
+});
+
+// Payment intents schema
+export const paymentIntents = pgTable("payment_intents", {
+  id: serial("id").primaryKey(),
+  orderId: integer("order_id").notNull().references(() => orders.id),
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  clientSecret: text("client_secret"),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  currency: text("currency").default('INR'),
+  status: text("status").notNull().default('created'),
+  paymentMethod: text("payment_method"),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertPaymentIntentSchema = createInsertSchema(paymentIntents).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
+});
+
+// Order and Checkout Types
+export type Order = typeof orders.$inferSelect;
+export type InsertOrder = typeof orders.$inferInsert;
+export type OrderItem = typeof orderItems.$inferSelect;
+export type InsertOrderItem = typeof orderItems.$inferInsert;
+export type PaymentIntent = typeof paymentIntents.$inferSelect;
+export type InsertPaymentIntent = typeof paymentIntents.$inferInsert;
