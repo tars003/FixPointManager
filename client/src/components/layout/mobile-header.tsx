@@ -85,7 +85,7 @@ const navItems = [
   {
     title: 'TestBeforeBuy',
     icon: Car,
-    href: '/autovista',
+    href: '/testbeforebuy',
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
   },
