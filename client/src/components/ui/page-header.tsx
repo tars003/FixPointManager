@@ -1,42 +1,47 @@
-import React from 'react';
-import { LucideIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ReactNode } from "react";
 
 interface PageHeaderProps {
   title: string;
   description?: string;
-  Icon?: LucideIcon;
-  iconClassName?: string;
+  children?: ReactNode;
+  action?: {
+    label: string;
+    onClick: () => void;
+    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+    icon?: ReactNode;
+  };
   className?: string;
-  children?: React.ReactNode;
 }
 
-const PageHeader: React.FC<PageHeaderProps> = ({
+export function PageHeader({
   title,
   description,
-  Icon,
-  iconClassName,
-  className,
-  children
-}) => {
+  children,
+  action,
+  className
+}: PageHeaderProps) {
   return (
-    <div className={cn("flex flex-col space-y-2", className)}>
-      <div className="flex items-center">
-        {Icon && (
-          <div className={cn("p-2 rounded-md mr-3", iconClassName ? undefined : "bg-primary/10")}>
-            <Icon className={cn("h-5 w-5", iconClassName ? iconClassName : "text-primary")} />
-          </div>
+    <div className={cn("flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6", className)}>
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+        {description && (
+          <p className="text-muted-foreground mt-1">{description}</p>
         )}
-        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
       </div>
-      
-      {description && (
-        <p className="text-muted-foreground text-sm md:text-base">{description}</p>
-      )}
-      
-      {children}
+      <div className="flex items-center gap-2">
+        {action && (
+          <Button 
+            onClick={action.onClick}
+            variant={action.variant || "default"}
+          >
+            {action.icon && <span className="mr-2">{action.icon}</span>}
+            {action.label}
+          </Button>
+        )}
+        {children}
+      </div>
     </div>
   );
-};
-
-export default PageHeader;
+}

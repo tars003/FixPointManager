@@ -51,10 +51,10 @@ import {
 } from "@/components/ui/card";
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { formatDate } from '@/lib/format';
+import { formatDate, formatRelativeTime } from '@/lib/format';
 import { apiRequest } from '@/lib/queryClient';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import PageHeader from '@/components/ui/page-header';
+import { PageHeader } from '@/components/ui/page-header';
 
 // Define document types that match the backend
 type DocumentType = 
@@ -406,10 +406,12 @@ const DocumentVault: React.FC = () => {
       <PageHeader 
         title="Document Vault"
         description="Securely store, organize, and access all your vehicle-related documents in one place."
-        Icon={FileText}
-        iconClassName="text-violet-600"
         className="mb-8"
-      />
+      >
+        <div className="flex items-center">
+          <FileText className="h-6 w-6 text-violet-600 mr-2" />
+        </div>
+      </PageHeader>
       
       {/* Document Management */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

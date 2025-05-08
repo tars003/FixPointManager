@@ -83,3 +83,52 @@ export function formatDateRange(startDate?: string, endDate?: string): string {
     return 'Invalid date range';
   }
 }
+
+/**
+ * Format a date relative to the current time (e.g. "2 days ago", "in 3 months")
+ */
+export function formatRelativeTime(dateString?: string): string {
+  if (!dateString) return 'N/A';
+  
+  try {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((date.getTime() - now.getTime()) / 1000);
+    const absoluteDiffInSeconds = Math.abs(diffInSeconds);
+    
+    // Determine the appropriate time unit and value
+    let unit: Intl.RelativeTimeFormatUnit;
+    let value: number;
+    
+    if (absoluteDiffInSeconds < 60) {
+      unit = 'second';
+      value = diffInSeconds;
+    } else if (absoluteDiffInSeconds < 3600) {
+      unit = 'minute';
+      value = Math.floor(diffInSeconds / 60);
+    } else if (absoluteDiffInSeconds < 86400) {
+      unit = 'hour';
+      value = Math.floor(diffInSeconds / 3600);
+    } else if (absoluteDiffInSeconds < 2592000) {
+      unit = 'day';
+      value = Math.floor(diffInSeconds / 86400);
+    } else if (absoluteDiffInSeconds < 31536000) {
+      unit = 'month';
+      value = Math.floor(diffInSeconds / 2592000);
+    } else {
+      unit = 'year';
+      value = Math.floor(diffInSeconds / 31536000);
+    }
+    
+    // Format the relative time
+    const formatter = new Intl.RelativeTimeFormat('en', {
+      numeric: 'auto',
+      style: 'long'
+    });
+    
+    return formatter.format(value, unit);
+  } catch (error) {
+    console.error('Error formatting relative time:', error);
+    return 'Invalid date';
+  }
+}
