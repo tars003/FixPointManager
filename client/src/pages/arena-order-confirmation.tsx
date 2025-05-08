@@ -34,116 +34,27 @@ const ArenaOrderConfirmation = () => {
   const { toast } = useToast();
   const orderId = parseInt(id || '0');
 
-  // Sample order data since we don't have API yet
-  const [order, setOrder] = useState<Order | null>(null);
-  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // Fetch order data from API
+  const { 
+    data: orderData,
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ['/api/arena/orders', orderId],
+    queryFn: async () => {
+      if (orderId <= 0) return null;
+      const response = await fetch(`/api/arena/orders/${orderId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch order');
+      }
+      return response.json();
+    },
+    enabled: orderId > 0,
+  });
 
-  // Fetch order data
-  useEffect(() => {
-    // Since we don't have API yet, simulate a fetch
-    setTimeout(() => {
-      // This would normally come from an API call
-      const sampleOrder: Partial<Order> = {
-        id: orderId,
-        userId: 1,
-        orderNumber: `ORD-${(100000 + orderId).toString()}`,
-        status: 'created',
-        subtotal: 1500000,
-        tax: 270000,
-        shipping: 1200,
-        discount: 0,
-        totalAmount: 1771200,
-        currency: 'INR',
-        paymentMethod: 'credit_card',
-        shippingAddress: {
-          name: 'Sample Customer',
-          street: '123 Test Street',
-          city: 'Mumbai',
-          state: 'Maharashtra',
-          postalCode: '400001',
-          country: 'India',
-          phone: '+91 9876543210'
-        },
-        billingAddressSameAsShipping: true,
-        estimatedDeliveryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        createdAt: new Date(),
-        updatedAt: new Date()
-      };
-      
-      const sampleItems: Partial<OrderItem>[] = [
-        {
-          id: 1,
-          orderId: orderId,
-          itemType: 'vehicle',
-          itemId: 6,
-          name: 'Audi A4',
-          description: 'Base vehicle - 2023',
-          quantity: 1,
-          unitPrice: 1200000,
-          totalPrice: 1200000,
-          currency: 'INR',
-          thumbnailUrl: 'https://images.unsplash.com/photo-1606664721758-e127d25b0b09?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-        },
-        {
-          id: 2,
-          orderId: orderId,
-          itemType: 'part',
-          itemId: 101,
-          name: 'Premium Sport Bumper',
-          description: 'exterior - body',
-          quantity: 1,
-          unitPrice: 85000,
-          totalPrice: 85000,
-          currency: 'INR',
-          thumbnailUrl: 'https://images.unsplash.com/photo-1659937552143-142459d63f55?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-        },
-        {
-          id: 3,
-          orderId: orderId,
-          itemType: 'part',
-          itemId: 202,
-          name: 'Carbon Fiber Rear Spoiler',
-          description: 'exterior - spoiler',
-          quantity: 1,
-          unitPrice: 65000,
-          totalPrice: 65000,
-          currency: 'INR',
-          thumbnailUrl: 'https://images.unsplash.com/photo-1611448747074-1e8c9a3b0bf4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-        },
-        {
-          id: 4,
-          orderId: orderId,
-          itemType: 'part',
-          itemId: 303,
-          name: 'Sport Alloy Wheels (Set of 4)',
-          description: 'wheels - rims',
-          quantity: 1,
-          unitPrice: 120000,
-          totalPrice: 120000,
-          currency: 'INR',
-          thumbnailUrl: 'https://images.unsplash.com/photo-1612207157920-52cc008e7c34?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-        },
-        {
-          id: 5,
-          orderId: orderId,
-          itemType: 'part',
-          itemId: 404,
-          name: 'Premium LED Headlights',
-          description: 'lighting - headlights',
-          quantity: 1,
-          unitPrice: 30000,
-          totalPrice: 30000,
-          currency: 'INR',
-          thumbnailUrl: 'https://images.unsplash.com/photo-1551515300-2d3b7bb80920?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-        }
-      ];
-      
-      setOrder(sampleOrder as Order);
-      setOrderItems(sampleItems as OrderItem[]);
-      setIsLoading(false);
-    }, 1000);
-  }, [orderId]);
+  // Extract order and orderItems from the API response
+  const order = orderData as Order | null;
+  const orderItems = orderData?.items as OrderItem[] || [];
 
   // Save order to localStorage when it loads
   useEffect(() => {

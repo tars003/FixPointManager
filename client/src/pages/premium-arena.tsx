@@ -809,7 +809,14 @@ const PremiumArena: React.FC = () => {
                         </span>
                       </div>
                       
-                      <Button className="w-full">
+                      <Button 
+                        className="w-full" 
+                        onClick={() => {
+                          // Close cart sheet and navigate to checkout
+                          setCartOpen(false);
+                          window.location.href = '/arena-checkout';
+                        }}
+                      >
                         Proceed to Checkout
                       </Button>
                     </div>
