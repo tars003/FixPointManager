@@ -239,7 +239,7 @@ const Arena: React.FC = () => {
   }, []);
   
   // Calculate total price
-  const getTotalPrice = () => {
+  const calculateTotal = () => {
     let total = 0;
     
     // Add body kit price
@@ -590,7 +590,7 @@ const Arena: React.FC = () => {
                   description: 'Export functionality will be implemented soon.',
                 });
               }}
-              totalPrice={calculateTotalPrice()}
+              totalPrice={calculateTotal()}
             />
           </div>
         </motion.div>
