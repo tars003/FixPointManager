@@ -6,7 +6,7 @@ import VehicleDiscovery from '@/components/testbeforebuy/vehicle-discovery';
 import VehicleAdvisor from '@/components/testbeforebuy/vehicle-advisor';
 import ComparisonTool from '@/components/testbeforebuy/comparison-tool';
 import SalesElements from '@/components/testbeforebuy/sales-elements';
-import PlatformComparison from '@/components/testbeforebuy/platform-comparison';
+import PlatformComparison from '@/components/testbeforebuy/platform-comparison-updated';
 import PageTransition from '@/components/transitions/page-transition';
 import ContentReaction from '@/components/ui/content-reaction';
 import FeedbackButton from '@/components/ui/feedback-button';
