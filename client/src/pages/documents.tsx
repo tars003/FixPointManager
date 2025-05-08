@@ -20,7 +20,8 @@ import {
   Car,
   ChevronRight,
   ArrowRight,
-  Info
+  Info,
+  Settings
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
@@ -917,13 +918,29 @@ const DocumentVault: React.FC = () => {
                 ))}
               </div>
             </CardContent>
-            <CardFooter className="border-t pt-4">
+            <CardFooter className="border-t pt-4 flex flex-col space-y-2">
               <Button
                 className="w-full bg-violet-600 hover:bg-violet-700"
                 onClick={() => setIsAddDocumentOpen(true)}
               >
                 <Plus className="mr-2 h-4 w-4" />
                 Add Document
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => setIsDocumentScannerOpen(true)}
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                Scan Document
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full text-violet-700"
+                onClick={() => setShowAdvancedFeatures(!showAdvancedFeatures)}
+              >
+                <FileCog className="mr-2 h-4 w-4" />
+                {showAdvancedFeatures ? 'Hide Advanced Features' : 'Show Advanced Features'}
               </Button>
             </CardFooter>
           </Card>
@@ -1392,6 +1409,51 @@ const DocumentVault: React.FC = () => {
           </Tabs>
         </div>
       </div>
+      
+      {/* Document Scanner Dialog */}
+      <Dialog open={isDocumentScannerOpen} onOpenChange={setIsDocumentScannerOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold">Scan Document</DialogTitle>
+            <DialogDescription>
+              Upload or scan a document to automatically extract information.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="p-2">
+            {selectedVehicle === 'all' ? (
+              <div className="mb-4">
+                <label className="text-sm font-medium mb-1 block">Select Vehicle</label>
+                <Select
+                  value={formData.vehicleId ? formData.vehicleId.toString() : ''}
+                  onValueChange={(value) => setFormData(prev => ({
+                    ...prev,
+                    vehicleId: parseInt(value)
+                  }))}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select vehicle" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {vehicles.map(vehicle => (
+                      <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
+                        {vehicle.make} {vehicle.model} ({vehicle.licensePlate})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : (
+              <input type="hidden" value={selectedVehicle} />
+            )}
+            
+            <DocumentScanner 
+              vehicleId={selectedVehicle === 'all' ? formData.vehicleId : Number(selectedVehicle)} 
+              onScanComplete={handleScanComplete} 
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
       
       {/* Add Document Dialog */}
       <Dialog open={isAddDocumentOpen} onOpenChange={setIsAddDocumentOpen}>
