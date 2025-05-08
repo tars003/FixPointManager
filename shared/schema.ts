@@ -683,6 +683,8 @@ export const vehicleModels = pgTable('arena_vehicle_models', {
   modelUrl: text('model_url'),
   description: text('description'),
   specifications: jsonb('specifications'),
+  basePrice: integer('base_price'),
+  colors: jsonb('colors').$type<Array<{id: string, name: string, hex: string, type: string, price: number}>>(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
   isActive: boolean('is_active').default(true),
@@ -701,6 +703,17 @@ export const customizationProjects = pgTable('arena_projects', {
   status: text('status').default('draft').$type<'draft' | 'in-progress' | 'completed'>(),
   visibility: text('visibility').default('private').$type<'private' | 'public' | 'shared'>(),
   totalPoints: integer('total_points').default(0),
+  basePrice: integer('base_price').default(0),
+  totalPrice: integer('total_price').default(0),
+  selectedParts: jsonb('selected_parts').$type<Array<{
+    partId: number;
+    position?: { x: number; y: number; z: number };
+    rotation?: { x: number; y: number; z: number };
+    scale?: number;
+    color?: string;
+  }>>().default([]),
+  sharingKey: text('sharing_key'),
+  lastRenderedImageUrl: text('last_rendered_image_url'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -716,11 +729,20 @@ export const customizationParts = pgTable('arena_parts', {
   thumbnailUrl: text('thumbnail_url'),
   modelUrl: text('model_url'),
   price: integer('price'),
+  discount: integer('discount').default(0),
   currency: text('currency').default('INR'),
   description: text('description'),
   specifications: jsonb('specifications'),
   installationDifficulty: integer('installation_difficulty').default(1),
   popularity: integer('popularity').default(0),
+  dimensions: jsonb('dimensions').$type<{ width: number, height: number, depth: number }>(),
+  weight: integer('weight'),
+  material: text('material'),
+  manufacturerWarranty: integer('manufacturer_warranty'),
+  hasColorOptions: boolean('has_color_options').default(false),
+  colorOptions: jsonb('color_options').$type<Array<{ id: string, name: string, hex: string, price: number }>>(),
+  inStock: boolean('in_stock').default(true),
+  estimatedInstallationTime: integer('estimated_installation_time'),  // in minutes
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
