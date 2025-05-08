@@ -1641,7 +1641,7 @@ const Arena: React.FC = () => {
                           
                           <div className="flex justify-between font-bold">
                             <span>Total Customization Cost</span>
-                            <span>{formatPrice(getTotalPrice())}</span>
+                            <span>{formatPrice(calculateTotal())}</span>
                           </div>
                         </div>
                       </div>
