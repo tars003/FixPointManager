@@ -355,68 +355,106 @@ const PremiumArena: React.FC = () => {
 
   // Handle continuing to next step
   const handleContinue = () => {
-    // If no vehicle is selected and we're on vehicle step, show an error
-    if (currentStep === 'vehicle' && !selectedVehicle) {
-      toast({
-        title: "Vehicle Required",
-        description: "Please select a vehicle to continue",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    // On vehicle selection step with a vehicle selected, go directly to exterior
-    if (currentStep === 'vehicle' && selectedVehicle) {
-      setCurrentStep('exterior');
-      // Update category to match
-      setSelectedCategory('exterior');
-      setSelectedSubcategory('paint');
-      toast({
-        title: "Exterior Customization",
-        description: "Now you can customize the exterior of your vehicle"
-      });
-      return;
-    }
-
-    const currentIndex = CUSTOMIZATION_STEPS.findIndex(step => step.id === currentStep);
-    if (currentIndex < CUSTOMIZATION_STEPS.length - 1) {
-      const nextStep = CUSTOMIZATION_STEPS[currentIndex + 1].id;
-      setCurrentStep(nextStep);
+    try {
+      // If no vehicle is selected and we're on vehicle step, show an error
+      if (currentStep === 'vehicle' && !selectedVehicle) {
+        toast({
+          title: "Vehicle Required",
+          description: "Please select a vehicle to continue",
+          variant: "destructive"
+        });
+        return;
+      }
       
-      // If going to a category step, update selected category
-      if (['exterior', 'interior', 'performance', 'wheels', 'lighting'].includes(nextStep)) {
-        setSelectedCategory(nextStep as CustomizationCategory);
-        
-        // Set default subcategory for each category
-        switch(nextStep) {
-          case 'exterior':
-            setSelectedSubcategory('paint');
-            break;
-          case 'interior':
-            setSelectedSubcategory('seats');
-            break;
-          case 'performance':
-            setSelectedSubcategory('engine');
-            break;
-          case 'wheels':
-            setSelectedSubcategory('rims');
-            break;
-          case 'lighting':
-            setSelectedSubcategory('headlights');
-            break;
+      // On vehicle selection step with a vehicle selected, go directly to exterior
+      if (currentStep === 'vehicle' && selectedVehicle) {
+        // Make sure the vehicle data is fully loaded
+        if (!selectedVehicle.id) {
+          toast({
+            title: "Loading Vehicle Data",
+            description: "Please wait while we finish loading your vehicle data",
+            variant: "default"
+          });
+          return;
         }
+        
+        // Save initial vehicle selection and create a new project if needed
+        if (!projectId) {
+          const projectName = `${selectedVehicle.manufacturer} ${selectedVehicle.name} Customization`;
+          console.log(`Creating new project: ${projectName}`);
+        }
+        
+        // Update step with animation
+        setCurrentStep('exterior');
+        
+        // Update category to match
+        setSelectedCategory('exterior');
+        setSelectedSubcategory('paint');
+        
+        // Show success message
+        toast({
+          title: "Exterior Customization",
+          description: "Now you can customize the exterior of your vehicle"
+        });
+        
+        // Scroll to top of page to see new content
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
       }
-      
-      // When reaching review step, make sure to save the project state
-      if (nextStep === 'review') {
-        // Auto-save the project when reaching review page
-        handleSaveProject();
+  
+      // For other steps, find the current index and move to next step
+      const currentIndex = CUSTOMIZATION_STEPS.findIndex(step => step.id === currentStep);
+      if (currentIndex < CUSTOMIZATION_STEPS.length - 1) {
+        const nextStep = CUSTOMIZATION_STEPS[currentIndex + 1].id;
+        
+        // Update step with animation
+        setCurrentStep(nextStep);
+        
+        // If going to a category step, update selected category
+        if (['exterior', 'interior', 'performance', 'wheels', 'lighting'].includes(nextStep)) {
+          setSelectedCategory(nextStep as CustomizationCategory);
+          
+          // Set default subcategory for each category
+          switch(nextStep) {
+            case 'exterior':
+              setSelectedSubcategory('paint');
+              break;
+            case 'interior':
+              setSelectedSubcategory('seats');
+              break;
+            case 'performance':
+              setSelectedSubcategory('engine');
+              break;
+            case 'wheels':
+              setSelectedSubcategory('rims');
+              break;
+            case 'lighting':
+              setSelectedSubcategory('headlights');
+              break;
+          }
+        }
+        
+        // When reaching review step, make sure to save the project state
+        if (nextStep === 'review') {
+          // Auto-save the project when reaching review page
+          handleSaveProject();
+        }
+        
+        // Show a success message to guide the user
+        toast({
+          title: `Step: ${CUSTOMIZATION_STEPS[currentIndex + 1].label}`,
+          description: `You can now ${nextStep === 'review' ? 'review your selections' : 'customize your vehicle'}`
+        });
+        
+        // Scroll to top of page to see new content
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-      
-      // Show a success message to guide the user
+    } catch (error) {
+      console.error("Navigation error:", error);
       toast({
-        title: `Step: ${CUSTOMIZATION_STEPS[currentIndex + 1].label}`,
-        description: `You can now ${nextStep === 'review' ? 'review your selections' : 'customize your vehicle'}`
+        title: "Navigation Error",
+        description: "There was an error navigating to the next step. Please try again.",
+        variant: "destructive"
       });
     }
   };
