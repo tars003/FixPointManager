@@ -12,7 +12,8 @@ import {
   Loader2,
   Camera,
   HelpCircle,
-  ChevronLeft
+  ChevronLeft,
+  CreditCard
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from "@/hooks/use-toast";
@@ -813,7 +814,7 @@ const PremiumArena: React.FC = () => {
                         className="w-full" 
                         onClick={() => {
                           // Close cart sheet and navigate to checkout
-                          setCartOpen(false);
+                          setIsCartOpen(false);
                           window.location.href = '/arena-checkout';
                         }}
                       >
@@ -1269,10 +1270,23 @@ const PremiumArena: React.FC = () => {
                               
                               <Button 
                                 onClick={handleAddToCart}
+                                variant="outline"
                                 className="gap-2"
                               >
                                 <ShoppingCart size={16} />
                                 Add to Cart
+                              </Button>
+                              
+                              <Button 
+                                onClick={() => {
+                                  // Save cart items and navigate to checkout directly
+                                  handleAddToCart();
+                                  window.location.href = '/arena-checkout';
+                                }}
+                                className="gap-2"
+                              >
+                                <CreditCard size={16} />
+                                Checkout
                               </Button>
                             </div>
                           </div>
