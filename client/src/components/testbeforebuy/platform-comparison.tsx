@@ -25,19 +25,19 @@ const comparisonData: ComparisonItem[] = [
   },
   {
     feature: 'Vehicle Types',
-    autovista: 'All 8 categories',
+    testbeforebuy: 'All 8 categories',
     competitors: '2-3 categories',
     advantageText: 'Complete coverage'
   },
   {
     feature: 'AI Recommendation',
-    autovista: 'Personalized matching',
+    testbeforebuy: 'Personalized matching',
     competitors: 'Basic filters',
     advantageText: 'Tailored to your needs'
   },
   {
     feature: 'Information Accuracy',
-    autovista: 'Daily updates',
+    testbeforebuy: 'Daily updates',
     competitors: 'Monthly updates',
     advantageText: 'Always up-to-date'
   }
@@ -167,7 +167,7 @@ const PlatformComparison: React.FC<PlatformComparisonProps> = ({ isPreowned = fa
                         >
                           <Check className="h-3 w-3 text-green-600" />
                         </motion.div>
-                        <span>{item.autovista}</span>
+                        <span>{item.testbeforebuy}</span>
                       </div>
                     </td>
                     <td className="py-4 text-neutral-500">{item.competitors}</td>

@@ -204,7 +204,7 @@ const DashboardEnhanced = () => {
       icon: <Building2 className="h-6 w-6 text-white" />,
       bgClass: 'bg-gradient-to-br from-blue-500 to-sky-600',
       accentColor: 'bg-blue-500',
-      path: '/autovista',
+      path: '/testbeforebuy',
       stats: [
         { label: 'Vehicles Compared', value: '12', trend: 'up' },
         { label: 'Test Drives', value: '4', trend: 'up' },

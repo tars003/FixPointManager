@@ -181,7 +181,7 @@ const DashboardNew = () => {
       id: 'test-buy', 
       name: 'TestBeforeBuy', 
       icon: <Building2 className="h-5 w-5 text-blue-500" />,
-      path: '/autovista' 
+      path: '/testbeforebuy' 
     },
     { 
       id: 'emergency', 
