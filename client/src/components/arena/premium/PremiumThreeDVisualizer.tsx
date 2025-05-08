@@ -15,16 +15,17 @@ import {
 } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import { Suspense } from 'react';
+import * as THREE from 'three';
 import { Vector3, Quaternion } from 'three';
 import { CustomizationPartInstance, VehicleConfiguration } from '@shared/arena-schema';
 
-// Environment options
+// Environment options - using built-in presets instead of external HDRs for reliability
 const environments = [
-  { id: 'studio', name: 'Studio', hdrPath: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr' },
-  { id: 'sunset', name: 'Sunset', hdrPath: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/sunset_fairway_1k.hdr' },
-  { id: 'warehouse', name: 'Warehouse', hdrPath: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/industrial_workshop_foundry_1k.hdr' },
-  { id: 'city', name: 'City', hdrPath: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/suburban_field_1k.hdr' },
-  { id: 'showroom', name: 'Showroom', hdrPath: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/lebombo_1k.hdr' },
+  { id: 'studio', name: 'Studio', preset: 'studio' as const },
+  { id: 'sunset', name: 'Sunset', preset: 'sunset' as const },
+  { id: 'warehouse', name: 'Warehouse', preset: 'warehouse' as const },
+  { id: 'city', name: 'City', preset: 'city' as const },
+  { id: 'night', name: 'Night', preset: 'night' as const },
 ];
 
 // Placeholder Vehicle Mesh - would be replaced with actual loaded models
@@ -86,9 +87,9 @@ const CustomizationPart = ({
     if (partId.includes('spoiler')) {
       return <boxGeometry args={[2, 0.1, 0.5]} />;
     } else if (partId.includes('wheel')) {
-      return <cylinderGeometry args={[0.5, 0.5, 0.2, 32]} rotation={[Math.PI / 2, 0, 0]} />;
+      return <cylinderGeometry args={[0.5, 0.5, 0.2, 32]} />; // Rotation applied at mesh level
     } else if (partId.includes('exhaust')) {
-      return <cylinderGeometry args={[0.1, 0.1, 1, 16]} rotation={[0, 0, Math.PI / 2]} />;
+      return <cylinderGeometry args={[0.1, 0.1, 1, 16]} />; // Rotation applied at mesh level
     } else if (partId.includes('light')) {
       return <sphereGeometry args={[0.3, 16, 16]} />;
     } else {
