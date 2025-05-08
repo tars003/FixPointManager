@@ -1030,6 +1030,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   apiRouter.delete("/documents/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
+      
+      // Log document access before deleting
+      await db.insert(documentAccessLogs).values({
+        documentId: id,
+        userId: 1, // Default user ID for now
+        accessType: 'delete',
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent'],
+        deviceInfo: {}
+      });
+      
       const [deletedDocument] = await db.delete(vehicleDocuments)
         .where(eq(vehicleDocuments.id, id))
         .returning();
@@ -1042,6 +1053,540 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting document:", error);
       res.status(500).json({ message: "Error deleting document" });
+    }
+  });
+  
+  // Document OCR functionality
+  apiRouter.post("/documents/:id/ocr", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      // Get document to ensure it exists
+      const [document] = await db.select()
+        .from(vehicleDocuments)
+        .where(eq(vehicleDocuments.id, id));
+      
+      if (!document) {
+        return res.status(404).json({ message: "Document not found" });
+      }
+      
+      // Create initial OCR entry
+      const [ocrResult] = await db.insert(documentOcrResults)
+        .values({
+          documentId: id,
+          processingStatus: 'processing',
+        })
+        .returning();
+      
+      // In a real application, this would be an async task
+      // For demonstration, we'll simulate OCR with mock extraction
+      setTimeout(async () => {
+        try {
+          // Mock OCR data extraction based on document type
+          let extractedData = {};
+          let confidence = 0.95;
+          
+          if (document.documentType === 'registration_certificate') {
+            extractedData = {
+              registrationNumber: document.documentNumber || 'REG-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
+              registrationDate: document.issuedDate || new Date().toISOString(),
+              expiryDate: document.expiryDate || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+              ownerName: "Vehicle Owner",
+              vehicleDetails: {
+                make: document.vehicle?.make || "Unknown Make",
+                model: document.vehicle?.model || "Unknown Model",
+                year: document.vehicle?.year || new Date().getFullYear(),
+                vin: "VIN" + Math.random().toString(36).substring(2, 10).toUpperCase()
+              }
+            };
+          } else if (document.documentType === 'insurance_policy') {
+            extractedData = {
+              policyNumber: document.documentNumber || 'POL-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
+              issueDate: document.issuedDate || new Date().toISOString(),
+              expiryDate: document.expiryDate || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+              insuranceProvider: document.issuedBy || "Sample Insurance Co.",
+              policyType: "Comprehensive",
+              coverageAmount: 1000000,
+              premium: 12000
+            };
+          } else {
+            extractedData = {
+              documentNumber: document.documentNumber || 'DOC-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
+              issueDate: document.issuedDate || new Date().toISOString(),
+              expiryDate: document.expiryDate || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+              issuedBy: document.issuedBy || "Issuing Authority"
+            };
+            confidence = 0.85;
+          }
+          
+          // Update OCR result
+          await db.update(documentOcrResults)
+            .set({
+              processedText: "Sample extracted text from document " + document.name,
+              extractedData,
+              confidence,
+              processingStatus: 'completed',
+              processingTime: 1500, // Mock processing time in milliseconds
+              updatedAt: new Date()
+            })
+            .where(eq(documentOcrResults.id, ocrResult.id));
+          
+        } catch (error) {
+          console.error("Error in OCR processing:", error);
+          await db.update(documentOcrResults)
+            .set({
+              processingStatus: 'failed',
+              errorMessage: error.message,
+              updatedAt: new Date()
+            })
+            .where(eq(documentOcrResults.id, ocrResult.id));
+        }
+      }, 2000); // Simulate 2-second processing time
+      
+      res.status(202).json({
+        message: "OCR processing started",
+        ocrResultId: ocrResult.id
+      });
+    } catch (error) {
+      console.error("Error initiating OCR:", error);
+      res.status(500).json({ message: "Error initiating OCR" });
+    }
+  });
+  
+  // Get OCR result for a document
+  apiRouter.get("/documents/:id/ocr", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      // Get latest OCR result for this document
+      const [ocrResult] = await db.select()
+        .from(documentOcrResults)
+        .where(eq(documentOcrResults.documentId, id))
+        .orderBy(desc(documentOcrResults.createdAt))
+        .limit(1);
+      
+      if (!ocrResult) {
+        return res.status(404).json({ message: "No OCR results found for this document" });
+      }
+      
+      res.json(ocrResult);
+    } catch (error) {
+      console.error("Error fetching OCR result:", error);
+      res.status(500).json({ message: "Error fetching OCR result" });
+    }
+  });
+  
+  // Apply OCR data to document
+  apiRouter.post("/documents/:id/apply-ocr", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { ocrResultId } = req.body;
+      
+      // Get the OCR result
+      const [ocrResult] = await db.select()
+        .from(documentOcrResults)
+        .where(eq(documentOcrResults.id, ocrResultId));
+      
+      if (!ocrResult) {
+        return res.status(404).json({ message: "OCR result not found" });
+      }
+      
+      if (ocrResult.processingStatus !== 'completed') {
+        return res.status(400).json({ message: `OCR processing not complete. Current status: ${ocrResult.processingStatus}` });
+      }
+      
+      // Extract data based on document type and apply it to the document
+      const extractedData = ocrResult.extractedData;
+      
+      // Prepare update data based on document type
+      const updateData: any = { updatedAt: new Date() };
+      
+      if (extractedData.documentNumber) {
+        updateData.documentNumber = extractedData.documentNumber;
+      }
+      
+      if (extractedData.issuedBy) {
+        updateData.issuedBy = extractedData.issuedBy;
+      }
+      
+      if (extractedData.expiryDate) {
+        updateData.expiryDate = new Date(extractedData.expiryDate);
+        updateData.hasExpiryDate = true;
+      }
+      
+      if (extractedData.issueDate) {
+        updateData.issuedDate = new Date(extractedData.issueDate);
+      }
+      
+      // Update the document with extracted data
+      const [updatedDocument] = await db.update(vehicleDocuments)
+        .set(updateData)
+        .where(eq(vehicleDocuments.id, id))
+        .returning();
+      
+      if (!updatedDocument) {
+        return res.status(404).json({ message: "Document not found" });
+      }
+      
+      res.json(updatedDocument);
+    } catch (error) {
+      console.error("Error applying OCR data:", error);
+      res.status(500).json({ message: "Error applying OCR data" });
+    }
+  });
+  
+  // Document Sharing
+  apiRouter.post("/documents/:id/share", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { sharedWithEmail, permission, expiryDate } = req.body;
+      
+      // Check if document exists
+      const [document] = await db.select()
+        .from(vehicleDocuments)
+        .where(eq(vehicleDocuments.id, id));
+      
+      if (!document) {
+        return res.status(404).json({ message: "Document not found" });
+      }
+      
+      // Generate secure access token (in reality, use a more secure method)
+      const accessToken = Math.random().toString(36).substring(2, 15) + 
+                          Math.random().toString(36).substring(2, 15);
+      
+      // Create share record
+      const [share] = await db.insert(documentShares)
+        .values({
+          documentId: id,
+          userId: 1, // Current user ID (placeholder)
+          sharedWithEmail,
+          permission: permission || "view",
+          accessToken,
+          expiryDate: expiryDate ? new Date(expiryDate) : undefined,
+          isActive: true
+        })
+        .returning();
+      
+      // Log the sharing activity
+      await db.insert(documentAccessLogs).values({
+        documentId: id,
+        userId: 1, // Current user ID (placeholder)
+        accessType: 'share',
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent']
+      });
+      
+      // In a real application, you would send an email with the share link
+      
+      res.status(201).json({
+        ...share,
+        shareUrl: `${req.protocol}://${req.get('host')}/api/shared-documents/${accessToken}`
+      });
+    } catch (error) {
+      console.error("Error sharing document:", error);
+      res.status(500).json({ message: "Error sharing document" });
+    }
+  });
+  
+  // Get document shares
+  apiRouter.get("/documents/:id/shares", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      const shares = await db.select()
+        .from(documentShares)
+        .where(eq(documentShares.documentId, id));
+      
+      res.json(shares);
+    } catch (error) {
+      console.error("Error fetching document shares:", error);
+      res.status(500).json({ message: "Error fetching document shares" });
+    }
+  });
+  
+  // Revoke document share
+  apiRouter.delete("/documents/shares/:shareId", async (req, res) => {
+    try {
+      const shareId = parseInt(req.params.shareId);
+      
+      const [share] = await db.update(documentShares)
+        .set({ isActive: false, updatedAt: new Date() })
+        .where(eq(documentShares.id, shareId))
+        .returning();
+      
+      if (!share) {
+        return res.status(404).json({ message: "Share not found" });
+      }
+      
+      res.status(200).json({ message: "Share revoked successfully" });
+    } catch (error) {
+      console.error("Error revoking share:", error);
+      res.status(500).json({ message: "Error revoking share" });
+    }
+  });
+  
+  // Access shared document
+  apiRouter.get("/shared-documents/:token", async (req, res) => {
+    try {
+      const token = req.params.token;
+      
+      // Find the share by token
+      const [share] = await db.select()
+        .from(documentShares)
+        .where(eq(documentShares.accessToken, token))
+        .where(eq(documentShares.isActive, true));
+      
+      if (!share) {
+        return res.status(404).json({ message: "Invalid or expired share link" });
+      }
+      
+      // Check if share has expired
+      if (share.expiryDate && new Date(share.expiryDate) < new Date()) {
+        return res.status(403).json({ message: "This share link has expired" });
+      }
+      
+      // Get the document
+      const [document] = await db.select()
+        .from(vehicleDocuments)
+        .where(eq(vehicleDocuments.id, share.documentId));
+      
+      if (!document) {
+        return res.status(404).json({ message: "Document not found" });
+      }
+      
+      // Update view count and last viewed
+      await db.update(documentShares)
+        .set({ 
+          viewCount: share.viewCount + 1,
+          lastViewed: new Date(),
+          updatedAt: new Date()
+        })
+        .where(eq(documentShares.id, share.id));
+      
+      // Log the access
+      await db.insert(documentAccessLogs).values({
+        documentId: document.id,
+        accessType: 'view',
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent'],
+        shareId: share.id
+      });
+      
+      res.json({
+        document,
+        shareInfo: {
+          permission: share.permission,
+          expiryDate: share.expiryDate
+        }
+      });
+    } catch (error) {
+      console.error("Error accessing shared document:", error);
+      res.status(500).json({ message: "Error accessing shared document" });
+    }
+  });
+  
+  // Document versions
+  apiRouter.post("/documents/:id/versions", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { fileUrl, fileSize, fileType, thumbnailUrl, changeDescription } = req.body;
+      
+      // Get document to ensure it exists and to get current version info
+      const [document] = await db.select()
+        .from(vehicleDocuments)
+        .where(eq(vehicleDocuments.id, id));
+      
+      if (!document) {
+        return res.status(404).json({ message: "Document not found" });
+      }
+      
+      // Get count of existing versions to determine version number
+      const versionCount = await db.select({ count: count() })
+        .from(documentVersions)
+        .where(eq(documentVersions.documentId, id));
+      
+      const versionNumber = (versionCount[0]?.count || 0) + 1;
+      
+      // Create new version
+      const [version] = await db.insert(documentVersions)
+        .values({
+          documentId: id,
+          versionNumber,
+          fileUrl: fileUrl || document.fileUrl,
+          fileSize: fileSize || document.fileSize,
+          fileType: fileType || document.fileType,
+          thumbnailUrl: thumbnailUrl || document.thumbnailUrl,
+          modifiedBy: 1, // Current user ID (placeholder)
+          changeDescription: changeDescription || `Version ${versionNumber}`,
+          metadata: {}
+        })
+        .returning();
+      
+      // Log the version creation
+      await db.insert(documentAccessLogs).values({
+        documentId: id,
+        userId: 1, // Current user ID (placeholder)
+        accessType: 'version',
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent']
+      });
+      
+      res.status(201).json(version);
+    } catch (error) {
+      console.error("Error creating document version:", error);
+      res.status(500).json({ message: "Error creating document version" });
+    }
+  });
+  
+  // Get document versions
+  apiRouter.get("/documents/:id/versions", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      const versions = await db.select()
+        .from(documentVersions)
+        .where(eq(documentVersions.documentId, id))
+        .orderBy(desc(documentVersions.versionNumber));
+      
+      res.json(versions);
+    } catch (error) {
+      console.error("Error fetching document versions:", error);
+      res.status(500).json({ message: "Error fetching document versions" });
+    }
+  });
+  
+  // Restore document version
+  apiRouter.post("/documents/:id/restore-version/:versionId", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const versionId = parseInt(req.params.versionId);
+      
+      // Get the version
+      const [version] = await db.select()
+        .from(documentVersions)
+        .where(eq(documentVersions.id, versionId));
+      
+      if (!version) {
+        return res.status(404).json({ message: "Version not found" });
+      }
+      
+      // Update document with version data
+      const [updatedDocument] = await db.update(vehicleDocuments)
+        .set({
+          fileUrl: version.fileUrl,
+          fileSize: version.fileSize,
+          fileType: version.fileType,
+          thumbnailUrl: version.thumbnailUrl,
+          updatedAt: new Date()
+        })
+        .where(eq(vehicleDocuments.id, id))
+        .returning();
+      
+      // Log the restoration
+      await db.insert(documentAccessLogs).values({
+        documentId: id,
+        userId: 1, // Current user ID (placeholder)
+        accessType: 'restore',
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent']
+      });
+      
+      res.json(updatedDocument);
+    } catch (error) {
+      console.error("Error restoring document version:", error);
+      res.status(500).json({ message: "Error restoring document version" });
+    }
+  });
+  
+  // Document notifications
+  apiRouter.get("/document-notifications", async (req, res) => {
+    try {
+      const notifications = await db.select()
+        .from(documentNotifications)
+        .where(eq(documentNotifications.userId, 1)) // Current user ID (placeholder)
+        .orderBy(desc(documentNotifications.createdAt))
+        .limit(50);
+      
+      res.json(notifications);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      res.status(500).json({ message: "Error fetching notifications" });
+    }
+  });
+  
+  // Mark notification as read
+  apiRouter.put("/document-notifications/:id/read", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      const [notification] = await db.update(documentNotifications)
+        .set({ isRead: true })
+        .where(eq(documentNotifications.id, id))
+        .returning();
+      
+      if (!notification) {
+        return res.status(404).json({ message: "Notification not found" });
+      }
+      
+      res.json(notification);
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+      res.status(500).json({ message: "Error marking notification as read" });
+    }
+  });
+  
+  // Create a notification for expiring documents
+  apiRouter.post("/documents/check-expiring", async (req, res) => {
+    try {
+      const today = new Date();
+      const thirtyDaysFromNow = new Date();
+      thirtyDaysFromNow.setDate(today.getDate() + 30);
+      
+      // Find documents expiring in the next 30 days
+      const expiringDocuments = await db.select()
+        .from(vehicleDocuments)
+        .where(
+          and(
+            eq(vehicleDocuments.status, 'active'),
+            eq(vehicleDocuments.hasExpiryDate, true),
+            not(isNull(vehicleDocuments.expiryDate)),
+            lte(vehicleDocuments.expiryDate, thirtyDaysFromNow),
+            gt(vehicleDocuments.expiryDate, today)
+          )
+        );
+      
+      // Create notifications for each
+      const notifications = [];
+      
+      for (const document of expiringDocuments) {
+        const expiryDate = new Date(document.expiryDate);
+        const daysUntilExpiry = Math.ceil((expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        
+        // Check if we should send notification based on reminderDays
+        if (daysUntilExpiry <= document.reminderDays && document.reminderEnabled) {
+          const [notification] = await db.insert(documentNotifications)
+            .values({
+              documentId: document.id,
+              userId: document.userId,
+              notificationType: 'expiry',
+              title: `Document Expiring Soon: ${document.name}`,
+              message: `Your document "${document.name}" will expire in ${daysUntilExpiry} days on ${expiryDate.toLocaleDateString()}.`,
+              isRead: false
+            })
+            .returning();
+          
+          notifications.push(notification);
+        }
+      }
+      
+      res.json({
+        expiringCount: expiringDocuments.length,
+        notificationsCreated: notifications.length,
+        notifications
+      });
+    } catch (error) {
+      console.error("Error checking expiring documents:", error);
+      res.status(500).json({ message: "Error checking expiring documents" });
     }
   });
 

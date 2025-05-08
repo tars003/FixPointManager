@@ -20,6 +20,21 @@ export const documentTypeEnum = pgEnum('document_type', [
   'other'
 ]);
 
+// Document verification status enum
+export const documentVerificationStatusEnum = pgEnum('document_verification_status', [
+  'unverified',
+  'pending',
+  'verified',
+  'rejected'
+]);
+
+// Document share permission enum
+export const documentSharePermissionEnum = pgEnum('document_share_permission', [
+  'view',
+  'edit',
+  'admin'
+]);
+
 // Export type for Arena Customization Platform
 export type VehicleCategory = 'two-wheeler' | 'three-wheeler' | 'four-wheeler' | 'special' | 'heavy-vehicle';
 
@@ -151,10 +166,265 @@ export const vehicleRelations = relations(vehicles, ({ many }) => ({
   documents: many(vehicleDocuments),
 }));
 
-export const vehicleDocumentRelations = relations(vehicleDocuments, ({ one }) => ({
+// Document Sharing schema
+export const documentShares = pgTable("document_shares", {
+  id: serial("id").primaryKey(),
+  documentId: integer("document_id").notNull(),
+  userId: integer("user_id").notNull(), // Document owner
+  sharedWithUserId: integer("shared_with_user_id"), // User it's shared with
+  sharedWithEmail: text("shared_with_email"), // Email for external sharing
+  permission: documentSharePermissionEnum("permission").default("view").notNull(),
+  accessToken: text("access_token"), // For secure external sharing
+  expiryDate: timestamp("expiry_date"), // When the share expires
+  viewCount: integer("view_count").default(0),
+  lastViewed: timestamp("last_viewed"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertDocumentShareSchema = createInsertSchema(documentShares).pick({
+  documentId: true,
+  userId: true,
+  sharedWithUserId: true,
+  sharedWithEmail: true,
+  permission: true,
+  accessToken: true,
+  expiryDate: true,
+  isActive: true,
+});
+
+// Document Version History schema
+export const documentVersions = pgTable("document_versions", {
+  id: serial("id").primaryKey(),
+  documentId: integer("document_id").notNull(),
+  versionNumber: integer("version_number").notNull(),
+  fileUrl: text("file_url"),
+  fileSize: integer("file_size"),
+  fileType: text("file_type"),
+  thumbnailUrl: text("thumbnail_url"),
+  modifiedBy: integer("modified_by").notNull(),
+  changeDescription: text("change_description"),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertDocumentVersionSchema = createInsertSchema(documentVersions).pick({
+  documentId: true,
+  versionNumber: true,
+  fileUrl: true,
+  fileSize: true,
+  fileType: true,
+  thumbnailUrl: true,
+  modifiedBy: true,
+  changeDescription: true,
+  metadata: true,
+});
+
+// Document Notifications schema
+export const documentNotifications = pgTable("document_notifications", {
+  id: serial("id").primaryKey(),
+  documentId: integer("document_id").notNull(),
+  userId: integer("user_id").notNull(),
+  notificationType: text("notification_type").notNull(), // expiry, update, share, verification
+  title: text("title").notNull(),
+  message: text("message").notNull(),
+  isRead: boolean("is_read").default(false),
+  emailSent: boolean("email_sent").default(false),
+  emailSentAt: timestamp("email_sent_at"),
+  scheduledFor: timestamp("scheduled_for"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertDocumentNotificationSchema = createInsertSchema(documentNotifications).pick({
+  documentId: true,
+  userId: true,
+  notificationType: true,
+  title: true,
+  message: true,
+  isRead: true,
+  emailSent: true,
+  emailSentAt: true,
+  scheduledFor: true,
+});
+
+// Document Template schema
+export const documentTemplates = pgTable("document_templates", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  documentType: documentTypeEnum("document_type").notNull(),
+  description: text("description"),
+  defaultName: text("default_name").notNull(),
+  hasExpiryDate: boolean("has_expiry_date").default(true),
+  reminderEnabled: boolean("reminder_enabled").default(true),
+  reminderDays: integer("reminder_days").default(30),
+  requiredFields: jsonb("required_fields").default([]),
+  templateSchema: jsonb("template_schema").default({}),
+  createdBy: integer("created_by").notNull(),
+  isPublic: boolean("is_public").default(false),
+  category: text("category"),
+  tags: text("tags").array(),
+  previewImage: text("preview_image"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertDocumentTemplateSchema = createInsertSchema(documentTemplates).pick({
+  name: true,
+  documentType: true,
+  description: true,
+  defaultName: true,
+  hasExpiryDate: true,
+  reminderEnabled: true,
+  reminderDays: true,
+  requiredFields: true,
+  templateSchema: true,
+  createdBy: true,
+  isPublic: true,
+  category: true,
+  tags: true,
+  previewImage: true,
+});
+
+// Document OCR Results schema
+export const documentOcrResults = pgTable("document_ocr_results", {
+  id: serial("id").primaryKey(),
+  documentId: integer("document_id").notNull(),
+  processedText: text("processed_text"),
+  extractedData: jsonb("extracted_data").default({}),
+  confidence: decimal("confidence", { precision: 5, scale: 2 }),
+  processingStatus: text("processing_status").default("pending").notNull(), // pending, processing, completed, failed
+  errorMessage: text("error_message"),
+  processingTime: integer("processing_time"), // Time in milliseconds
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertDocumentOcrResultSchema = createInsertSchema(documentOcrResults).pick({
+  documentId: true,
+  processedText: true,
+  extractedData: true,
+  confidence: true,
+  processingStatus: true,
+  errorMessage: true,
+  processingTime: true,
+});
+
+// Document Verification Results schema
+export const documentVerifications = pgTable("document_verifications", {
+  id: serial("id").primaryKey(),
+  documentId: integer("document_id").notNull(),
+  verificationStatus: documentVerificationStatusEnum("verification_status").default("unverified").notNull(),
+  verifiedBy: integer("verified_by"), // User ID for manual verification
+  verificationDate: timestamp("verification_date"),
+  verificationMethod: text("verification_method"), // manual, automated, blockchain
+  verificationDetails: jsonb("verification_details").default({}),
+  digitalSignature: text("digital_signature"), // For blockchain or cryptographic verification
+  verificationExpiry: timestamp("verification_expiry"), // When verification expires
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertDocumentVerificationSchema = createInsertSchema(documentVerifications).pick({
+  documentId: true,
+  verificationStatus: true,
+  verifiedBy: true,
+  verificationDate: true,
+  verificationMethod: true,
+  verificationDetails: true,
+  digitalSignature: true,
+  verificationExpiry: true,
+});
+
+// Document Access Logs schema
+export const documentAccessLogs = pgTable("document_access_logs", {
+  id: serial("id").primaryKey(),
+  documentId: integer("document_id").notNull(),
+  userId: integer("user_id"), // Null for anonymous access
+  accessType: text("access_type").notNull(), // view, download, edit, share, delete
+  accessTimestamp: timestamp("access_timestamp").defaultNow().notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  deviceInfo: jsonb("device_info").default({}),
+  shareId: integer("share_id"), // Reference to share if accessed via shared link
+  accessLocation: jsonb("access_location").default({}), // Geolocation data if available
+});
+
+export const insertDocumentAccessLogSchema = createInsertSchema(documentAccessLogs).pick({
+  documentId: true,
+  userId: true,
+  accessType: true,
+  accessTimestamp: true,
+  ipAddress: true,
+  userAgent: true,
+  deviceInfo: true,
+  shareId: true,
+  accessLocation: true,
+});
+
+// Enhanced Document Relations
+export const vehicleDocumentRelations = relations(vehicleDocuments, ({ one, many }) => ({
   vehicle: one(vehicles, {
     fields: [vehicleDocuments.vehicleId],
     references: [vehicles.id],
+  }),
+  shares: many(documentShares),
+  versions: many(documentVersions),
+  notifications: many(documentNotifications),
+  ocrResults: many(documentOcrResults),
+  verifications: many(documentVerifications),
+  accessLogs: many(documentAccessLogs),
+}));
+
+// Document Shares Relations
+export const documentSharesRelations = relations(documentShares, ({ one }) => ({
+  document: one(vehicleDocuments, {
+    fields: [documentShares.documentId],
+    references: [vehicleDocuments.id],
+  }),
+}));
+
+// Document Versions Relations
+export const documentVersionsRelations = relations(documentVersions, ({ one }) => ({
+  document: one(vehicleDocuments, {
+    fields: [documentVersions.documentId],
+    references: [vehicleDocuments.id],
+  }),
+}));
+
+// Document Notifications Relations
+export const documentNotificationsRelations = relations(documentNotifications, ({ one }) => ({
+  document: one(vehicleDocuments, {
+    fields: [documentNotifications.documentId],
+    references: [vehicleDocuments.id],
+  }),
+}));
+
+// Document OCR Results Relations
+export const documentOcrResultsRelations = relations(documentOcrResults, ({ one }) => ({
+  document: one(vehicleDocuments, {
+    fields: [documentOcrResults.documentId],
+    references: [vehicleDocuments.id],
+  }),
+}));
+
+// Document Verification Results Relations
+export const documentVerificationsRelations = relations(documentVerifications, ({ one }) => ({
+  document: one(vehicleDocuments, {
+    fields: [documentVerifications.documentId],
+    references: [vehicleDocuments.id],
+  }),
+}));
+
+// Document Access Logs Relations
+export const documentAccessLogsRelations = relations(documentAccessLogs, ({ one }) => ({
+  document: one(vehicleDocuments, {
+    fields: [documentAccessLogs.documentId],
+    references: [vehicleDocuments.id],
+  }),
+  share: one(documentShares, {
+    fields: [documentAccessLogs.shareId],
+    references: [documentShares.id],
   }),
 }));
 
@@ -1002,3 +1272,25 @@ export type OrderItem = typeof orderItems.$inferSelect;
 export type InsertOrderItem = typeof orderItems.$inferInsert;
 export type PaymentIntent = typeof paymentIntents.$inferSelect;
 export type InsertPaymentIntent = typeof paymentIntents.$inferInsert;
+
+// Document-related types
+export type DocumentShare = typeof documentShares.$inferSelect;
+export type InsertDocumentShare = z.infer<typeof insertDocumentShareSchema>;
+
+export type DocumentVersion = typeof documentVersions.$inferSelect;
+export type InsertDocumentVersion = z.infer<typeof insertDocumentVersionSchema>;
+
+export type DocumentNotification = typeof documentNotifications.$inferSelect;
+export type InsertDocumentNotification = z.infer<typeof insertDocumentNotificationSchema>;
+
+export type DocumentTemplate = typeof documentTemplates.$inferSelect;
+export type InsertDocumentTemplate = z.infer<typeof insertDocumentTemplateSchema>;
+
+export type DocumentOcrResult = typeof documentOcrResults.$inferSelect;
+export type InsertDocumentOcrResult = z.infer<typeof insertDocumentOcrResultSchema>;
+
+export type DocumentVerification = typeof documentVerifications.$inferSelect;
+export type InsertDocumentVerification = z.infer<typeof insertDocumentVerificationSchema>;
+
+export type DocumentAccessLog = typeof documentAccessLogs.$inferSelect;
+export type InsertDocumentAccessLog = z.infer<typeof insertDocumentAccessLogSchema>;
