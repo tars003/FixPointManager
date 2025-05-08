@@ -484,15 +484,15 @@ const PremiumArena: React.FC = () => {
         try {
           // Find the actual part data for each selected part
           const loadedParts = projectData.selectedParts
-            .map(selectedPart => {
+            .map((selectedPart: {partId: number}) => {
               return mockParts.find(part => part.id === selectedPart.partId);
             })
-            .filter(part => part !== undefined) as CustomizationPartData[];
+            .filter((part: CustomizationPartData | undefined) => part !== undefined) as CustomizationPartData[];
           
           setSelectedParts(loadedParts);
           
           // Update vehicle configuration
-          const parts: CustomizationPartInstance[] = projectData.selectedParts.map(selectedPart => {
+          const parts: CustomizationPartInstance[] = projectData.selectedParts.map((selectedPart: {partId: number, position?: Vector3D}) => {
             return {
               id: `part-${selectedPart.partId}`,
               partId: selectedPart.partId,
@@ -572,7 +572,7 @@ const PremiumArena: React.FC = () => {
         totalPrice: vehicle.basePrice || 0,
         customizations: {
           baseVehicleId: vehicle.id as number,
-          baseColor: vehicle.baseColor || '#1E3A8A',
+          baseColor: '#1E3A8A', // Default blue color
           parts: []
         },
         selectedParts: [],
