@@ -55,6 +55,9 @@ import { formatDate, formatRelativeTime } from '@/lib/format';
 import { apiRequest } from '@/lib/queryClient';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { PageHeader } from '@/components/ui/page-header';
+import { DocumentScanner } from '@/components/documents/DocumentScanner';
+import { DocumentRecommendations } from '@/components/documents/DocumentRecommendations';
+import { DocumentAnnotation } from '@/components/documents/DocumentAnnotation';
 
 // Define document types that match the backend
 type DocumentType = 
@@ -152,6 +155,9 @@ const DocumentVault: React.FC = () => {
   const [isAddDocumentOpen, setIsAddDocumentOpen] = useState<boolean>(false);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   const [isViewDocumentOpen, setIsViewDocumentOpen] = useState<boolean>(false);
+  const [showAdvancedFeatures, setShowAdvancedFeatures] = useState<boolean>(false);
+  const [isDocumentScannerOpen, setIsDocumentScannerOpen] = useState<boolean>(false);
+  const [scannedDocumentData, setScannedDocumentData] = useState<any>(null);
   
   // Form data
   const [formData, setFormData] = useState<DocumentFormData>({
@@ -398,6 +404,36 @@ const DocumentVault: React.FC = () => {
       reminderEnabled: true,
       reminderDays: 30
     });
+    setScannedDocumentData(null);
+  };
+  
+  // Handle document scan completion
+  const handleScanComplete = (data: any) => {
+    setScannedDocumentData(data);
+    setIsDocumentScannerOpen(false);
+    
+    // Pre-fill form with scanned data
+    if (data && data.extractedData) {
+      const extractedData = data.extractedData;
+      
+      setFormData(prev => ({
+        ...prev,
+        name: data.suggestedName || prev.name,
+        documentType: data.detectedType || prev.documentType,
+        documentNumber: extractedData.documentNumber || prev.documentNumber,
+        issuedBy: extractedData.issuedBy || prev.issuedBy,
+        issuedDate: extractedData.issuedDate || extractedData.issueDate || prev.issuedDate,
+        expiryDate: extractedData.expiryDate || prev.expiryDate,
+        hasExpiryDate: !!extractedData.expiryDate,
+      }));
+      
+      setIsAddDocumentOpen(true);
+      
+      toast({
+        title: "Document scanned successfully",
+        description: "The form has been pre-filled with the extracted data. Please review and submit.",
+      });
+    }
   };
   
   // Handle form input changes
