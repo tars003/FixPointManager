@@ -573,19 +573,24 @@ const Arena: React.FC = () => {
               Share
             </Button>
             <ProjectControls
-              projectId={projectId}
-              currentStep={activeTab === 'vehicle-selection' ? 1 : activeTab === 'customization' ? 2 : activeTab === 'performance' ? 3 : 4}
-              totalSteps={4}
-              onSave={handleSaveProject}
-              onResume={handleResumeProject}
-              vehicleModel={selectedVehicle?.name}
-              customizations={{
-                bodyKit: selectedBodyKit !== 'stock' ? bodyKitOptions.find(kit => kit.id === selectedBodyKit)?.name : 'Stock',
-                spoiler: selectedSpoiler !== 'none' ? spoilerOptions.find(spoiler => spoiler.id === selectedSpoiler)?.name : 'None',
-                color: vehicleColor,
-                finish: colorFinish,
-                itemCount: cartItems.length
+              onSave={() => {
+                const projectNameVal = (typeof projectName === 'string' ? projectName : '') || 'My Custom Project';
+                const projectDescVal = (typeof projectDesc === 'string' ? projectDesc : '') || 'Personal customization project';
+                handleSaveProject(projectNameVal, projectDescVal);
               }}
+              onShare={() => {
+                toast({
+                  title: 'Share Feature',
+                  description: 'Share functionality will be implemented soon.',
+                });
+              }}
+              onExport={() => {
+                toast({
+                  title: 'Export Feature',
+                  description: 'Export functionality will be implemented soon.',
+                });
+              }}
+              totalPrice={calculateTotalPrice()}
             />
           </div>
         </motion.div>

@@ -15,7 +15,9 @@ import {
   MousePointer,
   Heart,
   User,
-  Car
+  Car,
+  CheckCircle,
+  XCircle
 } from 'lucide-react';
 
 import ArenaWrapper from '@/components/arena/ArenaWrapper';

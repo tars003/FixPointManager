@@ -13,19 +13,25 @@ interface CartItem {
 }
 
 interface CartPanelProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
   items: CartItem[];
   onRemoveItem: (itemId: string) => void;
-  formatPrice: (price: number) => string;
+  onCheckout?: () => void;
+  likedItems?: string[];
+  onToggleLike?: (id: string) => void;
+  formatPrice?: (price: number) => string;
 }
 
 const CartPanel: React.FC<CartPanelProps> = ({
-  isOpen,
-  onClose,
+  isOpen = false,
+  onClose = () => {},
   items,
   onRemoveItem,
-  formatPrice
+  onCheckout = () => {},
+  likedItems = [],
+  onToggleLike = () => {},
+  formatPrice = (price) => `₹${price.toLocaleString('en-IN')}`
 }) => {
   // Calculate totals
   const subtotal = items.reduce((total, item) => total + item.price, 0);
@@ -134,6 +140,7 @@ const CartPanel: React.FC<CartPanelProps> = ({
                 
                 <Button 
                   className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                  onClick={onCheckout}
                 >
                   Proceed to Checkout
                   <ChevronRight className="h-4 w-4 ml-2" />
