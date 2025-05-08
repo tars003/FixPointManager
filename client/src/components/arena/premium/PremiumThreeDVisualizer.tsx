@@ -223,8 +223,8 @@ const PremiumThreeDVisualizer: React.FC<PremiumThreeDVisualizerProps> = ({
   const performanceSettings = {
     low: { shadows: false, pixelRatio: 1 },
     medium: { shadows: true, pixelRatio: 1.5 },
-    high: { shadows: true, pixelRatio: 2 },
-    ultra: { shadows: true, pixelRatio: window.devicePixelRatio }
+    high: { shadows: true, pixelRatio: 1.5 }, // Reduced from 2 to avoid performance issues
+    ultra: { shadows: true, pixelRatio: 1.75 } // Fixed value instead of dynamic window.devicePixelRatio
   }[quality];
   
   return (

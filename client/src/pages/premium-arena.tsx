@@ -364,6 +364,19 @@ const PremiumArena: React.FC = () => {
       });
       return;
     }
+    
+    // On vehicle selection step with a vehicle selected, go directly to exterior
+    if (currentStep === 'vehicle' && selectedVehicle) {
+      setCurrentStep('exterior');
+      // Update category to match
+      setSelectedCategory('exterior');
+      setSelectedSubcategory('paint');
+      toast({
+        title: "Exterior Customization",
+        description: "Now you can customize the exterior of your vehicle"
+      });
+      return;
+    }
 
     const currentIndex = CUSTOMIZATION_STEPS.findIndex(step => step.id === currentStep);
     if (currentIndex < CUSTOMIZATION_STEPS.length - 1) {
@@ -858,6 +871,50 @@ const PremiumArena: React.FC = () => {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-bold text-gray-900">Select Your Vehicle</h2>
+                </div>
+                
+                {/* Premium Features Section */}
+                <div className="grid grid-cols-1 gap-6 mb-8">
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-6 shadow-sm">
+                    <h3 className="text-lg font-semibold text-blue-900 mb-4">Premium Features</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="bg-white rounded-lg p-4 shadow-sm border border-blue-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="p-2 bg-blue-100 rounded-md text-blue-700">
+                            <Settings size={18} />
+                          </div>
+                          <h4 className="font-medium text-blue-900">Drag & Drop Editor</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Intuitive interface for positioning and adjusting vehicle parts with real-time updates.
+                        </p>
+                      </div>
+                      
+                      <div className="bg-white rounded-lg p-4 shadow-sm border border-blue-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="p-2 bg-blue-100 rounded-md text-blue-700">
+                            <Camera size={18} />
+                          </div>
+                          <h4 className="font-medium text-blue-900">3D Visualization</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Interactive 3D models with realistic lighting and environmental controls.
+                        </p>
+                      </div>
+                      
+                      <div className="bg-white rounded-lg p-4 shadow-sm border border-blue-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="p-2 bg-blue-100 rounded-md text-blue-700">
+                            <HelpCircle size={18} />
+                          </div>
+                          <h4 className="font-medium text-blue-900">Smart Recommendations</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Personalized vehicle and part suggestions based on your preferences and style.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 
                 {isVehiclesLoading ? (
