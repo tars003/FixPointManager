@@ -204,3 +204,4 @@ export interface ApiError {
 export type ProjectData = z.infer<typeof customizationProjectSchema>;
 export type VehicleModelData = z.infer<typeof vehicleModelSchema>;
 export type CustomizationPartData = z.infer<typeof customizationPartSchema>;
+export type CustomizationProject = z.infer<typeof customizationProjectSchema>;

@@ -456,6 +456,19 @@ function Router() {
               </motion.div>
             )}
           </Route>
+          <Route path="/arena/premium/:id?">
+            {(params) => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <PremiumArena />
+              </motion.div>
+            )}
+          </Route>
           <Route path="/animation-demo">
             {() => (
               <motion.div
