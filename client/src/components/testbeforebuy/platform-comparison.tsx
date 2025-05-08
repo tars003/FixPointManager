@@ -49,7 +49,7 @@ const testimonials = [
     name: 'Rahul M.',
     avatar: 'RM',
     vehicle: 'Purchased Kia Seltos',
-    comment: 'AutoVista saved me so much time. I compared 5 SUVs easily and found the perfect one for my family.',
+    comment: 'TestBeforeBuy saved me so much time. I compared 5 SUVs easily and found the perfect one for my family.',
     rating: 5
   },
   {
@@ -63,7 +63,7 @@ const testimonials = [
     name: 'Amit K.',
     avatar: 'AK',
     vehicle: 'Bought Tata Nexon',
-    comment: 'The financial calculator was spot-on. My EMI is exactly what AutoVista predicted.',
+    comment: 'The financial calculator was spot-on. My EMI is exactly what TestBeforeBuy predicted.',
     rating: 4
   }
 ];
@@ -127,8 +127,8 @@ const PlatformComparison: React.FC<PlatformComparisonProps> = ({ isPreowned = fa
           <div>
             <h2 className="text-2xl font-bold text-center md:text-left">
               {isPreowned 
-                ? "Why AutoVista is India's #1 Pre-owned Vehicle Platform" 
-                : "Why AutoVista is India's #1 Vehicle Discovery Platform"}
+                ? "Why TestBeforeBuy is India's #1 Pre-owned Vehicle Platform" 
+                : "Why TestBeforeBuy is India's #1 Vehicle Discovery Platform"}
             </h2>
           </div>
         </div>
@@ -146,9 +146,9 @@ const PlatformComparison: React.FC<PlatformComparisonProps> = ({ isPreowned = fa
               <thead>
                 <tr className="border-b-2 border-neutral-200">
                   <th className="py-3 text-left font-medium">Feature</th>
-                  <th className="py-3 text-left font-medium text-primary">AutoVista</th>
+                  <th className="py-3 text-left font-medium text-primary">TestBeforeBuy</th>
                   <th className="py-3 text-left font-medium text-neutral-500">Other Platforms</th>
-                  <th className="py-3 text-left font-medium text-primary">AutoVista Advantage</th>
+                  <th className="py-3 text-left font-medium text-primary">TestBeforeBuy Advantage</th>
                 </tr>
               </thead>
               <tbody>
