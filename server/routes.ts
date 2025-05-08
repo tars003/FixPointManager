@@ -983,8 +983,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   apiRouter.put("/documents/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
+      
+      // Convert date strings to Date objects
+      const updateData = { ...req.body };
+      if (updateData.expiryDate) {
+        updateData.expiryDate = new Date(updateData.expiryDate);
+      }
+      if (updateData.issuedDate) {
+        updateData.issuedDate = new Date(updateData.issuedDate);
+      }
+      
+      // Add updatedAt timestamp
+      updateData.updatedAt = new Date();
+      
       const [updatedDocument] = await db.update(vehicleDocuments)
-        .set(req.body)
+        .set(updateData)
         .where(eq(vehicleDocuments.id, id))
         .returning();
       
