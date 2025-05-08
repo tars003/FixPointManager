@@ -205,8 +205,95 @@ export interface ApiError {
   details?: any;
 }
 
+// Order and checkout schemas
+export const orderStatusEnum = z.enum([
+  'created', 
+  'payment_pending', 
+  'payment_failed', 
+  'payment_completed', 
+  'processing', 
+  'ready_for_pickup', 
+  'shipped', 
+  'delivered', 
+  'cancelled', 
+  'refunded'
+]);
+
+export const orderItemSchema = z.object({
+  id: z.number().optional(),
+  orderId: z.number().optional(),
+  itemType: z.enum(['vehicle', 'part', 'service']),
+  itemId: z.number(),
+  name: z.string(),
+  description: z.string().optional(),
+  quantity: z.number().min(1).default(1),
+  unitPrice: z.number().min(0),
+  totalPrice: z.number().min(0),
+  currency: z.string().default('INR'),
+  thumbnailUrl: z.string().url().optional(),
+  metadata: z.record(z.any()).optional(),
+});
+
+export const orderSchema = z.object({
+  id: z.number().optional(),
+  userId: z.number(),
+  projectId: z.number().optional(),
+  orderNumber: z.string().optional(),
+  status: orderStatusEnum.default('created'),
+  subtotal: z.number().min(0),
+  tax: z.number().min(0).default(0),
+  shipping: z.number().min(0).default(0),
+  discount: z.number().min(0).default(0),
+  totalAmount: z.number().min(0),
+  currency: z.string().default('INR'),
+  paymentMethod: z.string().optional(),
+  paymentId: z.string().optional(),
+  shippingAddress: z.object({
+    name: z.string().optional(),
+    street: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    postalCode: z.string().optional(),
+    country: z.string().optional(),
+    phone: z.string().optional(),
+  }).optional(),
+  billingAddressSameAsShipping: z.boolean().default(true),
+  billingAddress: z.object({
+    name: z.string().optional(),
+    street: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    postalCode: z.string().optional(),
+    country: z.string().optional(),
+    phone: z.string().optional(),
+  }).optional(),
+  notes: z.string().optional(),
+  estimatedDeliveryDate: z.date().optional(),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
+  items: z.array(orderItemSchema).optional(),
+});
+
+// A condensed schema for payment intents
+export const paymentIntentSchema = z.object({
+  id: z.string().optional(),
+  orderId: z.number(),
+  clientSecret: z.string().optional(),
+  amount: z.number().min(0),
+  currency: z.string().default('INR'),
+  status: z.enum(['created', 'processing', 'succeeded', 'failed', 'cancelled']).default('created'),
+  paymentMethod: z.string().optional(),
+  metadata: z.record(z.any()).optional(),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
+});
+
 // Export types for use in components
 export type ProjectData = z.infer<typeof customizationProjectSchema>;
 export type VehicleModelData = z.infer<typeof vehicleModelSchema>;
 export type CustomizationPartData = z.infer<typeof customizationPartSchema>;
 export type CustomizationProject = z.infer<typeof customizationProjectSchema>;
+export type OrderStatus = z.infer<typeof orderStatusEnum>;
+export type OrderItem = z.infer<typeof orderItemSchema>;
+export type Order = z.infer<typeof orderSchema>;
+export type PaymentIntent = z.infer<typeof paymentIntentSchema>;
