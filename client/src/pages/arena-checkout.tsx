@@ -199,7 +199,7 @@ const ArenaCheckout = () => {
     const orderItems: Partial<OrderItem>[] = [
       // Add vehicle as order item if selected
       ...(selectedVehicle ? [{
-        itemType: 'vehicle',
+        itemType: 'vehicle' as const,
         itemId: selectedVehicle.id as number,
         name: `${selectedVehicle.manufacturer} ${selectedVehicle.name}`,
         description: `Base vehicle - ${selectedVehicle.year}`,
@@ -211,7 +211,7 @@ const ArenaCheckout = () => {
       
       // Add customization parts
       ...cartItems.map(part => ({
-        itemType: 'part',
+        itemType: 'part' as const,
         itemId: part.id as number,
         name: part.name,
         description: `${part.category} - ${part.subcategory}`,

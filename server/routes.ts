@@ -17,6 +17,7 @@ import {
   insertVehicleModelSchema,
   insertCustomizationPartSchema
 } from "@shared/schema";
+import { registerOrderRoutes } from "./api/orders";
 import { resetDashboardModules } from "../client/src/services/dashboardPreferences";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -903,6 +904,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create server
+  // Register order routes (checkout process)
+  registerOrderRoutes(app);
+  
   const httpServer = createServer(app);
   
   // Set up WebSocket server
