@@ -67,6 +67,13 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
@@ -909,9 +916,9 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                   <div>
                     <h4 className="text-sm font-medium mb-1">Status</h4>
                     <Select
-                      value={project.status}
+                      value={project.status || "in-progress"}
                       disabled={!isOwner}
-                      onValueChange={(value) => {
+                      onValueChange={(value: string) => {
                         if (isOwner) onSave({ status: value as 'draft' | 'in-progress' | 'completed' });
                       }}
                     >
@@ -929,9 +936,9 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                   <div>
                     <h4 className="text-sm font-medium mb-1">Visibility</h4>
                     <Select
-                      value={project.visibility}
+                      value={project.visibility || "private"}
                       disabled={!isOwner}
-                      onValueChange={(value) => {
+                      onValueChange={(value: string) => {
                         if (isOwner) onSave({ visibility: value as 'private' | 'public' | 'shared' });
                       }}
                     >
