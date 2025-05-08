@@ -192,7 +192,7 @@ const PremiumArena: React.FC = () => {
 
   // Filtered parts based on selected category and subcategory
   const filteredParts = customizationParts.filter(
-    part => part.category === selectedCategory && 
+    (part: CustomizationPartData) => part.category === selectedCategory && 
            (!selectedSubcategory || part.subcategory === selectedSubcategory)
   );
 
@@ -235,7 +235,7 @@ const PremiumArena: React.FC = () => {
       
       // If we have a vehicle ID, find that vehicle from our API data
       if (projectData.vehicleId) {
-        const vehicle = vehicleModels.find(v => v.id === projectData.vehicleId);
+        const vehicle = vehicleModels.find((v: VehicleModelData) => v.id === projectData.vehicleId);
         if (vehicle) {
           setSelectedVehicle(vehicle);
           
@@ -252,7 +252,7 @@ const PremiumArena: React.FC = () => {
           // Find the actual part data for each selected part
           const loadedParts = projectData.selectedParts
             .map((selectedPart: {partId: number}) => {
-              return customizationParts.find(part => part.id === selectedPart.partId);
+              return customizationParts.find((part: CustomizationPartData) => part.id === selectedPart.partId);
             })
             .filter((part: CustomizationPartData | undefined) => part !== undefined) as CustomizationPartData[];
           
