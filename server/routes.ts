@@ -18,13 +18,21 @@ import {
   insertVehicleModelSchema,
   insertCustomizationPartSchema,
   vehicleDocuments,
-  insertVehicleDocumentSchema
+  insertVehicleDocumentSchema,
+  // Advanced document features
+  documentShares,
+  documentVersions,
+  documentNotifications,
+  documentTemplates,
+  documentOcrResults,
+  documentVerifications,
+  documentAccessLogs
 } from "@shared/schema";
 import { registerOrderRoutes } from "./api/orders";
 import { resetDashboardModules } from "../client/src/services/dashboardPreferences";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, not, isNull, gt, gte, lte, lt, desc, count } from "drizzle-orm";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const apiRouter = express.Router();
@@ -1082,38 +1090,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // For demonstration, we'll simulate OCR with mock extraction
       setTimeout(async () => {
         try {
+          // Get the associated vehicle information
+          const [vehicle] = await db.select()
+            .from(vehicles)
+            .where(eq(vehicles.id, document.vehicleId));
+            
+          // Define interfaces for document extraction types
+          interface BaseExtractedData {
+            documentNumber?: string;
+            issuedDate?: string;
+            expiryDate?: string;
+            issuedBy?: string;
+          }
+          
+          interface RegistrationExtractedData extends BaseExtractedData {
+            registrationNumber: string;
+            registrationDate: string;
+            ownerName: string;
+            vehicleDetails: {
+              make: string;
+              model: string;
+              year: number;
+              vin: string;
+            };
+          }
+          
+          interface InsuranceExtractedData extends BaseExtractedData {
+            policyNumber: string;
+            issueDate: string;
+            expiryDate: string;
+            insuranceProvider: string;
+            policyType: string;
+            coverageAmount: number;
+            premium: number;
+          }
+          
           // Mock OCR data extraction based on document type
-          let extractedData = {};
+          let extractedData: BaseExtractedData = {};
           let confidence = 0.95;
           
           if (document.documentType === 'registration_certificate') {
-            extractedData = {
+            const regData: RegistrationExtractedData = {
               registrationNumber: document.documentNumber || 'REG-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
-              registrationDate: document.issuedDate || new Date().toISOString(),
-              expiryDate: document.expiryDate || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+              registrationDate: document.issuedDate?.toISOString() || new Date().toISOString(),
+              expiryDate: document.expiryDate?.toISOString() || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
               ownerName: "Vehicle Owner",
               vehicleDetails: {
-                make: document.vehicle?.make || "Unknown Make",
-                model: document.vehicle?.model || "Unknown Model",
-                year: document.vehicle?.year || new Date().getFullYear(),
+                make: vehicle?.make || "Unknown Make",
+                model: vehicle?.model || "Unknown Model",
+                year: vehicle?.year || new Date().getFullYear(),
                 vin: "VIN" + Math.random().toString(36).substring(2, 10).toUpperCase()
               }
             };
+            extractedData = regData;
           } else if (document.documentType === 'insurance_policy') {
-            extractedData = {
+            const insData: InsuranceExtractedData = {
               policyNumber: document.documentNumber || 'POL-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
-              issueDate: document.issuedDate || new Date().toISOString(),
-              expiryDate: document.expiryDate || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+              issueDate: document.issuedDate?.toISOString() || new Date().toISOString(),
+              expiryDate: document.expiryDate?.toISOString() || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
               insuranceProvider: document.issuedBy || "Sample Insurance Co.",
               policyType: "Comprehensive",
               coverageAmount: 1000000,
               premium: 12000
             };
+            extractedData = insData;
           } else {
             extractedData = {
               documentNumber: document.documentNumber || 'DOC-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
-              issueDate: document.issuedDate || new Date().toISOString(),
-              expiryDate: document.expiryDate || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+              issuedDate: document.issuedDate?.toISOString() || new Date().toISOString(),
+              expiryDate: document.expiryDate?.toISOString() || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
               issuedBy: document.issuedBy || "Issuing Authority"
             };
             confidence = 0.85;
@@ -1126,17 +1171,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
               extractedData,
               confidence,
               processingStatus: 'completed',
-              processingTime: 1500, // Mock processing time in milliseconds
+              processingTime: "1500", // Mock processing time in milliseconds (stored as string)
               updatedAt: new Date()
             })
             .where(eq(documentOcrResults.id, ocrResult.id));
           
-        } catch (error) {
+        } catch (error: any) {
           console.error("Error in OCR processing:", error);
           await db.update(documentOcrResults)
             .set({
               processingStatus: 'failed',
-              errorMessage: error.message,
+              errorMessage: error.message || "Unknown error during OCR processing",
               updatedAt: new Date()
             })
             .where(eq(documentOcrResults.id, ocrResult.id));
@@ -1196,25 +1241,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Extract data based on document type and apply it to the document
-      const extractedData = ocrResult.extractedData;
+      // Define the structure of extracted data
+      interface BaseExtractedData {
+        documentNumber?: string;
+        issuedBy?: string;
+        expiryDate?: string;
+        issueDate?: string;
+      }
+      
+      // Extract and type cast the data
+      const extractedData = ocrResult.extractedData as BaseExtractedData;
       
       // Prepare update data based on document type
       const updateData: any = { updatedAt: new Date() };
       
-      if (extractedData.documentNumber) {
+      if (extractedData?.documentNumber) {
         updateData.documentNumber = extractedData.documentNumber;
       }
       
-      if (extractedData.issuedBy) {
+      if (extractedData?.issuedBy) {
         updateData.issuedBy = extractedData.issuedBy;
       }
       
-      if (extractedData.expiryDate) {
+      if (extractedData?.expiryDate) {
         updateData.expiryDate = new Date(extractedData.expiryDate);
         updateData.hasExpiryDate = true;
       }
       
-      if (extractedData.issueDate) {
+      if (extractedData?.issueDate) {
         updateData.issuedDate = new Date(extractedData.issueDate);
       }
       
@@ -1330,11 +1384,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const token = req.params.token;
       
-      // Find the share by token
+      // Find the share by token using two separate conditions in a single where clause
       const [share] = await db.select()
         .from(documentShares)
-        .where(eq(documentShares.accessToken, token))
-        .where(eq(documentShares.isActive, true));
+        .where(and(
+          eq(documentShares.accessToken, token),
+          eq(documentShares.isActive, true)
+        ));
       
       if (!share) {
         return res.status(404).json({ message: "Invalid or expired share link" });
