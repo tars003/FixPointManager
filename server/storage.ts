@@ -127,6 +127,42 @@ export class MemStorage implements IStorage {
     };
     this.createUser(demoUser);
     
+    // Create sample vehicles for demo user
+    const sampleVehicles: InsertVehicle[] = [
+      {
+        userId: 1,
+        name: "My BMW",
+        make: "BMW",
+        model: "5 Series",
+        year: 2022,
+        licensePlate: "MH01AB1234",
+        vin: "WBAJB0C51JB084264",
+        color: "Black",
+        mileage: 15000,
+        fuelType: "Petrol",
+        transmission: "Automatic",
+        status: "active",
+        imageUrl: "https://images.unsplash.com/photo-1523983388277-336a66bf9bcd?q=80&w=1000&auto=format&fit=crop"
+      },
+      {
+        userId: 1,
+        name: "Family Car",
+        make: "Audi",
+        model: "Q7",
+        year: 2021,
+        licensePlate: "MH02CD5678",
+        vin: "WAUZZZ4L6JD005620",
+        color: "White",
+        mileage: 22000,
+        fuelType: "Diesel",
+        transmission: "Automatic",
+        status: "active",
+        imageUrl: "https://images.unsplash.com/photo-1606152536277-5aa1fd33f526?q=80&w=1000&auto=format&fit=crop"
+      }
+    ];
+    
+    sampleVehicles.forEach(vehicle => this.createVehicle(vehicle));
+    
     // Create service provider
     const provider: InsertServiceProvider = {
       name: "Quick Fix Auto Service",
