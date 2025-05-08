@@ -51,6 +51,7 @@ import ProfilePage from "@/pages/profile";
 import SettingsPage from "@/pages/settings";
 import MembershipPage from "@/pages/membership";
 import OverallSummary from "@/pages/overall-summary";
+import DocumentVault from "@/pages/documents";
 
 function Router() {
   const [location] = useLocation();
@@ -536,6 +537,19 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <SettingsPage />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/documents">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <DocumentVault />
               </motion.div>
             )}
           </Route>

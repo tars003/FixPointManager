@@ -4,6 +4,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { storage } from "./storage";
 import { db } from "./db";
 import { 
+  vehicles,
   insertVehicleSchema, 
   insertServiceBookingSchema, 
   insertAvailabilitySchema,
@@ -903,6 +904,117 @@ export async function registerRoutes(app: Express): Promise<Server> {
     ];
     
     res.json(tutorials);
+  });
+
+  // Document Routes
+  apiRouter.get("/documents", async (req, res) => {
+    try {
+      const userIdParam = req.query.userId || '1'; // Default to demo user
+      const vehicleId = req.query.vehicleId ? parseInt(req.query.vehicleId as string) : undefined;
+      const userId = parseInt(userIdParam as string);
+      
+      // Query all documents or filter by vehicleId
+      const documents = await db.select().from(vehicleDocuments)
+        .where(vehicleId ? eq(vehicleDocuments.vehicleId, vehicleId) : undefined);
+      
+      // For each document, fetch its associated vehicle details
+      const documentsWithVehicles = await Promise.all(documents.map(async (doc) => {
+        const [vehicle] = await db.select().from(vehicles).where(eq(vehicles.id, doc.vehicleId));
+        return {
+          ...doc,
+          vehicle: vehicle ? {
+            id: vehicle.id,
+            name: vehicle.name,
+            make: vehicle.make,
+            model: vehicle.model,
+            year: vehicle.year,
+            licensePlate: vehicle.licensePlate,
+            imageUrl: vehicle.imageUrl
+          } : undefined
+        };
+      }));
+      
+      res.json(documentsWithVehicles);
+    } catch (error) {
+      console.error("Error fetching documents:", error);
+      res.status(500).json({ message: "Error fetching documents" });
+    }
+  });
+
+  apiRouter.get("/documents/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const [document] = await db.select().from(vehicleDocuments).where(eq(vehicleDocuments.id, id));
+      
+      if (!document) {
+        return res.status(404).json({ message: "Document not found" });
+      }
+      
+      const [vehicle] = await db.select().from(vehicles).where(eq(vehicles.id, document.vehicleId));
+      
+      res.json({
+        ...document,
+        vehicle: vehicle ? {
+          id: vehicle.id,
+          name: vehicle.name,
+          make: vehicle.make,
+          model: vehicle.model,
+          year: vehicle.year,
+          licensePlate: vehicle.licensePlate,
+          imageUrl: vehicle.imageUrl
+        } : undefined
+      });
+    } catch (error) {
+      console.error("Error fetching document:", error);
+      res.status(500).json({ message: "Error fetching document" });
+    }
+  });
+
+  apiRouter.post("/documents", validateRequest(insertVehicleDocumentSchema), async (req, res) => {
+    try {
+      const [document] = await db.insert(vehicleDocuments).values(req.body).returning();
+      res.status(201).json(document);
+    } catch (error) {
+      console.error("Error creating document:", error);
+      res.status(500).json({ message: "Error creating document" });
+    }
+  });
+
+  apiRouter.put("/documents/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const [updatedDocument] = await db.update(vehicleDocuments)
+        .set(req.body)
+        .where(eq(vehicleDocuments.id, id))
+        .returning();
+      
+      if (!updatedDocument) {
+        return res.status(404).json({ message: "Document not found" });
+      }
+      
+      res.json(updatedDocument);
+    } catch (error) {
+      console.error("Error updating document:", error);
+      res.status(500).json({ message: "Error updating document" });
+    }
+  });
+
+  apiRouter.delete("/documents/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const [deletedDocument] = await db.delete(vehicleDocuments)
+        .where(eq(vehicleDocuments.id, id))
+        .returning();
+      
+      if (!deletedDocument) {
+        return res.status(404).json({ message: "Document not found" });
+      }
+      
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      res.status(500).json({ message: "Error deleting document" });
+    }
   });
 
   // Create server
