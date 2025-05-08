@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { formatPrice } from '@/lib/formatters';
 import { 
   Card, 
   CardContent, 
@@ -53,8 +54,16 @@ import ArenaWrapper from '@/components/arena/ArenaWrapper';
 import PreviewCard from '@/components/arena/PreviewCard';
 import EnhancedColorSelector from '@/components/arena/EnhancedColorSelector';
 import CustomizationPackage from '@/components/arena/CustomizationPackage';
-import CartPanel, { CartItem as CartPanelItem } from '@/components/arena/CartPanel';
+import CartPanel from '@/components/arena/CartPanel';
 import ProjectControls from '@/components/arena/ProjectControls';
+
+// Define CartPanelItem interface if not exported from CartPanel
+interface CartPanelItem {
+  id: string;
+  name: string;
+  price: number;
+  category: string;
+}
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
@@ -264,14 +273,7 @@ const Arena: React.FC = () => {
     return total;
   };
   
-  // Format price in Indian Rupees
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(price);
-  };
+  // formatPrice is imported at the top of the file
   
   // Function to handle vehicle selection
   const handleSelectVehicle = (vehicle: typeof vehicleModels[0]) => {

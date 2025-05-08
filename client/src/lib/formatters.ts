@@ -16,6 +16,25 @@ export const formatIndianPrice = (price: number): string => {
 };
 
 /**
+ * General purpose currency formatter (defaults to INR)
+ * @param price - The price to format
+ * @param currency - The currency code (default: 'INR')
+ * @returns Formatted price string
+ */
+export const formatCurrency = (price: number, currency: string = 'INR'): string => {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: currency,
+    maximumFractionDigits: 0
+  }).format(price);
+};
+
+/**
+ * Alias for formatIndianPrice for backward compatibility
+ */
+export const formatPrice = formatIndianPrice;
+
+/**
  * Format a percentage value
  * @param value - The percentage value
  * @returns Formatted percentage string with % symbol

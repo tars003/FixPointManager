@@ -2,21 +2,20 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Save, Share2, Download, ChevronRight, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { formatPrice } from '@/lib/formatters';
 
 interface ProjectControlsProps {
   onSave: () => void;
   onShare: () => void;
   onExport: () => void;
   totalPrice: number;
-  formatPrice: (price: number) => string;
 }
 
 const ProjectControls: React.FC<ProjectControlsProps> = ({
   onSave,
   onShare,
   onExport,
-  totalPrice,
-  formatPrice
+  totalPrice
 }) => {
   return (
     <motion.div 
