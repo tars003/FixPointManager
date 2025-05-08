@@ -15,14 +15,15 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     md: 'h-8 w-8 border-3',
     lg: 'h-12 w-12 border-4',
   };
-
+  
   return (
     <div 
       className={cn(
-        'animate-spin rounded-full border-solid border-t-transparent border-primary', 
-        sizeClasses[size], 
+        "animate-spin rounded-full border-t-transparent border-primary", 
+        sizeClasses[size],
         className
-      )}
+      )} 
+      aria-label="Loading"
     />
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
-import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface PageHeaderProps {
   title: string;
@@ -20,30 +20,20 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   children
 }) => {
   return (
-    <div className={cn('flex flex-col space-y-2 md:space-y-1', className)}>
-      <div className="flex items-center gap-3">
+    <div className={cn("flex flex-col space-y-2", className)}>
+      <div className="flex items-center">
         {Icon && (
-          <div className={cn(
-            'flex h-10 w-10 items-center justify-center rounded-lg bg-muted',
-            iconClassName ? iconClassName : 'text-primary'
-          )}>
-            <Icon className="h-5 w-5" />
+          <div className={cn("p-2 rounded-md mr-3", iconClassName ? undefined : "bg-primary/10")}>
+            <Icon className={cn("h-5 w-5", iconClassName ? iconClassName : "text-primary")} />
           </div>
         )}
-        <div>
-          <h1 className={cn(
-            "text-2xl font-semibold tracking-tight md:text-3xl",
-            Icon ? '' : 'mb-1'
-          )}>
-            {title}
-          </h1>
-          {description && (
-            <p className="text-sm md:text-base text-muted-foreground">
-              {description}
-            </p>
-          )}
-        </div>
+        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
       </div>
+      
+      {description && (
+        <p className="text-muted-foreground text-sm md:text-base">{description}</p>
+      )}
+      
       {children}
     </div>
   );

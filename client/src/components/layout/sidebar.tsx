@@ -26,7 +26,8 @@ import {
   Receipt,
   BookOpen,
   Eye,
-  Sparkles
+  Sparkles,
+  FileText
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -44,6 +45,13 @@ const navItems = [
     href: '/vehicle-vault',
     color: 'text-primary',
     bgColor: 'bg-primary/10',
+  },
+  {
+    title: 'Document Vault',
+    icon: FileText,
+    href: '/documents',
+    color: 'text-violet-600',
+    bgColor: 'bg-violet-50',
   },
   {
     title: 'Book Service',
