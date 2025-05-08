@@ -446,7 +446,7 @@ const DocumentVault: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   
   // Filter documents based on selected filters
-  const filteredDocuments = actualDocuments.filter(doc => {
+  const filteredDocuments = (Array.isArray(actualDocuments) ? actualDocuments : []).filter((doc: Document) => {
     // Filter by search term
     const matchesSearch = 
       doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -482,19 +482,17 @@ const DocumentVault: React.FC = () => {
     return matchesSearch && matchesStatus && matchesVehicle && matchesType && matchesCategory;
   });
   
-  // Function to check if a document is expiring within 30 days
-  const isExpiringWithin30Days = (expiryDateStr: string) => {
-    const expiryDate = new Date(expiryDateStr);
-    const today = new Date();
-    const differenceInTime = expiryDate.getTime() - today.getTime();
-    const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-    return differenceInDays > 0 && differenceInDays <= 30;
-  };
+  // Using the isExpiringWithin30Days function defined earlier
   
-  // Function to open document view
+  // Function to open document view with proper type
   const openDocumentView = (document: Document) => {
     setSelectedDocument(document);
     setIsViewDocumentOpen(true);
+    toast({
+      title: 'Document opened',
+      description: `Viewing details for ${document.name}`,
+      variant: 'default',
+    });
   };
   
   // Function to get document status badge
@@ -577,7 +575,7 @@ const DocumentVault: React.FC = () => {
   ];
   
   // Update counts of each category
-  documents.forEach(doc => {
+  (Array.isArray(documents) ? documents : []).forEach((doc: Document) => {
     if (['registration_certificate', 'road_tax_receipt', 'purchase_invoice'].includes(doc.documentType)) {
       documentCategories[0].count++;
     } else if (doc.documentType === 'insurance_policy') {
@@ -593,6 +591,238 @@ const DocumentVault: React.FC = () => {
     }
   });
   
+  // Removing duplicate function declaration
+  
+  // Document view dialog
+  const renderDocumentViewDialog = () => {
+    if (!selectedDocument) return null;
+    
+    return (
+      <Dialog open={isViewDocumentOpen} onOpenChange={setIsViewDocumentOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">
+              <div className="flex items-center gap-2">
+                {getDocumentIcon(selectedDocument.documentType)}
+                <span>{selectedDocument.name}</span>
+              </div>
+            </DialogTitle>
+            <DialogDescription>
+              <span className="flex items-center gap-2 mt-2">
+                <Car className="h-4 w-4" />
+                {selectedDocument.vehicle 
+                  ? `${selectedDocument.vehicle.make} ${selectedDocument.vehicle.model} (${selectedDocument.vehicle.licensePlate})`
+                  : 'Loading vehicle...'}
+              </span>
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+            <div>
+              <div className="mb-6">
+                <h3 className="text-sm font-medium text-gray-500 mb-2">Document Details</h3>
+                <div className="border rounded-lg p-4 space-y-3">
+                  {selectedDocument.documentNumber && (
+                    <div>
+                      <div className="text-xs text-gray-500">Document Number</div>
+                      <div className="text-sm font-medium">{selectedDocument.documentNumber}</div>
+                    </div>
+                  )}
+                  
+                  {selectedDocument.issuedBy && (
+                    <div>
+                      <div className="text-xs text-gray-500">Issued By</div>
+                      <div className="text-sm font-medium">{selectedDocument.issuedBy}</div>
+                    </div>
+                  )}
+                  
+                  {selectedDocument.issuedDate && (
+                    <div>
+                      <div className="text-xs text-gray-500">Issue Date</div>
+                      <div className="text-sm font-medium">{formatDate(selectedDocument.issuedDate)}</div>
+                    </div>
+                  )}
+                  
+                  {selectedDocument.hasExpiryDate && selectedDocument.expiryDate && (
+                    <div>
+                      <div className="text-xs text-gray-500">Expiry Date</div>
+                      <div className="text-sm font-medium flex items-center">
+                        {formatDate(selectedDocument.expiryDate)}
+                        {selectedDocument.status === 'active' && isExpiringWithin30Days(selectedDocument.expiryDate) && (
+                          <Badge variant="outline" className="ml-2 bg-yellow-100 text-yellow-800 border-yellow-300">
+                            Expiring Soon
+                          </Badge>
+                        )}
+                        {selectedDocument.status === 'expired' && (
+                          <Badge variant="outline" className="ml-2 bg-red-100 text-red-800 border-red-300">
+                            Expired
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {selectedDocument.description && (
+                    <div>
+                      <div className="text-xs text-gray-500">Description</div>
+                      <div className="text-sm">{selectedDocument.description}</div>
+                    </div>
+                  )}
+                  
+                  {selectedDocument.tags && selectedDocument.tags.length > 0 && (
+                    <div>
+                      <div className="text-xs text-gray-500">Tags</div>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {selectedDocument.tags.map((tag, index) => (
+                          <Badge key={index} variant="outline" className="bg-violet-100 text-violet-800 border-violet-300">{tag}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div>
+                    <div className="text-xs text-gray-500">Document Type</div>
+                    <div className="text-sm font-medium">{getDocumentTypeLabel(selectedDocument.documentType)}</div>
+                  </div>
+                  
+                  <div>
+                    <div className="text-xs text-gray-500">Status</div>
+                    <div className="text-sm font-medium">{selectedDocument.status.charAt(0).toUpperCase() + selectedDocument.status.slice(1)}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-2">Notification Settings</h3>
+                <div className="border rounded-lg p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm">Expiry Reminders</div>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${selectedDocument.reminderEnabled ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                      {selectedDocument.reminderEnabled ? 'Enabled' : 'Disabled'}
+                    </span>
+                  </div>
+                  
+                  {selectedDocument.reminderEnabled && (
+                    <div>
+                      <div className="text-xs text-gray-500">Reminder Days</div>
+                      <div className="text-sm">{selectedDocument.reminderDays} days before expiry</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-2">Document Preview</h3>
+              <div className="border rounded-lg overflow-hidden">
+                {selectedDocument.thumbnailUrl ? (
+                  <img 
+                    src={selectedDocument.thumbnailUrl} 
+                    alt={selectedDocument.name} 
+                    className="w-full h-64 object-cover object-center"
+                  />
+                ) : (
+                  <div className="w-full h-64 bg-gray-100 flex items-center justify-center">
+                    <FileText className="h-16 w-16 text-gray-300" />
+                  </div>
+                )}
+                
+                <div className="p-4 border-t">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-xs text-gray-500">File Type</div>
+                      <div className="text-sm font-medium">{selectedDocument.fileType || 'Unknown'}</div>
+                    </div>
+                    
+                    {selectedDocument.fileSize && (
+                      <div className="text-right">
+                        <div className="text-xs text-gray-500">File Size</div>
+                        <div className="text-sm font-medium">{formatFileSize(selectedDocument.fileSize)}</div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex flex-col mt-6 space-y-2">
+                <Button className="w-full bg-violet-600 hover:bg-violet-700 flex items-center justify-center">
+                  <Download className="h-4 w-4 mr-2" />
+                  Download Document
+                </Button>
+                
+                <Button variant="outline" className="w-full flex items-center justify-center">
+                  <Upload className="h-4 w-4 mr-2" />
+                  Update Document
+                </Button>
+                
+                {selectedDocument.status === 'expired' && (
+                  <Button className="w-full bg-green-600 hover:bg-green-700 flex items-center justify-center">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Renew Document
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <div className="w-full flex flex-col-reverse sm:flex-row sm:justify-between sm:space-x-2">
+              <Button variant="outline" onClick={() => setIsViewDocumentOpen(false)}>
+                Close
+              </Button>
+              
+              <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 mb-2 sm:mb-0">
+                <Button
+                  variant="outline"
+                  className="border-blue-500 text-blue-600 hover:bg-blue-50"
+                  onClick={() => {
+                    toast({
+                      title: 'Document sharing',
+                      description: 'Share functionality will be available soon',
+                    });
+                  }}
+                >
+                  Share Document
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  className="border-red-500 text-red-600 hover:bg-red-50"
+                  onClick={() => {
+                    toast({
+                      title: 'Document archived',
+                      description: 'Document has been archived successfully',
+                    });
+                    setIsViewDocumentOpen(false);
+                  }}
+                >
+                  Archive Document
+                </Button>
+              </div>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  };
+  
+  // Function to format file size
+  const formatFileSize = (bytes: number): string => {
+    if (bytes < 1024) return bytes + ' B';
+    else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    else if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
+    else return (bytes / 1073741824).toFixed(1) + ' GB';
+  };
+  
+  // Keeping this implementation of isExpiringWithin30Days
+  const isExpiringWithin30Days = (expiryDate: string): boolean => {
+    const expiry = new Date(expiryDate);
+    const now = new Date();
+    const diffTime = expiry.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays > 0 && diffDays <= 30;
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <PageHeader 
@@ -604,6 +834,9 @@ const DocumentVault: React.FC = () => {
           <FileText className="h-6 w-6 text-violet-600 mr-2" />
         </div>
       </PageHeader>
+      
+      {/* Document View Dialog */}
+      {renderDocumentViewDialog()}
       
       {/* Document Management */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -836,20 +1069,289 @@ const DocumentVault: React.FC = () => {
               )}
             </TabsContent>
             
-            {/* Other tabs reuse the same layout with filtered data */}
+            {/* Active documents tab */}
             <TabsContent value="active" className="mt-6">
-              {/* Same layout as 'all' tab */}
-              {/* This is handled by the filteredDocuments logic */}
+              {isLoadingDocuments ? (
+                <div className="flex justify-center items-center h-64">
+                  <LoadingSpinner size="lg" />
+                </div>
+              ) : filteredDocuments.length === 0 ? (
+                <div className="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8 h-64">
+                  <Check className="h-10 w-10 text-green-400 mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-1">No active documents found</h3>
+                  <p className="text-sm text-gray-500 mb-4 text-center max-w-md">
+                    {searchTerm || selectedVehicle !== 'all' || selectedDocumentType !== 'all'
+                      ? "No active documents match your current filters. Try adjusting your search criteria."
+                      : "You don't have any active documents. Add documents to your vault to keep track of their status."}
+                  </p>
+                  <Button 
+                    onClick={() => setIsAddDocumentOpen(true)}
+                    className="bg-violet-600 hover:bg-violet-700"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Document
+                  </Button>
+                </div>
+              ) : (
+                <motion.div 
+                  className="grid grid-cols-1 gap-4"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  {filteredDocuments.map((document) => (
+                    <motion.div
+                      key={document.id}
+                      variants={itemVariants}
+                      onClick={() => openDocumentView(document)}
+                      className="cursor-pointer"
+                    >
+                      <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="flex flex-col md:flex-row">
+                          <div className="flex items-center gap-4 p-4 md:w-3/5">
+                            <div className="bg-gray-100 rounded-full p-2.5">
+                              {getDocumentIcon(document.documentType)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-base font-semibold text-gray-900 mb-1 truncate">{document.name}</h3>
+                              <div className="flex flex-wrap gap-2">
+                                <Badge variant="outline" className="bg-gray-100">
+                                  {getDocumentTypeLabel(document.documentType)}
+                                </Badge>
+                                {getDocumentStatusBadge(document.status, document.expiryDate)}
+                              </div>
+                              {document.description && (
+                                <p className="text-sm text-gray-500 mt-2 line-clamp-2">{document.description}</p>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="p-4 bg-gray-50 border-t md:border-t-0 md:border-l border-gray-100 flex flex-col justify-between md:w-2/5">
+                            <div className="mb-2">
+                              <div className="flex items-center mb-1">
+                                <Car className="h-4 w-4 text-gray-500 mr-2" />
+                                <span className="text-sm font-medium text-gray-800 truncate">
+                                  {document.vehicle 
+                                    ? `${document.vehicle.make} ${document.vehicle.model} (${document.vehicle.licensePlate})`
+                                    : 'Loading vehicle...'}
+                                </span>
+                              </div>
+                              
+                              {document.expiryDate && (
+                                <div className="flex items-center">
+                                  <Calendar className="h-4 w-4 text-gray-500 mr-2" />
+                                  <span className="text-sm text-gray-600">
+                                    Expires: {formatDate(document.expiryDate)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs text-gray-500">
+                                Added: {formatDate(document.createdAt)}
+                              </span>
+                              <button className="text-violet-600 hover:text-violet-800">
+                                <ChevronRight className="h-5 w-5" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
             </TabsContent>
             
+            {/* Expiring Soon documents tab */}
             <TabsContent value="expiring-soon" className="mt-6">
-              {/* Same layout as 'all' tab */}
-              {/* This is handled by the filteredDocuments logic */}
+              {isLoadingDocuments ? (
+                <div className="flex justify-center items-center h-64">
+                  <LoadingSpinner size="lg" />
+                </div>
+              ) : filteredDocuments.length === 0 ? (
+                <div className="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8 h-64">
+                  <AlertTriangle className="h-10 w-10 text-yellow-400 mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-1">No expiring documents found</h3>
+                  <p className="text-sm text-gray-500 mb-4 text-center max-w-md">
+                    {searchTerm || selectedVehicle !== 'all' || selectedDocumentType !== 'all'
+                      ? "No expiring documents match your current filters. Try adjusting your search criteria."
+                      : "You don't have any documents expiring soon. Your documents are all valid for more than 30 days."}
+                  </p>
+                  <Button 
+                    onClick={() => setIsAddDocumentOpen(true)}
+                    className="bg-violet-600 hover:bg-violet-700"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Document
+                  </Button>
+                </div>
+              ) : (
+                <motion.div 
+                  className="grid grid-cols-1 gap-4"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  {filteredDocuments.map((document) => (
+                    <motion.div
+                      key={document.id}
+                      variants={itemVariants}
+                      onClick={() => openDocumentView(document)}
+                      className="cursor-pointer"
+                    >
+                      <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="flex flex-col md:flex-row">
+                          <div className="flex items-center gap-4 p-4 md:w-3/5">
+                            <div className="bg-yellow-50 rounded-full p-2.5">
+                              {getDocumentIcon(document.documentType)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-base font-semibold text-gray-900 mb-1 truncate">{document.name}</h3>
+                              <div className="flex flex-wrap gap-2">
+                                <Badge variant="outline" className="bg-gray-100">
+                                  {getDocumentTypeLabel(document.documentType)}
+                                </Badge>
+                                {getDocumentStatusBadge(document.status, document.expiryDate)}
+                              </div>
+                              {document.description && (
+                                <p className="text-sm text-gray-500 mt-2 line-clamp-2">{document.description}</p>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="p-4 bg-yellow-50 border-t md:border-t-0 md:border-l border-yellow-100 flex flex-col justify-between md:w-2/5">
+                            <div className="mb-2">
+                              <div className="flex items-center mb-1">
+                                <Car className="h-4 w-4 text-gray-500 mr-2" />
+                                <span className="text-sm font-medium text-gray-800 truncate">
+                                  {document.vehicle 
+                                    ? `${document.vehicle.make} ${document.vehicle.model} (${document.vehicle.licensePlate})`
+                                    : 'Loading vehicle...'}
+                                </span>
+                              </div>
+                              
+                              {document.expiryDate && (
+                                <div className="flex items-center">
+                                  <Clock className="h-4 w-4 text-yellow-500 mr-2" />
+                                  <span className="text-sm text-yellow-700 font-medium">
+                                    Expires in {formatRelativeTime(document.expiryDate)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs text-gray-500">
+                                Added: {formatDate(document.createdAt)}
+                              </span>
+                              <button className="text-yellow-600 hover:text-yellow-800">
+                                <ArrowRight className="h-5 w-5" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
             </TabsContent>
             
+            {/* Expired documents tab */}
             <TabsContent value="expired" className="mt-6">
-              {/* Same layout as 'all' tab */}
-              {/* This is handled by the filteredDocuments logic */}
+              {isLoadingDocuments ? (
+                <div className="flex justify-center items-center h-64">
+                  <LoadingSpinner size="lg" />
+                </div>
+              ) : filteredDocuments.length === 0 ? (
+                <div className="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8 h-64">
+                  <X className="h-10 w-10 text-red-400 mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-1">No expired documents found</h3>
+                  <p className="text-sm text-gray-500 mb-4 text-center max-w-md">
+                    {searchTerm || selectedVehicle !== 'all' || selectedDocumentType !== 'all'
+                      ? "No expired documents match your current filters. Try adjusting your search criteria."
+                      : "You don't have any expired documents. All your documents are up to date."}
+                  </p>
+                  <Button 
+                    onClick={() => setIsAddDocumentOpen(true)}
+                    className="bg-violet-600 hover:bg-violet-700"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Document
+                  </Button>
+                </div>
+              ) : (
+                <motion.div 
+                  className="grid grid-cols-1 gap-4"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  {filteredDocuments.map((document) => (
+                    <motion.div
+                      key={document.id}
+                      variants={itemVariants}
+                      onClick={() => openDocumentView(document)}
+                      className="cursor-pointer"
+                    >
+                      <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="flex flex-col md:flex-row">
+                          <div className="flex items-center gap-4 p-4 md:w-3/5">
+                            <div className="bg-red-50 rounded-full p-2.5">
+                              {getDocumentIcon(document.documentType)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-base font-semibold text-gray-900 mb-1 truncate">{document.name}</h3>
+                              <div className="flex flex-wrap gap-2">
+                                <Badge variant="outline" className="bg-gray-100">
+                                  {getDocumentTypeLabel(document.documentType)}
+                                </Badge>
+                                {getDocumentStatusBadge(document.status, document.expiryDate)}
+                              </div>
+                              {document.description && (
+                                <p className="text-sm text-gray-500 mt-2 line-clamp-2">{document.description}</p>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="p-4 bg-red-50 border-t md:border-t-0 md:border-l border-red-100 flex flex-col justify-between md:w-2/5">
+                            <div className="mb-2">
+                              <div className="flex items-center mb-1">
+                                <Car className="h-4 w-4 text-gray-500 mr-2" />
+                                <span className="text-sm font-medium text-gray-800 truncate">
+                                  {document.vehicle 
+                                    ? `${document.vehicle.make} ${document.vehicle.model} (${document.vehicle.licensePlate})`
+                                    : 'Loading vehicle...'}
+                                </span>
+                              </div>
+                              
+                              {document.expiryDate && (
+                                <div className="flex items-center">
+                                  <AlertTriangle className="h-4 w-4 text-red-500 mr-2" />
+                                  <span className="text-sm text-red-700 font-medium">
+                                    Expired {formatRelativeTime(document.expiryDate)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            
+                            <div className="flex justify-between items-center">
+                              <button className="text-xs text-red-600 hover:text-red-800 font-medium">
+                                Renew Document
+                              </button>
+                              <button className="text-red-600 hover:text-red-800">
+                                <ArrowRight className="h-5 w-5" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
             </TabsContent>
           </Tabs>
         </div>
