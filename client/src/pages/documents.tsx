@@ -1455,6 +1455,62 @@ const DocumentVault: React.FC = () => {
         </DialogContent>
       </Dialog>
       
+      {/* Document Scanner Dialog */}
+      <Dialog open={isDocumentScannerOpen} onOpenChange={setIsDocumentScannerOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Scan Document</DialogTitle>
+            <DialogDescription>
+              Use your camera to scan and automatically extract information from your vehicle documents.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="py-4">
+            <DocumentScanner 
+              vehicleId={selectedVehicle !== 'all' ? Number(selectedVehicle) : (vehicles.length > 0 ? vehicles[0].id : 0)}
+              onScanComplete={(data) => {
+                setScannedDocumentData(data);
+                setIsDocumentScannerOpen(false);
+                
+                // If we have extracted data, pre-fill the add document form
+                if (data && data.extractedData) {
+                  const extractedData = data.extractedData;
+                  
+                  // Prepare form data from extracted data
+                  const newFormData = {
+                    ...formData,
+                    vehicleId: selectedVehicle !== 'all' ? Number(selectedVehicle) : (vehicles.length > 0 ? vehicles[0].id : 0),
+                    name: extractedData.documentType ? `${extractedData.documentType.charAt(0).toUpperCase() + extractedData.documentType.slice(1).replace(/_/g, ' ')}` : formData.name,
+                    documentType: extractedData.documentType || formData.documentType,
+                    documentNumber: extractedData.documentNumber || formData.documentNumber,
+                    issuedBy: extractedData.issuedBy || formData.issuedBy,
+                    issuedDate: extractedData.issuedDate || formData.issuedDate,
+                    expiryDate: extractedData.expiryDate || formData.expiryDate,
+                  };
+                  
+                  setFormData(newFormData);
+                  
+                  // Auto open the add document form with pre-filled data
+                  setIsAddDocumentOpen(true);
+                  
+                  toast({
+                    title: 'Document scanned successfully',
+                    description: 'Document information has been extracted and pre-filled.',
+                    variant: 'default',
+                  });
+                }
+              }}
+            />
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDocumentScannerOpen(false)}>
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
       {/* Add Document Dialog */}
       <Dialog open={isAddDocumentOpen} onOpenChange={setIsAddDocumentOpen}>
         <DialogContent className="sm:max-w-[600px]">
@@ -1765,16 +1821,63 @@ const DocumentVault: React.FC = () => {
                 )}
               </div>
               
+              {/* Advanced Features Section */}
+              {showAdvancedFeatures && selectedDocument && (
+                <div className="mt-8 border-t pt-6">
+                  <h3 className="text-md font-semibold mb-4">Advanced Features</h3>
+                  
+                  <div className="grid gap-8">
+                    {/* Document Recommendations */}
+                    <DocumentRecommendations 
+                      vehicleId={selectedDocument.vehicleId}
+                      onCreateDocument={(documentType, title, description) => {
+                        toast({
+                          title: "Document created from recommendation",
+                          description: title,
+                        });
+                        queryClient.invalidateQueries({ queryKey: ['/api/documents'] });
+                      }}
+                    />
+                    
+                    {/* Document Annotation */}
+                    <DocumentAnnotation 
+                      documentId={selectedDocument.id}
+                      previewUrl={selectedDocument.thumbnailUrl}
+                    />
+                  </div>
+                </div>
+              )}
+              
               <DialogFooter className="flex flex-col sm:flex-row gap-2">
                 <Button variant="outline" onClick={() => setIsViewDocumentOpen(false)}>
                   Close
                 </Button>
-                {selectedDocument.fileUrl && (
-                  <Button className="bg-violet-600 hover:bg-violet-700">
-                    <Download className="mr-2 h-4 w-4" />
-                    Download
-                  </Button>
-                )}
+                <div className="flex gap-2">
+                  {showAdvancedFeatures ? (
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setShowAdvancedFeatures(false)}
+                    >
+                      <FileCog className="h-4 w-4 mr-2" />
+                      Hide Advanced Features
+                    </Button>
+                  ) : (
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setShowAdvancedFeatures(true)}
+                    >
+                      <FileCog className="h-4 w-4 mr-2" />
+                      Show Advanced Features
+                    </Button>
+                  )}
+                  
+                  {selectedDocument.fileUrl && (
+                    <Button className="bg-violet-600 hover:bg-violet-700">
+                      <Download className="mr-2 h-4 w-4" />
+                      Download
+                    </Button>
+                  )}
+                </div>
               </DialogFooter>
             </>
           )}
