@@ -428,6 +428,97 @@ export const documentAccessLogsRelations = relations(documentAccessLogs, ({ one 
   }),
 }));
 
+// Document Recommendation Engine schema
+export const documentRecommendations = pgTable("document_recommendations", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  vehicleId: integer("vehicle_id").notNull(),
+  documentType: documentTypeEnum("document_type").notNull(),
+  recommendationSource: text("recommendation_source").notNull(), // system, vehicle-type, user-profile, service-history
+  recommendationReason: text("recommendation_reason").notNull(),
+  priority: integer("priority").default(1), // 1-5 priority level
+  status: text("status").default("pending").notNull(), // pending, accepted, dismissed, completed
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  createdDocumentId: integer("created_document_id"), // If user creates document from recommendation
+  recommendedAt: timestamp("recommended_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at"),
+  dismissedAt: timestamp("dismissed_at"),
+  completedAt: timestamp("completed_at"),
+});
+
+export const insertDocumentRecommendationSchema = createInsertSchema(documentRecommendations).pick({
+  userId: true,
+  vehicleId: true,
+  documentType: true,
+  recommendationSource: true,
+  recommendationReason: true,
+  priority: true,
+  status: true,
+  title: true,
+  description: true,
+  createdDocumentId: true,
+  expiresAt: true,
+});
+
+// Document Annotation schema
+export const documentAnnotations = pgTable("document_annotations", {
+  id: serial("id").primaryKey(),
+  documentId: integer("document_id").notNull(),
+  userId: integer("user_id").notNull(),
+  annotationType: text("annotation_type").notNull(), // highlight, text, drawing, stamp, signature
+  content: text("content"),
+  color: text("color").default("#FFFF00"),
+  position: jsonb("position").notNull(), // {x, y, width, height} for positioning
+  page: integer("page").default(1),
+  rotation: decimal("rotation", { precision: 5, scale: 2 }).default("0"),
+  opacity: decimal("opacity", { precision: 3, scale: 2 }).default("1.00"),
+  isPrivate: boolean("is_private").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertDocumentAnnotationSchema = createInsertSchema(documentAnnotations).pick({
+  documentId: true,
+  userId: true,
+  annotationType: true,
+  content: true,
+  color: true,
+  position: true,
+  page: true,
+  rotation: true,
+  opacity: true,
+  isPrivate: true,
+});
+
+// Document Auto-detection Rules schema
+export const documentAutoDetectionRules = pgTable("document_auto_detection_rules", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  documentType: documentTypeEnum("document_type").notNull(),
+  keywordPatterns: text("keyword_patterns").array(), // Keywords to match in document text
+  fieldPatterns: jsonb("field_patterns").default({}), // Regex patterns for extracting fields
+  confidenceThreshold: decimal("confidence_threshold", { precision: 3, scale: 2 }).default("0.75"),
+  isActive: boolean("is_active").default(true),
+  priority: integer("priority").default(10), // Rules are evaluated in priority order
+  description: text("description"),
+  lastUpdatedBy: integer("last_updated_by").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertDocumentAutoDetectionRuleSchema = createInsertSchema(documentAutoDetectionRules).pick({
+  name: true,
+  documentType: true,
+  keywordPatterns: true,
+  fieldPatterns: true,
+  confidenceThreshold: true,
+  isActive: true,
+  priority: true,
+  description: true,
+  lastUpdatedBy: true,
+});
+
 // Service Provider schema
 export const serviceProviders = pgTable("service_providers", {
   id: serial("id").primaryKey(),
@@ -1294,3 +1385,40 @@ export type InsertDocumentVerification = z.infer<typeof insertDocumentVerificati
 
 export type DocumentAccessLog = typeof documentAccessLogs.$inferSelect;
 export type InsertDocumentAccessLog = z.infer<typeof insertDocumentAccessLogSchema>;
+
+export type DocumentRecommendation = typeof documentRecommendations.$inferSelect;
+export type InsertDocumentRecommendation = z.infer<typeof insertDocumentRecommendationSchema>;
+
+export type DocumentAnnotation = typeof documentAnnotations.$inferSelect;
+export type InsertDocumentAnnotation = z.infer<typeof insertDocumentAnnotationSchema>;
+
+export type DocumentAutoDetectionRule = typeof documentAutoDetectionRules.$inferSelect;
+export type InsertDocumentAutoDetectionRule = z.infer<typeof insertDocumentAutoDetectionRuleSchema>;
+
+// Document Recommendations Relations
+export const documentRecommendationsRelations = relations(documentRecommendations, ({ one }) => ({
+  vehicle: one(vehicles, {
+    fields: [documentRecommendations.vehicleId],
+    references: [vehicles.id],
+  }),
+  document: one(vehicleDocuments, {
+    fields: [documentRecommendations.createdDocumentId],
+    references: [vehicleDocuments.id],
+  }),
+}));
+
+// Document Annotations Relations
+export const documentAnnotationsRelations = relations(documentAnnotations, ({ one }) => ({
+  document: one(vehicleDocuments, {
+    fields: [documentAnnotations.documentId],
+    references: [vehicleDocuments.id],
+  }),
+}));
+
+// Document Auto-detection Rules Relations
+export const documentAutoDetectionRulesRelations = relations(documentAutoDetectionRules, ({ one }) => ({
+  updatedBy: one(users, {
+    fields: [documentAutoDetectionRules.lastUpdatedBy],
+    references: [users.id],
+  }),
+}));
