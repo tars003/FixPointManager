@@ -52,6 +52,8 @@ import SettingsPage from "@/pages/settings";
 import MembershipPage from "@/pages/membership";
 import OverallSummary from "@/pages/overall-summary";
 import DocumentVault from "@/pages/documents";
+import TripPlanner from "@/pages/trip-planner";
+import Calculators from "@/pages/calculators";
 
 function Router() {
   const [location] = useLocation();
@@ -550,6 +552,32 @@ function Router() {
                 transition={{ duration: 0.3 }}
               >
                 <DocumentVault />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/trip-planner">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <TripPlanner />
+              </motion.div>
+            )}
+          </Route>
+          <Route path="/calculators">
+            {() => (
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={pageVariants}
+                transition={{ duration: 0.3 }}
+              >
+                <Calculators />
               </motion.div>
             )}
           </Route>

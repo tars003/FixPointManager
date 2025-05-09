@@ -13,6 +13,7 @@ interface PageHeaderProps {
     icon?: ReactNode;
   };
   className?: string;
+  icon?: ReactNode;
 }
 
 export function PageHeader({
@@ -20,15 +21,23 @@ export function PageHeader({
   description,
   children,
   action,
-  className
+  className,
+  icon
 }: PageHeaderProps) {
   return (
     <div className={cn("flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6", className)}>
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-        {description && (
-          <p className="text-muted-foreground mt-1">{description}</p>
+      <div className="flex items-center gap-3">
+        {icon && (
+          <div className="flex-shrink-0">
+            {icon}
+          </div>
         )}
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+          {description && (
+            <p className="text-muted-foreground mt-1">{description}</p>
+          )}
+        </div>
       </div>
       <div className="flex items-center gap-2">
         {action && (
