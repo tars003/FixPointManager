@@ -64,6 +64,18 @@
     "recentNotifications": "Recent Notifications",
     "olderNotifications": "Older Notifications",
     "viewAll": "View All",
+    "tabs": {
+      "all": "All",
+      "unread": "Unread",
+      "documents": "Docs",
+      "services": "Services"
+    },
+    "empty": {
+      "title": "No notifications",
+      "allMessage": "You don't have any notifications yet.",
+      "filteredMessage": "No notifications in this category."
+    },
+    "footer": "Notification settings can be configured in your profile",
     "priority": {
       "low": "Low",
       "medium": "Medium",

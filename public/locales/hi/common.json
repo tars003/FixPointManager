@@ -64,6 +64,18 @@
     "recentNotifications": "हाल की सूचनाएं",
     "olderNotifications": "पुरानी सूचनाएं",
     "viewAll": "सभी देखें",
+    "tabs": {
+      "all": "सभी",
+      "unread": "अपठित",
+      "documents": "दस्तावेज़",
+      "services": "सेवाएं"
+    },
+    "empty": {
+      "title": "कोई सूचना नहीं",
+      "allMessage": "आपके पास अभी तक कोई सूचना नहीं है।",
+      "filteredMessage": "इस श्रेणी में कोई सूचना नहीं है।"
+    },
+    "footer": "सूचना सेटिंग्स आपकी प्रोफ़ाइल में कॉन्फ़िगर की जा सकती हैं",
     "priority": {
       "low": "कम",
       "medium": "मध्यम",

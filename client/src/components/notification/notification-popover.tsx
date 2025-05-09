@@ -62,6 +62,44 @@ export function NotificationPopover() {
     }
   };
   
+  // Format relative time
+  const formatRelativeTime = (date: Date): string => {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diffInSeconds < 60) {
+      return t('notifications.timeAgo.justNow', 'Just now');
+    }
+    
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) {
+      return t('notifications.timeAgo.minutesAgo', { count: diffInMinutes });
+    }
+    
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) {
+      return t('notifications.timeAgo.hoursAgo', { count: diffInHours });
+    }
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) {
+      return t('notifications.timeAgo.daysAgo', { count: diffInDays });
+    }
+    
+    const diffInWeeks = Math.floor(diffInDays / 7);
+    if (diffInWeeks < 4) {
+      return t('notifications.timeAgo.weeksAgo', { count: diffInWeeks });
+    }
+    
+    const diffInMonths = Math.floor(diffInDays / 30);
+    if (diffInMonths < 12) {
+      return t('notifications.timeAgo.monthsAgo', { count: diffInMonths });
+    }
+    
+    const diffInYears = Math.floor(diffInDays / 365);
+    return t('notifications.timeAgo.yearsAgo', { count: diffInYears });
+  };
+  
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -145,7 +183,7 @@ export function NotificationPopover() {
                       </p>
                       
                       <p className="text-[10px] text-neutral-400">
-                        {new Date(notification.timestamp).toLocaleString()}
+                        {formatRelativeTime(notification.timestamp)}
                       </p>
                     </div>
                   </div>
