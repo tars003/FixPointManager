@@ -1,116 +1,112 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Check, X, Info, AlertCircle, Calendar } from 'lucide-react';
+import { Bell, X, FileText, Wrench, Car, CreditCard, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { formatRelativeTime } from '@/lib/format';
+import { cn } from '@/lib/utils';
+import { useNotifications } from '@/components/common/NotificationProvider';
+import { useTranslation } from 'react-i18next';
 
-// Type for notifications
+// Define Notification type to match what we expect from NotificationProvider
 interface Notification {
   id: string;
   title: string;
   message: string;
-  type: 'success' | 'warning' | 'info' | 'reminder';
+  category: 'system' | 'document' | 'vehicle' | 'service' | 'reminder' | 'payment';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
   read: boolean;
   date: Date;
+  actionUrl?: string;
 }
-
-// Mock notifications
-const MOCK_NOTIFICATIONS: Notification[] = [
-  {
-    id: '1',
-    title: 'Service reminder',
-    message: 'Your vehicle is due for service in 3 days.',
-    type: 'reminder',
-    read: false,
-    date: new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
-  },
-  {
-    id: '2',
-    title: 'Inspection completed',
-    message: 'The inspection for your Honda City has been completed.',
-    type: 'success',
-    read: false,
-    date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) // 1 day ago
-  },
-  {
-    id: '3',
-    title: 'Document expiring',
-    message: 'Your insurance is expiring in 15 days. Renew it now!',
-    type: 'warning',
-    read: true,
-    date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) // 3 days ago
-  },
-  {
-    id: '4',
-    title: 'Appointment confirmed',
-    message: 'Your service appointment has been confirmed for May 25th.',
-    type: 'info',
-    read: true,
-    date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000) // 4 days ago
-  }
-];
 
 export function NotificationPopover() {
   const [open, setOpen] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>(MOCK_NOTIFICATIONS);
-  
-  // Count unread notifications
-  const unreadCount = notifications.filter(n => !n.read).length;
-  
-  // Mark a notification as read
-  const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, read: true } : n)
-    );
-  };
+  const { t } = useTranslation(['common']);
+  const { notifications, markAsRead, removeNotification, unreadCount } = useNotifications();
   
   // Mark all as read
   const markAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(n => ({ ...n, read: true }))
-    );
+    notifications.forEach(notification => {
+      markAsRead(notification.id);
+    });
   };
   
-  // Remove a notification
-  const removeNotification = (id: string) => {
-    setNotifications(prev => 
-      prev.filter(n => n.id !== id)
-    );
-  };
-  
-  // Get icon based on notification type
-  const getNotificationIcon = (type: Notification['type']) => {
-    switch (type) {
-      case 'success':
-        return <Check className="h-4 w-4 text-green-500" />;
-      case 'warning':
-        return <AlertCircle className="h-4 w-4 text-amber-500" />;
-      case 'info':
-        return <Info className="h-4 w-4 text-blue-500" />;
+  // Get icon based on notification category
+  const getNotificationIcon = (category: Notification['category']) => {
+    switch (category) {
+      case 'document':
+        return <FileText className="h-4 w-4 text-blue-500" />;
+      case 'service':
+        return <Wrench className="h-4 w-4 text-amber-500" />;
+      case 'vehicle':
+        return <Car className="h-4 w-4 text-green-500" />;
+      case 'payment':
+        return <CreditCard className="h-4 w-4 text-violet-500" />;
       case 'reminder':
         return <Calendar className="h-4 w-4 text-purple-500" />;
+      default:
+        return <Bell className="h-4 w-4 text-gray-500" />;
     }
   };
   
-  // Get background color based on notification type
-  const getNotificationBg = (type: Notification['type'], read: boolean) => {
+  // Get background color based on notification priority
+  const getNotificationBg = (priority: Notification['priority'], read: boolean) => {
     if (read) return 'bg-white';
     
-    switch (type) {
-      case 'success':
-        return 'bg-green-50';
-      case 'warning':
+    switch (priority) {
+      case 'urgent':
+        return 'bg-red-50';
+      case 'high':
+        return 'bg-orange-50';
+      case 'medium':
         return 'bg-amber-50';
-      case 'info':
+      case 'low':
         return 'bg-blue-50';
-      case 'reminder':
-        return 'bg-purple-50';
+      default:
+        return 'bg-gray-50';
     }
+  };
+  
+  // Format relative time
+  const formatRelativeTime = (date: Date): string => {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diffInSeconds < 60) {
+      return t('notifications.timeAgo.justNow');
+    }
+    
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) {
+      return t('notifications.timeAgo.minutesAgo', { count: diffInMinutes });
+    }
+    
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) {
+      return t('notifications.timeAgo.hoursAgo', { count: diffInHours });
+    }
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) {
+      return t('notifications.timeAgo.daysAgo', { count: diffInDays });
+    }
+    
+    const diffInWeeks = Math.floor(diffInDays / 7);
+    if (diffInWeeks < 4) {
+      return t('notifications.timeAgo.weeksAgo', { count: diffInWeeks });
+    }
+    
+    const diffInMonths = Math.floor(diffInDays / 30);
+    if (diffInMonths < 12) {
+      return t('notifications.timeAgo.monthsAgo', { count: diffInMonths });
+    }
+    
+    const diffInYears = Math.floor(diffInDays / 365);
+    return t('notifications.timeAgo.yearsAgo', { count: diffInYears });
   };
   
   return (
@@ -157,30 +153,31 @@ export function NotificationPopover() {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
-                  className={`border-b last:border-0 ${getNotificationBg(notification.type, notification.read)}`}
+                  className={`border-b last:border-0 ${getNotificationBg(notification.priority, notification.read)}`}
                 >
                   <div 
                     className="p-4 flex gap-3 relative"
                     onClick={() => markAsRead(notification.id)}
                   >
                     <div className="shrink-0 mt-0.5">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center
-                        ${notification.type === 'success' ? 'bg-green-100' : ''}
-                        ${notification.type === 'warning' ? 'bg-amber-100' : ''}
-                        ${notification.type === 'info' ? 'bg-blue-100' : ''}
-                        ${notification.type === 'reminder' ? 'bg-purple-100' : ''}
-                      `}>
-                        {getNotificationIcon(notification.type)}
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        notification.category === 'document' ? 'bg-blue-100' : 
+                        notification.category === 'service' ? 'bg-amber-100' : 
+                        notification.category === 'vehicle' ? 'bg-green-100' : 
+                        notification.category === 'payment' ? 'bg-violet-100' : 
+                        notification.category === 'reminder' ? 'bg-purple-100' : 'bg-gray-100'
+                      }`}>
+                        {getNotificationIcon(notification.category)}
                       </div>
                     </div>
                     
                     <div className="flex-1">
                       <div className="flex justify-between items-start">
-                        <h5 className={`font-medium text-sm ${!notification.read ? 'text-neutral-dark' : 'text-neutral'}`}>
+                        <h5 className={`font-medium text-sm ${!notification.read ? 'text-neutral-900' : 'text-neutral-600'}`}>
                           {notification.title}
                         </h5>
                         <button 
-                          className="text-neutral-light hover:text-neutral-dark rounded-full p-1"
+                          className="text-neutral-400 hover:text-neutral-700 rounded-full p-1"
                           onClick={(e) => {
                             e.stopPropagation();
                             removeNotification(notification.id);
@@ -190,11 +187,11 @@ export function NotificationPopover() {
                         </button>
                       </div>
                       
-                      <p className="text-xs text-neutral-light mt-1 mb-2">
+                      <p className="text-xs text-neutral-500 mt-1 mb-2">
                         {notification.message}
                       </p>
                       
-                      <p className="text-[10px] text-neutral-light">
+                      <p className="text-[10px] text-neutral-400">
                         {formatRelativeTime(notification.date)}
                       </p>
                     </div>
@@ -207,8 +204,8 @@ export function NotificationPopover() {
               <div className="w-12 h-12 bg-neutral-100 rounded-full mx-auto flex items-center justify-center mb-3">
                 <Bell className="h-5 w-5 text-neutral-400" />
               </div>
-              <p className="text-neutral-dark font-medium">No notifications</p>
-              <p className="text-neutral-light text-sm mt-1">You're all caught up!</p>
+              <p className="text-neutral-800 font-medium">{t('notifications.noNotifications')}</p>
+              <p className="text-neutral-500 text-sm mt-1">{t('notifications.allCaughtUp')}</p>
             </div>
           )}
         </div>
