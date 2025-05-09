@@ -787,7 +787,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                         </div>
                       </div>
 
-                      <h3 className="font-medium text-lg">Payment Method</h3>
+                      <h3 className="font-medium text-lg">{t('booking.paymentMethod', 'Payment Method')}</h3>
                       
                       <FormField
                         control={form.control}
@@ -803,15 +803,15 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                                 <div className="flex items-center space-x-2 border rounded-md p-3">
                                   <RadioGroupItem value="online" id="online" />
                                   <Label htmlFor="online" className="flex-1">
-                                    <div className="font-medium">Online Payment</div>
-                                    <div className="text-sm text-muted-foreground">Pay now using Credit/Debit card, UPI, or Net Banking</div>
+                                    <div className="font-medium">{t('booking.onlinePayment', 'Online Payment')}</div>
+                                    <div className="text-sm text-muted-foreground">{t('booking.onlinePaymentDesc', 'Pay now using Credit/Debit card, UPI, or Net Banking')}</div>
                                   </Label>
                                 </div>
                                 <div className="flex items-center space-x-2 border rounded-md p-3">
                                   <RadioGroupItem value="cash" id="cash" />
                                   <Label htmlFor="cash" className="flex-1">
-                                    <div className="font-medium">Pay at RTO Office</div>
-                                    <div className="text-sm text-muted-foreground">Pay in cash when visiting the RTO office</div>
+                                    <div className="font-medium">{t('booking.payAtRto', 'Pay at RTO Office')}</div>
+                                    <div className="text-sm text-muted-foreground">{t('booking.payAtRtoDesc', 'Pay in cash when visiting the RTO office')}</div>
                                   </Label>
                                 </div>
                               </RadioGroup>
@@ -824,7 +824,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                       <div className="flex items-center p-4 border border-amber-200 bg-amber-50 rounded-md text-amber-700 text-sm">
                         <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0" />
                         <div>
-                          By proceeding with this booking, you agree to our terms of service and acknowledge that additional document verification may be required at the RTO office.
+                          {t('booking.termsNotice', 'By proceeding with this booking, you agree to our terms of service and acknowledge that additional document verification may be required at the RTO office.')}
                         </div>
                       </div>
                     </div>
@@ -889,30 +889,30 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
               <div className="bg-green-100 p-3 rounded-full mb-4">
                 <CheckCircle className="h-12 w-12 text-green-600" />
               </div>
-              <h2 className="text-2xl font-semibold mb-2">Booking Successful!</h2>
+              <h2 className="text-2xl font-semibold mb-2">{t('booking.bookingSuccessful', 'Booking Successful!')}</h2>
               <p className="text-gray-500 mb-6">
-                Your RTO service has been booked successfully.
+                {t('booking.bookingSuccessMessage', 'Your RTO service has been booked successfully.')}
               </p>
 
               <div className="bg-muted p-4 rounded-lg w-full max-w-sm mb-6">
                 <div className="flex justify-between mb-2">
-                  <span className="text-muted-foreground">Booking ID:</span>
+                  <span className="text-muted-foreground">{t('booking.bookingId', 'Booking ID')}:</span>
                   <span className="font-medium">{bookingId}</span>
                 </div>
                 <div className="flex justify-between mb-2">
-                  <span className="text-muted-foreground">Service:</span>
+                  <span className="text-muted-foreground">{t('booking.service', 'Service')}:</span>
                   <span>{service.name}</span>
                 </div>
                 <div className="flex justify-between mb-2">
-                  <span className="text-muted-foreground">Amount:</span>
+                  <span className="text-muted-foreground">{t('booking.amount', 'Amount')}:</span>
                   <span>{formatCurrency(service.price)}</span>
                 </div>
                 <div className="flex justify-between mb-2">
-                  <span className="text-muted-foreground">Date:</span>
+                  <span className="text-muted-foreground">{t('booking.date', 'Date')}:</span>
                   <span>{format(form.getValues('preferredDate') || new Date(), 'PPP')}</span>
                 </div>
                 <div className="flex justify-between mb-2">
-                  <span className="text-muted-foreground">Vehicle:</span>
+                  <span className="text-muted-foreground">{t('booking.vehicle', 'Vehicle')}:</span>
                   <span>
                     {form.getValues('useExistingVehicle') && userVehicles ? (
                       (() => {
@@ -928,19 +928,21 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                 </div>
                 {form.getValues('nearbyRto') && (
                   <div className="flex justify-between mb-2">
-                    <span className="text-muted-foreground">RTO Office:</span>
+                    <span className="text-muted-foreground">{t('booking.rtoOffice', 'RTO Office')}:</span>
                     <span>
                       {(() => {
                         const rtoId = form.getValues('nearbyRto');
                         const selectedOffice = availableRtoOffices.find(o => o.id === rtoId);
-                        return selectedOffice ? selectedOffice.name : 'Not specified';
+                        return selectedOffice ? selectedOffice.name : t('common.notSpecified', 'Not specified');
                       })()}
                     </span>
                   </div>
                 )}
                 <div className="flex justify-between mb-2">
-                  <span className="text-muted-foreground">Payment:</span>
-                  <span>{form.getValues('paymentMethod') === 'online' ? 'Online Payment' : 'Pay at RTO Office'}</span>
+                  <span className="text-muted-foreground">{t('booking.payment', 'Payment')}:</span>
+                  <span>{form.getValues('paymentMethod') === 'online' ? 
+                    t('booking.onlinePayment', 'Online Payment') : 
+                    t('booking.payAtRto', 'Pay at RTO Office')}</span>
                 </div>
               </div>
 
@@ -958,7 +960,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
               </div>
 
               <p className="text-sm text-muted-foreground">
-                A confirmation email has been sent to {form.getValues('email')}
+                {t('booking.confirmationEmailSent', 'A confirmation email has been sent to {{email}}', { email: form.getValues('email') })}
               </p>
             </div>
           </div>
