@@ -572,6 +572,13 @@ function Router() {
               </AdvancedPageTransition>
             )}
           </Route>
+          <Route path="/rto-services">
+            {() => (
+              <AdvancedPageTransition type="slide" direction="left" duration={0.5}>
+                <RTOServices />
+              </AdvancedPageTransition>
+            )}
+          </Route>
           <Route path="/animation-showcase">
             {() => (
               <AdvancedPageTransition type="fade" duration={0.5}>
