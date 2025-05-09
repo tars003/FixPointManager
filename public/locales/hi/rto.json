@@ -30,6 +30,10 @@
     "rtoRequired": "कृपया एक आरटीओ कार्यालय चुनें",
     "dateRequired": "कृपया एक तिथि चुनें",
     "phonePrefix": "+91",
+    "processing": "प्रोसेसिंग",
+    "bookAndPay": "बुक करें और भुगतान करें",
+    "closeButton": "बंद करें",
+    "trackApplication": "आवेदन को ट्रैक करें",
     "steps": {
       "personalInfo": "व्यक्तिगत जानकारी",
       "addressAndDate": "पता और तिथि",

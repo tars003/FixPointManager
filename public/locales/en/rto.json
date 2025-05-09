@@ -30,6 +30,10 @@
     "rtoRequired": "Please select an RTO office",
     "dateRequired": "Please select a date",
     "phonePrefix": "+91",
+    "processing": "Processing",
+    "bookAndPay": "Book & Pay",
+    "closeButton": "Close",
+    "trackApplication": "Track Application", 
     "steps": {
       "personalInfo": "Personal Info",
       "addressAndDate": "Address & Date",

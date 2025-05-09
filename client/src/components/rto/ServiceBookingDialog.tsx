@@ -730,13 +730,13 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                   <>
                     <div className="space-y-6">
                       <div className="bg-muted p-4 rounded-lg">
-                        <h3 className="font-medium mb-2">Booking Summary</h3>
+                        <h3 className="font-medium mb-2">{t('booking.bookingSummary', 'Booking Summary')}</h3>
                         <div className="space-y-2 text-sm">
                           <div className="grid grid-cols-2 gap-2">
-                            <span className="text-muted-foreground">Service:</span>
+                            <span className="text-muted-foreground">{t('booking.service', 'Service')}:</span>
                             <span className="font-medium">{service.name}</span>
                             
-                            <span className="text-muted-foreground">Price:</span>
+                            <span className="text-muted-foreground">{t('booking.price', 'Price')}:</span>
                             <span className="font-medium">{formatCurrency(service.price)}</span>
                             
                             <span className="text-muted-foreground">Name:</span>
@@ -839,7 +839,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                       onClick={handlePreviousStep}
                       disabled={isSubmitting}
                     >
-                      Previous
+                      {t('common.previous', 'Previous')}
                     </Button>
                   ) : (
                     <Button 
@@ -848,7 +848,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                       onClick={handleClose}
                       disabled={isSubmitting}
                     >
-                      Cancel
+                      {t('common.cancel', 'Cancel')}
                     </Button>
                   )}
 
@@ -858,7 +858,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                       onClick={handleNextStep}
                       disabled={isSubmitting}
                     >
-                      Next
+                      {t('common.next', 'Next')}
                     </Button>
                   ) : (
                     <Button 
@@ -872,10 +872,10 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
-                          Processing
+                          {t('booking.processing', 'Processing')}
                         </span>
                       ) : (
-                        'Book & Pay'
+                        t('booking.bookAndPay', 'Book & Pay')
                       )}
                     </Button>
                   )}
@@ -946,14 +946,14 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
 
               <div className="space-y-2 w-full max-w-xs mb-6">
                 <Button className="w-full" variant="outline" onClick={handleClose}>
-                  Close
+                  {t('booking.closeButton', 'Close')}
                 </Button>
                 <Button className="w-full" onClick={() => {
                   handleClose();
                   // Navigate to track page
                   // In a real app, you would navigate to the tracking page with the booking ID
                 }}>
-                  Track Application
+                  {t('booking.trackApplication', 'Track Application')}
                 </Button>
               </div>
 
