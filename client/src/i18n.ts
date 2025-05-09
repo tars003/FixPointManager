@@ -3,39 +3,32 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
 
-const savedLanguage = localStorage.getItem('fixpoint_language') || 'en';
-
 i18n
-  // Load translations from /public/locales
+  // Load translation using http (default public/locales/en/common.json)
   .use(Backend)
   // Detect user language
   .use(LanguageDetector)
   // Pass the i18n instance to react-i18next
   .use(initReactI18next)
-  // Init i18next
   .init({
     fallbackLng: 'en',
-    lng: savedLanguage,
-    debug: false, // Set to true for development
-    
-    detection: {
-      order: ['localStorage', 'navigator'],
-      lookupLocalStorage: 'fixpoint_language',
-      caches: ['localStorage'],
-    },
+    debug: false,
+    ns: ['common', 'documents', 'rto', 'vehicles', 'calculators'],
+    defaultNS: 'common',
     
     interpolation: {
-      escapeValue: false, // React already safes from XSS
+      escapeValue: false, // Not needed for React as it escapes by default
     },
     
-    // Enable dynamic loading of translations
+    // Language detector options
+    detection: {
+      order: ['localStorage', 'cookie', 'navigator'],
+      caches: ['localStorage', 'cookie'],
+    },
+    
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
-    
-    // Default namespaces used in your application
-    ns: ['common', 'vehicle', 'service', 'documents', 'arena', 'emergency', 'marketplace', 'rto'],
-    defaultNS: 'common',
     
     react: {
       useSuspense: true,

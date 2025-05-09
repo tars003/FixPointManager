@@ -6,6 +6,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import { AnimatePresence, motion } from "framer-motion";
 import { FeedbackProvider } from "@/hooks/use-feedback";
+import { NotificationProvider } from "@/components/common/NotificationProvider";
+import { I18nextProvider } from "react-i18next";
+import i18n from "./i18n";
 import Layout from "@/components/layout/layout";
 import NotFound from "@/pages/not-found";
 import PageTransition from "@/components/transitions/page-transition";
@@ -651,16 +654,20 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <TooltipProvider>
-          <Toaster />
-          <FeedbackProvider>
-            <Router />
-          </FeedbackProvider>
-        </TooltipProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <I18nextProvider i18n={i18n}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <TooltipProvider>
+            <Toaster />
+            <NotificationProvider>
+              <FeedbackProvider>
+                <Router />
+              </FeedbackProvider>
+            </NotificationProvider>
+          </TooltipProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </I18nextProvider>
   );
 }
 

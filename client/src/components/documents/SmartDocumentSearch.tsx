@@ -31,11 +31,11 @@ import {
   MoreHorizontal,
   Check,
   Info,
-  Tool,
-  Receipt,
   Users,
   RefreshCw,
-  Shield
+  Shield,
+  Wrench as Tool,
+  FileText as Receipt
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
