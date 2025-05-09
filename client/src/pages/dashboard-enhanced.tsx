@@ -338,11 +338,11 @@ const DashboardEnhanced = () => {
       path: '/compare' 
     },
     { 
-      id: 'history', 
-      name: 'Service History', 
-      description: 'Past service records',
-      icon: <History className="h-5 w-5 text-emerald-500" />,
-      path: '/history' 
+      id: 'rto', 
+      name: 'RTO Services', 
+      description: 'Compare & book RTO services',
+      icon: <FileText className="h-5 w-5 text-emerald-500" />,
+      path: '/rto-services' 
     },
     { 
       id: 'fastag', 
