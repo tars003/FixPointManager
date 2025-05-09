@@ -285,6 +285,24 @@ const DashboardEnhanced = () => {
       path: '/emergency',
       keyFeature: '24/7 SOS assistance with one-tap calling and location sharing'
     },
+    { 
+      id: 'tripplanner', 
+      name: 'Trip Planner', 
+      description: 'Plan routes, estimate costs & save trips',
+      icon: <Route className="h-5 w-5 text-teal-500" />,
+      color: 'bg-teal-100 text-teal-600',
+      path: '/trip-planner',
+      keyFeature: 'Multi-destination planning with fuel costs and points of interest along routes'
+    },
+    { 
+      id: 'calculators', 
+      name: 'Calculators', 
+      description: 'EMI, fuel, depreciation & insurance tools',
+      icon: <Calculator className="h-5 w-5 text-blue-500" />,
+      color: 'bg-blue-100 text-blue-600',
+      path: '/calculators',
+      keyFeature: 'Comprehensive financial planning tools for all aspects of vehicle ownership'
+    },
   ];
   
   // Additional modules
