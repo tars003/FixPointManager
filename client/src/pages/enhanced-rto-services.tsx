@@ -369,8 +369,7 @@ const EnhancedRTOServices: React.FC = () => {
           icon={<FileText />} 
         />
 
-        {/* NEW: Personalized Dashboard Widgets */}
-        <PersonalizedDashboardWidgets />
+        {/* Dashboard widgets have been removed as requested */}
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
           <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto">
