@@ -27,7 +27,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { formatCurrency } from '@/lib/format';
+import { formatCurrency, formatDate } from '@/lib/format';
 import AdvancedPageTransition from '@/components/transitions/advanced-page-transition';
 import PersonalizedDashboardWidgets from '@/components/dashboard/PersonalizedDashboardWidgets';
 import DocumentHoverCard from '@/components/documents/DocumentHoverCard';
@@ -193,7 +193,7 @@ const sampleDocuments = [
     category: 'License',
     dateAdded: '2024-06-15',
     expiryDate: '2029-06-14',
-    status: 'valid',
+    status: 'valid' as 'valid',
     fileSize: '1.2 MB',
     fileType: 'PDF'
   },
@@ -204,7 +204,7 @@ const sampleDocuments = [
     category: 'Registration',
     dateAdded: '2024-02-10',
     expiryDate: '2025-02-09',
-    status: 'valid',
+    status: 'valid' as 'valid',
     fileSize: '3.5 MB',
     fileType: 'PDF'
   },
@@ -215,7 +215,7 @@ const sampleDocuments = [
     category: 'Insurance',
     dateAdded: '2024-01-05',
     expiryDate: '2025-06-15',
-    status: 'expiring',
+    status: 'expiring' as 'expiring',
     fileSize: '2.8 MB',
     fileType: 'PDF'
   }
@@ -227,43 +227,43 @@ const tutorialSteps = [
     id: 'welcome',
     title: 'Welcome to RTO Services!',
     content: 'Hi there! I\'m Fixi, your guide to the new RTO Services module. Let me show you around the new features we\'ve added.',
-    mascotState: 'happy'
+    mascotState: 'happy' as 'happy'
   },
   {
     id: 'browse',
     title: 'Browse RTO Services',
     content: 'In the Browse tab, you can search for various RTO services available across India. Filter by state or category to find what you need.',
-    mascotState: 'pointing'
+    mascotState: 'pointing' as 'pointing'
   },
   {
     id: 'compare',
     title: 'Compare Services',
     content: 'Found multiple services that interest you? Click the "Compare" button to add them to your comparison list, and compare up to 3 services side by side.',
-    mascotState: 'thinking'
+    mascotState: 'thinking' as 'thinking'
   },
   {
     id: 'track',
     title: 'Track Your Applications',
     content: 'Use the Track tab to monitor the status of your RTO service applications. Enter your tracking ID or select from your recent services.',
-    mascotState: 'pointing'
+    mascotState: 'pointing' as 'pointing'
   },
   {
     id: 'widgets',
     title: 'Personalized Dashboard',
     content: 'You can now customize your dashboard with widgets! Click "Customize" to add, remove, or rearrange widgets based on what\'s important to you.',
-    mascotState: 'happy'
+    mascotState: 'happy' as 'happy'
   },
   {
     id: 'preview',
     title: 'Document Hover Preview',
     content: 'Hover over documents to quickly preview their details without opening them. Try it out on the documents in the Related Documents section.',
-    mascotState: 'pointing'
+    mascotState: 'pointing' as 'pointing'
   },
   {
     id: 'completed',
     title: 'You\'re All Set!',
     content: 'Great job! You now know how to use all the new features in the RTO Services module. Feel free to explore on your own!',
-    mascotState: 'celebrating'
+    mascotState: 'celebrating' as 'celebrating'
   }
 ];
 
