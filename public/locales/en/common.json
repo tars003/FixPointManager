@@ -19,7 +19,11 @@
     "viewDetails": "View Details",
     "moreInfo": "More Information",
     "needHelp": "Need help?",
-    "getAssistance": "Get quick assistance with our most common questions"
+    "getAssistance": "Get quick assistance with our most common questions",
+    "browse": "Browse",
+    "compare": "Compare",
+    "track": "Track",
+    "bookNow": "Book Now"
   },
   "language": {
     "languageSelection": "Language Selection",

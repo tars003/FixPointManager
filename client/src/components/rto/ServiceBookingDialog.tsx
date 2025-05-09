@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { apiRequest } from '@/lib/queryClient';
@@ -137,6 +138,7 @@ const ServiceBookingDialog: React.FC<ServiceBookingDialogProps> = ({
   service
 }) => {
   const { toast } = useToast();
+  const { t } = useTranslation(['rto', 'common']);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [bookingComplete, setBookingComplete] = useState(false);
@@ -323,9 +325,9 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
         {!bookingComplete ? (
           <>
             <DialogHeader>
-              <DialogTitle>Book RTO Service</DialogTitle>
+              <DialogTitle>{t('booking.title')}</DialogTitle>
               <DialogDescription>
-                Fill in the details to book {service.name}
+                {t('booking.fillDetails', { serviceName: service.name, defaultValue: `Fill in the details to book ${service.name}` })}
               </DialogDescription>
             </DialogHeader>
 
