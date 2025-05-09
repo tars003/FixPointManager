@@ -8,6 +8,11 @@ import CustomizeDashboardDialog, { DashboardModule } from '@/components/dashboar
 import { getDashboardModules, saveDashboardModules } from '@/services/dashboardPreferences';
 import FixPointCard from '@/components/membership/FixPointCard';
 import { useMembership } from '@/hooks/use-membership';
+import EnhancedHero from '@/components/hero/enhanced-hero';
+import PremiumCard from '@/components/premium/premium-card';
+import EnhancedCard from '@/components/ui/enhanced-card';
+import AnimatedBarChart from '@/components/charts/animated-bar-chart';
+import ProgressCircle from '@/components/charts/progress-circle';
 import { 
   Car, 
   Bell, 
