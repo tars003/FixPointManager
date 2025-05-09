@@ -345,6 +345,9 @@ const EnhancedRTOServices: React.FC = () => {
     if (service) {
       setSelectedService(service);
       setIsBookingDialogOpen(true);
+      console.log("Opening booking dialog for service:", service.name);
+    } else {
+      console.error("Service not found with ID:", serviceId);
     }
   };
 
