@@ -179,11 +179,14 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
       phone: '',
       vehicleType: '',
       vehicleRegistration: '',
+      useExistingVehicle: false,
+      existingVehicleId: undefined,
       address: '',
       city: '',
       state: '',
       pincode: '',
       preferredDate: undefined,
+      nearbyRto: '',
       paymentMethod: 'online',
       additionalNotes: '',
     },
@@ -225,7 +228,15 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
   const handleNextStep = () => {
     // For step 1, validate the personal information fields
     if (currentStep === 1) {
-      const personalInfoFields = ['fullName', 'email', 'phone', 'vehicleType', 'vehicleRegistration'];
+      // Fields to validate depend on whether user is using an existing vehicle
+      let personalInfoFields = ['fullName', 'email', 'phone', 'vehicleType'];
+      
+      if (form.getValues('useExistingVehicle')) {
+        personalInfoFields.push('existingVehicleId');
+      } else {
+        personalInfoFields.push('vehicleRegistration');
+      }
+      
       const validateFields = async () => {
         const result = await form.trigger(personalInfoFields as any);
         if (result) setCurrentStep(2);
@@ -234,7 +245,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
     }
     // For step 2, validate address and date fields before moving to payment
     else if (currentStep === 2) {
-      const addressDateFields = ['address', 'city', 'state', 'pincode', 'preferredDate'];
+      const addressDateFields = ['address', 'city', 'state', 'pincode', 'preferredDate', 'nearbyRto'];
       const validateFields = async () => {
         const result = await form.trigger(addressDateFields as any);
         if (result) setCurrentStep(3);
@@ -470,7 +481,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                               <Select 
                                 onValueChange={(value) => {
                                   field.onChange(value);
-                                  const selectedVehicle = userVehicles.find(v => v.id.toString() === value);
+                                  const selectedVehicle = userVehicles?.find((v: Vehicle) => v.id.toString() === value);
                                   if (selectedVehicle) {
                                     form.setValue('vehicleType', selectedVehicle.make.toLowerCase().includes('bike') ? '2-wheeler' : '4-wheeler');
                                   }
@@ -483,7 +494,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                  {userVehicles.map(vehicle => (
+                                  {userVehicles.map((vehicle: Vehicle) => (
                                     <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
                                       {vehicle.make} {vehicle.model} ({vehicle.licensePlate})
                                     </SelectItem>
@@ -715,10 +726,33 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                             <span>{form.getValues('phone')}</span>
                             
                             <span className="text-muted-foreground">Vehicle:</span>
-                            <span>{form.getValues('vehicleRegistration')}</span>
+                            <span>
+                              {form.getValues('useExistingVehicle') && userVehicles ? (
+                                (() => {
+                                  const selectedVehicle = userVehicles.find(
+                                    (v: Vehicle) => v.id.toString() === form.getValues('existingVehicleId')
+                                  );
+                                  return selectedVehicle ? 
+                                    `${selectedVehicle.make} ${selectedVehicle.model} (${selectedVehicle.licensePlate})` : 
+                                    form.getValues('vehicleRegistration');
+                                })()
+                              ) : form.getValues('vehicleRegistration')}
+                            </span>
                             
                             <span className="text-muted-foreground">Location:</span>
                             <span>{form.getValues('city')}, {form.getValues('state')}</span>
+                            
+                            <span className="text-muted-foreground">RTO Office:</span>
+                            <span>
+                              {(() => {
+                                const rtoId = form.getValues('nearbyRto');
+                                if (rtoId) {
+                                  const selectedOffice = availableRtoOffices.find(o => o.id === rtoId);
+                                  return selectedOffice ? selectedOffice.name : 'Not selected';
+                                }
+                                return 'Not selected';
+                              })()}
+                            </span>
                             
                             <span className="text-muted-foreground">Preferred Date:</span>
                             <span>
@@ -850,9 +884,40 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                   <span className="text-muted-foreground">Amount:</span>
                   <span>{formatCurrency(service.price)}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between mb-2">
                   <span className="text-muted-foreground">Date:</span>
                   <span>{format(form.getValues('preferredDate') || new Date(), 'PPP')}</span>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <span className="text-muted-foreground">Vehicle:</span>
+                  <span>
+                    {form.getValues('useExistingVehicle') && userVehicles ? (
+                      (() => {
+                        const selectedVehicle = userVehicles.find(
+                          (v: Vehicle) => v.id.toString() === form.getValues('existingVehicleId')
+                        );
+                        return selectedVehicle ? 
+                          `${selectedVehicle.make} ${selectedVehicle.model}` : 
+                          form.getValues('vehicleRegistration');
+                      })()
+                    ) : form.getValues('vehicleRegistration')}
+                  </span>
+                </div>
+                {form.getValues('nearbyRto') && (
+                  <div className="flex justify-between mb-2">
+                    <span className="text-muted-foreground">RTO Office:</span>
+                    <span>
+                      {(() => {
+                        const rtoId = form.getValues('nearbyRto');
+                        const selectedOffice = availableRtoOffices.find(o => o.id === rtoId);
+                        return selectedOffice ? selectedOffice.name : 'Not specified';
+                      })()}
+                    </span>
+                  </div>
+                )}
+                <div className="flex justify-between mb-2">
+                  <span className="text-muted-foreground">Payment:</span>
+                  <span>{form.getValues('paymentMethod') === 'online' ? 'Online Payment' : 'Pay at RTO Office'}</span>
                 </div>
               </div>
 
