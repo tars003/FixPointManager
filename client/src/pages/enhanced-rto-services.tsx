@@ -19,6 +19,7 @@ import {
   Settings,
   Info
 } from 'lucide-react';
+import { useTabWithScroll } from '@/hooks/use-scroll-top';
 
 import { PageHeader } from '@/components/ui/page-header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -272,7 +273,7 @@ const tutorialSteps = [
 const EnhancedRTOServices: React.FC = () => {
   const { toast } = useToast();
   const { t } = useTranslation(['rto', 'common']);
-  const [activeTab, setActiveTab] = useState('browse');
+  const [activeTab, setActiveTab] = useTabWithScroll<string>('browse');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedState, setSelectedState] = useState('all-states');
   const [selectedCategory, setSelectedCategory] = useState('all');

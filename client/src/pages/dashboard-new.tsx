@@ -39,10 +39,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { formatDate } from '@/lib/format';
 import { NotificationPopover } from '@/components/notification/notification-popover';
+import { useTabWithScroll } from '@/hooks/use-scroll-top';
 
 const DashboardNew = () => {
   const [, navigate] = useLocation();
-  const [activeTab, setActiveTab] = useState<string>('overview');
+  const [activeTab, setActiveTab] = useTabWithScroll<string>('overview');
   
   // Mock data for user
   const user = {

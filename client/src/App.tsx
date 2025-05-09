@@ -69,7 +69,9 @@ function Router() {
   
   // Scroll to top on route change
   useEffect(() => {
-    window.scrollTo(0, 0);
+    import('@/utils/scroll-utils').then(({ scrollToTop }) => {
+      scrollToTop();
+    });
   }, [location]);
   
   // Page transition animation

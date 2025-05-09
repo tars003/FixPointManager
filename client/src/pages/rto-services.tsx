@@ -28,6 +28,7 @@ import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { formatCurrency } from '@/lib/format';
 import AdvancedPageTransition from '@/components/transitions/advanced-page-transition';
+import { useTabWithScroll } from '@/hooks/use-scroll-top';
 
 // Sample RTO service data
 const rtoServices = [
@@ -182,7 +183,7 @@ const trackingData = [
 
 const RTOServices: React.FC = () => {
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState('browse');
+  const [activeTab, setActiveTab] = useTabWithScroll<string>('browse');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedState, setSelectedState] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
