@@ -29,6 +29,17 @@ export function formatCurrency(amount: number): string {
 }
 
 /**
+ * Format currency in Indian Rupee format, but with a custom symbol
+ * This is useful when we want to prefix the currency manually in the UI
+ */
+export function formatCurrencyValue(amount: number): string {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'decimal',
+    maximumFractionDigits: 0
+  }).format(amount);
+}
+
+/**
  * Format a number with commas as thousands separators
  */
 export function formatNumber(num: number): string {

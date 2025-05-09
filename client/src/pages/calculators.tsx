@@ -385,19 +385,19 @@ const Calculators: React.FC = () => {
                     <div className="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
                       <div className="text-sm text-gray-500 mb-1">Monthly EMI</div>
                       <div className="text-2xl font-bold text-blue-600">
-                        ₹{formatCurrency(loanResult.emi)}
+                        {formatCurrency(loanResult.emi)}
                       </div>
                     </div>
                     <div className="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
                       <div className="text-sm text-gray-500 mb-1">Total Interest</div>
                       <div className="text-2xl font-bold text-blue-600">
-                        ₹{formatCurrency(loanResult.totalInterest)}
+                        {formatCurrency(loanResult.totalInterest)}
                       </div>
                     </div>
                     <div className="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
                       <div className="text-sm text-gray-500 mb-1">Total Payment</div>
                       <div className="text-2xl font-bold text-blue-600">
-                        ₹{formatCurrency(loanResult.totalAmount)}
+                        {formatCurrency(loanResult.totalAmount)}
                       </div>
                     </div>
                   </div>
@@ -870,7 +870,7 @@ const Calculators: React.FC = () => {
                     <div className="bg-white p-4 rounded-lg shadow-sm border border-amber-100">
                       <div className="text-sm text-gray-500 mb-1">Basic Premium</div>
                       <div className="text-2xl font-bold text-amber-600">
-                        ₹{formatCurrency(Number(insuranceResult.basicPremium))}
+                        {formatCurrency(Number(insuranceResult.basicPremium))}
                       </div>
                     </div>
                     <div className="bg-white p-4 rounded-lg shadow-sm border border-amber-100">
@@ -888,7 +888,7 @@ const Calculators: React.FC = () => {
                     <div className="bg-white p-4 rounded-lg shadow-sm border border-amber-100">
                       <div className="text-sm text-gray-500 mb-1">Total Premium</div>
                       <div className="text-2xl font-bold text-amber-600">
-                        ₹{formatCurrency(Number(insuranceResult.totalPremium))}
+                        {formatCurrency(Number(insuranceResult.totalPremium))}
                       </div>
                     </div>
                   </div>
