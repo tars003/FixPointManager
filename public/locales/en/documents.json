@@ -1,0 +1,85 @@
+{
+  "title": "Document Vault",
+  "subtitle": "Manage all your vehicle-related documents in one place",
+  "searchPlaceholder": "Search documents by name, type, or vehicle",
+  "categories": {
+    "all": "All Documents",
+    "registration": "Registration",
+    "insurance": "Insurance",
+    "service": "Service Records",
+    "tax": "Tax Documents",
+    "invoice": "Invoices & Receipts"
+  },
+  "status": {
+    "valid": "Valid",
+    "expiring": "Expiring Soon",
+    "expired": "Expired"
+  },
+  "actions": {
+    "upload": "Upload Document",
+    "scan": "Scan Document",
+    "share": "Share",
+    "download": "Download",
+    "print": "Print",
+    "delete": "Delete",
+    "edit": "Edit Details",
+    "renew": "Renew Document"
+  },
+  "tags": {
+    "important": "Important",
+    "personal": "Personal",
+    "shared": "Shared",
+    "archived": "Archived"
+  },
+  "upload": {
+    "title": "Upload Document",
+    "dragDrop": "Drag and drop files here, or click to select files",
+    "selectFiles": "Select Files",
+    "maxSize": "Maximum file size: 10MB",
+    "supportedFormats": "Supported formats: PDF, JPG, PNG",
+    "uploading": "Uploading document...",
+    "success": "Document uploaded successfully",
+    "error": "Error uploading document"
+  },
+  "documentDetails": {
+    "title": "Document Details",
+    "documentName": "Document Name",
+    "documentType": "Document Type",
+    "issuedDate": "Issued Date",
+    "expiryDate": "Expiry Date",
+    "associatedVehicle": "Associated Vehicle",
+    "tags": "Tags",
+    "uploadedOn": "Uploaded On",
+    "sharedWith": "Shared With",
+    "addDetails": "Add Additional Details"
+  },
+  "sharing": {
+    "title": "Share Document",
+    "shareVia": "Share Via",
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "message": "Message",
+    "link": "Generate Link",
+    "accessDuration": "Access Duration",
+    "accessPermissions": "Access Permissions",
+    "recipientEmail": "Recipient Email",
+    "optionalMessage": "Optional Message",
+    "sendCopy": "Send me a copy",
+    "shareButton": "Share Document",
+    "cancelButton": "Cancel",
+    "successMessage": "Document shared successfully"
+  },
+  "search": {
+    "advancedSearch": "Advanced Search",
+    "filters": "Filters",
+    "sort": "Sort By",
+    "date": "Date",
+    "name": "Name",
+    "type": "Type",
+    "status": "Status",
+    "vehicle": "Vehicle",
+    "recentSearches": "Recent Searches",
+    "noResults": "No documents found matching your search",
+    "searching": "Searching documents..."
+  }
+}

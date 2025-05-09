@@ -239,7 +239,6 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
           message: t('booking.bookingConfirmed', 'Your RTO service booking (ID: {{id}}) has been confirmed.', 
             { id: generatedBookingId }),
           timestamp: new Date(),
-          read: false,
           priority: 'medium',
           category: 'service',
           link: '/rto-services/bookings'

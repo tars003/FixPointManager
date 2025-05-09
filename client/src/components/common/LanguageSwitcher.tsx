@@ -1,87 +1,112 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Globe } from 'lucide-react';
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+} from "@/components/ui/dropdown-menu";
+import { Globe, CheckCircle2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-// Define language options with display names and country codes for flags
-const languages = [
-  { code: 'en', name: 'English', flag: '🇬🇧' },
-  { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
-  { code: 'ta', name: 'தமிழ்', flag: '🇮🇳' },
-  { code: 'te', name: 'తెలుగు', flag: '🇮🇳' },
-  { code: 'mr', name: 'मराठी', flag: '🇮🇳' },
-  { code: 'bn', name: 'বাংলা', flag: '🇮🇳' },
-  { code: 'gu', name: 'ગુજરાતી', flag: '🇮🇳' },
-  { code: 'kn', name: 'ಕನ್ನಡ', flag: '🇮🇳' },
-  { code: 'ml', name: 'മലയാളം', flag: '🇮🇳' }
+interface LanguageOption {
+  code: string;
+  name: string;
+  flag: string;
+  nativeName: string;
+}
+
+interface LanguageSwitcherProps {
+  variant?: "default" | "outline" | "ghost";
+  size?: "sm" | "default" | "lg";
+  position?: "bottom" | "top" | "left" | "right";
+  showText?: boolean;
+  className?: string;
+}
+
+// Available languages
+const languages: LanguageOption[] = [
+  {
+    code: "en",
+    name: "English",
+    flag: "🇬🇧",
+    nativeName: "English"
+  },
+  {
+    code: "hi",
+    name: "Hindi",
+    flag: "🇮🇳",
+    nativeName: "हिन्दी"
+  }
 ];
 
-export const LanguageSwitcher: React.FC<{ variant?: 'default' | 'outline' | 'ghost' }> = ({ 
-  variant = 'outline' 
-}) => {
+export function LanguageSwitcher({
+  variant = "outline",
+  size = "default",
+  position = "bottom",
+  showText = true,
+  className
+}: LanguageSwitcherProps) {
   const { i18n, t } = useTranslation();
-  const { toast } = useToast();
-  const [isChanging, setIsChanging] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  
   const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
-
-  const changeLanguage = async (langCode: string) => {
-    if (langCode === i18n.language) return;
-    
-    setIsChanging(true);
-    
-    try {
-      await i18n.changeLanguage(langCode);
-      localStorage.setItem('fixpoint_language', langCode);
-      
-      const newLang = languages.find(lang => lang.code === langCode);
-      
-      toast({
-        title: t('common.success'),
-        description: `${t('language.currentLanguage')}: ${newLang?.name}`,
-      });
-    } catch (error) {
-      console.error('Error changing language:', error);
-      toast({
-        title: t('common.error'),
-        description: 'Failed to change language. Please try again.',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsChanging(false);
-    }
+  
+  const handleLanguageChange = (langCode: string) => {
+    i18n.changeLanguage(langCode);
+    setOpen(false);
   };
-
+  
+  const sizeClasses = {
+    sm: "h-8 text-xs",
+    default: "h-10 text-sm",
+    lg: "h-12 text-base"
+  };
+  
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant={variant} size="sm" className="gap-2">
-          <Globe className="h-4 w-4" />
-          <span className="hidden md:inline-flex">{currentLanguage.flag} {currentLanguage.name}</span>
+        <Button 
+          variant={variant} 
+          size={size === "lg" ? "lg" : size === "sm" ? "sm" : "default"}
+          className={cn("gap-2", className)}
+        >
+          <Globe className={cn(
+            size === "sm" ? "h-3.5 w-3.5" : 
+            size === "lg" ? "h-5 w-5" : 
+            "h-4 w-4"
+          )} />
+          {showText && (
+            <span className="hidden sm:inline-block">
+              {currentLanguage.flag} {currentLanguage.nativeName}
+            </span>
+          )}
+          {!showText && (
+            <span className="sm:inline-block">
+              {currentLanguage.flag}
+            </span>
+          )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {languages.map((lang) => (
+      <DropdownMenuContent align="end" side={position} className="w-40">
+        {languages.map((language) => (
           <DropdownMenuItem
-            key={lang.code}
-            disabled={isChanging}
-            onClick={() => changeLanguage(lang.code)}
-            className={lang.code === i18n.language ? 'bg-muted' : ''}
+            key={language.code}
+            onClick={() => handleLanguageChange(language.code)}
+            className={cn(
+              "flex items-center gap-2 px-3 py-2 cursor-pointer",
+              language.code === i18n.language && "bg-muted"
+            )}
           >
-            <span className="mr-2">{lang.flag}</span>
-            {lang.name}
+            <span className="text-base">{language.flag}</span>
+            <span className="flex-1">{language.nativeName}</span>
+            {language.code === i18n.language && (
+              <CheckCircle2 className="h-4 w-4 text-primary" />
+            )}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
-
-export default LanguageSwitcher;
+}

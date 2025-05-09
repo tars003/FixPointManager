@@ -1,161 +1,120 @@
 {
   "title": "आरटीओ सेवाएं",
-  "subtitle": "एक ही स्थान पर सभी आरटीओ संबंधित सेवाओं तक पहुंचें",
-  "popular": "लोकप्रिय आरटीओ सेवाएं",
-  "allServices": "सभी आरटीओ सेवाएं",
-  "nearby": "आस-पास के आरटीओ कार्यालय",
+  "subtitle": "आरटीओ संबंधित सेवाएं अपनी सुविधा पर प्राप्त करें",
+  "searchPlaceholder": "आरटीओ सेवाओं के लिए खोजें",
+  "topServices": "शीर्ष सेवाएं",
+  "allServices": "सभी सेवाएं",
+  "locations": "आरटीओ स्थान",
+  "nearestRto": "निकटतम आरटीओ केंद्र",
+  "recentBookings": "हालिया बुकिंग",
+  "viewAll": "सभी देखें",
+  "nearbyRto": "आसपास के आरटीओ केंद्र",
+  "trackingId": "ट्रैकिंग आईडी",
+  "bookingStatus": "बुकिंग स्थिति",
+  "bookingDate": "बुकिंग तिथि",
   "bookNow": "अभी बुक करें",
-  "searchLocation": "स्थान या पिनकोड से खोजें",
-  "viewAllServices": "सभी सेवाएं देखें",
-  "viewMore": "और देखें",
-  "viewLess": "कम देखें",
-  "enhanced": {
-    "title": "उन्नत आरटीओ सेवाएं",
-    "intro": "सभी आरटीओ संबंधित सेवाओं तक तेज़, विश्वसनीय और सुविधाजनक पहुंच",
-    "filterBy": "फ़िल्टर करें"
+  "status": {
+    "pending": "लंबित",
+    "inProgress": "प्रगति पर",
+    "completed": "पूर्ण",
+    "cancelled": "रद्द"
+  },
+  "services": {
+    "licenseRenewal": {
+      "title": "लाइसेंस नवीनीकरण",
+      "description": "अपने ड्राइविंग लाइसेंस की समाप्ति से पहले उसका नवीनीकरण करें",
+      "price": "₹300",
+      "time": "7-10 दिन"
+    },
+    "vehicleRegistration": {
+      "title": "वाहन पंजीकरण",
+      "description": "अपने नए वाहन को आरटीओ में पंजीकृत करें",
+      "price": "₹800",
+      "time": "5-7 दिन"
+    },
+    "permitRenewal": {
+      "title": "परमिट नवीनीकरण",
+      "description": "अपने वाहन परमिट का समाप्ति से पहले नवीनीकरण करें",
+      "price": "₹500",
+      "time": "3-5 दिन"
+    },
+    "duplicateDL": {
+      "title": "डुप्लिकेट ड्राइविंग लाइसेंस",
+      "description": "डुप्लिकेट ड्राइविंग लाइसेंस के लिए आवेदन करें",
+      "price": "₹250",
+      "time": "7 दिन"
+    },
+    "vehicleTransfer": {
+      "title": "वाहन स्वामित्व हस्तांतरण",
+      "description": "अपने वाहन का स्वामित्व हस्तांतरित करें",
+      "price": "₹600",
+      "time": "10 दिन"
+    },
+    "noc": {
+      "title": "अनापत्ति प्रमाण पत्र आवेदन",
+      "description": "अनापत्ति प्रमाण पत्र के लिए आवेदन करें",
+      "price": "₹400",
+      "time": "5-7 दिन"
+    }
   },
   "booking": {
     "title": "आरटीओ सेवा बुक करें",
     "fillDetails": "{{serviceName}} बुक करने के लिए विवरण भरें",
-    "selectVehicle": "वाहन चुनें",
-    "selectService": "सेवा चुनें",
-    "chooseRTO": "आरटीओ कार्यालय चुनें",
-    "selectDate": "तिथि और समय चुनें",
-    "yourDetails": "आपका विवरण",
+    "personalInformation": "व्यक्तिगत जानकारी",
+    "vehicleInformation": "वाहन जानकारी",
+    "addressDetails": "पता विवरण",
     "paymentDetails": "भुगतान विवरण",
-    "confirm": "बुकिंग की पुष्टि करें",
-    "success": "बुकिंग सफल",
-    "vehicleRequired": "कृपया एक वाहन चुनें",
-    "serviceRequired": "कृपया एक सेवा चुनें",
-    "rtoRequired": "कृपया एक आरटीओ कार्यालय चुनें",
-    "dateRequired": "कृपया एक तिथि चुनें",
-    "phonePrefix": "+91",
-    "processing": "प्रोसेसिंग",
-    "bookAndPay": "बुक करें और भुगतान करें",
-    "closeButton": "बंद करें",
-    "trackApplication": "आवेदन को ट्रैक करें",
-    "bookingSummary": "बुकिंग सारांश",
-    "bookingSuccessful": "बुकिंग सफल!",
-    "bookingSuccessMessage": "आपकी आरटीओ सेवा सफलतापूर्वक बुक कर ली गई है।",
-    "confirmationEmailSent": "एक पुष्टिकरण ईमेल {{email}} पर भेज दिया गया है",
-    "service": "सेवा",
-    "price": "मूल्य",
-    "vehicle": "वाहन",
-    "location": "स्थान",
-    "rtoOffice": "आरटीओ कार्यालय",
-    "preferredDate": "पसंदीदा तिथि",
-    "name": "नाम",
-    "email": "ईमेल",
-    "phone": "फोन",
-    "bookingId": "बुकिंग आईडी",
-    "amount": "राशि",
-    "date": "तिथि",
-    "payment": "भुगतान",
-    "paymentMethod": "भुगतान का तरीका",
-    "onlinePayment": "ऑनलाइन भुगतान",
-    "payAtRto": "आरटीओ कार्यालय पर भुगतान करें",
-    "onlinePaymentDesc": "क्रेडिट/डेबिट कार्ड, यूपीआई या नेट बैंकिंग का उपयोग करके अभी भुगतान करें",
-    "payAtRtoDesc": "आरटीओ कार्यालय जाते समय नकद भुगतान करें",
-    "termsNotice": "इस बुकिंग के साथ आगे बढ़कर, आप हमारी सेवा की शर्तों से सहमत होते हैं और यह स्वीकार करते हैं कि आरटीओ कार्यालय में अतिरिक्त दस्तावेज़ सत्यापन की आवश्यकता हो सकती है।",
+    "bookingSuccessful": "बुकिंग सफल",
+    "bookingConfirmed": "आपकी आरटीओ सेवा बुकिंग (आईडी: {{id}}) की पुष्टि कर दी गई है।",
+    "bookingFailed": "बुकिंग विफल",
+    "bookingError": "आपकी बुकिंग प्रक्रिया में त्रुटि थी। कृपया पुनः प्रयास करें।",
     "steps": {
       "personalInfo": "व्यक्तिगत जानकारी",
       "addressAndDate": "पता और तिथि",
       "payment": "भुगतान"
     },
-    "personalInformation": "व्यक्तिगत जानकारी",
-    "vehicleInformation": "वाहन की जानकारी",
+    "success": "बुकिंग सफल",
     "form": {
       "fullName": "पूरा नाम",
-      "fullNamePlaceholder": "जॉन डो",
-      "email": "ईमेल",
-      "emailPlaceholder": "johndoe@example.com",
+      "fullNamePlaceholder": "अपना पूरा नाम दर्ज करें",
+      "email": "ईमेल पता",
+      "emailPlaceholder": "अपना ईमेल पता दर्ज करें",
       "phone": "फोन नंबर",
-      "phonePlaceholder": "10-अंकों का मोबाइल नंबर",
+      "phonePlaceholder": "10-अंकीय मोबाइल नंबर",
       "vehicleType": "वाहन प्रकार",
+      "vehicleRegistration": "वाहन पंजीकरण संख्या",
+      "vehicleRegistrationPlaceholder": "पंजीकरण संख्या दर्ज करें",
+      "existingVehicle": "वाहन वॉल्ट से मौजूदा वाहन का उपयोग करें",
+      "selectVehicle": "वाहन चुनें",
       "selectVehicleTypePlaceholder": "वाहन प्रकार चुनें",
-      "twoWheeler": "दो पहिया वाहन",
-      "fourWheeler": "चार पहिया वाहन",
+      "twoWheeler": "दो पहिया",
+      "fourWheeler": "चार पहिया",
       "commercialVehicle": "वाणिज्यिक वाहन",
       "other": "अन्य",
-      "useVehicleFromGarage": "मेरे गैराज से वाहन का उपयोग करें",
-      "selectVehicle": "एक वाहन चुनें",
-      "selectVehiclePlaceholder": "अपने गैराज से एक वाहन चुनें",
-      "vehicleRegistration": "वाहन पंजीकरण संख्या",
-      "vehicleRegistrationPlaceholder": "उदाहरण, MH12AB1234",
-      "vehicleRegistrationHelp": "MH12AB1234 जैसे प्रारूप में अपना वाहन पंजीकरण नंबर दर्ज करें",
-      "address": "पता",
-      "addressPlaceholder": "अपना पूरा पता दर्ज करें",
+      "address": "स्ट्रीट एड्रेस",
+      "addressPlaceholder": "अपना स्ट्रीट एड्रेस दर्ज करें",
       "city": "शहर",
-      "cityPlaceholder": "शहर का नाम",
+      "cityPlaceholder": "अपना शहर दर्ज करें",
       "state": "राज्य",
-      "statePlaceholder": "राज्य चुनें",
-      "pincode": "पिन कोड",
-      "pincodePlaceholder": "6-अंकों का पिन कोड",
-      "date": "तारीख",
-      "pickDate": "तारीख चुनें",
-      "dateHelp": "अपनी आरटीओ सेवा के लिए पसंदीदा तारीख चुनें (अधिकतम 2 महीने आगे की)",
-      "selectRto": "आसपास का आरटीओ कार्यालय चुनें",
-      "selectRtoPlaceholder": "आरटीओ कार्यालय चुनें",
-      "rtoHelp": "अपने स्थान के आधार पर अपना पसंदीदा आरटीओ कार्यालय चुनें",
-      "additionalNotes": "अतिरिक्त टिप्पणियां (वैकल्पिक)",
-      "additionalNotesPlaceholder": "कोई अतिरिक्त जानकारी या विशेष आवश्यकताएं"
-    },
-    "nameLabel": "पूरा नाम",
-    "emailLabel": "ईमेल पता",
-    "phoneLabel": "फोन नंबर",
-    "addressLabel": "पता",
-    "pinLabel": "पिन कोड",
-    "vehicleNumber": "वाहन नंबर",
-    "success_message": "आपकी आरटीओ सेवा सफलतापूर्वक बुक कर ली गई है। एक पुष्टिकरण आपके ईमेल और मोबाइल नंबर पर भेज दिया गया है।"
-  },
-  "services": {
-    "drivingLicense": {
-      "title": "ड्राइविंग लाइसेंस",
-      "desc": "नए लाइसेंस, नवीनीकरण या डुप्लिकेट के लिए आवेदन करें"
-    },
-    "vehicleRegistration": {
-      "title": "वाहन पंजीकरण",
-      "desc": "नया पंजीकरण, स्थानांतरण या नवीनीकरण"
-    },
-    "permitServices": {
-      "title": "परमिट सेवाएं",
-      "desc": "सभी प्रकार के वाहन परमिट"
-    },
-    "fitnessServices": {
-      "title": "फिटनेस सेवाएं",
-      "desc": "वाहन फिटनेस प्रमाणन"
-    },
-    "taxServices": {
-      "title": "कर सेवाएं",
-      "desc": "सड़क कर भुगतान और सत्यापन"
-    },
-    "noc": {
-      "title": "एनओसी सेवाएं",
-      "desc": "वाहनों के लिए अनापत्ति प्रमाण पत्र"
-    },
-    "hypothecation": {
-      "title": "हाइपोथिकेशन",
-      "desc": "हाइपोथिकेशन की जोड़ या समाप्ति"
-    },
-    "pucc": {
-      "title": "पीयूसी प्रमाणपत्र",
-      "desc": "प्रदूषण नियंत्रण के तहत प्रमाणन"
-    },
-    "addressChange": {
-      "title": "पता परिवर्तन",
-      "desc": "वाहन दस्तावेजों में पता अपडेट करें"
-    },
-    "internationalDL": {
-      "title": "अंतर्राष्ट्रीय डीएल",
-      "desc": "अंतर्राष्ट्रीय ड्राइविंग परमिट"
-    },
-    "duplicateRC": {
-      "title": "डुप्लिकेट आरसी",
-      "desc": "डुप्लिकेट पंजीकरण प्रमाणपत्र के लिए आवेदन करें"
-    },
-    "fancyNumber": {
-      "title": "फैंसी नंबर",
-      "desc": "पसंद का पंजीकरण नंबर बुक करें"
+      "statePlaceholder": "अपना राज्य चुनें",
+      "pincode": "पिनकोड",
+      "pincodePlaceholder": "6-अंकीय पिनकोड",
+      "preferredDate": "पसंदीदा सेवा तिथि",
+      "preferredDatePlaceholder": "अपनी पसंदीदा तिथि चुनें",
+      "nearbyRto": "आसपास का आरटीओ केंद्र",
+      "nearbyRtoPlaceholder": "आरटीओ केंद्र चुनें",
+      "paymentMethod": "भुगतान विधि",
+      "cardNumber": "कार्ड नंबर",
+      "cardName": "कार्ड पर नाम",
+      "cardExpiry": "समाप्ति तिथि",
+      "cardCvc": "सीवीसी",
+      "upi": "यूपीआई आईडी",
+      "upiPlaceholder": "अपनी यूपीआई आईडी दर्ज करें",
+      "saveDetails": "भविष्य की बुकिंग के लिए विवरण सहेजें",
+      "optionalNotes": "अतिरिक्त नोट्स (वैकल्पिक)",
+      "optionalNotesPlaceholder": "कोई विशेष आवश्यकताएं या जानकारी",
+      "downloadReceipt": "रसीद डाउनलोड करें",
+      "trackService": "सेवा ट्रैक करें"
     }
   }
 }

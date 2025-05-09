@@ -1,161 +1,120 @@
 {
   "title": "RTO Services",
-  "subtitle": "Access all RTO related services in one place",
-  "popular": "Popular RTO Services",
-  "allServices": "All RTO Services",
-  "nearby": "Nearby RTO Offices",
+  "subtitle": "Get RTO-related services at your convenience",
+  "searchPlaceholder": "Search for RTO services",
+  "topServices": "Top Services",
+  "allServices": "All Services",
+  "locations": "RTO Locations",
+  "nearestRto": "Nearest RTO Center",
+  "recentBookings": "Recent Bookings",
+  "viewAll": "View All",
+  "nearbyRto": "Nearby RTO Centers",
+  "trackingId": "Tracking ID",
+  "bookingStatus": "Booking Status",
+  "bookingDate": "Booking Date",
   "bookNow": "Book Now",
-  "searchLocation": "Search by location or pincode",
-  "viewAllServices": "View All Services",
-  "viewMore": "View More",
-  "viewLess": "View Less",
-  "enhanced": {
-    "title": "Enhanced RTO Services",
-    "intro": "Fast, reliable and convenient access to all RTO related services",
-    "filterBy": "Filter by"
+  "status": {
+    "pending": "Pending",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "services": {
+    "licenseRenewal": {
+      "title": "License Renewal",
+      "description": "Renew your driving license before it expires",
+      "price": "₹300",
+      "time": "7-10 days"
+    },
+    "vehicleRegistration": {
+      "title": "Vehicle Registration",
+      "description": "Register your new vehicle with the RTO",
+      "price": "₹800",
+      "time": "5-7 days"
+    },
+    "permitRenewal": {
+      "title": "Permit Renewal",
+      "description": "Renew your vehicle permit before expiry",
+      "price": "₹500",
+      "time": "3-5 days"
+    },
+    "duplicateDL": {
+      "title": "Duplicate Driving License",
+      "description": "Apply for a duplicate driving license",
+      "price": "₹250",
+      "time": "7 days"
+    },
+    "vehicleTransfer": {
+      "title": "Vehicle Ownership Transfer",
+      "description": "Transfer ownership of your vehicle",
+      "price": "₹600",
+      "time": "10 days"
+    },
+    "noc": {
+      "title": "NOC Application",
+      "description": "Apply for a No Objection Certificate",
+      "price": "₹400",
+      "time": "5-7 days"
+    }
   },
   "booking": {
     "title": "Book RTO Service",
     "fillDetails": "Fill in the details to book {{serviceName}}",
-    "selectVehicle": "Select Vehicle",
-    "selectService": "Select Service",
-    "chooseRTO": "Choose RTO Office",
-    "selectDate": "Select Date & Time",
-    "yourDetails": "Your Details",
+    "personalInformation": "Personal Information",
+    "vehicleInformation": "Vehicle Information",
+    "addressDetails": "Address Details",
     "paymentDetails": "Payment Details",
-    "confirm": "Confirm Booking",
-    "success": "Booking Successful",
-    "vehicleRequired": "Please select a vehicle",
-    "serviceRequired": "Please select a service",
-    "rtoRequired": "Please select an RTO office",
-    "dateRequired": "Please select a date",
-    "phonePrefix": "+91",
-    "processing": "Processing",
-    "bookAndPay": "Book & Pay",
-    "closeButton": "Close",
-    "trackApplication": "Track Application",
-    "bookingSummary": "Booking Summary",
-    "bookingSuccessful": "Booking Successful!",
-    "bookingSuccessMessage": "Your RTO service has been booked successfully.",
-    "confirmationEmailSent": "A confirmation email has been sent to {{email}}",
-    "service": "Service",
-    "price": "Price",
-    "vehicle": "Vehicle",
-    "location": "Location",
-    "rtoOffice": "RTO Office",
-    "preferredDate": "Preferred Date",
-    "name": "Name",
-    "email": "Email",
-    "phone": "Phone",
-    "bookingId": "Booking ID",
-    "amount": "Amount",
-    "date": "Date",
-    "payment": "Payment",
-    "paymentMethod": "Payment Method",
-    "onlinePayment": "Online Payment",
-    "payAtRto": "Pay at RTO Office",
-    "onlinePaymentDesc": "Pay now using Credit/Debit card, UPI, or Net Banking",
-    "payAtRtoDesc": "Pay in cash when visiting the RTO office",
-    "termsNotice": "By proceeding with this booking, you agree to our terms of service and acknowledge that additional document verification may be required at the RTO office.",
+    "bookingSuccessful": "Booking Successful",
+    "bookingConfirmed": "Your RTO service booking (ID: {{id}}) has been confirmed.",
+    "bookingFailed": "Booking Failed",
+    "bookingError": "There was an error processing your booking. Please try again.",
     "steps": {
       "personalInfo": "Personal Info",
       "addressAndDate": "Address & Date",
       "payment": "Payment"
     },
-    "personalInformation": "Personal Information",
-    "vehicleInformation": "Vehicle Information",
+    "success": "Booking Successful",
     "form": {
       "fullName": "Full Name",
-      "fullNamePlaceholder": "John Doe",
-      "email": "Email",
-      "emailPlaceholder": "johndoe@example.com",
+      "fullNamePlaceholder": "Enter your full name",
+      "email": "Email Address",
+      "emailPlaceholder": "Enter your email address",
       "phone": "Phone Number",
       "phonePlaceholder": "10-digit mobile number",
       "vehicleType": "Vehicle Type",
+      "vehicleRegistration": "Vehicle Registration Number",
+      "vehicleRegistrationPlaceholder": "Enter registration number",
+      "existingVehicle": "Use existing vehicle from Vehicle Vault",
+      "selectVehicle": "Select Vehicle",
       "selectVehicleTypePlaceholder": "Select vehicle type",
       "twoWheeler": "Two Wheeler",
       "fourWheeler": "Four Wheeler",
       "commercialVehicle": "Commercial Vehicle",
       "other": "Other",
-      "useVehicleFromGarage": "Use vehicle from my garage",
-      "selectVehicle": "Select a Vehicle",
-      "selectVehiclePlaceholder": "Select a vehicle from your garage",
-      "vehicleRegistration": "Vehicle Registration Number",
-      "vehicleRegistrationPlaceholder": "e.g., MH12AB1234",
-      "vehicleRegistrationHelp": "Enter your vehicle registration number in the format like MH12AB1234",
-      "address": "Address",
-      "addressPlaceholder": "Enter your full address",
+      "address": "Street Address",
+      "addressPlaceholder": "Enter your street address",
       "city": "City",
-      "cityPlaceholder": "City name",
+      "cityPlaceholder": "Enter your city",
       "state": "State",
-      "statePlaceholder": "Select state",
-      "pincode": "PIN Code",
-      "pincodePlaceholder": "6-digit PIN code",
-      "date": "Date",
-      "pickDate": "Pick a date",
-      "dateHelp": "Choose a preferred date for your RTO service (up to 2 months in advance)",
-      "selectRto": "Select Nearby RTO Office",
-      "selectRtoPlaceholder": "Select RTO office",
-      "rtoHelp": "Choose your preferred RTO office based on your location",
-      "additionalNotes": "Additional Notes (Optional)",
-      "additionalNotesPlaceholder": "Any additional information or special requirements"
-    },
-    "nameLabel": "Full Name",
-    "emailLabel": "Email Address",
-    "phoneLabel": "Phone Number",
-    "addressLabel": "Address",
-    "pinLabel": "PIN Code",
-    "vehicleNumber": "Vehicle Number",
-    "success_message": "Your RTO service has been booked successfully. A confirmation has been sent to your email and mobile number."
-  },
-  "services": {
-    "drivingLicense": {
-      "title": "Driving License",
-      "desc": "Apply for new license, renewal or duplicate"
-    },
-    "vehicleRegistration": {
-      "title": "Vehicle Registration",
-      "desc": "New registration, transfer or renewal"
-    },
-    "permitServices": {
-      "title": "Permit Services",
-      "desc": "All types of vehicle permits"
-    },
-    "fitnessServices": {
-      "title": "Fitness Services",
-      "desc": "Vehicle fitness certification"
-    },
-    "taxServices": {
-      "title": "Tax Services",
-      "desc": "Road tax payment and verification"
-    },
-    "noc": {
-      "title": "NOC Services",
-      "desc": "No Objection Certificate for vehicles"
-    },
-    "hypothecation": {
-      "title": "Hypothecation",
-      "desc": "Addition or termination of hypothecation"
-    },
-    "pucc": {
-      "title": "PUC Certificate",
-      "desc": "Pollution Under Control certification"
-    },
-    "addressChange": {
-      "title": "Address Change",
-      "desc": "Update address in vehicle documents"
-    },
-    "internationalDL": {
-      "title": "International DL",
-      "desc": "International Driving Permit"
-    },
-    "duplicateRC": {
-      "title": "Duplicate RC",
-      "desc": "Apply for duplicate Registration Certificate"
-    },
-    "fancyNumber": {
-      "title": "Fancy Number",
-      "desc": "Book choice registration number"
+      "statePlaceholder": "Select your state",
+      "pincode": "Pincode",
+      "pincodePlaceholder": "6-digit pincode",
+      "preferredDate": "Preferred Service Date",
+      "preferredDatePlaceholder": "Select your preferred date",
+      "nearbyRto": "Nearby RTO Center",
+      "nearbyRtoPlaceholder": "Select RTO center",
+      "paymentMethod": "Payment Method",
+      "cardNumber": "Card Number",
+      "cardName": "Name on Card",
+      "cardExpiry": "Expiry Date",
+      "cardCvc": "CVC",
+      "upi": "UPI ID",
+      "upiPlaceholder": "Enter your UPI ID",
+      "saveDetails": "Save details for future bookings",
+      "optionalNotes": "Additional Notes (Optional)",
+      "optionalNotesPlaceholder": "Any special requirements or information",
+      "downloadReceipt": "Download Receipt",
+      "trackService": "Track Service"
     }
   }
 }
