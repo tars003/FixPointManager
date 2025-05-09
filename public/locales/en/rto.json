@@ -1,0 +1,90 @@
+{
+  "title": "RTO Services",
+  "subtitle": "Access all RTO related services in one place",
+  "popular": "Popular RTO Services",
+  "allServices": "All RTO Services",
+  "nearby": "Nearby RTO Offices",
+  "bookNow": "Book Now",
+  "searchLocation": "Search by location or pincode",
+  "viewAllServices": "View All Services",
+  "viewMore": "View More",
+  "viewLess": "View Less",
+  "enhanced": {
+    "title": "Enhanced RTO Services",
+    "intro": "Fast, reliable and convenient access to all RTO related services",
+    "filterBy": "Filter by"
+  },
+  "booking": {
+    "title": "Book RTO Service",
+    "selectVehicle": "Select Vehicle",
+    "selectService": "Select Service",
+    "chooseRTO": "Choose RTO Office",
+    "selectDate": "Select Date & Time",
+    "yourDetails": "Your Details",
+    "paymentDetails": "Payment Details",
+    "confirm": "Confirm Booking",
+    "success": "Booking Successful",
+    "vehicleRequired": "Please select a vehicle",
+    "serviceRequired": "Please select a service",
+    "rtoRequired": "Please select an RTO office",
+    "dateRequired": "Please select a date",
+    "phonePrefix": "+91",
+    "nameLabel": "Full Name",
+    "emailLabel": "Email Address",
+    "phoneLabel": "Phone Number",
+    "addressLabel": "Address",
+    "pinLabel": "PIN Code",
+    "vehicleNumber": "Vehicle Number",
+    "success_message": "Your RTO service has been booked successfully. A confirmation has been sent to your email and mobile number."
+  },
+  "services": {
+    "drivingLicense": {
+      "title": "Driving License",
+      "desc": "Apply for new license, renewal or duplicate"
+    },
+    "vehicleRegistration": {
+      "title": "Vehicle Registration",
+      "desc": "New registration, transfer or renewal"
+    },
+    "permitServices": {
+      "title": "Permit Services",
+      "desc": "All types of vehicle permits"
+    },
+    "fitnessServices": {
+      "title": "Fitness Services",
+      "desc": "Vehicle fitness certification"
+    },
+    "taxServices": {
+      "title": "Tax Services",
+      "desc": "Road tax payment and verification"
+    },
+    "noc": {
+      "title": "NOC Services",
+      "desc": "No Objection Certificate for vehicles"
+    },
+    "hypothecation": {
+      "title": "Hypothecation",
+      "desc": "Addition or termination of hypothecation"
+    },
+    "pucc": {
+      "title": "PUC Certificate",
+      "desc": "Pollution Under Control certification"
+    },
+    "addressChange": {
+      "title": "Address Change",
+      "desc": "Update address in vehicle documents"
+    },
+    "internationalDL": {
+      "title": "International DL",
+      "desc": "International Driving Permit"
+    },
+    "duplicateRC": {
+      "title": "Duplicate RC",
+      "desc": "Apply for duplicate Registration Certificate"
+    },
+    "fancyNumber": {
+      "title": "Fancy Number",
+      "desc": "Book choice registration number"
+    }
+  }
+}

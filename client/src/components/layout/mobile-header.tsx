@@ -173,6 +173,7 @@ interface MobileHeaderProps {
 const MobileHeader: React.FC<MobileHeaderProps> = ({ className }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location, navigate] = useLocation();
+  const { t } = useTranslation();
   
   const isActive = (href: string) => {
     if (href === '/') {
@@ -209,6 +210,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ className }) => {
         </div>
         
         <div className="ml-auto flex items-center gap-2">
+          <LanguageSwitcher variant="ghost" />
           <Button 
             variant="outline" 
             size="sm"
@@ -216,7 +218,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ className }) => {
             onClick={() => navigate('/emergency')}
           >
             <AlertCircle className="h-4 w-4 mr-1" />
-            SOS
+            {t('emergency.sos_short')}
           </Button>
           <NotificationPopover />
         </div>
