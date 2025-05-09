@@ -67,6 +67,11 @@ import EnhancedRTOServices from "@/pages/enhanced-rto-services";
 function Router() {
   const [location] = useLocation();
   
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  
   // Page transition animation
   const pageVariants = {
     initial: { opacity: 0, y: 10 },
