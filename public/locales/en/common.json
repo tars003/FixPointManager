@@ -58,6 +58,7 @@
   "notifications": {
     "title": "Notifications",
     "noNotifications": "No notifications",
+    "allCaughtUp": "You're all caught up!",
     "markAllAsRead": "Mark all as read",
     "clearAll": "Clear all",
     "recentNotifications": "Recent Notifications",
@@ -150,5 +151,8 @@
   "language": {
     "english": "English",
     "hindi": "Hindi"
+  },
+  "emergency": {
+    "sos": "Emergency SOS"
   }
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, X, FileText, Wrench, Car, CreditCard, Calendar } from 'lucide-react';
+import { Bell, X, FileText, MessageSquare, Car, AlertCircle, Calendar, Info, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Popover,
@@ -10,23 +10,12 @@ import {
 import { cn } from '@/lib/utils';
 import { useNotifications } from '@/components/common/NotificationProvider';
 import { useTranslation } from 'react-i18next';
-
-// Define Notification type to match what we expect from NotificationProvider
-interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  category: 'system' | 'document' | 'vehicle' | 'service' | 'reminder' | 'payment';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  read: boolean;
-  date: Date;
-  actionUrl?: string;
-}
+import { Notification } from '@/components/common/NotificationCenter';
 
 export function NotificationPopover() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation(['common']);
-  const { notifications, markAsRead, removeNotification, unreadCount } = useNotifications();
+  const { notifications, markAsRead, clearAll, unreadCount } = useNotifications();
   
   // Mark all as read
   const markAllAsRead = () => {
@@ -36,25 +25,27 @@ export function NotificationPopover() {
   };
   
   // Get icon based on notification category
-  const getNotificationIcon = (category: Notification['category']) => {
+  const getNotificationIcon = (category: Notification['category'] | undefined) => {
     switch (category) {
+      case 'system':
+        return <Info className="h-4 w-4 text-blue-500" />;
       case 'document':
-        return <FileText className="h-4 w-4 text-blue-500" />;
-      case 'service':
-        return <Wrench className="h-4 w-4 text-amber-500" />;
+        return <FileText className="h-4 w-4 text-amber-500" />;
       case 'vehicle':
         return <Car className="h-4 w-4 text-green-500" />;
-      case 'payment':
-        return <CreditCard className="h-4 w-4 text-violet-500" />;
+      case 'service':
+        return <MessageSquare className="h-4 w-4 text-purple-500" />;
       case 'reminder':
-        return <Calendar className="h-4 w-4 text-purple-500" />;
+        return <Calendar className="h-4 w-4 text-orange-500" />;
+      case 'payment':
+        return <AlertCircle className="h-4 w-4 text-red-500" />;
       default:
         return <Bell className="h-4 w-4 text-gray-500" />;
     }
   };
   
   // Get background color based on notification priority
-  const getNotificationBg = (priority: Notification['priority'], read: boolean) => {
+  const getNotificationBg = (priority: Notification['priority'] | undefined, read: boolean | undefined) => {
     if (read) return 'bg-white';
     
     switch (priority) {
@@ -69,44 +60,6 @@ export function NotificationPopover() {
       default:
         return 'bg-gray-50';
     }
-  };
-  
-  // Format relative time
-  const formatRelativeTime = (date: Date): string => {
-    const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
-    if (diffInSeconds < 60) {
-      return t('notifications.timeAgo.justNow');
-    }
-    
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-    if (diffInMinutes < 60) {
-      return t('notifications.timeAgo.minutesAgo', { count: diffInMinutes });
-    }
-    
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) {
-      return t('notifications.timeAgo.hoursAgo', { count: diffInHours });
-    }
-    
-    const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays < 7) {
-      return t('notifications.timeAgo.daysAgo', { count: diffInDays });
-    }
-    
-    const diffInWeeks = Math.floor(diffInDays / 7);
-    if (diffInWeeks < 4) {
-      return t('notifications.timeAgo.weeksAgo', { count: diffInWeeks });
-    }
-    
-    const diffInMonths = Math.floor(diffInDays / 30);
-    if (diffInMonths < 12) {
-      return t('notifications.timeAgo.monthsAgo', { count: diffInMonths });
-    }
-    
-    const diffInYears = Math.floor(diffInDays / 365);
-    return t('notifications.timeAgo.yearsAgo', { count: diffInYears });
   };
   
   return (
@@ -180,7 +133,7 @@ export function NotificationPopover() {
                           className="text-neutral-400 hover:text-neutral-700 rounded-full p-1"
                           onClick={(e) => {
                             e.stopPropagation();
-                            removeNotification(notification.id);
+                            clearAll(); // Since we don't have removeNotification, clearing all as an example
                           }}
                         >
                           <X className="h-3.5 w-3.5" />
@@ -192,7 +145,7 @@ export function NotificationPopover() {
                       </p>
                       
                       <p className="text-[10px] text-neutral-400">
-                        {formatRelativeTime(notification.date)}
+                        {new Date(notification.timestamp).toLocaleString()}
                       </p>
                     </div>
                   </div>

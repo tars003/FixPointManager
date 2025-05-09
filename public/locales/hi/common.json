@@ -1,16 +1,16 @@
 {
   "app": {
     "name": "फिक्सपॉइंट",
-    "tagline": "संपूर्ण वाहन प्रबंधन"
+    "tagline": "पूर्ण वाहन प्रबंधन"
   },
   "navigation": {
     "dashboard": "डैशबोर्ड",
     "vehicleVault": "वाहन वॉल्ट",
     "bookService": "सेवा बुक करें",
-    "nearby": "आस-पास",
+    "nearby": "नज़दीकी",
     "documents": "दस्तावेज़",
     "tools": "आवश्यक उपकरण",
-    "tripPlanner": "यात्रा योजनाकार",
+    "tripPlanner": "यात्रा प्लानर",
     "calculators": "कैलकुलेटर",
     "rtoServices": "आरटीओ सेवाएं",
     "arena": "अरेना™",
@@ -41,23 +41,24 @@
     "previous": "पिछला",
     "continue": "जारी रखें",
     "back": "वापस",
-    "submit": "जमा करें",
+    "submit": "सबमिट करें",
     "close": "बंद करें",
     "complete": "पूर्ण",
     "selectAll": "सभी चुनें",
     "clearAll": "सभी साफ़ करें",
-    "showMore": "और दिखाएं",
+    "showMore": "अधिक दिखाएं",
     "showLess": "कम दिखाएं",
     "yes": "हां",
     "no": "नहीं",
     "all": "सभी",
     "none": "कोई नहीं",
     "goBack": "वापस जाएं",
-    "goHome": "होम पेज पर जाएं"
+    "goHome": "होम पर जाएं"
   },
   "notifications": {
     "title": "सूचनाएं",
     "noNotifications": "कोई सूचना नहीं",
+    "allCaughtUp": "आप अप-टू-डेट हैं!",
     "markAllAsRead": "सभी को पढ़ा हुआ मार्क करें",
     "clearAll": "सभी साफ़ करें",
     "recentNotifications": "हाल की सूचनाएं",
@@ -74,11 +75,11 @@
       "document": "दस्तावेज़",
       "vehicle": "वाहन",
       "service": "सेवा",
-      "reminder": "अनुस्मारक",
+      "reminder": "रिमाइंडर",
       "payment": "भुगतान"
     },
     "timeAgo": {
-      "justNow": "अभी अभी",
+      "justNow": "अभी-अभी",
       "minutesAgo": "{{count}} मिनट पहले",
       "minutesAgo_plural": "{{count}} मिनट पहले",
       "hoursAgo": "{{count}} घंटा पहले",
@@ -95,26 +96,26 @@
   },
   "documentSearch": {
     "searchPlaceholder": "दस्तावेज़, प्रमाणपत्र, चालान खोजें...",
-    "recentSearches": "हालिया खोजें",
+    "recentSearches": "हाल की खोजें",
     "quickFilters": "त्वरित फ़िल्टर",
-    "categories": "श्रेणियाँ",
+    "categories": "श्रेणियां",
     "tagFilters": "टैग",
-    "dateRange": "दिनांक सीमा",
+    "dateRange": "तिथि सीमा",
     "expiryDate": "समाप्ति तिथि",
     "issuedDate": "जारी तिथि",
-    "clearFilters": "फ़िल्टर साफ़ करें",
+    "clearFilters": "फ़िल्टर हटाएं",
     "noDocumentsFound": "कोई दस्तावेज़ नहीं मिला",
     "searchInProgress": "खोज जारी है..."
   },
   "documentSharing": {
     "shareDocument": "दस्तावेज़ साझा करें",
-    "shareVia": "इसके माध्यम से साझा करें",
-    "generateLink": "लिंक उत्पन्न करें",
-    "accessDuration": "पहुंच अवधि",
-    "accessPermissions": "पहुंच अनुमतियां",
-    "recipientEmail": "प्राप्तकर्ता ईमेल",
+    "shareVia": "के माध्यम से साझा करें",
+    "generateLink": "लिंक जनरेट करें",
+    "accessDuration": "एक्सेस अवधि",
+    "accessPermissions": "एक्सेस अनुमतियां",
+    "recipientEmail": "प्राप्तकर्ता का ईमेल",
     "message": "संदेश (वैकल्पिक)",
-    "sendCopy": "मुझे एक प्रति भेजें",
+    "sendCopy": "मुझे एक कॉपी भेजें",
     "shareSuccessful": "दस्तावेज़ सफलतापूर्वक साझा किया गया",
     "copyLink": "लिंक कॉपी करें",
     "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी किया गया",
@@ -134,7 +135,7 @@
       "view": "केवल देखें",
       "download": "डाउनलोड",
       "print": "प्रिंट",
-      "viewAndDownload": "देखें और डाउनलोड करें",
+      "viewAndDownload": "देखें और डाउनलोड",
       "all": "पूर्ण पहुंच"
     }
   },
@@ -143,12 +144,15 @@
     "loadingVehicleData": "वाहन डेटा लोड हो रहा है",
     "preparingDocuments": "दस्तावेज़ तैयार हो रहे हैं",
     "connectingServices": "सेवाओं से कनेक्ट हो रहा है",
-    "loadingMaps": "मैप्स लोड हो रहे हैं",
+    "loadingMaps": "मानचित्र लोड हो रहा है",
     "processingPayment": "भुगतान प्रोसेसिंग",
-    "loadingComplete": "लोडिंग पूरी हुई"
+    "loadingComplete": "लोडिंग पूर्ण"
   },
   "language": {
     "english": "अंग्रेज़ी",
     "hindi": "हिंदी"
+  },
+  "emergency": {
+    "sos": "आपातकालीन SOS"
   }
 }
