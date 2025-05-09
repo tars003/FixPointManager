@@ -554,7 +554,7 @@ const DashboardEnhanced = () => {
             {/* Quick actions */}
             <div className="flex items-center gap-3">
               <Button 
-                onClick={() => navigateTo('/vehicle-vault/add')}
+                onClick={() => navigateTo('/vehicle-vault')}
                 className="bg-white/10 hover:bg-white/20 text-white border-0"
               >
                 <Plus className="h-4 w-4 mr-2" />
