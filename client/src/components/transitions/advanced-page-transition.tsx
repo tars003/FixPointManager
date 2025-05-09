@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { ReactNode, memo } from 'react';
+import { motion } from 'framer-motion';
 
 interface AdvancedPageTransitionProps {
   children: ReactNode;
@@ -10,6 +10,7 @@ interface AdvancedPageTransitionProps {
   className?: string;
 }
 
+// Using simplified transition variants to improve performance
 const transitionVariants = {
   fade: {
     initial: { opacity: 0 },
@@ -18,53 +19,55 @@ const transitionVariants = {
   },
   slide: {
     up: {
-      initial: { y: 50, opacity: 0 },
+      initial: { y: 20, opacity: 0 },
       animate: { y: 0, opacity: 1 },
-      exit: { y: -50, opacity: 0 },
+      exit: { opacity: 0 },
     },
     down: {
-      initial: { y: -50, opacity: 0 },
+      initial: { y: -20, opacity: 0 },
       animate: { y: 0, opacity: 1 },
-      exit: { y: 50, opacity: 0 },
+      exit: { opacity: 0 },
     },
     left: {
-      initial: { x: 50, opacity: 0 },
+      initial: { x: 20, opacity: 0 },
       animate: { x: 0, opacity: 1 },
-      exit: { x: -50, opacity: 0 },
+      exit: { opacity: 0 },
     },
     right: {
-      initial: { x: -50, opacity: 0 },
+      initial: { x: -20, opacity: 0 },
       animate: { x: 0, opacity: 1 },
-      exit: { x: 50, opacity: 0 },
+      exit: { opacity: 0 },
     },
   },
   scale: {
-    initial: { scale: 0.9, opacity: 0 },
+    initial: { scale: 0.95, opacity: 0 },
     animate: { scale: 1, opacity: 1 },
-    exit: { scale: 0.9, opacity: 0 },
+    exit: { opacity: 0 },
   },
+  // Simplified the more computationally intensive animations
   flip: {
-    initial: { rotateY: 90, opacity: 0 },
-    animate: { rotateY: 0, opacity: 1 },
-    exit: { rotateY: -90, opacity: 0 },
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
   },
   rotate: {
-    initial: { rotate: -5, opacity: 0 },
-    animate: { rotate: 0, opacity: 1 },
-    exit: { rotate: 5, opacity: 0 },
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
   },
   skew: {
-    initial: { skew: 5, opacity: 0 },
-    animate: { skew: 0, opacity: 1 },
-    exit: { skew: -5, opacity: 0 },
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
   },
 };
 
-const AdvancedPageTransition: React.FC<AdvancedPageTransitionProps> = ({
+// Memoize the component to prevent unnecessary re-renders
+const AdvancedPageTransition: React.FC<AdvancedPageTransitionProps> = memo(({
   children,
   type = 'fade',
   direction = 'up',
-  duration = 0.4,
+  duration = 0.3, // Slightly shorter duration for better performance
   delay = 0,
   className,
 }) => {
@@ -84,17 +87,17 @@ const AdvancedPageTransition: React.FC<AdvancedPageTransitionProps> = ({
       exit="exit"
       variants={variants}
       transition={{
-        type: type === 'scale' || type === 'fade' ? 'tween' : 'spring',
+        type: 'tween', // Using tween for all transitions as it's less CPU intensive
         duration: duration,
         delay: delay,
-        stiffness: 260,
-        damping: 20,
       }}
       className={className}
     >
       {children}
     </motion.div>
   );
-};
+});
+
+AdvancedPageTransition.displayName = 'AdvancedPageTransition';
 
 export default AdvancedPageTransition;
