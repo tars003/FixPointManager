@@ -27,7 +27,11 @@ import {
   BookOpen,
   Eye,
   Sparkles,
-  FileText
+  FileText,
+  Calculator,
+  Map,
+  Navigation,
+  Route
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -129,6 +133,20 @@ const navItems = [
     href: '/educational',
     color: 'text-emerald-500',
     bgColor: 'bg-emerald-50',
+  },
+  {
+    title: 'Trip Planner',
+    icon: Route,
+    href: '/trip-planner',
+    color: 'text-teal-500',
+    bgColor: 'bg-teal-50',
+  },
+  {
+    title: 'Calculators',
+    icon: Calculator,
+    href: '/calculators',
+    color: 'text-blue-500',
+    bgColor: 'bg-blue-50',
   },
   {
     title: 'Arena',
