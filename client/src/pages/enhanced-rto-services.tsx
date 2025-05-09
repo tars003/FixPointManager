@@ -32,6 +32,7 @@ import AdvancedPageTransition from '@/components/transitions/advanced-page-trans
 import PersonalizedDashboardWidgets from '@/components/dashboard/PersonalizedDashboardWidgets';
 import DocumentHoverCard from '@/components/documents/DocumentHoverCard';
 import InteractiveMascotGuide from '@/components/tutorial/InteractiveMascotGuide';
+import ServiceBookingDialog from '@/components/rto/ServiceBookingDialog';
 
 // Sample RTO service data
 const rtoServices = [
@@ -277,6 +278,8 @@ const EnhancedRTOServices: React.FC = () => {
   const [isComparing, setIsComparing] = useState(false);
   const [trackingId, setTrackingId] = useState('');
   const [trackingResult, setTrackingResult] = useState<any>(null);
+  const [isBookingDialogOpen, setIsBookingDialogOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<any>(null);
   
   // Filter services based on search, state and category
   const filteredServices = rtoServices.filter(service => {
@@ -336,13 +339,13 @@ const EnhancedRTOServices: React.FC = () => {
     }
   };
 
-  // Book a service - In real app would navigate to form page or show modal
+  // Book a service - Open the booking dialog
   const bookService = (serviceId: number) => {
     const service = rtoServices.find(s => s.id === serviceId);
-    toast({
-      title: 'Service booking initiated',
-      description: `You are booking ${service?.name}. Please fill in required details.`,
-    });
+    if (service) {
+      setSelectedService(service);
+      setIsBookingDialogOpen(true);
+    }
   };
 
   // Get status icon based on status string
@@ -819,6 +822,13 @@ const EnhancedRTOServices: React.FC = () => {
           autoStart={true}
           mascotName="Fixi"
           delay={1500}
+        />
+        
+        {/* Service Booking Dialog */}
+        <ServiceBookingDialog
+          open={isBookingDialogOpen}
+          onOpenChange={setIsBookingDialogOpen}
+          service={selectedService}
         />
       </div>
     </AdvancedPageTransition>
