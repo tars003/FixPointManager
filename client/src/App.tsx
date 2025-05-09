@@ -1,692 +1,304 @@
-import { useEffect } from "react";
+import { useEffect, Suspense, lazy } from "react";
 import { Switch, Route, useLocation, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { FeedbackProvider } from "@/hooks/use-feedback";
 import { NotificationProvider } from "@/components/common/NotificationProvider";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import { loadDemoNotifications } from "./utils/demo-notifications";
 import Layout from "@/components/layout/layout";
-import NotFound from "@/pages/not-found";
-import PageTransition from "@/components/transitions/page-transition";
-import AdvancedPageTransition from "@/components/transitions/advanced-page-transition";
+import PageLoader from "@/components/loading/page-loader";
+import LazyPage from "@/components/loading/lazy-page";
+import { scrollToTop } from "@/utils/scroll-utils";
 
-// Pages
-import MyVehicles from "@/pages/my-vehicles-updated";
-import AddVehicle from "@/pages/add-vehicle";
-import BookService from "@/pages/book-service";
-import EnhancedServiceBooking from "@/pages/enhanced-service-booking";
-import VehicleVault from "@/pages/vehicle-vault";
-// Import the new enhanced nearby services page
-import Nearby from "@/pages/nearby-new";
-import LearnDriving from "@/pages/learn-driving";
-import Dashboard from "@/pages/dashboard-enhanced";
-import Inspection from "@/pages/inspection";
-import Energy from "@/pages/energy";
-import PartsPage from "@/pages/parts";
-import VehicleDetail from "@/pages/vehicle-detail";
-import CommercialFleet from "@/pages/commercial-fleet";
-import EmergencyServices from "@/pages/emergency-services";
-import DrivingEducation from "@/pages/driving-education";
-import FastagEchallan from "@/pages/fastag-echallan";
-import EducationalPage from "@/pages/educational";
-import Marketplace from "@/pages/marketplace";
-import MarketplaceEnhanced from "@/pages/marketplace-enhanced";
-import Arena from "@/pages/arena";
-import PremiumArena from "@/pages/premium-arena";
-import ArenaPremium from "@/pages/arena-premium"; 
-import ArenaHome from "@/pages/arena/index";
-import ArenaVehicleSelection from "@/pages/arena/vehicle-selection";
-import ArenaCustomize from "@/pages/arena/customize";
-import TestBeforeBuy from "@/pages/testbeforebuy";
-import ArenaDashboard from "@/pages/arena-dashboard";
-import NewArenaDashboard from "@/pages/new-arena-dashboard";
-import ArenaDashboardNew from "@/pages/arena-dashboard-new";
-import ArenaDashboardEnhanced from "@/pages/arena-dashboard-enhanced";
-import ArenaMain from "@/pages/arena-main";
-import ProjectCustomization from "@/pages/project-customization";
-import EnhancedArenaFeatures from "@/pages/enhanced-arena-features";
-import Drishti from "@/pages/drishti";
-import AnimationDemo from "@/pages/animation-demo";
-import AnimationShowcase from "@/pages/animation-showcase";
-import ProfilePage from "@/pages/profile";
-import SettingsPage from "@/pages/settings";
-import MembershipPage from "@/pages/membership";
-import OverallSummary from "@/pages/overall-summary";
-import DocumentVault from "@/pages/documents";
-import TripPlanner from "@/pages/trip-planner";
-import Calculators from "@/pages/calculators";
-import RTOServices from "@/pages/rto-services";
-import EnhancedRTOServices from "@/pages/enhanced-rto-services";
+// Lazy loaded page components with performance optimizations
+const Dashboard = lazy(() => import("@/pages/dashboard-enhanced"));
+const VehicleVault = lazy(() => import("@/pages/vehicle-vault"));
+const Documents = lazy(() => import("@/pages/documents"));
+const RtoServices = lazy(() => import("@/pages/rto-services"));
+const EnhancedRtoServices = lazy(() => import("@/pages/enhanced-rto-services"));
+const TestBeforeBuy = lazy(() => import("@/pages/testbeforebuy"));
+const BookService = lazy(() => import("@/pages/book-service"));
+const EnhancedServiceBooking = lazy(() => import("@/pages/enhanced-service-booking"));
+const MyVehicles = lazy(() => import("@/pages/my-vehicles-updated"));
+const AddVehicle = lazy(() => import("@/pages/add-vehicle"));
+const Nearby = lazy(() => import("@/pages/nearby-new"));
+const LearnDriving = lazy(() => import("@/pages/learn-driving"));
+const Inspection = lazy(() => import("@/pages/inspection"));
+const TripPlanner = lazy(() => import("@/pages/trip-planner"));
+const Calculators = lazy(() => import("@/pages/calculators"));
+const NotFound = lazy(() => import("@/pages/not-found"));
+
+// Lazy loaded lower-priority components
+const ArenaMain = lazy(() => import("@/pages/arena-main"));
+const ArenaDashboardEnhanced = lazy(() => import("@/pages/arena-dashboard-enhanced"));
+const ArenaDashboard = lazy(() => import("@/pages/arena-dashboard"));
+const NewArenaDashboard = lazy(() => import("@/pages/new-arena-dashboard"));
+const Energy = lazy(() => import("@/pages/energy"));
+const PartsPage = lazy(() => import("@/pages/parts"));
+const MarketplaceEnhanced = lazy(() => import("@/pages/marketplace-enhanced"));
+const CommercialFleet = lazy(() => import("@/pages/commercial-fleet"));
+const EmergencyServices = lazy(() => import("@/pages/emergency-services"));
+const DrivingEducation = lazy(() => import("@/pages/driving-education"));
+const FastagEchallan = lazy(() => import("@/pages/fastag-echallan"));
+const EducationalPage = lazy(() => import("@/pages/educational"));
+const Drishti = lazy(() => import("@/pages/drishti"));
+const ArenaVehicleSelection = lazy(() => import("@/pages/arena/vehicle-selection"));
+const ArenaCustomize = lazy(() => import("@/pages/arena/customize"));
+const ProjectCustomization = lazy(() => import("@/pages/project-customization"));
+const EnhancedArenaFeatures = lazy(() => import("@/pages/enhanced-arena-features"));
+const PremiumArena = lazy(() => import("@/pages/premium-arena"));
+const ArenaPremium = lazy(() => import("@/pages/arena-premium"));
+const Arena = lazy(() => import("@/pages/arena"));
+const AnimationDemo = lazy(() => import("@/pages/animation-demo"));
+const AnimationShowcase = lazy(() => import("@/pages/animation-showcase"));
+const ProfilePage = lazy(() => import("@/pages/profile"));
+const SettingsPage = lazy(() => import("@/pages/settings"));
+const MembershipPage = lazy(() => import("@/pages/membership"));
+const OverallSummary = lazy(() => import("@/pages/overall-summary"));
 
 function Router() {
   const [location] = useLocation();
-  
+
   // Scroll to top on route change
   useEffect(() => {
-    import('@/utils/scroll-utils').then(({ scrollToTop }) => {
-      scrollToTop();
-    });
+    scrollToTop();
   }, [location]);
-  
-  // Page transition animation
-  const pageVariants = {
-    initial: { opacity: 0, y: 10 },
-    enter: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -10 }
-  };
+
+  // Handle route changes efficiently with a single rendering function
+  const renderPage = (Component: React.ComponentType<any>, props = {}) => (
+    <LazyPage>
+      <Component {...props} />
+    </LazyPage>
+  );
   
   return (
     <Layout>
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         <Switch location={location} key={location}>
           <Route path="/">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <Dashboard />
-              </motion.div>
-            )}
+            {() => renderPage(Dashboard)}
           </Route>
-          {/* /vehicles routes have been removed and replaced by /vehicle-vault */}
-          <Route path="/book-service">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <BookService />
-              </motion.div>
-            )}
-          </Route>
-          <Route path="/book-service/:vehicleId">
-            {(params) => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <BookService />
-              </motion.div>
-            )}
-          </Route>
-          <Route path="/enhanced-service">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <EnhancedServiceBooking />
-              </motion.div>
-            )}
-          </Route>
-          <Route path="/vehicle-vault">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <VehicleVault />
-              </motion.div>
-            )}
-          </Route>
-          <Route path="/vehicle-vault-community">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <VehicleVault />
-              </motion.div>
-            )}
-          </Route>
-          <Route path="/nearby">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <Nearby />
-              </motion.div>
-            )}
-          </Route>
-
-          <Route path="/learn-driving">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <LearnDriving />
-              </motion.div>
-            )}
-          </Route>
+          
           <Route path="/dashboard">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <Dashboard />
-              </motion.div>
-            )}
+            {() => renderPage(Dashboard)}
           </Route>
+          
+          <Route path="/book-service">
+            {() => renderPage(BookService)}
+          </Route>
+          
+          <Route path="/book-service/:vehicleId">
+            {(params) => renderPage(BookService, params)}
+          </Route>
+          
+          <Route path="/enhanced-service">
+            {() => renderPage(EnhancedServiceBooking)}
+          </Route>
+          
+          <Route path="/vehicles">
+            {() => <Redirect to="/vehicle-vault" />}
+          </Route>
+          
+          <Route path="/vehicle-vault">
+            {() => renderPage(VehicleVault)}
+          </Route>
+          
+          <Route path="/vehicle-vault-community">
+            {() => renderPage(VehicleVault)}
+          </Route>
+          
+          <Route path="/nearby">
+            {() => renderPage(Nearby)}
+          </Route>
+          
+          <Route path="/learn-driving">
+            {() => renderPage(LearnDriving)}
+          </Route>
+          
           <Route path="/inspection/:id">
-            {(params) => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <Inspection />
-              </motion.div>
-            )}
+            {(params) => renderPage(Inspection, params)}
           </Route>
+          
           <Route path="/energy">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <Energy />
-              </motion.div>
-            )}
+            {() => renderPage(Energy)}
           </Route>
+          
           <Route path="/parts">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <PartsPage />
-              </motion.div>
-            )}
+            {() => renderPage(PartsPage)}
           </Route>
+          
           <Route path="/marketplace">
-            {() => (
-              <PageTransition type="complex" duration={0.6}>
-                <MarketplaceEnhanced />
-              </PageTransition>
-            )}
+            {() => renderPage(MarketplaceEnhanced)}
           </Route>
+          
           <Route path="/testbeforebuy">
-            {() => (
-              <TestBeforeBuy />
-            )}
+            {() => renderPage(TestBeforeBuy)}
           </Route>
-          {/* Redirect from old /autovista URL to /testbeforebuy */}
+          
           <Route path="/autovista">
             {() => <Redirect to="/testbeforebuy" />}
           </Route>
+          
           <Route path="/commercial-fleet">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <CommercialFleet />
-              </motion.div>
-            )}
+            {() => renderPage(CommercialFleet)}
           </Route>
+          
           <Route path="/emergency">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <EmergencyServices />
-              </motion.div>
-            )}
+            {() => renderPage(EmergencyServices)}
           </Route>
+          
           <Route path="/driving-education">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <DrivingEducation />
-              </motion.div>
-            )}
+            {() => renderPage(DrivingEducation)}
           </Route>
+          
           <Route path="/fastag-echallan">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <FastagEchallan />
-              </motion.div>
-            )}
+            {() => renderPage(FastagEchallan)}
           </Route>
+          
           <Route path="/educational">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <EducationalPage />
-              </motion.div>
-            )}
+            {() => renderPage(EducationalPage)}
           </Route>
+          
           <Route path="/drishti">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <Drishti />
-              </motion.div>
-            )}
+            {() => renderPage(Drishti)}
           </Route>
+          
           <Route path="/arena-dashboard">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <ArenaDashboard />
-              </motion.div>
-            )}
+            {() => renderPage(ArenaDashboard)}
           </Route>
+          
           <Route path="/new-arena-dashboard">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <NewArenaDashboard />
-              </motion.div>
-            )}
+            {() => renderPage(NewArenaDashboard)}
           </Route>
+          
           <Route path="/arena">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <ArenaMain />
-              </motion.div>
-            )}
+            {() => renderPage(ArenaMain)}
           </Route>
+          
           <Route path="/arena/vehicle-selection">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <ArenaVehicleSelection />
-              </motion.div>
-            )}
+            {() => renderPage(ArenaVehicleSelection)}
           </Route>
+          
           <Route path="/arena/customize/:id">
-            {(params) => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <ArenaCustomize />
-              </motion.div>
-            )}
+            {(params) => renderPage(ArenaCustomize, params)}
           </Route>
+          
           <Route path="/arena-enhanced">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <ArenaDashboardEnhanced />
-              </motion.div>
-            )}
+            {() => renderPage(ArenaDashboardEnhanced)}
           </Route>
+          
           <Route path="/arena-main">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <ArenaMain />
-              </motion.div>
-            )}
+            {() => renderPage(ArenaMain)}
           </Route>
+          
           <Route path="/project/:projectId/:studio?">
-            {(params) => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <ProjectCustomization />
-              </motion.div>
-            )}
+            {(params) => renderPage(ProjectCustomization, params)}
           </Route>
+          
           <Route path="/enhanced-arena-features">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <EnhancedArenaFeatures />
-              </motion.div>
-            )}
+            {() => renderPage(EnhancedArenaFeatures)}
           </Route>
+          
           <Route path="/arena-studio">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <Arena />
-              </motion.div>
-            )}
+            {() => renderPage(Arena)}
           </Route>
+          
           <Route path="/arena-studio/premium">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <PremiumArena />
-              </motion.div>
-            )}
+            {() => renderPage(PremiumArena)}
           </Route>
+          
           <Route path="/arena-studio/premium-advanced">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <PremiumArena />
-              </motion.div>
-            )}
+            {() => renderPage(PremiumArena)}
           </Route>
+          
           <Route path="/arena/premium/:id?">
-            {(params) => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <ArenaPremium />
-              </motion.div>
-            )}
+            {(params) => renderPage(ArenaPremium, params)}
           </Route>
-          <Route path="/arena/premium-advanced/:id?">
-            {(params) => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <PremiumArena />
-              </motion.div>
-            )}
-          </Route>
+          
           <Route path="/animation-demo">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <AnimationDemo />
-              </motion.div>
-            )}
+            {() => renderPage(AnimationDemo)}
           </Route>
+          
           <Route path="/profile">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <ProfilePage />
-              </motion.div>
-            )}
+            {() => renderPage(ProfilePage)}
           </Route>
+          
           <Route path="/settings">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <SettingsPage />
-              </motion.div>
-            )}
+            {() => renderPage(SettingsPage)}
           </Route>
+          
           <Route path="/documents">
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <DocumentVault />
-              </motion.div>
-            )}
+            {() => renderPage(Documents)}
           </Route>
+          
           <Route path="/trip-planner">
-            {() => (
-              <AdvancedPageTransition type="slide" direction="up" duration={0.5}>
-                <TripPlanner />
-              </AdvancedPageTransition>
-            )}
+            {() => renderPage(TripPlanner)}
           </Route>
+          
           <Route path="/calculators">
-            {() => (
-              <AdvancedPageTransition type="scale" duration={0.5}>
-                <Calculators />
-              </AdvancedPageTransition>
-            )}
+            {() => renderPage(Calculators)}
           </Route>
+          
           <Route path="/rto-services">
-            {() => (
-              <AdvancedPageTransition type="slide" direction="left" duration={0.5}>
-                <RTOServices />
-              </AdvancedPageTransition>
-            )}
+            {() => renderPage(RtoServices)}
           </Route>
+          
           <Route path="/enhanced-rto-services">
-            {() => (
-              <AdvancedPageTransition type="slide" direction="left" duration={0.5}>
-                <EnhancedRTOServices />
-              </AdvancedPageTransition>
-            )}
+            {() => renderPage(EnhancedRtoServices)}
           </Route>
+          
           <Route path="/animation-showcase">
-            {() => (
-              <AdvancedPageTransition type="fade" duration={0.5}>
-                <AnimationShowcase />
-              </AdvancedPageTransition>
-            )}
+            {() => renderPage(AnimationShowcase)}
           </Route>
+          
           <Route path="/membership">
-            {() => (
-              <PageTransition type="complex" duration={0.6}>
-                <MembershipPage />
-              </PageTransition>
-            )}
+            {() => renderPage(MembershipPage)}
           </Route>
-          <Route path="/overall-summary">
-            {() => (
-              <PageTransition type="complex" duration={0.6}>
-                <OverallSummary />
-              </PageTransition>
-            )}
+          
+          <Route path="/summary">
+            {() => renderPage(OverallSummary)}
           </Route>
+          
           <Route>
-            {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <NotFound />
-              </motion.div>
-            )}
+            {() => renderPage(NotFound)}
           </Route>
         </Switch>
       </AnimatePresence>
-      
-      {/* Floating action button for quick actions */}
-      <motion.div 
-        className="fixed bottom-24 right-6 lg:bottom-6 z-40"
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ 
-          type: "spring",
-          stiffness: 260,
-          damping: 20,
-          delay: 0.5 
-        }}
-      >
-        <button
-          className="bg-primary text-white h-14 w-14 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
-          aria-label="Quick Actions"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-        </button>
-      </motion.div>
     </Layout>
   );
 }
 
 function App() {
-  // Load demo notifications after component mounts
+  // Initialize demo notifications
   useEffect(() => {
-    // Small delay to ensure NotificationProvider is fully mounted
-    const timer = setTimeout(() => {
-      loadDemoNotifications();
-    }, 1500);
-    return () => clearTimeout(timer);
+    loadDemoNotifications();
+    console.log("Demo notifications loaded");
   }, []);
 
+  return <Router />;
+}
+
+export default function AppWithProviders() {
   return (
     <I18nextProvider i18n={i18n}>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <TooltipProvider>
-            <Toaster />
-            <NotificationProvider>
-              <FeedbackProvider>
-                <Router />
-              </FeedbackProvider>
-            </NotificationProvider>
+            <FeedbackProvider>
+              <NotificationProvider>
+                <App />
+                <Toaster />
+              </NotificationProvider>
+            </FeedbackProvider>
           </TooltipProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </I18nextProvider>
   );
 }
-
-export default App;
