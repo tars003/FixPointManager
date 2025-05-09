@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronRight, AlertCircle, Receipt } from 'lucide-react';
+import { Menu, X, ChevronRight, AlertCircle, Receipt, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { NotificationPopover } from '@/components/notification/notification-popover';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 
 // Import the same nav items as sidebar
 import { 

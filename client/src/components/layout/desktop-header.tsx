@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { 
   Search, 
   Bell, 
@@ -29,6 +30,7 @@ import { Button } from '@/components/ui/button';
 import { NotificationPopover } from '@/components/notification/notification-popover';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 
 interface DesktopHeaderProps {
   className?: string;
@@ -37,6 +39,7 @@ interface DesktopHeaderProps {
 const DesktopHeader: React.FC<DesktopHeaderProps> = ({ className }) => {
   const [, navigate] = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
+  const { t } = useTranslation();
   
   // Example user data
   const user = {
@@ -112,6 +115,9 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({ className }) => {
         
         {/* Right section - Actions and User */}
         <div className="flex items-center gap-4">
+          {/* Language Switcher */}
+          <LanguageSwitcher variant="ghost" />
+          
           {/* Emergency SOS Button */}
           <Button 
             variant="destructive"
@@ -120,7 +126,7 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({ className }) => {
             onClick={() => navigate('/emergency')}
           >
             <AlertCircle className="h-4 w-4 mr-1.5" />
-            Emergency SOS
+            {t('emergency.sos')}
           </Button>
           
           {/* Help */}
