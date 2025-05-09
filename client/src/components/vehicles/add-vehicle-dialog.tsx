@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { 
   Dialog, 
   DialogContent, 
@@ -34,17 +35,57 @@ import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
+import { insertVehicleSchema } from '@shared/schema';
 import { 
-  CalendarIcon, 
+  Activity,
+  ActivitySquare,
+  AlertCircle,
+  AlertOctagon,
+  AlertTriangle,
+  Award,
+  Ban,
+  Brain,
+  Calendar as CalendarIcon, 
   Camera, 
   Car, 
+  CarFront,
+  CheckCircle,
   ChevronLeft, 
   ChevronRight, 
+  Circle,
   CircleCheck, 
+  CircleDollarSign,
+  CircleDot,
+  Clock,
+  Clock3,
   ClipboardCheck,
   CreditCard, 
-  FileBox, 
-  Upload 
+  Download,
+  Droplets,
+  FileBox,
+  FileText,
+  Filter,
+  GitBranch,
+  KeySquare,
+  Leaf,
+  ListFilter,
+  MoreHorizontal,
+  Plus,
+  Search,
+  Share,
+  Shield,
+  ShieldOff,
+  ShoppingBag,
+  Tag,
+  Trash2,
+  Truck,
+  Upload,
+  Users,
+  Warehouse,
+  X
 } from 'lucide-react';
 
 type AddVehicleDialogProps = {
@@ -145,9 +186,117 @@ const fullVehicleSchema = z.object({
 // Extract type from schema
 type VehicleFormValues = z.infer<typeof fullVehicleSchema>;
 
+// Status categories with icons for vehicle status selection
+const statusCategories = [
+  { 
+    id: 'active', 
+    label: 'Active', 
+    icon: <Activity className="h-4 w-4 text-emerald-600" />,
+    bgClass: 'bg-emerald-50 border-emerald-200'
+  },
+  { 
+    id: 'recently-purchased', 
+    label: 'Recently Purchased', 
+    icon: <ShoppingBag className="h-4 w-4 text-blue-600" />,
+    bgClass: 'bg-blue-50 border-blue-200'
+  },
+  { 
+    id: 'pre-owned', 
+    label: 'Pre-owned', 
+    icon: <Clock3 className="h-4 w-4 text-indigo-600" />,
+    bgClass: 'bg-indigo-50 border-indigo-200'
+  },
+  { 
+    id: 'in-maintenance', 
+    label: 'In Maintenance', 
+    icon: <Clock className="h-4 w-4 text-amber-600" />,
+    bgClass: 'bg-amber-50 border-amber-200'
+  },
+  { 
+    id: 'garage-stored', 
+    label: 'Garage Stored', 
+    icon: <Warehouse className="h-4 w-4 text-cyan-600" />,
+    bgClass: 'bg-cyan-50 border-cyan-200'
+  },
+  { 
+    id: 'out-of-service', 
+    label: 'Out of Service', 
+    icon: <AlertOctagon className="h-4 w-4 text-gray-600" />,
+    bgClass: 'bg-gray-50 border-gray-200'
+  },
+  { 
+    id: 'commercial-fleet', 
+    label: 'Commercial Fleet', 
+    icon: <Truck className="h-4 w-4 text-violet-600" />,
+    bgClass: 'bg-violet-50 border-violet-200'
+  },
+  { 
+    id: 'leased-out', 
+    label: 'Leased Out', 
+    icon: <KeySquare className="h-4 w-4 text-green-600" />,
+    bgClass: 'bg-green-50 border-green-200'
+  },
+  { 
+    id: 'for-sale', 
+    label: 'For Sale', 
+    icon: <Tag className="h-4 w-4 text-rose-600" />,
+    bgClass: 'bg-rose-50 border-rose-200'
+  },
+  { 
+    id: 'sold', 
+    label: 'Sold', 
+    icon: <CheckCircle className="h-4 w-4 text-blue-600" />,
+    bgClass: 'bg-blue-50 border-blue-200'
+  },
+  { 
+    id: 'impounded', 
+    label: 'Impounded', 
+    icon: <AlertTriangle className="h-4 w-4 text-red-600" />,
+    bgClass: 'bg-red-50 border-red-200'
+  },
+  { 
+    id: 'under-legal-hold', 
+    label: 'Under Legal Hold', 
+    icon: <Shield className="h-4 w-4 text-amber-600" />,
+    bgClass: 'bg-amber-50 border-amber-200'
+  },
+  { 
+    id: 'stolen', 
+    label: 'Stolen', 
+    icon: <ShieldOff className="h-4 w-4 text-red-600" />,
+    bgClass: 'bg-red-50 border-red-200'
+  },
+  { 
+    id: 'scrapped', 
+    label: 'Scrapped', 
+    icon: <Trash2 className="h-4 w-4 text-gray-600" />,
+    bgClass: 'bg-gray-50 border-gray-200'
+  },
+  { 
+    id: 'totaled', 
+    label: 'Totaled', 
+    icon: <Ban className="h-4 w-4 text-gray-600" />,
+    bgClass: 'bg-gray-50 border-gray-200'
+  },
+];
+
 export function AddVehicleDialog({ open, onOpenChange, theme }: AddVehicleDialogProps) {
   // Current step in the multi-step form
   const [currentStep, setCurrentStep] = useState(0);
+  
+  // Main selection method (number plate or manual selection)
+  const [addMethod, setAddMethod] = useState<'selection' | 'number-plate' | 'form'>('selection');
+  
+  // OTP verification
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
+  
+  // For toast notifications
+  const { toast } = useToast();
+  
+  // Access query client for cache invalidation
+  const queryClient = useQueryClient();
   
   // Step titles for the progress indicator
   const steps = [
@@ -218,6 +367,44 @@ export function AddVehicleDialog({ open, onOpenChange, theme }: AddVehicleDialog
     }
   });
   
+  // Mutation for adding a vehicle
+  const addVehicleMutation = useMutation({
+    mutationFn: async (data: any) => {
+      // In a real application, this would format the data according to the API requirements
+      const formattedData = {
+        userId: 1, // Example user ID
+        name: `${data.specifications.make} ${data.specifications.model}`,
+        make: data.specifications.make,
+        model: data.specifications.model,
+        year: parseInt(data.specifications.year),
+        licensePlate: data.registration.registrationNumber,
+        mileage: 0, // Default to 0 for new entries
+        fuelType: data.specifications.fuelType,
+        vehicleType: data.specifications.vehicleType,
+        status: 'active', // Default status
+        // Include other fields as needed
+      };
+      
+      const response = await apiRequest('POST', '/api/vehicles', formattedData);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/vehicles'] });
+      toast({
+        title: "Vehicle added successfully",
+        description: "Your vehicle has been added to your fleet.",
+      });
+      onOpenChange(false);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error adding vehicle",
+        description: error.message || "Failed to add vehicle. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+  
   // Navigation between steps
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
@@ -233,17 +420,68 @@ export function AddVehicleDialog({ open, onOpenChange, theme }: AddVehicleDialog
   
   // Form submission handler
   const onSubmit = (data: VehicleFormValues) => {
-    console.log("Form submitted with data:", data);
-    // Here we would typically send this to an API endpoint
-    alert("Vehicle added successfully!");
-    onOpenChange(false);
+    addVehicleMutation.mutate(data);
   };
   
-  // Scan registration plate function (mock)
+  // Scan registration plate function
   const scanRegistrationPlate = () => {
     // In a real scenario, this would activate the camera and do OCR
     // For demo purposes, we're just setting a mock plate number
     form.setValue('registration.registrationNumber', 'KA05 MG4321');
+  };
+  
+  // Send OTP handler
+  const handleSendOtp = () => {
+    const registrationNumber = form.getValues('registration.registrationNumber');
+    if (!registrationNumber) {
+      toast({
+        title: "Registration number required",
+        description: "Please enter a valid registration number.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setIsOtpSent(true);
+    toast({
+      title: "OTP Sent",
+      description: "A verification code has been sent to your registered mobile number.",
+    });
+  };
+  
+  // Verify OTP handler
+  const handleVerifyOtp = () => {
+    if (!otp || otp.length < 4) {
+      toast({
+        title: "Invalid OTP",
+        description: "Please enter a valid verification code.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setIsVerifying(true);
+    
+    // Simulate verification delay
+    setTimeout(() => {
+      setIsVerifying(false);
+      setAddMethod('form');
+      // Pre-fill the form with data "fetched" from RTO records
+      form.setValue('specifications.make', 'Honda');
+      form.setValue('specifications.model', 'City');
+      form.setValue('specifications.year', '2022');
+      form.setValue('specifications.fuelType', 'petrol');
+      form.setValue('specifications.vehicleType', 'four-wheeler');
+      form.setValue('specifications.chassisNumber', 'MRHFM56492P150125');
+      form.setValue('specifications.engineNumber', 'L15A71234567');
+      form.setValue('specifications.seatingCapacity', '5');
+      form.setValue('specifications.color', 'White');
+      
+      toast({
+        title: "Verification Successful",
+        description: "Vehicle information retrieved from RTO records.",
+      });
+    }, 2000);
   };
   
   // Calculate progress percentage
@@ -255,43 +493,186 @@ export function AddVehicleDialog({ open, onOpenChange, theme }: AddVehicleDialog
         <DialogHeader>
           <DialogTitle className={theme === 'dark' ? 'text-white' : ''}>Add New Vehicle</DialogTitle>
           <DialogDescription>
-            Please fill in the vehicle details to add it to your fleet.
+            {addMethod === 'selection' 
+              ? 'Select a method to add your vehicle'
+              : addMethod === 'number-plate'
+                ? 'Enter or scan your vehicle\'s registration number for quick setup with OTP verification'
+                : 'Please fill in the vehicle details to add it to your fleet.'
+            }
           </DialogDescription>
         </DialogHeader>
         
-        {/* Progress bar */}
-        <div className="mb-6">
-          <div className="flex justify-between mb-2">
-            {steps.map((step, index) => (
-              <div 
-                key={index} 
-                className={`text-xs font-medium ${
-                  index <= currentStep 
-                    ? (theme === 'dark' ? 'text-primary' : 'text-primary') 
-                    : (theme === 'dark' ? 'text-gray-600' : 'text-gray-400')
-                } ${index === 0 ? 'text-left' : index === steps.length - 1 ? 'text-right' : 'text-center'}`}
-                style={{ width: `${100 / steps.length}%` }}
-              >
-                {step}
+        {addMethod === 'selection' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+            <motion.div 
+              className="border rounded-lg p-6 cursor-pointer hover:border-blue-500 hover:shadow-md transition-all"
+              onClick={() => setAddMethod('number-plate')}
+              whileHover={{ y: -5 }}
+            >
+              <div className="flex flex-col items-center text-center">
+                <div className="bg-blue-100 rounded-full p-4 mb-4">
+                  <Car className="h-10 w-10 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-medium mb-2">Add by Number Plate</h3>
+                <p className="text-gray-500 text-sm">
+                  Enter or scan your vehicle's registration number for quick setup with OTP verification
+                </p>
               </div>
-            ))}
+            </motion.div>
+            
+            <motion.div 
+              className="border rounded-lg p-6 cursor-pointer hover:border-blue-500 hover:shadow-md transition-all"
+              onClick={() => {
+                setAddMethod('form');
+                setCurrentStep(0);
+              }}
+              whileHover={{ y: -5 }}
+            >
+              <div className="flex flex-col items-center text-center">
+                <div className="bg-blue-100 rounded-full p-4 mb-4">
+                  <ClipboardCheck className="h-10 w-10 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-medium mb-2">Manual Selection</h3>
+                <p className="text-gray-500 text-sm">
+                  Choose your vehicle's make, model, and enter details manually
+                </p>
+              </div>
+            </motion.div>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-            <div 
-              className="bg-primary h-2.5 rounded-full transition-all duration-300 ease-in-out" 
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
-          </div>
-        </div>
+        )}
         
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {addMethod === 'number-plate' && (
+          <div className="py-4">
+            <div className="border rounded-lg p-6 mb-4">
+              <h3 className="text-lg font-medium mb-4">Number Plate Verification</h3>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="registration-number">Registration Number</Label>
+                  <div className="flex gap-2">
+                    <Input 
+                      id="registration-number" 
+                      placeholder="e.g., KA01MG5678" 
+                      value={form.getValues('registration.registrationNumber')}
+                      onChange={(e) => form.setValue('registration.registrationNumber', e.target.value)}
+                    />
+                    <Button type="button" variant="outline" onClick={scanRegistrationPlate}>
+                      <Camera className="h-4 w-4 mr-2" />
+                      Scan
+                    </Button>
+                  </div>
+                  <p className="text-xs text-gray-500">Enter your vehicle's registration number exactly as it appears on your RC</p>
+                </div>
+                
+                {isOtpSent ? (
+                  <div className="space-y-2">
+                    <Label htmlFor="otp">Verification Code (OTP)</Label>
+                    <div className="flex gap-2">
+                      <Input 
+                        id="otp" 
+                        placeholder="Enter OTP" 
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                      />
+                      <Button 
+                        type="button" 
+                        onClick={handleVerifyOtp}
+                        disabled={isVerifying}
+                      >
+                        {isVerifying ? (
+                          <>
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                              className="mr-2"
+                            >
+                              <Circle className="h-4 w-4" />
+                            </motion.div>
+                            Verifying...
+                          </>
+                        ) : (
+                          'Verify'
+                        )}
+                      </Button>
+                    </div>
+                    <p className="text-xs text-gray-500">A 6-digit verification code was sent to your registered mobile number</p>
+                  </div>
+                ) : (
+                  <Button 
+                    type="button" 
+                    onClick={handleSendOtp}
+                    className="w-full"
+                  >
+                    Send OTP for Verification
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {addMethod === 'form' && (
+          <>
+            {/* Progress bar */}
+            <div className="mb-6">
+              <div className="flex justify-between mb-2">
+                {steps.map((step, index) => (
+                  <div 
+                    key={index} 
+                    className={`text-xs font-medium ${
+                      index <= currentStep 
+                        ? (theme === 'dark' ? 'text-primary' : 'text-primary') 
+                        : (theme === 'dark' ? 'text-gray-600' : 'text-gray-400')
+                    } ${index === 0 ? 'text-left' : index === steps.length - 1 ? 'text-right' : 'text-center'}`}
+                    style={{ width: `${100 / steps.length}%` }}
+                  >
+                    {step}
+                  </div>
+                ))}
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                <div 
+                  className="bg-primary h-2.5 rounded-full transition-all duration-300 ease-in-out" 
+                  style={{ width: `${progressPercentage}%` }}
+                ></div>
+              </div>
+            </div>
+            
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* Step 1: Vehicle Registration */}
             {currentStep === 0 && (
               <div className="space-y-4">
                 <h3 className={`text-lg font-medium ${theme === 'dark' ? 'text-white' : ''}`}>
                   Registration Information
                 </h3>
+                
+                {/* Vehicle Status Selection */}
+                <div className="mb-4">
+                  <Label htmlFor="vehicle-status" className="mb-2 block">Vehicle Status</Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {statusCategories.map((category) => (
+                      <motion.div
+                        key={category.id}
+                        className={`flex items-center p-2 border rounded-md cursor-pointer ${form.getValues().specifications.vehicleType === category.id ? 'ring-2 ring-primary' : ''} ${category.bgClass}`}
+                        onClick={() => {
+                          // In a real implementation, we would have a form field for status
+                          // For now, this is just visual
+                          toast({
+                            title: "Status Selected",
+                            description: `Vehicle status set to ${category.label}`,
+                          });
+                        }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <div className="mr-2">
+                          {category.icon}
+                        </div>
+                        <span className="text-sm font-medium">{category.label}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
                 
                 <FormField
                   control={form.control}
@@ -1686,8 +2067,10 @@ export function AddVehicleDialog({ open, onOpenChange, theme }: AddVehicleDialog
                 )}
               </div>
             </DialogFooter>
-          </form>
-        </Form>
+              </form>
+            </Form>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

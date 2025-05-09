@@ -1250,6 +1250,7 @@ const VehicleVault = () => {
             </Button>
             <Button 
               className="rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border-0"
+              onClick={() => setIsAddVehicleOpen(true)}
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Vehicle
@@ -2329,6 +2330,13 @@ const VehicleVault = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
+      {/* Add Vehicle Dialog */}
+      <AddVehicleDialog 
+        open={isAddVehicleOpen} 
+        onOpenChange={setIsAddVehicleOpen} 
+        theme="light" 
+      />
     </div>
   );
 };
