@@ -901,33 +901,33 @@ const Calculators: React.FC = () => {
                       <div className="space-y-3">
                         <div className="flex justify-between items-center">
                           <span>Basic Third Party</span>
-                          <span className="font-medium">₹{formatCurrency(Number(insuranceResult.basicPremium) * 0.4)}</span>
+                          <span className="font-medium">{formatCurrency(Number(insuranceResult.basicPremium) * 0.4)}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span>Own Damage</span>
-                          <span className="font-medium">₹{formatCurrency(Number(insuranceResult.basicPremium) * 0.6)}</span>
+                          <span className="font-medium">{formatCurrency(Number(insuranceResult.basicPremium) * 0.6)}</span>
                         </div>
                         <Separator />
                         <div className="flex justify-between items-center">
                           <span>Basic Premium</span>
-                          <span className="font-medium">₹{formatCurrency(Number(insuranceResult.basicPremium))}</span>
+                          <span className="font-medium">{formatCurrency(Number(insuranceResult.basicPremium))}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span>No Claim Bonus ({noClaimBonus}%)</span>
-                          <span className="font-medium text-red-500">-₹{formatCurrency(Number(insuranceResult.basicPremium) - Number(insuranceResult.netPremium))}</span>
+                          <span className="font-medium text-red-500">-{formatCurrency(Number(insuranceResult.basicPremium) - Number(insuranceResult.netPremium))}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span>Net Premium</span>
-                          <span className="font-medium">₹{formatCurrency(Number(insuranceResult.netPremium))}</span>
+                          <span className="font-medium">{formatCurrency(Number(insuranceResult.netPremium))}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span>GST (18%)</span>
-                          <span className="font-medium">₹{formatCurrency(Number(insuranceResult.tax))}</span>
+                          <span className="font-medium">{formatCurrency(Number(insuranceResult.tax))}</span>
                         </div>
                         <Separator />
                         <div className="flex justify-between items-center font-bold">
                           <span>Total Premium</span>
-                          <span>₹{formatCurrency(Number(insuranceResult.totalPremium))}</span>
+                          <span>{formatCurrency(Number(insuranceResult.totalPremium))}</span>
                         </div>
                       </div>
                     </CardContent>
