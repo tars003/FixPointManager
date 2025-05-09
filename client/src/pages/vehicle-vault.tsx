@@ -4,6 +4,7 @@ import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { Vehicle } from '@shared/schema';
 import ValueTrendPredictor from '@/components/dashboard/ValueTrendPredictor';
+import { AddVehicleDialog } from '@/components/vehicles/add-vehicle-dialog';
 import { 
   Car, 
   Search,
@@ -105,6 +106,7 @@ const VehicleVault = () => {
   const [selectedVehicle, setSelectedVehicle] = useState<EnhancedVehicle | null>(null);
   const [newStatus, setNewStatus] = useState<VehicleStatus | ''>('');
   const [selectedDocCategory, setSelectedDocCategory] = useState<string>('');
+  const [isAddVehicleOpen, setIsAddVehicleOpen] = useState(false);
   
   // For toast notifications
   const { toast } = useToast();
