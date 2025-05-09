@@ -337,7 +337,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 ${currentStep >= 1 ? 'border-primary bg-primary text-white' : 'border-gray-300'}`}>
                     <UserCircle className="h-5 w-5" />
                   </div>
-                  <span className="text-xs mt-1">Personal Info</span>
+                  <span className="text-xs mt-1">{t('booking.steps.personalInfo')}</span>
                 </div>
 
                 <div className={`flex-1 border-t-2 self-start mt-5 ${currentStep >= 2 ? 'border-primary' : 'border-gray-300'}`} />
@@ -346,7 +346,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 ${currentStep >= 2 ? 'border-primary bg-primary text-white' : 'border-gray-300'}`}>
                     <MapPin className="h-5 w-5" />
                   </div>
-                  <span className="text-xs mt-1">Address & Date</span>
+                  <span className="text-xs mt-1">{t('booking.steps.addressAndDate')}</span>
                 </div>
 
                 <div className={`flex-1 border-t-2 self-start mt-5 ${currentStep >= 3 ? 'border-primary' : 'border-gray-300'}`} />
@@ -355,7 +355,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 ${currentStep >= 3 ? 'border-primary bg-primary text-white' : 'border-gray-300'}`}>
                     <CreditCard className="h-5 w-5" />
                   </div>
-                  <span className="text-xs mt-1">Payment</span>
+                  <span className="text-xs mt-1">{t('booking.steps.payment')}</span>
                 </div>
               </div>
             </div>
@@ -382,16 +382,16 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
 
                     {/* Personal Information */}
                     <div className="space-y-4">
-                      <h3 className="font-medium text-lg">Personal Information</h3>
+                      <h3 className="font-medium text-lg">{t('booking.personalInformation')}</h3>
 
                       <FormField
                         control={form.control}
                         name="fullName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Full Name</FormLabel>
+                            <FormLabel>{t('booking.form.fullName')}</FormLabel>
                             <FormControl>
-                              <Input placeholder="John Doe" {...field} />
+                              <Input placeholder={t('booking.form.fullNamePlaceholder', 'John Doe')} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -404,9 +404,9 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Email</FormLabel>
+                              <FormLabel>{t('booking.form.email')}</FormLabel>
                               <FormControl>
-                                <Input placeholder="johndoe@example.com" type="email" {...field} />
+                                <Input placeholder={t('booking.form.emailPlaceholder', 'johndoe@example.com')} type="email" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -418,7 +418,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                           name="phone"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Phone Number</FormLabel>
+                              <FormLabel>{t('booking.form.phone')}</FormLabel>
                               <FormControl>
                                 <div className="flex">
                                   <div className="flex items-center px-3 bg-muted border border-r-0 rounded-l-md">
@@ -426,7 +426,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                                   </div>
                                   <Input 
                                     className="rounded-l-none" 
-                                    placeholder="10-digit mobile number" 
+                                    placeholder={t('booking.form.phonePlaceholder', '10-digit mobile number')} 
                                     {...field}
                                   />
                                 </div>
@@ -437,25 +437,25 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                         />
                       </div>
 
-                      <h3 className="font-medium text-lg mt-6">Vehicle Information</h3>
+                      <h3 className="font-medium text-lg mt-6">{t('booking.vehicleInformation')}</h3>
 
                       <FormField
                         control={form.control}
                         name="vehicleType"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Vehicle Type</FormLabel>
+                            <FormLabel>{t('booking.form.vehicleType')}</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select vehicle type" />
+                                  <SelectValue placeholder={t('booking.form.selectVehicleTypePlaceholder', 'Select vehicle type')} />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="2-wheeler">Two Wheeler</SelectItem>
-                                <SelectItem value="4-wheeler">Four Wheeler</SelectItem>
-                                <SelectItem value="commercial">Commercial Vehicle</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
+                                <SelectItem value="2-wheeler">{t('booking.form.twoWheeler')}</SelectItem>
+                                <SelectItem value="4-wheeler">{t('booking.form.fourWheeler')}</SelectItem>
+                                <SelectItem value="commercial">{t('booking.form.commercialVehicle')}</SelectItem>
+                                <SelectItem value="other">{t('booking.form.other')}</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -485,7 +485,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                                   />
                                 </FormControl>
                                 <FormLabel className="text-base font-medium">
-                                  Use vehicle from my garage
+                                  {t('booking.form.useVehicleFromGarage')}
                                 </FormLabel>
                               </div>
                               <FormMessage />
@@ -500,7 +500,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                           name="existingVehicleId"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Select a Vehicle</FormLabel>
+                              <FormLabel>{t('booking.form.selectVehicle')}</FormLabel>
                               <Select 
                                 onValueChange={(value) => {
                                   field.onChange(value);
@@ -513,7 +513,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                               >
                                 <FormControl>
                                   <SelectTrigger>
-                                    <SelectValue placeholder="Select a vehicle from your garage" />
+                                    <SelectValue placeholder={t('booking.form.selectVehiclePlaceholder')} />
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -534,12 +534,12 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                           name="vehicleRegistration"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Vehicle Registration Number</FormLabel>
+                              <FormLabel>{t('booking.form.vehicleRegistration')}</FormLabel>
                               <FormControl>
-                                <Input placeholder="e.g., MH12AB1234" {...field} />
+                                <Input placeholder={t('booking.form.vehicleRegistrationPlaceholder')} {...field} />
                               </FormControl>
                               <div className="text-sm text-muted-foreground">
-                                Enter your vehicle registration number in the format like MH12AB1234
+                                {t('booking.form.vehicleRegistrationHelp')}
                               </div>
                               <FormMessage />
                             </FormItem>
