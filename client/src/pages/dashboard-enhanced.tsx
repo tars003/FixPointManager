@@ -47,7 +47,9 @@ import {
   Activity,
   BarChart2,
   XCircle,
-  CreditCard
+  CreditCard,
+  Route,
+  Calculator
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
