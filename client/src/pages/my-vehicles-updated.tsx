@@ -238,7 +238,7 @@ const VehicleVault = () => {
   
   // Add new vehicle
   const addNewVehicle = () => {
-    navigate('/vehicles/add');
+    navigate('/vehicle-vault');
   };
   
   // Calculate total portfolio value
