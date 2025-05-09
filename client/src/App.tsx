@@ -9,6 +9,7 @@ import { FeedbackProvider } from "@/hooks/use-feedback";
 import Layout from "@/components/layout/layout";
 import NotFound from "@/pages/not-found";
 import PageTransition from "@/components/transitions/page-transition";
+import AdvancedPageTransition from "@/components/transitions/advanced-page-transition";
 
 // Pages
 import MyVehicles from "@/pages/my-vehicles-updated";
@@ -47,6 +48,7 @@ import ProjectCustomization from "@/pages/project-customization";
 import EnhancedArenaFeatures from "@/pages/enhanced-arena-features";
 import Drishti from "@/pages/drishti";
 import AnimationDemo from "@/pages/animation-demo";
+import AnimationShowcase from "@/pages/animation-showcase";
 import ProfilePage from "@/pages/profile";
 import SettingsPage from "@/pages/settings";
 import MembershipPage from "@/pages/membership";
@@ -557,28 +559,23 @@ function Router() {
           </Route>
           <Route path="/trip-planner">
             {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
+              <AdvancedPageTransition type="slide" direction="up" duration={0.5}>
                 <TripPlanner />
-              </motion.div>
+              </AdvancedPageTransition>
             )}
           </Route>
           <Route path="/calculators">
             {() => (
-              <motion.div
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
-              >
+              <AdvancedPageTransition type="scale" duration={0.5}>
                 <Calculators />
-              </motion.div>
+              </AdvancedPageTransition>
+            )}
+          </Route>
+          <Route path="/animation-showcase">
+            {() => (
+              <AdvancedPageTransition type="fade" duration={0.5}>
+                <AnimationShowcase />
+              </AdvancedPageTransition>
             )}
           </Route>
           <Route path="/membership">

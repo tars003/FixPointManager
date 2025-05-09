@@ -163,9 +163,9 @@ const navItems = [
     bgColor: 'bg-blue-50',
   },
   {
-    title: 'Animation Demo',
+    title: 'Animation Showcase',
     icon: Sparkles,
-    href: '/animation-demo',
+    href: '/animation-showcase',
     color: 'text-pink-500',
     bgColor: 'bg-pink-50',
   },
