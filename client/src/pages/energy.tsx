@@ -741,7 +741,7 @@ const EnergyPage = () => {
           </p>
           
           <Button 
-            onClick={() => navigate('/vehicles/add')}
+            onClick={() => navigate('/vehicle-vault')}
             className="bg-primary text-white hover:bg-primary-dark"
           >
             Add Electric Vehicle

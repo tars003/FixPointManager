@@ -215,7 +215,7 @@ const MyVehicles = () => {
   
   // Add new vehicle
   const addNewVehicle = () => {
-    navigate('/vehicles/add');
+    navigate('/vehicle-vault');
   };
   
   return (
