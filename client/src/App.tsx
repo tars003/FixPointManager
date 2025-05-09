@@ -57,6 +57,7 @@ import DocumentVault from "@/pages/documents";
 import TripPlanner from "@/pages/trip-planner";
 import Calculators from "@/pages/calculators";
 import RTOServices from "@/pages/rto-services";
+import EnhancedRTOServices from "@/pages/enhanced-rto-services";
 
 function Router() {
   const [location] = useLocation();
@@ -576,6 +577,13 @@ function Router() {
             {() => (
               <AdvancedPageTransition type="slide" direction="left" duration={0.5}>
                 <RTOServices />
+              </AdvancedPageTransition>
+            )}
+          </Route>
+          <Route path="/enhanced-rto-services">
+            {() => (
+              <AdvancedPageTransition type="slide" direction="left" duration={0.5}>
+                <EnhancedRTOServices />
               </AdvancedPageTransition>
             )}
           </Route>

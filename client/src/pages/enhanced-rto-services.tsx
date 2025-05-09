@@ -14,7 +14,9 @@ import {
   Filter, 
   Truck, 
   CreditCard,
-  CheckSquare
+  CheckSquare,
+  Settings,
+  Info
 } from 'lucide-react';
 
 import { PageHeader } from '@/components/ui/page-header';
@@ -27,6 +29,9 @@ import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { formatCurrency } from '@/lib/format';
 import AdvancedPageTransition from '@/components/transitions/advanced-page-transition';
+import PersonalizedDashboardWidgets from '@/components/dashboard/PersonalizedDashboardWidgets';
+import DocumentHoverCard from '@/components/documents/DocumentHoverCard';
+import InteractiveMascotGuide from '@/components/tutorial/InteractiveMascotGuide';
 
 // Sample RTO service data
 const rtoServices = [
@@ -179,11 +184,94 @@ const trackingData = [
   }
 ];
 
-const RTOServices: React.FC = () => {
+// Sample documents with hover preview
+const sampleDocuments = [
+  {
+    id: 'doc-1',
+    title: 'Driving License',
+    type: 'Identity Document',
+    category: 'License',
+    dateAdded: '2024-06-15',
+    expiryDate: '2029-06-14',
+    status: 'valid',
+    fileSize: '1.2 MB',
+    fileType: 'PDF'
+  },
+  {
+    id: 'doc-2',
+    title: 'Vehicle Registration Certificate',
+    type: 'Vehicle Document',
+    category: 'Registration',
+    dateAdded: '2024-02-10',
+    expiryDate: '2025-02-09',
+    status: 'valid',
+    fileSize: '3.5 MB',
+    fileType: 'PDF'
+  },
+  {
+    id: 'doc-3',
+    title: 'Insurance Policy',
+    type: 'Insurance Document',
+    category: 'Insurance',
+    dateAdded: '2024-01-05',
+    expiryDate: '2025-06-15',
+    status: 'expiring',
+    fileSize: '2.8 MB',
+    fileType: 'PDF'
+  }
+];
+
+// Tutorial steps for Interactive Mascot Guide
+const tutorialSteps = [
+  {
+    id: 'welcome',
+    title: 'Welcome to RTO Services!',
+    content: 'Hi there! I\'m Fixi, your guide to the new RTO Services module. Let me show you around the new features we\'ve added.',
+    mascotState: 'happy'
+  },
+  {
+    id: 'browse',
+    title: 'Browse RTO Services',
+    content: 'In the Browse tab, you can search for various RTO services available across India. Filter by state or category to find what you need.',
+    mascotState: 'pointing'
+  },
+  {
+    id: 'compare',
+    title: 'Compare Services',
+    content: 'Found multiple services that interest you? Click the "Compare" button to add them to your comparison list, and compare up to 3 services side by side.',
+    mascotState: 'thinking'
+  },
+  {
+    id: 'track',
+    title: 'Track Your Applications',
+    content: 'Use the Track tab to monitor the status of your RTO service applications. Enter your tracking ID or select from your recent services.',
+    mascotState: 'pointing'
+  },
+  {
+    id: 'widgets',
+    title: 'Personalized Dashboard',
+    content: 'You can now customize your dashboard with widgets! Click "Customize" to add, remove, or rearrange widgets based on what\'s important to you.',
+    mascotState: 'happy'
+  },
+  {
+    id: 'preview',
+    title: 'Document Hover Preview',
+    content: 'Hover over documents to quickly preview their details without opening them. Try it out on the documents in the Related Documents section.',
+    mascotState: 'pointing'
+  },
+  {
+    id: 'completed',
+    title: 'You\'re All Set!',
+    content: 'Great job! You now know how to use all the new features in the RTO Services module. Feel free to explore on your own!',
+    mascotState: 'celebrating'
+  }
+];
+
+const EnhancedRTOServices: React.FC = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('browse');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedState, setSelectedState] = useState('');
+  const [selectedState, setSelectedState] = useState('all-states');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [compareList, setCompareList] = useState<number[]>([]);
   const [isComparing, setIsComparing] = useState(false);
@@ -281,6 +369,9 @@ const RTOServices: React.FC = () => {
           icon={<FileText />} 
         />
 
+        {/* NEW: Personalized Dashboard Widgets */}
+        <PersonalizedDashboardWidgets />
+        
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
           <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto">
             <TabsTrigger value="browse">Browse</TabsTrigger>
@@ -693,9 +784,46 @@ const RTOServices: React.FC = () => {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* NEW: Related Documents with Hover Preview */}
+        <div className="mt-10">
+          <h3 className="text-lg font-medium mb-4">Related Documents</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {sampleDocuments.map((document) => (
+              <DocumentHoverCard key={document.id} document={document}>
+                <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                  <CardHeader className="py-3">
+                    <CardTitle className="text-sm">{document.title}</CardTitle>
+                    <CardDescription className="text-xs">{document.type}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-0 pb-3">
+                    <div className="flex justify-between items-center text-xs">
+                      <div className="flex items-center">
+                        <FileText className="h-3.5 w-3.5 mr-1 text-blue-500" />
+                        <span>{document.category}</span>
+                      </div>
+                      <Badge variant="outline" className="text-xs h-5">
+                        {document.status.charAt(0).toUpperCase() + document.status.slice(1)}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              </DocumentHoverCard>
+            ))}
+          </div>
+        </div>
+
+        {/* NEW: Interactive Mascot Tutorial Guide */}
+        <InteractiveMascotGuide 
+          tutorialId="rto-services-intro"
+          steps={tutorialSteps}
+          autoStart={true}
+          mascotName="Fixi"
+          delay={1500}
+        />
       </div>
     </AdvancedPageTransition>
   );
 };
 
-export default RTOServices;
+export default EnhancedRTOServices;
