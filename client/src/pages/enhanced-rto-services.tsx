@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
 import { 
   Calendar,
   IndianRupee, 
@@ -270,6 +271,7 @@ const tutorialSteps = [
 
 const EnhancedRTOServices: React.FC = () => {
   const { toast } = useToast();
+  const { t } = useTranslation(['rto', 'common']);
   const [activeTab, setActiveTab] = useState('browse');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedState, setSelectedState] = useState('all-states');
@@ -370,8 +372,8 @@ const EnhancedRTOServices: React.FC = () => {
     <AdvancedPageTransition>
       <div className="container mx-auto p-4 md:p-6">
         <PageHeader 
-          title="RTO Services" 
-          description="Check, compare, book and track RTO services across India" 
+          title={t('enhanced.title')} 
+          description={t('enhanced.intro')} 
           icon={<FileText />} 
         />
 
@@ -379,9 +381,9 @@ const EnhancedRTOServices: React.FC = () => {
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
           <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto">
-            <TabsTrigger value="browse">Browse</TabsTrigger>
-            <TabsTrigger value="compare">Compare</TabsTrigger>
-            <TabsTrigger value="track">Track</TabsTrigger>
+            <TabsTrigger value="browse">{t('common:common.browse')}</TabsTrigger>
+            <TabsTrigger value="compare">{t('common:common.compare')}</TabsTrigger>
+            <TabsTrigger value="track">{t('common:common.track')}</TabsTrigger>
           </TabsList>
           
           {/* Browse Services Tab */}
@@ -395,7 +397,7 @@ const EnhancedRTOServices: React.FC = () => {
                       <div className="relative">
                         <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                         <Input
-                          placeholder="Search for RTO services..."
+                          placeholder={t('searchLocation')}
                           className="pl-9"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
@@ -483,7 +485,7 @@ const EnhancedRTOServices: React.FC = () => {
                             {compareList.includes(service.id) ? "Added to Compare" : "Compare"}
                           </Button>
                           <Button size="sm" onClick={() => bookService(service.id)}>
-                            Book Now
+                            {t('common:common.bookNow')}
                           </Button>
                         </div>
                       </CardFooter>
@@ -624,7 +626,7 @@ const EnhancedRTOServices: React.FC = () => {
                             return (
                               <td key={id} className="p-2">
                                 <Button size="sm" onClick={() => bookService(id)}>
-                                  Book Now
+                                  {t('common:common.bookNow')}
                                 </Button>
                               </td>
                             );
