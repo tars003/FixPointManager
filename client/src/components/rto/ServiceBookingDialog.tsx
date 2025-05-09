@@ -200,15 +200,41 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
       const generatedBookingId = 'RTO' + Date.now().toString().slice(-5);
       setBookingId(generatedBookingId);
       
+      // Create booking object for API (in a real app this would be sent to server)
+      const bookingData = {
+        id: generatedBookingId,
+        serviceId: service?.id,
+        serviceName: service?.name,
+        price: service?.price,
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        vehicleInfo: data.useExistingVehicle && userVehicles 
+          ? userVehicles.find((v: Vehicle) => v.id.toString() === data.existingVehicleId)
+          : { licensePlate: data.vehicleRegistration },
+        address: data.address,
+        city: data.city,
+        state: data.state,
+        pincode: data.pincode,
+        rtoOffice: availableRtoOffices.find(office => office.id === data.nearbyRto),
+        preferredDate: data.preferredDate,
+        paymentMethod: data.paymentMethod,
+        additionalNotes: data.additionalNotes,
+        status: 'confirmed',
+        createdAt: new Date().toISOString()
+      };
+      
+      console.log('Booking created:', bookingData);
+      
       // Show success message and set booking as complete
       setBookingComplete(true);
-      setCurrentStep(3);
       
       toast({
         title: 'Booking Successful',
         description: `Your RTO service booking (ID: ${generatedBookingId}) has been confirmed.`,
       });
     } catch (error) {
+      console.error('Booking error:', error);
       toast({
         title: 'Booking Failed',
         description: 'There was an error processing your booking. Please try again.',
