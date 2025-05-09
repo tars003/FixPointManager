@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Switch, Route, useLocation, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -9,6 +10,7 @@ import { FeedbackProvider } from "@/hooks/use-feedback";
 import { NotificationProvider } from "@/components/common/NotificationProvider";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
+import { loadDemoNotifications } from "./utils/demo-notifications";
 import Layout from "@/components/layout/layout";
 import NotFound from "@/pages/not-found";
 import PageTransition from "@/components/transitions/page-transition";
@@ -653,6 +655,15 @@ function Router() {
 }
 
 function App() {
+  // Load demo notifications after component mounts
+  useEffect(() => {
+    // Small delay to ensure NotificationProvider is fully mounted
+    const timer = setTimeout(() => {
+      loadDemoNotifications();
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <I18nextProvider i18n={i18n}>
       <QueryClientProvider client={queryClient}>
