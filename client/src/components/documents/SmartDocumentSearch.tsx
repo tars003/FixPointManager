@@ -28,7 +28,14 @@ import {
   CalendarRange,
   X,
   ChevronsUpDown,
-  MoreHorizontal
+  MoreHorizontal,
+  Check,
+  Info,
+  Tool,
+  Receipt,
+  Users,
+  RefreshCw,
+  Shield
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -231,7 +238,7 @@ const getStatusBadge = (status?: "valid" | "expiring" | "expired") => {
   }
 };
 
-import { Tool, Receipt, Users, RefreshCw, Shield } from "lucide-react";
+// Icons already imported above
 
 interface SmartDocumentSearchProps {
   className?: string;
@@ -424,7 +431,7 @@ export function SmartDocumentSearch({ className, onSelectDocument }: SmartDocume
         <Search className="mr-2 h-4 w-4" />
         {t('documents:search.placeholder', 'Search documents...')}
       </Button>
-      <CommandDialog open={open} onOpenChange={handleOpenChange} className="max-w-3xl">
+      <CommandDialog open={open} onOpenChange={handleOpenChange}>
         <div className="flex border-b">
           <Search className="mx-2 my-3 h-4 w-4 text-muted-foreground" />
           <input

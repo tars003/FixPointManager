@@ -196,7 +196,7 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
     try {
       // In a real app, you would send this data to the server
       // For demo, we'll simulate a network request with setTimeout
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       // Generate a random booking ID
       const generatedBookingId = 'RTO' + Date.now().toString().slice(-5);
@@ -231,15 +231,31 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
       // Show success message and set booking as complete
       setBookingComplete(true);
       
+      // Add notification to notification system
+      if (window.addNotification) {
+        window.addNotification({
+          id: `booking-${generatedBookingId}`,
+          title: t('booking.bookingSuccessful', 'Booking Successful'),
+          message: t('booking.bookingConfirmed', 'Your RTO service booking (ID: {{id}}) has been confirmed.', 
+            { id: generatedBookingId }),
+          timestamp: new Date(),
+          read: false,
+          priority: 'medium',
+          category: 'service',
+          link: '/rto-services/bookings'
+        });
+      }
+      
       toast({
-        title: 'Booking Successful',
-        description: `Your RTO service booking (ID: ${generatedBookingId}) has been confirmed.`,
+        title: t('booking.success', 'Booking Successful'),
+        description: t('booking.bookingConfirmed', 'Your RTO service booking (ID: {{id}}) has been confirmed.', 
+          { id: generatedBookingId }),
       });
     } catch (error) {
       console.error('Booking error:', error);
       toast({
-        title: 'Booking Failed',
-        description: 'There was an error processing your booking. Please try again.',
+        title: t('booking.bookingFailed', 'Booking Failed'),
+        description: t('booking.bookingError', 'There was an error processing your booking. Please try again.'),
         variant: 'destructive',
       });
     } finally {
