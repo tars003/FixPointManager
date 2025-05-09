@@ -3,9 +3,10 @@
  * Can be used directly or within a useEffect hook for route changes
  */
 export function scrollToTop() {
+  // Use smooth scrolling for better user experience
   window.scrollTo({
     top: 0,
-    behavior: 'smooth' // Use 'auto' for immediate scrolling without animation
+    behavior: 'smooth'
   });
 }
 
