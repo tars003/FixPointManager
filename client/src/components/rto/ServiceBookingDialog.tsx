@@ -12,9 +12,11 @@ import {
   UserCircle,
   MapPin,
   Calendar,
+  CalendarIcon,
   CreditCard,
   Car,
-  Building
+  Building,
+  AlertCircle
 } from 'lucide-react';
 
 import {

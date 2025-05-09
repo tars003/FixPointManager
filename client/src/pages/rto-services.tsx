@@ -16,6 +16,7 @@ import {
   CreditCard,
   CheckSquare
 } from 'lucide-react';
+import ServiceBookingDialog from '@/components/rto/ServiceBookingDialog';
 
 import { PageHeader } from '@/components/ui/page-header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -189,6 +190,8 @@ const RTOServices: React.FC = () => {
   const [isComparing, setIsComparing] = useState(false);
   const [trackingId, setTrackingId] = useState('');
   const [trackingResult, setTrackingResult] = useState<any>(null);
+  const [isBookingDialogOpen, setIsBookingDialogOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<any>(null);
   
   // Filter services based on search, state and category
   const filteredServices = rtoServices.filter(service => {
@@ -248,13 +251,16 @@ const RTOServices: React.FC = () => {
     }
   };
 
-  // Book a service - In real app would navigate to form page or show modal
+  // Book a service - Open the booking dialog
   const bookService = (serviceId: number) => {
     const service = rtoServices.find(s => s.id === serviceId);
-    toast({
-      title: 'Service booking initiated',
-      description: `You are booking ${service?.name}. Please fill in required details.`,
-    });
+    if (service) {
+      setSelectedService(service);
+      setIsBookingDialogOpen(true);
+      console.log("Opening booking dialog for service:", service.name);
+    } else {
+      console.error("Service not found with ID:", serviceId);
+    }
   };
 
   // Get status icon based on status string
@@ -693,6 +699,12 @@ const RTOServices: React.FC = () => {
             </Card>
           </TabsContent>
         </Tabs>
+        {/* Service Booking Dialog */}
+        <ServiceBookingDialog
+          open={isBookingDialogOpen}
+          onOpenChange={setIsBookingDialogOpen}
+          service={selectedService}
+        />
       </div>
     </AdvancedPageTransition>
   );
