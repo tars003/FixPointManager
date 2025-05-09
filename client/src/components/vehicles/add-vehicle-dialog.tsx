@@ -292,6 +292,9 @@ export function AddVehicleDialog({ open, onOpenChange, theme }: AddVehicleDialog
   const [otp, setOtp] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   
+  // Track the selected vehicle status
+  const [selectedStatus, setSelectedStatus] = useState<string>('active');
+  
   // For toast notifications
   const { toast } = useToast();
   
@@ -370,7 +373,16 @@ export function AddVehicleDialog({ open, onOpenChange, theme }: AddVehicleDialog
   // Mutation for adding a vehicle
   const addVehicleMutation = useMutation({
     mutationFn: async (data: any) => {
-      // In a real application, this would format the data according to the API requirements
+      // Validate required fields before submission
+      if (!data.registration.registrationNumber) {
+        throw new Error("Registration number is required");
+      }
+      
+      if (!data.specifications.make || !data.specifications.model || !data.specifications.year) {
+        throw new Error("Vehicle make, model, and year are required");
+      }
+      
+      // Format the data according to the API requirements
       const formattedData = {
         userId: 1, // Example user ID
         name: `${data.specifications.make} ${data.specifications.model}`,
@@ -381,8 +393,10 @@ export function AddVehicleDialog({ open, onOpenChange, theme }: AddVehicleDialog
         mileage: 0, // Default to 0 for new entries
         fuelType: data.specifications.fuelType,
         vehicleType: data.specifications.vehicleType,
-        status: 'active', // Default status
-        // Include other fields as needed
+        status: selectedStatus, // Use the selected status instead of default
+        // Include other optional fields if present
+        vin: data.specifications.chassisNumber || null,
+        purchaseDate: data.ownership.purchaseDate || null,
       };
       
       const response = await apiRequest('POST', '/api/vehicles', formattedData);
@@ -653,10 +667,9 @@ export function AddVehicleDialog({ open, onOpenChange, theme }: AddVehicleDialog
                     {statusCategories.map((category) => (
                       <motion.div
                         key={category.id}
-                        className={`flex items-center p-2 border rounded-md cursor-pointer ${form.getValues().specifications.vehicleType === category.id ? 'ring-2 ring-primary' : ''} ${category.bgClass}`}
+                        className={`flex items-center p-2 border rounded-md cursor-pointer ${selectedStatus === category.id ? 'ring-2 ring-primary' : ''} ${category.bgClass}`}
                         onClick={() => {
-                          // In a real implementation, we would have a form field for status
-                          // For now, this is just visual
+                          setSelectedStatus(category.id);
                           toast({
                             title: "Status Selected",
                             description: `Vehicle status set to ${category.label}`,
