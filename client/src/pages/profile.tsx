@@ -483,7 +483,7 @@ const ProfilePage: React.FC = () => {
                           <h3 className="text-lg font-semibold text-gray-900">Registered Vehicles</h3>
                           <Button 
                             className="bg-gradient-to-r from-primary to-blue-700 hover:from-blue-700 hover:to-primary"
-                            onClick={() => navigate('/vehicle-vault/add')}
+                            onClick={() => navigate('/vehicle-vault')}
                           >
                             <Car className="h-4 w-4 mr-2" />
                             Add Vehicle
@@ -565,7 +565,7 @@ const ProfilePage: React.FC = () => {
                             className="rounded-lg border border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 transition-colors h-full min-h-[200px] flex items-center justify-center cursor-pointer"
                             variants={itemVariants}
                             whileHover={{ scale: 1.02 }}
-                            onClick={() => navigate('/vehicle-vault/add')}
+                            onClick={() => navigate('/vehicle-vault')}
                           >
                             <div className="text-center p-6">
                               <motion.div 
