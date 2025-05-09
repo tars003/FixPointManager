@@ -17,7 +17,7 @@ import LazyPage from "@/components/loading/lazy-page";
 import { scrollToTop } from "@/utils/scroll-utils";
 
 // Lazy loaded page components with performance optimizations
-const Dashboard = lazy(() => import("@/pages/dashboard-with-enhanced-ui"));
+const Dashboard = lazy(() => import("@/pages/dashboard-enhanced"));
 const VehicleVault = lazy(() => import("@/pages/vehicle-vault"));
 const Documents = lazy(() => import("@/pages/documents"));
 const RtoServices = lazy(() => import("@/pages/rto-services"));
