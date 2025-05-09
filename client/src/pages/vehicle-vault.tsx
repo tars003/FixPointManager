@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Vehicle } from '@shared/schema';
 import ValueTrendPredictor from '@/components/dashboard/ValueTrendPredictor';
 import { AddVehicleDialog } from '@/components/vehicles/add-vehicle-dialog';
+import { useTabWithScroll } from '@/hooks/use-scroll-top';
 import { 
   Car, 
   Search,
@@ -100,7 +101,7 @@ interface EnhancedVehicle extends Vehicle {
 
 const VehicleVault = () => {
   const [, navigate] = useLocation();
-  const [activeTab, setActiveTab] = useState<string>('list');
+  const [activeTab, setActiveTab] = useTabWithScroll<string>('list');
   const [statusFilter, setStatusFilter] = useState<VehicleStatus | 'all'>('active');
   const [showStatusDialog, setShowStatusDialog] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<EnhancedVehicle | null>(null);

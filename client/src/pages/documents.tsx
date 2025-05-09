@@ -23,6 +23,7 @@ import {
   Info,
   Settings
 } from 'lucide-react';
+import { useTabWithScroll } from '@/hooks/use-scroll-top';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -149,7 +150,7 @@ const DocumentVault: React.FC = () => {
   const queryClient = useQueryClient();
   
   // States
-  const [activeTab, setActiveTab] = useState<string>('all');
+  const [activeTab, setActiveTab] = useTabWithScroll<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedVehicle, setSelectedVehicle] = useState<number | 'all'>('all');
   const [selectedDocumentType, setSelectedDocumentType] = useState<DocumentType | 'all'>('all');
