@@ -30,11 +30,13 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage
 } from '@/components/ui/form';
+import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -508,9 +510,9 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                               <FormControl>
                                 <Input placeholder="e.g., MH12AB1234" {...field} />
                               </FormControl>
-                              <FormDescription>
+                              <div className="text-sm text-muted-foreground">
                                 Enter your vehicle registration number in the format like MH12AB1234
-                              </FormDescription>
+                              </div>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -634,9 +636,9 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                                 />
                               </PopoverContent>
                             </Popover>
-                            <FormDescription>
+                            <div className="text-sm text-muted-foreground">
                               Choose a preferred date for your RTO service (up to 2 months in advance)
-                            </FormDescription>
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -666,9 +668,9 @@ const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>
                                   ))}
                                 </SelectContent>
                               </Select>
-                              <FormDescription>
+                              <div className="text-sm text-muted-foreground">
                                 Choose your preferred RTO office based on your location
-                              </FormDescription>
+                              </div>
                               <FormMessage />
                             </FormItem>
                           )}
