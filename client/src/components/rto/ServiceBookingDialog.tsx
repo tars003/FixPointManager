@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { apiRequest } from '@/lib/queryClient';
+import { useQuery } from '@tanstack/react-query';
 import {
   IndianRupee,
   Calendar,
@@ -17,7 +19,8 @@ import {
   Calendar as CalendarIcon,
   Info,
   CreditCard,
-  AlertCircle
+  AlertCircle,
+  Building
 } from 'lucide-react';
 
 import {
@@ -54,18 +57,31 @@ import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 const bookingFormSchema = z.object({
   fullName: z.string().min(3, { message: 'Full name must be at least 3 characters' }),
   email: z.string().email({ message: 'Please enter a valid email address' }),
-  phone: z.string().regex(/^[6-9]\d{9}$/, { message: 'Please enter a valid 10-digit Indian mobile number' }),
+  phone: z.string().regex(/^[6-9]\d{9}$/, { message: 'Please enter a valid 10-digit mobile number (without +91)' }),
   vehicleType: z.string().min(1, { message: 'Please select a vehicle type' }),
+  useExistingVehicle: z.boolean().default(false),
+  existingVehicleId: z.string().optional(),
   vehicleRegistration: z.string().regex(/^[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{4}$/, {
     message: 'Please enter a valid vehicle registration number (e.g., MH12AB1234)'
-  }),
+  }).optional(),
   address: z.string().min(5, { message: 'Address must be at least 5 characters' }),
   city: z.string().min(2, { message: 'City must be at least 2 characters' }),
   state: z.string().min(2, { message: 'Please select a state' }),
   pincode: z.string().regex(/^[1-9][0-9]{5}$/, { message: 'Please enter a valid 6-digit pincode' }),
+  nearbyRto: z.string().optional(),
   preferredDate: z.date({ required_error: 'Please select a preferred date' }),
   paymentMethod: z.enum(['online', 'cash'], { required_error: 'Please select a payment method' }),
   additionalNotes: z.string().optional(),
+}).refine(data => {
+  // If using existing vehicle, existingVehicleId must be provided
+  if (data.useExistingVehicle) {
+    return !!data.existingVehicleId;
+  }
+  // If not using existing vehicle, vehicleRegistration must be provided
+  return !!data.vehicleRegistration;
+}, {
+  message: "Please select a vehicle from your garage or enter a registration number",
+  path: ["existingVehicleId"]
 });
 
 type BookingFormData = z.infer<typeof bookingFormSchema>;
@@ -97,6 +113,29 @@ const indianStates = [
   'Delhi', 'Jammu and Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry'
 ];
 
+// Define RTO office type
+type RtoOffice = {
+  id: string;
+  name: string;
+  address: string;
+};
+
+// Sample nearby RTO offices (in real app, would be based on pincode/city)
+const nearbyRtoOffices: Record<string, RtoOffice[]> = {
+  "400001": [
+    { id: "rto-mum-1", name: "Mumbai Central RTO", address: "Mumbai Central, Mumbai, Maharashtra" },
+    { id: "rto-mum-2", name: "Tardeo RTO", address: "Tardeo, Mumbai, Maharashtra" },
+    { id: "rto-mum-3", name: "Andheri RTO", address: "Andheri, Mumbai, Maharashtra" }
+  ],
+  "110001": [
+    { id: "rto-del-1", name: "Delhi Central RTO", address: "Sarai Kale Khan, New Delhi, Delhi" },
+    { id: "rto-del-2", name: "Lajpat Nagar RTO", address: "Lajpat Nagar, New Delhi, Delhi" },
+  ],
+  "default": [
+    { id: "rto-def-1", name: "Local RTO Office", address: "Please contact for exact address" },
+  ]
+};
+
 const ServiceBookingDialog: React.FC<ServiceBookingDialogProps> = ({
   open,
   onOpenChange,
@@ -107,6 +146,29 @@ const ServiceBookingDialog: React.FC<ServiceBookingDialogProps> = ({
   const [currentStep, setCurrentStep] = useState(1);
   const [bookingComplete, setBookingComplete] = useState(false);
   const [bookingId, setBookingId] = useState('');
+  const [showExistingVehicles, setShowExistingVehicles] = useState(false);
+  const [availableRtoOffices, setAvailableRtoOffices] = useState<typeof nearbyRtoOffices['default']>([]);
+  
+  // Define vehicle type
+type Vehicle = {
+  id: number;
+  name: string;
+  make: string;
+  model: string;
+  licensePlate: string;
+  year: number;
+  status: string;
+};
+
+// Fetch user's vehicles
+const { data: userVehicles, isLoading: isLoadingVehicles } = useQuery<Vehicle[]>({
+  queryKey: ['/api/vehicles'],
+  queryFn: async () => {
+    const res = await apiRequest('GET', '/api/vehicles');
+    const data = await res.json();
+    return data;
+  },
+});
   
   // Initialize form
   const form = useForm<BookingFormData>({
@@ -205,6 +267,21 @@ const ServiceBookingDialog: React.FC<ServiceBookingDialogProps> = ({
       setBookingId('RTO' + Date.now().toString().slice(-5));
     }
   }, [bookingComplete, bookingId]);
+  
+  // Update nearby RTO offices based on pincode
+  useEffect(() => {
+    const pincode = form.watch('pincode');
+    if (pincode && pincode.length === 6) {
+      if (pincode in nearbyRtoOffices) {
+        setAvailableRtoOffices(nearbyRtoOffices[pincode]);
+      } else {
+        // If pincode not found, use default
+        setAvailableRtoOffices(nearbyRtoOffices['default']);
+      }
+    } else {
+      setAvailableRtoOffices(nearbyRtoOffices['default']);
+    }
+  }, [form.watch('pincode')]);
 
   if (!service) return null;
 
@@ -309,7 +386,16 @@ const ServiceBookingDialog: React.FC<ServiceBookingDialogProps> = ({
                             <FormItem>
                               <FormLabel>Phone Number</FormLabel>
                               <FormControl>
-                                <Input placeholder="10-digit mobile number" {...field} />
+                                <div className="flex">
+                                  <div className="flex items-center px-3 bg-muted border border-r-0 rounded-l-md">
+                                    +91
+                                  </div>
+                                  <Input 
+                                    className="rounded-l-none" 
+                                    placeholder="10-digit mobile number" 
+                                    {...field}
+                                  />
+                                </div>
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -343,22 +429,89 @@ const ServiceBookingDialog: React.FC<ServiceBookingDialogProps> = ({
                         )}
                       />
 
-                      <FormField
-                        control={form.control}
-                        name="vehicleRegistration"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Vehicle Registration Number</FormLabel>
-                            <FormControl>
-                              <Input placeholder="e.g., MH12AB1234" {...field} />
-                            </FormControl>
-                            <FormDescription>
-                              Enter your vehicle registration number in the format like MH12AB1234
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      {userVehicles && userVehicles.length > 0 && (
+                        <FormField
+                          control={form.control}
+                          name="useExistingVehicle"
+                          render={({ field }) => (
+                            <FormItem>
+                              <div className="flex items-center space-x-2">
+                                <FormControl>
+                                  <input
+                                    type="checkbox"
+                                    checked={field.value}
+                                    onChange={(e) => {
+                                      field.onChange(e.target.checked);
+                                      setShowExistingVehicles(e.target.checked);
+                                      if (!e.target.checked) {
+                                        form.setValue('existingVehicleId', undefined);
+                                      }
+                                    }}
+                                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                  />
+                                </FormControl>
+                                <FormLabel className="text-base font-medium">
+                                  Use vehicle from my garage
+                                </FormLabel>
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      )}
+
+                      {showExistingVehicles && userVehicles && userVehicles.length > 0 ? (
+                        <FormField
+                          control={form.control}
+                          name="existingVehicleId"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Select a Vehicle</FormLabel>
+                              <Select 
+                                onValueChange={(value) => {
+                                  field.onChange(value);
+                                  const selectedVehicle = userVehicles.find(v => v.id.toString() === value);
+                                  if (selectedVehicle) {
+                                    form.setValue('vehicleType', selectedVehicle.make.toLowerCase().includes('bike') ? '2-wheeler' : '4-wheeler');
+                                  }
+                                }} 
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select a vehicle from your garage" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {userVehicles.map(vehicle => (
+                                    <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
+                                      {vehicle.make} {vehicle.model} ({vehicle.licensePlate})
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      ) : !showExistingVehicles && (
+                        <FormField
+                          control={form.control}
+                          name="vehicleRegistration"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Vehicle Registration Number</FormLabel>
+                              <FormControl>
+                                <Input placeholder="e.g., MH12AB1234" {...field} />
+                              </FormControl>
+                              <FormDescription>
+                                Enter your vehicle registration number in the format like MH12AB1234
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      )}
                     </div>
                   </>
                 )}
@@ -484,6 +637,39 @@ const ServiceBookingDialog: React.FC<ServiceBookingDialogProps> = ({
                           </FormItem>
                         )}
                       />
+
+                      {availableRtoOffices.length > 0 && (
+                        <FormField
+                          control={form.control}
+                          name="nearbyRto"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Select Nearby RTO Office</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select RTO office" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {availableRtoOffices.map((office) => (
+                                    <SelectItem key={office.id} value={office.id}>
+                                      <div className="flex flex-col">
+                                        <span>{office.name}</span>
+                                        <span className="text-xs text-muted-foreground">{office.address}</span>
+                                      </div>
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormDescription>
+                                Choose your preferred RTO office based on your location
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      )}
 
                       <FormField
                         control={form.control}
