@@ -34,6 +34,11 @@ const TripPlanner = lazy(() => import("@/pages/trip-planner"));
 const Calculators = lazy(() => import("@/pages/calculators"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
+// New summary pages with advanced data visualization
+const CurrentTrendsPage = lazy(() => import("@/pages/overall-summary-currentTrends"));
+const VehicleNetValuePage = lazy(() => import("@/pages/overall-summary-vehicle-net-value"));
+const ServiceHealthPage = lazy(() => import("@/pages/overall-summary-servicehealth"));
+
 // Lazy loaded lower-priority components
 const ArenaMain = lazy(() => import("@/pages/arena-main"));
 const ArenaDashboardEnhanced = lazy(() => import("@/pages/arena-dashboard-enhanced"));
@@ -263,6 +268,18 @@ function Router() {
           
           <Route path="/summary">
             {() => renderPage(OverallSummary)}
+          </Route>
+
+          <Route path="/overall-summary-currentTrends">
+            {() => renderPage(CurrentTrendsPage)}
+          </Route>
+
+          <Route path="/overall-summary-vehicle-net-value">
+            {() => renderPage(VehicleNetValuePage)}
+          </Route>
+
+          <Route path="/overall-summary-servicehealth">
+            {() => renderPage(ServiceHealthPage)}
           </Route>
           
           <Route>
