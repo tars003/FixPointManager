@@ -8,6 +8,7 @@ import CustomizeDashboardDialog, { DashboardModule } from '@/components/dashboar
 import { getDashboardModules, saveDashboardModules } from '@/services/dashboardPreferences';
 import FixPointCard from '@/components/membership/FixPointCard';
 import { useMembership } from '@/hooks/use-membership';
+import SummarySection from '@/components/summary/summary-section';
 import { 
   Car, 
   Bell, 
@@ -65,6 +66,11 @@ const DashboardEnhanced = () => {
   const [, navigate] = useLocation();
   const [isCustomizeDialogOpen, setIsCustomizeDialogOpen] = useState(false);
   const [dashboardModules, setDashboardModules] = useState<DashboardModule[]>([]);
+  
+  // Navigation helper
+  const navigateTo = (path: string) => {
+    navigate(path);
+  };
   
   // Load dashboard modules on initial render
   useEffect(() => {
@@ -1344,6 +1350,9 @@ const DashboardEnhanced = () => {
           );
         })()}
         
+        {/* Overall Summary Section */}
+        <SummarySection navigateTo={navigateTo} />
+
         {/* Key Feature Modules */}
         <section className="mb-16">
           <div className="flex items-center justify-between mb-6">
