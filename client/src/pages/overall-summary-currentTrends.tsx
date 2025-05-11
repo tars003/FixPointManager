@@ -17,7 +17,6 @@ import {
   Droplet,
   Wrench,
   Car,
-  Route,
   Calculator
 } from 'lucide-react';
 import { MotionCard, MotionCardHeader, MotionBadge, AnimatedProgressBar } from '@/components/summary/motion-card';

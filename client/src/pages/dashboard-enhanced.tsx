@@ -359,10 +359,7 @@ const DashboardEnhanced = () => {
     },
   ];
   
-  // Function to handle navigation to different sections
-  const navigateTo = (path: string) => {
-    navigate(path);
-  };
+  // Navigation function is already defined at the top of the component
   
   // Function to get health status color
   const getHealthColor = (score: number) => {
