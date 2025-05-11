@@ -2,7 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'wouter';
-import { ChevronLeft, ChevronRight, Clock, BarChart2, RefreshCw, Calendar, TrendingUp, AlertTriangle, Award, Truck, Zap, Droplet } from 'lucide-react';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Clock, 
+  BarChart2, 
+  RefreshCw, 
+  Calendar, 
+  TrendingUp, 
+  AlertTriangle, 
+  Award, 
+  Truck, 
+  Zap, 
+  Droplet,
+  Wrench,
+  Car,
+  Route,
+  Calculator
+} from 'lucide-react';
 import { MotionCard, MotionCardHeader, MotionBadge, AnimatedProgressBar } from '@/components/summary/motion-card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
