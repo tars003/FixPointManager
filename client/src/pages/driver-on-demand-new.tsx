@@ -347,6 +347,8 @@ function DriverOnDemand() {
   const [driverArrangeParking, setDriverArrangeParking] = useState<boolean>(false);
   const [tollsIncluded, setTollsIncluded] = useState<boolean>(false);
   const [endTime, setEndTime] = useState<string>('');
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
+  const [selectedDriverProfile, setSelectedDriverProfile] = useState<Driver | null>(null);
   
   // Function to format time to 12-hour format
   const formatTo12Hour = (time: string): string => {
@@ -757,10 +759,8 @@ function DriverOnDemand() {
                             variant="outline" 
                             className="w-full"
                             onClick={() => {
-                              toast({
-                                title: "Driver Profile",
-                                description: `Viewing ${driver.name}'s detailed profile`,
-                              });
+                              setSelectedDriverProfile(driver);
+                              setIsProfileModalOpen(true);
                             }}
                           >
                             View Profile
@@ -1478,12 +1478,233 @@ function DriverOnDemand() {
     );
   };
 
+  // Driver Profile Modal
+  const renderDriverProfileModal = () => {
+    if (!isProfileModalOpen || !selectedDriverProfile) return null;
+    
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <motion.div 
+          className="bg-white rounded-lg w-full max-w-4xl overflow-auto max-h-[90vh]"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="p-6">
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900">Driver Profile</h2>
+                <p className="text-slate-500">View complete driver information</p>
+              </div>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setIsProfileModalOpen(false)}
+              >
+                <XCircle className="h-5 w-5" />
+              </Button>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Left Column - Driver Details */}
+              <div className="md:col-span-1 space-y-6">
+                <div className="flex flex-col items-center text-center">
+                  <Avatar className="h-28 w-28 mb-3">
+                    <AvatarImage src={selectedDriverProfile.image} />
+                    <AvatarFallback>{selectedDriverProfile.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <h3 className="text-xl font-semibold">{selectedDriverProfile.name}</h3>
+                  <div className="flex items-center">
+                    <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                    <span className="ml-1 text-sm font-medium">{selectedDriverProfile.rating}</span>
+                    <span className="text-sm text-slate-500 ml-1">({selectedDriverProfile.reviews} reviews)</span>
+                  </div>
+                  <Badge 
+                    variant="secondary" 
+                    className="mt-2 bg-teal-50 text-teal-700 hover:bg-teal-100"
+                  >
+                    <UserCheck className="h-3 w-3 mr-1" />
+                    {selectedDriverProfile.verificationStatus}
+                  </Badge>
+                </div>
+                
+                <Separator />
+                
+                <div className="space-y-4">
+                  <h4 className="font-medium text-sm text-slate-500 uppercase">Driver Information</h4>
+                  
+                  <div className="grid grid-cols-1 gap-3">
+                    <div className="flex items-center">
+                      <MapPin className="h-4 w-4 text-slate-400 mr-2" />
+                      <span className="text-sm">{selectedDriverProfile.distance} away</span>
+                    </div>
+                    
+                    <div className="flex items-center">
+                      <Clock className="h-4 w-4 text-slate-400 mr-2" />
+                      <span className="text-sm">{selectedDriverProfile.experience} years experience</span>
+                    </div>
+                    
+                    <div className="flex items-center">
+                      <Globe className="h-4 w-4 text-slate-400 mr-2" />
+                      <span className="text-sm">
+                        Languages: {selectedDriverProfile.languages.join(', ')}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center text-green-600">
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      <span className="text-sm font-medium">{selectedDriverProfile.availability}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <Separator />
+                
+                <div className="space-y-4">
+                  <h4 className="font-medium text-sm text-slate-500 uppercase">Pricing</h4>
+                  
+                  <div className="space-y-3 text-sm">
+                    <div className="flex justify-between items-center">
+                      <span>Hourly Rate</span>
+                      <span className="font-semibold">₹{selectedDriverProfile.price.hourly}</span>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <span>Daily Rate</span>
+                      <span className="font-semibold">₹{selectedDriverProfile.price.daily}</span>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <span>Monthly Rate</span>
+                      <span className="font-semibold">₹{selectedDriverProfile.price.monthly}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Right Column - Specialties, Reviews, etc. */}
+              <div className="md:col-span-2 space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <Award className="h-5 w-5 mr-2 text-teal-600" />
+                      Driver Specialties
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {selectedDriverProfile.specialties.map((specialty, index) => (
+                        <Badge key={index} className="bg-teal-50 text-teal-800 hover:bg-teal-100 border-teal-200">
+                          {specialty}
+                        </Badge>
+                      ))}
+                    </div>
+                    
+                    <div className="p-4 bg-slate-50 rounded-md text-sm">
+                      <p className="text-slate-600 italic">
+                        "I specialize in {selectedDriverProfile.specialties.join(', ')}. With {selectedDriverProfile.experience} years of professional driving experience, I provide reliable and safe transportation services."
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <MessageSquare className="h-5 w-5 mr-2 text-teal-600" />
+                      Client Reviews
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {/* Simulated reviews */}
+                      <div className="p-4 border rounded-md">
+                        <div className="flex justify-between mb-2">
+                          <div className="flex items-center">
+                            <Avatar className="h-8 w-8 mr-2">
+                              <AvatarFallback>RK</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h5 className="font-medium text-sm">Rajesh Kumar</h5>
+                              <p className="text-xs text-slate-500">12 May, 2025</p>
+                            </div>
+                          </div>
+                          <div className="flex">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <Star key={i} className={`h-4 w-4 ${i < 5 ? 'text-yellow-500 fill-yellow-500' : 'text-slate-300'}`} />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-sm text-slate-600">
+                          Very professional driver. Was on time and knew the city very well. Definitely recommend!
+                        </p>
+                      </div>
+                      
+                      <div className="p-4 border rounded-md">
+                        <div className="flex justify-between mb-2">
+                          <div className="flex items-center">
+                            <Avatar className="h-8 w-8 mr-2">
+                              <AvatarFallback>AP</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h5 className="font-medium text-sm">Ananya Patel</h5>
+                              <p className="text-xs text-slate-500">5 May, 2025</p>
+                            </div>
+                          </div>
+                          <div className="flex">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <Star key={i} className={`h-4 w-4 ${i < 4 ? 'text-yellow-500 fill-yellow-500' : 'text-slate-300'}`} />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-sm text-slate-600">
+                          Good driver, very safe and knowledgeable about traffic routes. Will hire again.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4">
+                      <Button variant="outline" className="w-full text-sm">
+                        View All {selectedDriverProfile.reviews} Reviews
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <div className="flex gap-3 mt-4">
+                  <Button 
+                    className="flex-1 bg-teal-600 hover:bg-teal-700"
+                    onClick={() => {
+                      setIsProfileModalOpen(false);
+                      handleSelectDriver(selectedDriverProfile.id);
+                    }}
+                  >
+                    Book This Driver
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="flex-1"
+                    onClick={() => setIsProfileModalOpen(false)}
+                  >
+                    Close Profile
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    );
+  };
+
   return (
     <div className="container mx-auto py-8 max-w-7xl">
       {renderHeader()}
       {renderTabs()}
       {renderBookingModal()}
       {renderPaymentModal()}
+      {renderDriverProfileModal()}
     </div>
   );
 }
