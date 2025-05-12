@@ -264,6 +264,10 @@ function Router() {
             {() => renderPage(EnhancedRtoServices)}
           </Route>
           
+          <Route path="/insurance-marketplace">
+            {() => renderPage(InsuranceMarketplace)}
+          </Route>
+          
           <Route path="/animation-showcase">
             {() => renderPage(AnimationShowcase)}
           </Route>

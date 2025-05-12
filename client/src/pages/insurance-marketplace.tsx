@@ -248,7 +248,7 @@ export default function InsuranceMarketplace() {
         });
         
         // Sort by AI score and get the top recommendation
-        const sortedQuotes = [...scoredQuotes].sort((a, b) => b.aiScore - a.aiScore);
+        const sortedQuotes = [...scoredQuotes].sort((a: any, b: any) => b.aiScore - a.aiScore);
         setAiRecommendation(sortedQuotes[0]);
       }, 1500);
       
@@ -263,9 +263,24 @@ export default function InsuranceMarketplace() {
       ? userVehicles.find(v => v.id.toString() === selectedVehicle)
       : null;
     
-    const vehicleValue = vehicleDetails?.value || manualVehicle.value;
+    // Use vehicle value from manual entry or estimate based on year and type
+    const estimateVehicleValue = (vehicle: Vehicle | null): number => {
+      if (!vehicle) return manualVehicle.value;
+      
+      // Base value calculation based on make and year
+      const currentYear = new Date().getFullYear();
+      const age = currentYear - vehicle.year;
+      const baseValue = vehicle.make === 'BMW' || vehicle.make === 'Mercedes' || vehicle.make === 'Audi' 
+        ? 3000000 // Luxury brands
+        : 1000000; // Standard brands
+        
+      // Apply depreciation based on age (roughly 10% per year)
+      return Math.max(baseValue * Math.pow(0.9, age), 100000);
+    };
+    
+    const vehicleValue = manualVehicle.value || estimateVehicleValue(vehicleDetails || null);
     const vehicleAge = new Date().getFullYear() - (vehicleDetails?.year || manualVehicle.year);
-    const bodyType = vehicleDetails?.bodyType || manualVehicle.bodyType;
+    const bodyType = manualVehicle.bodyType || (vehicleDetails?.vehicleType === 'SUV' ? 'suv' : 'sedan');
     
     // Calculate IDV (Insured Declared Value) based on user selection
     const idv = vehicleValue * (idvPercentage / 100);
@@ -317,18 +332,18 @@ export default function InsuranceMarketplace() {
   const sortQuotes = (quotes: any[], sortCriteria: string) => {
     switch (sortCriteria) {
       case 'premium':
-        return [...quotes].sort((a, b) => a.totalPremium - b.totalPremium);
+        return [...quotes].sort((a: any, b: any) => a.totalPremium - b.totalPremium);
       case 'coverage':
         // Higher idv and zero-dep or comprehensive plans get sorted higher
-        return [...quotes].sort((a, b) => {
+        return [...quotes].sort((a: any, b: any) => {
           const aScore = a.idv + (a.planType === 'zero-dep' ? 1000000 : (a.planType === 'comprehensive' ? 500000 : 0));
           const bScore = b.idv + (b.planType === 'zero-dep' ? 1000000 : (b.planType === 'comprehensive' ? 500000 : 0));
           return bScore - aScore;
         });
       case 'claimRatio':
-        return [...quotes].sort((a, b) => b.provider.claimSettlementRatio - a.provider.claimSettlementRatio);
+        return [...quotes].sort((a: any, b: any) => b.provider.claimSettlementRatio - a.provider.claimSettlementRatio);
       case 'rating':
-        return [...quotes].sort((a, b) => b.provider.customerRating - a.provider.customerRating);
+        return [...quotes].sort((a: any, b: any) => b.provider.customerRating - a.provider.customerRating);
       default:
         return quotes;
     }
@@ -427,7 +442,7 @@ export default function InsuranceMarketplace() {
       toast({
         title: "Policy Purchase Successful",
         description: "Your insurance policy has been successfully purchased and added to Document Vault.",
-        variant: "success",
+        variant: "default", // Using default variant instead of success
       });
       
       // Reset state and go back to step 0 for a new purchase
@@ -1693,7 +1708,7 @@ export default function InsuranceMarketplace() {
                           <td className="px-4 py-2 text-gray-700 font-medium">{addon.name}</td>
                           {insuranceQuotes.slice(0, 3).map(quote => (
                             <td key={quote.provider.id} className="px-4 py-2 text-center">
-                              {quote.addOns.some(a => a.id === addon.id) ? (
+                              {quote.addOns.some((a: any) => a.id === addon.id) ? (
                                 <motion.div 
                                   className="flex items-center justify-center text-green-600"
                                   initial={{ scale: 0 }}
