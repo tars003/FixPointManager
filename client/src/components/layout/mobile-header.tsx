@@ -8,6 +8,7 @@ import { NotificationPopover } from '@/components/notification/notification-popo
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { Logo } from '@/components/ui/logo';
+import { IndianAvatar } from '@/components/ui/indian-avatar';
 
 // Import the same nav items as sidebar
 import { 
