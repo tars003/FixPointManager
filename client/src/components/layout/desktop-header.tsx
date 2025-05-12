@@ -65,7 +65,7 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({ className }) => {
             className="flex items-center gap-2"
             onClick={() => navigate('/')}
           >
-            <Logo variant="full" size="md" className="h-9" withLink={false} />
+            <Logo variant="full-new" size="md" className="h-9" withLink={false} />
           </button>
           
           {/* Search bar - matching the provided screenshot */}

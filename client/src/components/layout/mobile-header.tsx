@@ -204,8 +204,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ className }) => {
         </div>
         
         <div className="flex items-center" onClick={() => navigate('/')}>
-          <Logo variant="icon" size="sm" className="h-7 w-7 mr-2" withLink={false} />
-          <Logo variant="full" size="sm" className="h-6" withLink={false} />
+          <Logo variant="icon" size="sm" className="h-8 w-8 mr-1" withLink={false} />
         </div>
         
         <div className="ml-auto flex items-center gap-2">

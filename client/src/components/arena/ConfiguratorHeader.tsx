@@ -52,7 +52,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({
           <div className="flex items-center space-x-6">
             {/* FixPoint logo */}
             <div className="mr-4 cursor-pointer" onClick={() => setLocation('/')}>
-              <Logo variant="full" size="sm" className="h-8 brightness-200" withLink={false} />
+              <Logo variant="full" size="sm" className="h-8 brightness-200 filter contrast-125" withLink={false} />
             </div>
             
             {/* Main navigation */}
