@@ -340,6 +340,44 @@ function DriverOnDemand() {
     setIsBookingModalOpen(true);
   };
 
+  // State for new fields
+  const [pickupLocation, setPickupLocation] = useState<string>('');
+  const [contactNumber, setContactNumber] = useState<string>('');
+  const [specialInstructions, setSpecialInstructions] = useState<string>('');
+  const [driverArrangeParking, setDriverArrangeParking] = useState<boolean>(false);
+  const [tollsIncluded, setTollsIncluded] = useState<boolean>(false);
+  const [endTime, setEndTime] = useState<string>('');
+  
+  // Function to format time to 12-hour format
+  const formatTo12Hour = (time: string): string => {
+    if (!time) return '';
+    const [hours, minutes] = time.split(':');
+    const hour = parseInt(hours, 10);
+    const meridiem = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour % 12 || 12;
+    return `${hour12}:${minutes} ${meridiem} IST`;
+  };
+  
+  // Calculate end time based on start time and duration
+  useEffect(() => {
+    if (bookingTime && bookingType === 'hourly') {
+      try {
+        const [hours, minutes] = bookingTime.split(':');
+        const startDate = new Date();
+        startDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+        
+        const endDate = new Date(startDate);
+        endDate.setHours(startDate.getHours() + bookingDuration);
+        
+        const endHours = endDate.getHours().toString().padStart(2, '0');
+        const endMinutes = endDate.getMinutes().toString().padStart(2, '0');
+        setEndTime(`${endHours}:${endMinutes}`);
+      } catch (error) {
+        console.error('Error calculating end time', error);
+      }
+    }
+  }, [bookingTime, bookingDuration, bookingType]);
+
   // Handle booking
   const handleBookNow = () => {
     if (!selectedVehicle) {
@@ -355,6 +393,24 @@ function DriverOnDemand() {
       toast({
         title: "Time Required",
         description: "Please select a time for your booking.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!pickupLocation) {
+      toast({
+        title: "Pickup Location Required",
+        description: "Please enter a pickup location for your booking.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!contactNumber) {
+      toast({
+        title: "Contact Number Required",
+        description: "Please provide a contact number for the driver.",
         variant: "destructive",
       });
       return;
@@ -1025,53 +1081,188 @@ function DriverOnDemand() {
                 </Tabs>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Date</Label>
-                  <Input 
-                    type="date" 
-                    value={bookingDate}
-                    onChange={(e) => setBookingDate(e.target.value)}
-                    min={new Date().toISOString().split('T')[0]}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Time</Label>
-                  <Input 
-                    type="time" 
-                    value={bookingTime}
-                    onChange={(e) => setBookingTime(e.target.value)}
-                  />
+              <div className="p-4 bg-blue-50 rounded-lg mb-4">
+                <h4 className="font-medium text-blue-800 mb-2 flex items-center">
+                  <Clock className="h-4 w-4 mr-2" /> 
+                  Date & Time Selection
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-blue-700">Booking Date</Label>
+                    <div className="relative">
+                      <Calendar className="h-4 w-4 absolute left-3 top-3 text-slate-400" />
+                      <Input 
+                        type="date" 
+                        value={bookingDate}
+                        onChange={(e) => setBookingDate(e.target.value)}
+                        min={new Date().toISOString().split('T')[0]}
+                        className="pl-9"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-blue-700">Starting Time (IST)</Label>
+                      <div className="relative">
+                        <Clock className="h-4 w-4 absolute left-3 top-3 text-slate-400" />
+                        <Input 
+                          type="time" 
+                          value={bookingTime}
+                          onChange={(e) => {
+                            setBookingTime(e.target.value);
+                          }}
+                          className="pl-9"
+                        />
+                      </div>
+                      <div className="text-xs text-slate-500">
+                        {bookingTime && (
+                          <span>
+                            {(() => {
+                              const [hours, minutes] = bookingTime.split(':');
+                              const hour = parseInt(hours, 10);
+                              const meridiem = hour >= 12 ? 'PM' : 'AM';
+                              const hour12 = hour % 12 || 12;
+                              return `${hour12}:${minutes} ${meridiem} Indian Standard Time`;
+                            })()}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-blue-700">Ending Time (IST)</Label>
+                      <div className="relative">
+                        <Clock3 className="h-4 w-4 absolute left-3 top-3 text-slate-400" />
+                        <Input 
+                          type="time" 
+                          value={endTime}
+                          className="pl-9 bg-slate-50"
+                          disabled
+                        />
+                      </div>
+                      <div className="text-xs text-slate-500">
+                        {endTime && (
+                          <span>
+                            {(() => {
+                              const [hours, minutes] = endTime.split(':');
+                              const hour = parseInt(hours, 10);
+                              const meridiem = hour >= 12 ? 'PM' : 'AM';
+                              const hour12 = hour % 12 || 12;
+                              return `${hour12}:${minutes} ${meridiem} Indian Standard Time`;
+                            })()}
+                          </span>
+                        )}
+                      </div>
+                      
+                      {bookingTime && endTime && bookingType === 'hourly' && (
+                        <div className="p-2 rounded-md bg-blue-50 text-xs text-blue-700 mt-1 flex items-center">
+                          <Info className="h-3 w-3 mr-1 flex-shrink-0" />
+                          <span>
+                            Trip duration: {bookingDuration} {bookingDuration > 1 ? 'hours' : 'hour'}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
               
-              <div className="space-y-2">
-                <Label>Select Vehicle</Label>
-                <Select 
-                  value={selectedVehicle} 
-                  onValueChange={setSelectedVehicle}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Vehicle" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {vehicles.map((vehicle) => (
-                      <SelectItem key={vehicle.id} value={vehicle.name}>
-                        {vehicle.name} ({vehicle.make} {vehicle.model})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <div className="text-sm text-slate-500 flex items-center gap-1 mt-1">
-                  <Info className="h-3 w-3" />
-                  <span>Select from your Vehicle Vault or add a new vehicle</span>
+              <div className="p-4 bg-teal-50 rounded-lg mb-4">
+                <h4 className="font-medium text-teal-800 mb-2 flex items-center">
+                  <Car className="h-4 w-4 mr-2" /> 
+                  Vehicle Selection
+                </h4>
+                <div className="space-y-2">
+                  <Label className="text-teal-700">Select Your Vehicle</Label>
+                  <Select 
+                    value={selectedVehicle} 
+                    onValueChange={setSelectedVehicle}
+                  >
+                    <SelectTrigger className="border-teal-200">
+                      <SelectValue placeholder="Select Vehicle" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {vehicles.map((vehicle) => (
+                        <SelectItem key={vehicle.id} value={vehicle.name}>
+                          {vehicle.name} ({vehicle.make} {vehicle.model})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <div className="text-sm text-teal-600 flex items-center gap-1 mt-1">
+                    <Info className="h-3 w-3" />
+                    <span>Select from your Vehicle Vault or add a new vehicle</span>
+                  </div>
                 </div>
               </div>
               
-              <div className="space-y-2">
-                <Label>Additional Requirements (Optional)</Label>
-                <Input placeholder="e.g. Driver should know the city well" />
+              <div className="p-4 bg-amber-50 rounded-lg">
+                <h4 className="font-medium text-amber-800 mb-2 flex items-center">
+                  <FileText className="h-4 w-4 mr-2" /> 
+                  Driver Instructions
+                </h4>
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-amber-700">Special Instructions for Driver</Label>
+                    <textarea 
+                      className="mt-1 p-3 h-24 w-full rounded-md border border-amber-200 focus:border-amber-400 focus:ring focus:ring-amber-200 focus:ring-opacity-50"
+                      placeholder="e.g. Driver should know the city well, bring a spare mask, needs to be familiar with local language, etc."
+                      value={specialInstructions}
+                      onChange={(e) => setSpecialInstructions(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-amber-700">Pick-up Location</Label>
+                      <div className="relative">
+                        <MapPin className="h-4 w-4 absolute left-3 top-3 text-slate-400" />
+                        <Input 
+                          placeholder="Enter specific pick-up location" 
+                          className="pl-9 border-amber-200"
+                          value={pickupLocation}
+                          onChange={(e) => setPickupLocation(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-amber-700">Contact Number</Label>
+                      <div className="relative">
+                        <PhoneCall className="h-4 w-4 absolute left-3 top-3 text-slate-400" />
+                        <Input 
+                          placeholder="Your contact number" 
+                          className="pl-9 border-amber-200"
+                          value={contactNumber}
+                          onChange={(e) => setContactNumber(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="ownParking" 
+                      checked={driverArrangeParking}
+                      onCheckedChange={(checked) => setDriverArrangeParking(!!checked)}
+                    />
+                    <Label htmlFor="ownParking" className="text-sm cursor-pointer text-amber-800">
+                      Driver needs to arrange for parking
+                    </Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="tollsIncluded" 
+                      checked={tollsIncluded}
+                      onCheckedChange={(checked) => setTollsIncluded(!!checked)}
+                    />
+                    <Label htmlFor="tollsIncluded" className="text-sm cursor-pointer text-amber-800">
+                      Toll charges included in fare
+                    </Label>
+                  </div>
+                </div>
               </div>
             </div>
             
@@ -1099,6 +1290,19 @@ function DriverOnDemand() {
   const renderPaymentModal = () => {
     if (!isPaymentModalOpen || !selectedBooking) return null;
     
+    // Function to format time
+    const formatBookingTime = () => {
+      if (bookingTime) {
+        const startTime = formatTo12Hour(bookingTime);
+        if (endTime && bookingType === 'hourly') {
+          const endTimeFormatted = formatTo12Hour(endTime);
+          return `${startTime} to ${endTimeFormatted}`;
+        }
+        return startTime;
+      }
+      return selectedBooking.time;
+    };
+    
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
         <motion.div 
@@ -1110,8 +1314,8 @@ function DriverOnDemand() {
           <div className="p-6">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <h2 className="text-xl font-bold">Payment</h2>
-                <p className="text-slate-500">Select your payment method</p>
+                <h2 className="text-xl font-bold text-teal-800">Booking Payment</h2>
+                <p className="text-slate-500">Complete your driver booking</p>
               </div>
               <Button 
                 variant="ghost" 
@@ -1123,32 +1327,69 @@ function DriverOnDemand() {
             </div>
             
             <div className="space-y-6">
-              <div className="bg-slate-50 p-4 rounded-md space-y-3">
-                <div className="flex justify-between items-center text-sm">
-                  <span>Booking ID:</span>
-                  <span className="font-medium">{selectedBooking.id}</span>
+              <div className="bg-teal-50 p-5 rounded-lg space-y-4">
+                <div className="flex items-center mb-2">
+                  <Avatar className="h-10 w-10 mr-3">
+                    <AvatarImage src={selectedBooking.driverImage} />
+                    <AvatarFallback>{selectedBooking.driverName?.charAt(0) || 'D'}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h3 className="font-medium text-teal-900">{selectedBooking.driverName}</h3>
+                    <p className="text-xs text-teal-700">Booking ID: {selectedBooking.id}</p>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span>Driver:</span>
-                  <span>{selectedBooking.driverName}</span>
+                
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <p className="text-xs text-teal-600">Date</p>
+                    <p className="text-sm font-medium">{selectedBooking.date}</p>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <p className="text-xs text-teal-600">Time</p>
+                    <p className="text-sm font-medium">{formatBookingTime()}</p>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <p className="text-xs text-teal-600">Vehicle</p>
+                    <p className="text-sm font-medium">{selectedBooking.vehicle}</p>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <p className="text-xs text-teal-600">Duration</p>
+                    <p className="text-sm font-medium">{selectedBooking.duration}</p>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span>Date & Time:</span>
-                  <span>{selectedBooking.date}, {selectedBooking.time}</span>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span>Duration:</span>
-                  <span>{selectedBooking.duration}</span>
-                </div>
-                <Separator />
-                <div className="flex justify-between items-center font-medium">
-                  <span>Total Amount:</span>
-                  <span>₹{selectedBooking.fare}</span>
+                
+                {pickupLocation && (
+                  <div className="space-y-1 pt-2">
+                    <p className="text-xs text-teal-600">Pickup Location</p>
+                    <div className="flex items-start">
+                      <MapPin className="h-4 w-4 text-teal-500 mr-1 flex-shrink-0 mt-0.5" />
+                      <p className="text-sm">{pickupLocation}</p>
+                    </div>
+                  </div>
+                )}
+                
+                {specialInstructions && (
+                  <div className="space-y-1 pt-1">
+                    <p className="text-xs text-teal-600">Special Instructions</p>
+                    <p className="text-sm bg-white p-2 rounded-md">{specialInstructions}</p>
+                  </div>
+                )}
+                
+                <div className="flex items-center justify-between pt-3 border-t border-teal-100">
+                  <span className="text-teal-800 font-semibold">Total Fare:</span>
+                  <span className="text-xl font-bold text-teal-900">₹{selectedBooking.fare.toLocaleString('en-IN')}</span>
                 </div>
               </div>
               
-              <div className="space-y-3">
-                <h3 className="font-medium">Payment Method</h3>
+              <div className="space-y-4">
+                <h3 className="font-medium text-slate-800 flex items-center">
+                  <DollarSign className="h-4 w-4 mr-1 text-slate-600" />
+                  Select Payment Method
+                </h3>
+                
                 <RadioGroup
                   value={selectedPaymentMethod}
                   onValueChange={setSelectedPaymentMethod}
@@ -1159,7 +1400,9 @@ function DriverOnDemand() {
                       <RadioGroupItem value={method.id} id={method.id} />
                       <Label 
                         htmlFor={method.id} 
-                        className="flex items-center cursor-pointer flex-1 p-3 border rounded-md hover:bg-slate-50"
+                        className={`flex items-center cursor-pointer flex-1 p-3 border rounded-md hover:bg-slate-50 transition-colors ${
+                          selectedPaymentMethod === method.id ? 'border-teal-400 bg-teal-50' : ''
+                        }`}
                       >
                         {method.icon}
                         {method.label}
@@ -1170,38 +1413,63 @@ function DriverOnDemand() {
               </div>
               
               {selectedPaymentMethod === 'online' && (
-                <div className="space-y-3">
-                  <h3 className="font-medium">Card Details</h3>
+                <motion.div 
+                  className="space-y-4 p-4 border border-teal-200 rounded-lg bg-teal-50/50"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <h3 className="font-medium text-teal-800">Enter Card Details</h3>
                   <div className="space-y-3">
-                    <Input placeholder="Card Number" />
-                    <div className="grid grid-cols-2 gap-3">
-                      <Input placeholder="MM/YY" />
-                      <Input placeholder="CVV" />
+                    <div className="space-y-1">
+                      <Label className="text-sm">Card Number</Label>
+                      <Input placeholder="XXXX XXXX XXXX XXXX" className="border-teal-200" />
                     </div>
-                    <Input placeholder="Name on Card" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-sm">Expiry Date</Label>
+                        <Input placeholder="MM/YY" className="border-teal-200" />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-sm">CVV</Label>
+                        <Input placeholder="XXX" className="border-teal-200" />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-sm">Cardholder Name</Label>
+                      <Input placeholder="Name as on card" className="border-teal-200" />
+                    </div>
                   </div>
-                </div>
+                </motion.div>
               )}
               
               {selectedPaymentMethod === 'cash' && (
-                <div className="p-4 bg-amber-50 rounded-md">
+                <motion.div 
+                  className="p-4 bg-amber-50 rounded-lg border border-amber-200"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  transition={{ duration: 0.3 }}
+                >
                   <p className="text-sm text-amber-800 flex items-start gap-2">
                     <Info className="h-4 w-4 flex-shrink-0 mt-0.5" />
                     <span>
                       Pay the driver directly in cash when the service is completed. 
-                      Your booking will be confirmed immediately.
+                      Your booking will be confirmed immediately. Please ensure you have 
+                      exact change of ₹{selectedBooking.fare.toLocaleString('en-IN')}.
                     </span>
                   </p>
-                </div>
+                </motion.div>
               )}
             </div>
             
             <div className="flex justify-end mt-8">
               <Button 
-                className="bg-teal-600 hover:bg-teal-700 w-full"
+                className="bg-teal-600 hover:bg-teal-700 w-full text-white font-medium py-6"
                 onClick={handlePayment}
               >
-                {selectedPaymentMethod === 'online' ? 'Pay ₹' + selectedBooking.fare : 'Confirm Booking'}
+                {selectedPaymentMethod === 'online' 
+                  ? `Pay ₹${selectedBooking.fare.toLocaleString('en-IN')}` 
+                  : 'Confirm Cash Payment on Service'}
               </Button>
             </div>
           </div>
