@@ -515,7 +515,7 @@ export default function InsuranceMarketplace() {
       
       <CardContent className="space-y-6 relative z-10">
         <motion.div 
-          className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg"
+          className="p-4 rounded-lg bg-blue-50/30"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
@@ -561,7 +561,7 @@ export default function InsuranceMarketplace() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="overflow-hidden mt-4"
+                className="bg-white rounded-lg p-4 shadow-sm border border-blue-50"
               >
                 {userVehicles.length > 0 ? (
                   <div className="space-y-3">
@@ -629,7 +629,7 @@ export default function InsuranceMarketplace() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="overflow-hidden mt-4"
+                className="bg-white rounded-lg p-4 shadow-sm border border-blue-50"
               >
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
@@ -722,18 +722,24 @@ export default function InsuranceMarketplace() {
                   <div className="mt-4">
                     <Label htmlFor="value" className="text-gray-700 flex justify-between">
                       <span>Approximate Vehicle Value (₹)</span>
-                      <span className="font-medium text-indigo-600">{formatCurrency(manualVehicle.value)}</span>
+                      <span className="font-medium text-blue-600">{formatCurrency(manualVehicle.value)}</span>
                     </Label>
-                    <div className="pt-2">
-                      <Slider
-                        value={[manualVehicle.value]}
-                        min={100000}
-                        max={5000000}
-                        step={10000}
-                        onValueChange={(value) => setManualVehicle(prev => ({ ...prev, value: value[0] }))}
-                        className="my-3"
-                      />
-                      <div className="flex justify-between text-xs text-gray-500">
+                    <div className="pt-2 mb-2">
+                      <div className="relative mt-6 mb-8">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="h-1 w-full bg-gradient-to-r from-green-400 to-blue-500 rounded-full"></div>
+                        </div>
+                        <Slider
+                          value={[manualVehicle.value]}
+                          min={100000}
+                          max={5000000}
+                          step={10000}
+                          onValueChange={(value) => setManualVehicle(prev => ({ ...prev, value: value[0] }))}
+                          className="relative z-10"
+                        />
+                        <div className="absolute left-1/2 transform -translate-x-1/2 top-0 -mt-1 flex items-center justify-center w-7 h-7 rounded-full bg-white border-2 border-blue-400 text-blue-700 text-xs font-medium"></div>
+                      </div>
+                      <div className="flex justify-between text-xs text-gray-500 mt-2">
                         <span>₹1L</span>
                         <span>₹50L</span>
                       </div>
