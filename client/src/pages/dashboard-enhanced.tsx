@@ -1477,6 +1477,7 @@ const DashboardEnhanced = () => {
             }).map((tool, index) => {
               // Define clean, vibrant colors for tool cards
               const toolColors = {
+                'driver-on-demand': 'bg-teal-600',
                 'nearby': 'bg-rose-500',
                 'parts-verifier': 'bg-cyan-500',
                 'documents': 'bg-violet-500',
