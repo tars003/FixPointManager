@@ -1,5 +1,8 @@
 import { cn } from "@/lib/utils";
 import { Link } from "wouter";
+import logoIconNew from "@assets/logo-icon-new.png";
+import logoIconShadow from "@assets/logo-icon-shadow.png";
+import logoFullNew from "@assets/logo-full-new.png";
 
 interface LogoProps {
   variant?: "icon" | "full" | "text" | "gradient" | "icon-shadow" | "full-new";
@@ -15,26 +18,22 @@ export function Logo({
   withLink = true
 }: LogoProps) {
   const sizeClasses = {
-    sm: variant === "icon" ? "h-8 w-8" : "h-8",
-    md: variant === "icon" ? "h-10 w-10" : "h-10",
-    lg: variant === "icon" ? "h-12 w-12" : "h-14"
+    sm: variant.includes("icon") ? "h-8 w-8" : "h-8",
+    md: variant.includes("icon") ? "h-10 w-10" : "h-10",
+    lg: variant.includes("icon") ? "h-12 w-12" : "h-14"
   };
 
   // Choose the correct logo source based on variant
-  let logoSrc = "/assets/logo-full-new.png"; // Default to the new full logo
+  let logoSrc = logoFullNew; // Default to the new full logo
   
   if (variant === "icon") {
-    logoSrc = "/assets/logo-icon-new.png";
+    logoSrc = logoIconNew;
   } else if (variant === "icon-shadow") {
-    logoSrc = "/assets/logo-icon-shadow.png";
-  } else if (variant === "text") {
-    logoSrc = "/assets/logo-text.png";
-  } else if (variant === "gradient") {
-    logoSrc = "/assets/logo-gradient.png";
+    logoSrc = logoIconShadow;
   } else if (variant === "full") {
-    logoSrc = "/assets/logo-full-new.png";
+    logoSrc = logoFullNew;
   } else if (variant === "full-new") {
-    logoSrc = "/assets/logo-full-new.png";
+    logoSrc = logoFullNew;
   }
   
   const alt = variant === "icon" ? "FixPoint Icon" : "FixPoint Logo";
