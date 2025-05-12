@@ -520,46 +520,35 @@ export default function InsuranceMarketplace() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
         >
-          <div className="mb-4">
-            <h3 className="font-medium text-gray-800 mb-2">Vehicle Selection Method</h3>
-            <div className="bg-white p-1 rounded-lg shadow-sm flex relative">
-              <motion.div 
-                className="absolute h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md"
-                style={{ 
-                  width: '50%',
-                }}
-                animate={{ 
-                  x: useVehicleVault ? 0 : '100%' 
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              />
-              
+          <h3 className="font-medium text-gray-800 mb-2">Vehicle Selection Method</h3>
+          <div className="flex rounded-lg overflow-hidden shadow-sm bg-blue-50/50 border border-blue-100 mb-4">
+            {/* Left side - Vehicle Vault */}
+            <div className={`w-1/2 relative ${!useVehicleVault && 'bg-white/40'}`}>
               <button 
-                className={`relative z-10 flex-1 py-2 rounded-md transition-colors font-medium ${useVehicleVault ? 'text-white' : 'text-gray-700'}`}
                 onClick={() => setUseVehicleVault(true)}
+                className="w-full py-4 text-center relative z-10"
               >
-                <motion.div 
-                  animate={{ scale: useVehicleVault ? [1, 1.05, 1] : 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex items-center justify-center text-sm"
-                >
-                  <Shield className="w-4 h-4 mr-1.5" />
-                  Vehicle Vault
-                </motion.div>
+                <div className="flex flex-col items-center">
+                  <div className={`rounded-full p-1.5 ${useVehicleVault ? 'bg-white' : 'bg-white/70'}`}>
+                    <Shield className={`w-5 h-5 ${useVehicleVault ? 'text-blue-600' : 'text-gray-400'}`} />
+                  </div>
+                  <span className={`text-sm font-medium mt-1 ${useVehicleVault ? 'text-blue-700' : 'text-gray-500'}`}>Vehicle Vault</span>
+                </div>
               </button>
-              
+            </div>
+
+            {/* Right side - Enter Manually */}
+            <div className={`w-1/2 bg-blue-500 relative ${useVehicleVault && 'bg-opacity-70'}`}>
               <button 
-                className={`relative z-10 flex-1 py-2 rounded-md transition-colors font-medium ${!useVehicleVault ? 'text-white' : 'text-gray-700'}`}
                 onClick={() => setUseVehicleVault(false)}
+                className="w-full py-4 text-center relative z-10"
               >
-                <motion.div 
-                  animate={{ scale: !useVehicleVault ? [1, 1.05, 1] : 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex items-center justify-center text-sm"
-                >
-                  <Info className="w-4 h-4 mr-1.5" />
-                  Enter Manually
-                </motion.div>
+                <div className="flex flex-col items-center">
+                  <div className={`rounded-full p-1.5 ${!useVehicleVault ? 'bg-white' : 'bg-white/50'}`}>
+                    <Info className={`w-5 h-5 ${!useVehicleVault ? 'text-blue-600' : 'text-white/60'}`} />
+                  </div>
+                  <span className={`text-sm font-medium mt-1 ${!useVehicleVault ? 'text-white' : 'text-white/70'}`}>Enter Manually</span>
+                </div>
               </button>
             </div>
           </div>
