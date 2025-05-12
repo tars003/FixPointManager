@@ -541,7 +541,7 @@ const DashboardEnhanced = () => {
             <div className="mb-6 md:mb-0">
               <div className="flex items-center">
                 <Avatar className="h-16 w-16 border-4 border-white/20 mr-4">
-                  <AvatarImage src={user.profileImage} />
+                  <AvatarImage src="/assets/indian-avatar.png" />
                   <AvatarFallback className="bg-indigo-800 text-lg">{user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>

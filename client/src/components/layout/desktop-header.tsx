@@ -190,8 +190,8 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({ className }) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                <Avatar className="h-9 w-9 border border-gray-200">
-                  <AvatarImage src={user.profileImage} alt={user.name} />
+                <Avatar className="h-9 w-9">
+                  <AvatarImage src="/assets/indian-avatar.png" alt={user.name} />
                   <AvatarFallback className="bg-indigo-100 text-indigo-800 font-medium">
                     {user.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
