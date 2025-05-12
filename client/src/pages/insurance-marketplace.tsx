@@ -523,9 +523,11 @@ export default function InsuranceMarketplace() {
           <h3 className="font-medium text-gray-800 mb-2">Vehicle Selection Method</h3>
           <div className="flex rounded-lg overflow-hidden shadow-sm bg-blue-50/50 border border-blue-100 mb-4">
             {/* Left side - Vehicle Vault */}
-            <div className={`w-1/2 relative ${!useVehicleVault && 'bg-white/40'}`}>
+            <div 
+              className={`w-1/2 relative ${!useVehicleVault && 'bg-white/40'} cursor-pointer`}
+              onClick={() => setUseVehicleVault(true)}
+            >
               <button 
-                onClick={() => setUseVehicleVault(true)}
                 className="w-full py-4 text-center relative z-10"
               >
                 <div className="flex flex-col items-center">
@@ -538,9 +540,11 @@ export default function InsuranceMarketplace() {
             </div>
 
             {/* Right side - Enter Manually */}
-            <div className={`w-1/2 bg-blue-500 relative ${useVehicleVault && 'bg-opacity-70'}`}>
+            <div 
+              className={`w-1/2 bg-blue-500 relative ${useVehicleVault && 'bg-opacity-70'} cursor-pointer`}
+              onClick={() => setUseVehicleVault(false)}
+            >
               <button 
-                onClick={() => setUseVehicleVault(false)}
                 className="w-full py-4 text-center relative z-10"
               >
                 <div className="flex flex-col items-center">
@@ -565,7 +569,7 @@ export default function InsuranceMarketplace() {
               >
                 {userVehicles.length > 0 ? (
                   <div className="space-y-3">
-                    <Label htmlFor="vehicle" className="text-gray-700">Select from Vehicle Vault</Label>
+                    <Label htmlFor="vehicle" className="text-gray-700">Make</Label>
                     <Select value={selectedVehicle} onValueChange={setSelectedVehicle}>
                       <SelectTrigger className="bg-white border-gray-200">
                         <SelectValue placeholder="Select your vehicle" />
@@ -737,7 +741,12 @@ export default function InsuranceMarketplace() {
                           onValueChange={(value) => setManualVehicle(prev => ({ ...prev, value: value[0] }))}
                           className="relative z-10"
                         />
-                        <div className="absolute left-1/2 transform -translate-x-1/2 top-0 -mt-1 flex items-center justify-center w-7 h-7 rounded-full bg-white border-2 border-blue-400 text-blue-700 text-xs font-medium"></div>
+                        <div 
+                          className="absolute transform -translate-x-1/2 top-0 -mt-1 flex items-center justify-center w-7 h-7 rounded-full bg-white border-2 border-blue-400 text-blue-700 text-xs font-medium"
+                          style={{ 
+                            left: `${((manualVehicle.value - 100000) / (5000000 - 100000)) * 100}%` 
+                          }}
+                        ></div>
                       </div>
                       <div className="flex justify-between text-xs text-gray-500 mt-2">
                         <span>₹1L</span>
