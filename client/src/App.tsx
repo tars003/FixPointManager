@@ -46,6 +46,7 @@ const ArenaDashboard = lazy(() => import("@/pages/arena-dashboard"));
 const NewArenaDashboard = lazy(() => import("@/pages/new-arena-dashboard"));
 const Energy = lazy(() => import("@/pages/energy"));
 const PartsPage = lazy(() => import("@/pages/parts"));
+const PartsVerifier = lazy(() => import("@/pages/parts-verifier"));
 const MarketplaceEnhanced = lazy(() => import("@/pages/marketplace-enhanced"));
 const CommercialFleet = lazy(() => import("@/pages/commercial-fleet"));
 const EmergencyServices = lazy(() => import("@/pages/emergency-services"));
@@ -140,6 +141,10 @@ function Router() {
           
           <Route path="/marketplace">
             {() => renderPage(MarketplaceEnhanced)}
+          </Route>
+          
+          <Route path="/parts-verifier">
+            {() => renderPage(PartsVerifier)}
           </Route>
           
           <Route path="/testbeforebuy">

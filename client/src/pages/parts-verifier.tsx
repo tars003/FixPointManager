@@ -11,7 +11,8 @@ import {
   AlertTriangle, 
   Upload,
   Info,
-  ArrowRight
+  ArrowRight,
+  Shield as ShieldCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
