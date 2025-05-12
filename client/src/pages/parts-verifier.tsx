@@ -1,7 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 import Layout from '@/components/layout/layout';
+import { useQuery } from '@tanstack/react-query';
+import { Vehicle } from '@shared/schema';
 import { 
   FileText, 
   Camera, 
@@ -43,8 +45,22 @@ const PartVerifierPage = () => {
   const [partCode, setPartCode] = useState('');
   const [selectedVehicle, setSelectedVehicle] = useState('');
   const [selectedPartType, setSelectedPartType] = useState('');
+  const [vehicleInput, setVehicleInput] = useState('');
+  const [useVehicleVault, setUseVehicleVault] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  // Fetch user's vehicles from Vehicle Vault
+  const { data: userVehicles = [] } = useQuery<Vehicle[]>({
+    queryKey: ['/api/vehicles'],
+  });
+
+  // Set first vehicle as default if available
+  useEffect(() => {
+    if (userVehicles.length > 0 && !selectedVehicle) {
+      setSelectedVehicle(userVehicles[0].id.toString());
+    }
+  }, [userVehicles, selectedVehicle]);
 
   // Mock part data for demo purposes
   const partData = {
@@ -83,13 +99,41 @@ const PartVerifierPage = () => {
   ];
 
   const handleVerify = () => {
-    if (!partCode && activeTab === 'manual') {
-      toast({
-        title: "Error",
-        description: "Please enter a part verification code",
-        variant: "destructive",
-      });
-      return;
+    // Validate input based on active tab
+    if (activeTab === 'manual') {
+      if (!partCode) {
+        toast({
+          title: "Error",
+          description: "Please enter a part verification code",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Check if we have vehicle info (either from Vehicle Vault or manual entry)
+      if (useVehicleVault && !selectedVehicle) {
+        toast({
+          title: "Error",
+          description: "Please select a vehicle from your Vehicle Vault",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (!useVehicleVault && !vehicleInput) {
+        toast({
+          title: "Error",
+          description: "Please enter vehicle information",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
+    // Get vehicle details for verification
+    let verificationVehicle: Vehicle | undefined;
+    if (useVehicleVault) {
+      verificationVehicle = userVehicles.find(v => v.id.toString() === selectedVehicle);
     }
 
     setVerificationStatus('loading');
@@ -106,6 +150,14 @@ const PartVerifierPage = () => {
       } else {
         // If empty or any other code, show as verified for demo
         setVerificationStatus('verified');
+      }
+
+      // In a real implementation, we would use the vehicle information (make, model, year)
+      // to further verify part compatibility and authenticity
+      if (useVehicleVault && verificationVehicle) {
+        console.log('Vehicle for verification:', verificationVehicle);
+      } else if (!useVehicleVault && vehicleInput) {
+        console.log('Manual vehicle input:', vehicleInput);
       }
     }, 1500);
   };
@@ -198,6 +250,21 @@ const PartVerifierPage = () => {
               
               <CardContent>
                 <div className="space-y-4">
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Your Vehicle</h4>
+                    <Badge className="bg-green-100 text-green-800 mb-2">
+                      {useVehicleVault 
+                        ? userVehicles.find(v => v.id.toString() === selectedVehicle)?.name || 'Unknown Vehicle'
+                        : vehicleInput || 'Not Specified'}
+                    </Badge>
+                    
+                    {useVehicleVault && selectedVehicle && (
+                      <div className="text-xs text-gray-500 mt-1">
+                        Verified using data from your Vehicle Vault
+                      </div>
+                    )}
+                  </div>
+                  
                   <div>
                     <h4 className="text-sm font-medium mb-2">Compatible Vehicles</h4>
                     <div className="flex flex-wrap gap-2">
@@ -386,19 +453,57 @@ const PartVerifierPage = () => {
                   
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="vehicle-type">Select Vehicle</Label>
-                      <Select value={selectedVehicle} onValueChange={setSelectedVehicle}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select vehicle" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {mockVehicles.map(vehicle => (
-                            <SelectItem key={vehicle.id} value={vehicle.id}>
-                              {vehicle.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <div className="flex items-center justify-between mb-2">
+                        <Label htmlFor="vehicle-type">Select Vehicle</Label>
+                        <div className="flex items-center gap-2 text-xs">
+                          <Button 
+                            variant={useVehicleVault ? "default" : "outline"} 
+                            size="sm" 
+                            onClick={() => setUseVehicleVault(true)}
+                            className="h-6 px-2 text-xs"
+                          >
+                            Vehicle Vault
+                          </Button>
+                          <Button 
+                            variant={!useVehicleVault ? "default" : "outline"} 
+                            size="sm" 
+                            onClick={() => setUseVehicleVault(false)}
+                            className="h-6 px-2 text-xs"
+                          >
+                            Enter Manually
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      {useVehicleVault ? (
+                        userVehicles.length > 0 ? (
+                          <Select value={selectedVehicle} onValueChange={setSelectedVehicle}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select from your vehicles" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {userVehicles.map(vehicle => (
+                                <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
+                                  {vehicle.name} - {vehicle.licensePlate}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : (
+                          <div className="text-sm text-amber-600 flex items-center p-2 bg-amber-50 rounded-md">
+                            <AlertTriangle className="h-4 w-4 mr-2" />
+                            No vehicles in Vehicle Vault. Add vehicles or enter details manually.
+                          </div>
+                        )
+                      ) : (
+                        <div className="space-y-2">
+                          <Input
+                            placeholder="Enter vehicle name or license plate"
+                            value={vehicleInput}
+                            onChange={(e) => setVehicleInput(e.target.value)}
+                          />
+                        </div>
+                      )}
                     </div>
                     
                     <div className="space-y-2">
