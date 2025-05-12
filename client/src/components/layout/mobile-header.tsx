@@ -203,8 +203,12 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ className }) => {
           </Button>
         </div>
         
-        <div className="flex items-center" onClick={() => navigate('/')}>
-          <Logo variant="icon-shadow" size="sm" className="h-8 w-8 mr-1" withLink={false} />
+        <div 
+          className="flex items-center transform hover:scale-105 transition-transform duration-200" 
+          onClick={() => navigate('/')}
+        >
+          <Logo variant="icon-shadow" size="sm" className="h-8 w-8" withLink={false} />
+          <span className="ml-2 font-medium text-sm text-foreground/80">FixPoint</span>
         </div>
         
         <div className="ml-auto flex items-center gap-2">
