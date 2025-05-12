@@ -236,12 +236,9 @@ const ProfilePage: React.FC = () => {
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <Avatar className="w-32 h-32 border-4 border-white shadow-lg">
-                      <AvatarImage src="/images/indian-user.png" alt={userProfile.name} />
-                      <AvatarFallback className="text-4xl bg-gradient-to-br from-primary to-blue-700 text-white">
-                        {userProfile.name.split(' ').map(n => n[0]).join('')}
-                      </AvatarFallback>
-                    </Avatar>
+                    <div className="w-32 h-32">
+                      <IndianAvatar size="xl" className="border-4 border-white shadow-lg" alt={userProfile.name} />
+                    </div>
                     
                     {/* Animation for the avatar */}
                     <motion.div 

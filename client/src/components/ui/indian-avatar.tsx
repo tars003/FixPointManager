@@ -29,6 +29,10 @@ export function IndianAvatar({
         alt={alt}
         className="h-full w-full object-cover"
         style={{ objectPosition: "center" }}
+        onError={(e) => {
+          console.error('Failed to load avatar image');
+          e.currentTarget.style.display = 'none';
+        }}
       />
     </div>
   );
