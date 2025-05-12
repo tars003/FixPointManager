@@ -48,7 +48,7 @@ const Energy = lazy(() => import("@/pages/energy"));
 const PartsPage = lazy(() => import("@/pages/parts"));
 const PartsVerifier = lazy(() => import("@/pages/parts-verifier"));
 const InsuranceMarketplace = lazy(() => import("@/pages/insurance-marketplace"));
-const DriverOnDemand = lazy(() => import("@/pages/driver-on-demand"));
+const DriverOnDemand = lazy(() => import("@/pages/driver-on-demand-new"));
 const MarketplaceEnhanced = lazy(() => import("@/pages/marketplace-enhanced"));
 const CommercialFleet = lazy(() => import("@/pages/commercial-fleet"));
 const EmergencyServices = lazy(() => import("@/pages/emergency-services"));
