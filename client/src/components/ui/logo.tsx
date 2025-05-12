@@ -1,8 +1,5 @@
 import { cn } from "@/lib/utils";
 import { Link } from "wouter";
-import logoIconNew from "@assets/logo-icon-new.png";
-import logoIconShadow from "@assets/logo-icon-shadow.png";
-import logoFullNew from "@assets/logo-full-new.png";
 
 interface LogoProps {
   variant?: "icon" | "full" | "text" | "gradient" | "icon-shadow" | "full-new";
@@ -24,16 +21,16 @@ export function Logo({
   };
 
   // Choose the correct logo source based on variant
-  let logoSrc = logoFullNew; // Default to the new full logo
+  let logoSrc = "/logo-full-new.png"; // Default to the new full logo
   
   if (variant === "icon") {
-    logoSrc = logoIconNew;
+    logoSrc = "/logo-icon-new.png";
   } else if (variant === "icon-shadow") {
-    logoSrc = logoIconShadow;
+    logoSrc = "/logo-icon-shadow.png";
   } else if (variant === "full") {
-    logoSrc = logoFullNew;
+    logoSrc = "/logo-full-new.png";
   } else if (variant === "full-new") {
-    logoSrc = logoFullNew;
+    logoSrc = "/logo-full-new.png";
   }
   
   const alt = variant === "icon" ? "FixPoint Icon" : "FixPoint Logo";
