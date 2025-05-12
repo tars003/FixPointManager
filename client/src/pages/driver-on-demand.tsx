@@ -14,7 +14,15 @@ import {
   Car,
   DollarSign,
   Info,
-  Search
+  Search,
+  CreditCard,
+  Wallet,
+  CheckCircle,
+  Clock3,
+  XCircle,
+  AlertCircle,
+  ChevronRight,
+  History
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,6 +36,9 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 
 // Mock data for drivers
 const mockDrivers = [
@@ -85,6 +96,80 @@ const mockDrivers = [
     verificationStatus: 'Verified',
     reviews: 89
   }
+];
+
+// Mock booking history
+const mockBookings = [
+  {
+    id: 'B-2025-001',
+    driverId: 1,
+    driverName: 'Rajesh Kumar',
+    driverImage: 'https://randomuser.me/api/portraits/men/32.jpg',
+    status: 'completed',
+    date: '12 May 2025',
+    time: '09:30 AM - 04:30 PM',
+    duration: '7 hours',
+    vehicle: 'My BMW',
+    location: 'Bengaluru to Mysore',
+    fare: 1750,
+    paymentStatus: 'paid',
+    paymentMethod: 'online',
+    rating: 4.8
+  },
+  {
+    id: 'B-2025-002',
+    driverId: 2,
+    driverName: 'Priya Sharma',
+    driverImage: 'https://randomuser.me/api/portraits/women/44.jpg',
+    status: 'active',
+    date: '12 May 2025',
+    time: '06:30 PM - 08:30 PM',
+    duration: '2 hours',
+    vehicle: 'My BMW',
+    location: 'Inner Ring Road, Bengaluru',
+    fare: 600,
+    paymentStatus: 'pending',
+    paymentMethod: null,
+    rating: null
+  },
+  {
+    id: 'B-2025-003',
+    driverId: 3,
+    driverName: 'Amit Patel',
+    driverImage: 'https://randomuser.me/api/portraits/men/45.jpg',
+    status: 'scheduled',
+    date: '13 May 2025',
+    time: '10:00 AM - 06:00 PM',
+    duration: '8 hours',
+    vehicle: 'My BMW',
+    location: 'Bengaluru to Coorg',
+    fare: 1760,
+    paymentStatus: 'pending',
+    paymentMethod: null,
+    rating: null
+  },
+  {
+    id: 'B-2025-004',
+    driverId: 2,
+    driverName: 'Priya Sharma',
+    driverImage: 'https://randomuser.me/api/portraits/women/44.jpg',
+    status: 'cancelled',
+    date: '10 May 2025',
+    time: '02:00 PM - 04:00 PM',
+    duration: '2 hours',
+    vehicle: 'My BMW',
+    location: 'Airport Transfer, Bengaluru',
+    fare: 600,
+    paymentStatus: 'refunded',
+    paymentMethod: 'online',
+    rating: null
+  }
+];
+
+// Payment method options
+const paymentMethods = [
+  { id: 'online', label: 'Online Payment', icon: <CreditCard className="h-4 w-4 mr-2" /> },
+  { id: 'cash', label: 'Cash On Service', icon: <Wallet className="h-4 w-4 mr-2" /> }
 ];
 
 // Booking types
