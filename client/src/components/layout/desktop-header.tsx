@@ -31,6 +31,7 @@ import { NotificationPopover } from '@/components/notification/notification-popo
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
+import { Logo } from '@/components/ui/logo';
 
 interface DesktopHeaderProps {
   className?: string;
