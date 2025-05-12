@@ -20,6 +20,7 @@ import {
   Calendar,
   Shield,
   ArrowRight,
+  QrCode,
   ChevronRight,
   Clock,
   BarChart3,
@@ -268,13 +269,13 @@ const DashboardEnhanced = () => {
       keyFeature: 'Real-time location tracking of nearby service centers with ratings and reviews'
     },
     { 
-      id: 'marketplace', 
-      name: 'Parts Marketplace', 
-      description: 'Browse & purchase verified spare parts',
-      icon: <ShoppingBag className="h-5 w-5 text-cyan-500" />,
+      id: 'parts-verifier', 
+      name: 'Spare Parts Verifier', 
+      description: 'Verify authenticity of spare parts via QR code',
+      icon: <FileText className="h-5 w-5 text-cyan-500" />,
       color: 'bg-cyan-100 text-cyan-600',
-      path: '/marketplace',
-      keyFeature: 'Genuine parts verification and price comparison across multiple vendors'
+      path: '/parts-verifier',
+      keyFeature: 'Part authentication through QR scanning or manual code entry for all vehicle types'
     },
     { 
       id: 'documents', 
@@ -1458,7 +1459,7 @@ const DashboardEnhanced = () => {
               // Define clean, vibrant colors for tool cards
               const toolColors = {
                 'nearby': 'bg-rose-500',
-                'marketplace': 'bg-cyan-500',
+                'parts-verifier': 'bg-cyan-500',
                 'documents': 'bg-violet-500',
                 'emergency': 'bg-amber-500'
               };
