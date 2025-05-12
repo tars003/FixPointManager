@@ -22,10 +22,10 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
 
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-
+  
   // Calculate unread count
   const unreadCount = notifications.filter(n => !n.read).length;
-
+  
   // Add a notification
   const addNotification = (notification: Omit<Notification, 'read'>) => {
     setNotifications(prev => [
@@ -36,7 +36,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       ...prev
     ]);
   };
-
+  
   // Mark a notification as read
   const markAsRead = (id: string) => {
     setNotifications(prev => 
@@ -45,25 +45,25 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       )
     );
   };
-
+  
   // Clear all notifications
   const clearAll = () => {
     setNotifications([]);
   };
-
+  
   // Make functions available globally
   useEffect(() => {
     window.addNotification = addNotification;
     window.markNotificationAsRead = markAsRead;
     window.clearAllNotifications = clearAll;
-
+    
     return () => {
       window.addNotification = undefined;
       window.markNotificationAsRead = undefined;
       window.clearAllNotifications = undefined;
     };
   }, []);
-
+  
   const value = {
     notifications,
     addNotification,
@@ -71,7 +71,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     clearAll,
     unreadCount,
   };
-
+  
   return (
     <NotificationContext.Provider value={value}>
       {children}
@@ -89,7 +89,7 @@ export function useNotifications() {
 
 export function NotificationButton() {
   const { notifications } = useNotifications();
-
+  
   return (
     <div className="relative">
       <NotificationCenter />
