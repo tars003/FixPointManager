@@ -522,16 +522,15 @@ export default function InsuranceMarketplace() {
         >
           <div className="mb-4">
             <h3 className="font-medium text-gray-800 mb-2">Vehicle Selection Method</h3>
-            <div className="bg-white p-1 rounded-lg shadow-sm flex">
+            <div className="bg-white p-1 rounded-lg shadow-sm flex relative">
               <motion.div 
-                className="absolute h-full w-1/2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md"
+                className="absolute h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md"
                 style={{ 
-                  top: 0,
-                  left: 0,
-                  width: '50%', 
-                  transform: `translateX(${useVehicleVault ? 0 : '100%'})`,
+                  width: '50%',
                 }}
-                animate={{ x: useVehicleVault ? 0 : '100%' }}
+                animate={{ 
+                  x: useVehicleVault ? 0 : '100%' 
+                }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               />
               
@@ -565,15 +564,15 @@ export default function InsuranceMarketplace() {
             </div>
           </div>
           
-          <AnimatePresence mode="wait">
+          <AnimatePresence initial={false} mode="wait">
             {useVehicleVault ? (
               <motion.div
                 key="vehicle-vault"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden mt-4"
               >
                 {userVehicles.length > 0 ? (
                   <div className="space-y-3">
@@ -637,11 +636,11 @@ export default function InsuranceMarketplace() {
             ) : (
               <motion.div
                 key="manual-entry"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden mt-4"
               >
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
@@ -731,22 +730,24 @@ export default function InsuranceMarketplace() {
                     </div>
                   </div>
                   
-                  <div>
+                  <div className="mt-4">
                     <Label htmlFor="value" className="text-gray-700 flex justify-between">
                       <span>Approximate Vehicle Value (₹)</span>
                       <span className="font-medium text-indigo-600">{formatCurrency(manualVehicle.value)}</span>
                     </Label>
-                    <Slider
-                      value={[manualVehicle.value]}
-                      min={100000}
-                      max={5000000}
-                      step={10000}
-                      onValueChange={(value) => setManualVehicle(prev => ({ ...prev, value: value[0] }))}
-                      className="my-3"
-                    />
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>₹1L</span>
-                      <span>₹50L</span>
+                    <div className="pt-2">
+                      <Slider
+                        value={[manualVehicle.value]}
+                        min={100000}
+                        max={5000000}
+                        step={10000}
+                        onValueChange={(value) => setManualVehicle(prev => ({ ...prev, value: value[0] }))}
+                        className="my-3"
+                      />
+                      <div className="flex justify-between text-xs text-gray-500">
+                        <span>₹1L</span>
+                        <span>₹50L</span>
+                      </div>
                     </div>
                   </div>
                 </div>
