@@ -51,7 +51,8 @@ import {
   XCircle,
   CreditCard,
   Route,
-  Calculator
+  Calculator,
+  UserCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -259,6 +260,15 @@ const DashboardEnhanced = () => {
   
   // Essential tools section
   const essentialTools = [
+    { 
+      id: 'driver-on-demand', 
+      name: 'DriverOnDemand', 
+      description: 'Hire verified drivers for your vehicle',
+      icon: <UserCheck className="h-5 w-5 text-teal-600" />,
+      color: 'bg-teal-100 text-teal-700',
+      path: '/driver-on-demand',
+      keyFeature: 'Access vetted drivers with ratings near you'
+    },
     { 
       id: 'nearby', 
       name: 'Nearby Services', 
