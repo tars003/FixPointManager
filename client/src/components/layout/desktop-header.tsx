@@ -26,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { IndianAvatar } from '@/components/ui/indian-avatar';
 import { Button } from '@/components/ui/button';
 import { NotificationPopover } from '@/components/notification/notification-popover';
 import { Input } from '@/components/ui/input';
@@ -190,12 +191,7 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({ className }) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                <Avatar className="h-9 w-9">
-                  <AvatarImage src="/images/indian-user.png" alt={user.name} />
-                  <AvatarFallback className="bg-indigo-100 text-indigo-800 font-medium">
-                    {user.name.split(' ').map(n => n[0]).join('')}
-                  </AvatarFallback>
-                </Avatar>
+                <IndianAvatar size="sm" alt={user.name} />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>

@@ -58,6 +58,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { IndianAvatar } from '@/components/ui/indian-avatar';
 import { Progress } from '@/components/ui/progress';
 import { formatDate } from '@/lib/format';
 import { NotificationPopover } from '@/components/notification/notification-popover';
@@ -540,10 +541,7 @@ const DashboardEnhanced = () => {
             {/* Welcome & profile section */}
             <div className="mb-6 md:mb-0">
               <div className="flex items-center">
-                <Avatar className="h-16 w-16 border-4 border-white/20 mr-4">
-                  <AvatarImage src="/images/indian-user.png" />
-                  <AvatarFallback className="bg-indigo-800 text-lg">{user.name.charAt(0)}</AvatarFallback>
-                </Avatar>
+                <IndianAvatar size="xl" className="mr-4 border-4 border-white/20" alt={user.name} />
                 <div>
                   <h1 className="text-2xl md:text-3xl font-bold text-white">Welcome back, {user.name.split(' ')[0]}</h1>
                   <div className="flex items-center mt-1 text-blue-100">
