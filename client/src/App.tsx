@@ -268,6 +268,10 @@ function Router() {
           <Route path="/insurance-marketplace">
             {() => renderPage(InsuranceMarketplace)}
           </Route>
+
+          <Route path="/driver-on-demand">
+            {() => renderPage(DriverOnDemand)}
+          </Route>
           
           <Route path="/animation-showcase">
             {() => renderPage(AnimationShowcase)}
