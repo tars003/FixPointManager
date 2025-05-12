@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Logo } from '@/components/ui/logo';
 import { 
   User, 
   MapPin, 
@@ -49,13 +50,9 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({
       <div className="w-full bg-black text-white">
         <div className="container max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            {/* Brand logo */}
-            <div className="mr-4">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="11" stroke="white" strokeWidth="2" />
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="white" />
-                <path d="M12 6l-4 6h8l-4-6zM8 14l4 4 4-4H8z" fill="white" />
-              </svg>
+            {/* FixPoint logo */}
+            <div className="mr-4 cursor-pointer" onClick={() => setLocation('/')}>
+              <Logo variant="full" size="sm" className="h-8 brightness-200" withLink={false} />
             </div>
             
             {/* Main navigation */}

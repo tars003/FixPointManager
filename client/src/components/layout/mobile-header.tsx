@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { NotificationPopover } from '@/components/notification/notification-popover';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
+import { Logo } from '@/components/ui/logo';
 
 // Import the same nav items as sidebar
 import { 
@@ -202,11 +203,9 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ className }) => {
           </Button>
         </div>
         
-        <div className="flex items-center">
-          <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center">
-            <span className="text-white font-semibold text-sm">F</span>
-          </div>
-          <h1 className="ml-2 text-lg font-semibold">FixPoint</h1>
+        <div className="flex items-center" onClick={() => navigate('/')}>
+          <Logo variant="icon" size="sm" className="h-7 w-7 mr-2" withLink={false} />
+          <Logo variant="full" size="sm" className="h-6" withLink={false} />
         </div>
         
         <div className="ml-auto flex items-center gap-2">
