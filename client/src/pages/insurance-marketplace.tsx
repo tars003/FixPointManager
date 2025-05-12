@@ -1984,7 +1984,7 @@ export default function InsuranceMarketplace() {
                     <li className="flex items-start">
                       <CheckCircle2 className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                       <span className="text-green-700">
-                        {selectedQuote.addOns.length} add-ons included: {selectedQuote.addOns.map(a => a.name).join(', ')}
+                        {selectedQuote.addOns.length} add-ons included: {selectedQuote.addOns.map((a: any) => a.name).join(', ')}
                       </span>
                     </li>
                   )}
