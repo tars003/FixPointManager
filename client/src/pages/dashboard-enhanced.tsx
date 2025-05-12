@@ -296,6 +296,15 @@ const DashboardEnhanced = () => {
       keyFeature: '24/7 SOS assistance with one-tap calling and location sharing'
     },
     { 
+      id: 'insurance', 
+      name: 'Insurance Marketplace', 
+      description: 'Compare & buy insurance from top providers',
+      icon: <Shield className="h-5 w-5 text-emerald-500" />,
+      color: 'bg-emerald-100 text-emerald-600',
+      path: '/insurance-marketplace',
+      keyFeature: 'AI-powered comparison engine with policies from multiple providers'
+    },
+    { 
       id: 'tripplanner', 
       name: 'Trip Planner', 
       description: 'Plan routes, estimate costs & save trips',

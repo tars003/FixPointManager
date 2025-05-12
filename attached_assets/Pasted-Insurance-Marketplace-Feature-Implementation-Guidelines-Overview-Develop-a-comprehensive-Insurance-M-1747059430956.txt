@@ -1,0 +1,135 @@
+Insurance Marketplace Feature Implementation Guidelines
+Overview
+Develop a comprehensive Insurance Marketplace card feature for our vehicle management platform that enables users to discover, compare, purchase, and manage insurance policies for their vehicles with a premium, animated UI/UX experience.
+Core Functionality Requirements
+Vehicle Selection
+
+Implement dual selection paths:
+
+Primary path: Allow users to select from vehicles already added to their Vehicle Vault
+Secondary path: Provide direct vehicle search functionality
+
+
+Support all vehicle categories:
+
+Two-wheelers (motorcycles, scooters)
+Three-wheelers (auto-rickshaws, trikes)
+Four-wheelers (cars, SUVs, vans)
+Heavy vehicles (trucks, buses, commercial)
+
+
+Ensure compatibility with all fuel/power types:
+
+Conventional (petrol, diesel, CNG)
+Electric (EV)
+Hybrid
+Alternative (solar, hydrogen, biofuel)
+
+
+
+Insurance Comparison Engine
+
+Develop robust comparison functionality:
+
+Allow simultaneous comparison of up to 6 insurance policies
+Include all relevant parameters (coverage, premium, deductibles, add-ons, claim settlement ratio)
+Implement visual comparison charts for easy differentiation
+Create expandable details for in-depth policy examination
+
+
+
+AI Recommendation System
+
+Design an intelligent AI recommendation engine that:
+
+Analyzes user's vehicle usage patterns
+Considers driving history where available
+Evaluates personal preferences based on previous selections
+Recommends optimal insurance plans with justification
+Personalizes suggestions based on similar user profiles
+
+
+
+Policy Management
+
+Implement comprehensive policy lifecycle management:
+
+Purchase flow with secure payment processing
+Policy document storage in Document Vault
+Renewal tracking with timely notifications
+Claim filing and processing interface
+Claim status tracking with real-time updates
+
+
+
+UI/UX Requirements
+Premium Design Elements
+
+Implement a sophisticated, premium interface with:
+
+Clean, minimalist base design with bold accent elements
+High-contrast, accessible typography
+Intuitive information hierarchy
+Brand-consistent color palette with insurance-specific accents
+Responsive design across all devices
+
+
+
+Animation Framework
+
+Develop a cohesive animation system including:
+
+Entrance animations for cards and comparison tables
+Smooth transitions between selection stages
+Progress indicators for multi-step processes
+Subtle hover states and interaction feedback
+Loading state animations with personality
+
+
+
+Micro-animations
+
+Integrate purposeful micro-animations to enhance UX:
+
+Policy comparison sliders with animated transitions
+Checkmark confirmations with satisfaction-inducing animations
+Pulsing notifications for important alerts
+Document submission progress animations
+Celebration animations upon successful policy purchase
+
+
+
+User Journey Enhancement
+
+Implement guided flows with:
+
+Progressive disclosure of complex information
+Contextual help tooltips with animated entrances
+AI assistant with subtle animation cues
+Visual breadcrumbs showing progress through the process
+Animated success and error states
+
+
+
+Integration Requirements
+
+Seamlessly connect with:
+
+Vehicle Vault for accessing stored vehicle information
+Document Vault for storing insurance policies
+User profile for personalization
+Payment gateway for secure transactions
+Insurance provider APIs for real-time quotes
+Notification system for alerts and reminders
+
+
+
+Metrics & Analytics
+
+Implement tracking for:
+
+Conversion rates at each step
+Comparison engagement metrics
+AI recommendation acceptance rate
+User satisfaction with purchase process
+Claim filing experience ratings
