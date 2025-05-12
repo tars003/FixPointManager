@@ -58,7 +58,11 @@ const demoNotifications: Notification[] = [
   }
 ];
 
-export function loadDemoNotifications(): void {
+let isLoading = false;
+export function loadDemoNotifications() {
+  if (isLoading) return;
+  isLoading = true;
+
   // Add notifications through the global function if it exists
   if (window.addNotification) {
     // Add after a slight delay to ensure NotificationProvider is mounted
@@ -74,3 +78,4 @@ export function loadDemoNotifications(): void {
 }
 
 export default demoNotifications;
+```
