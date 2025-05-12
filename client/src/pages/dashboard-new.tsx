@@ -259,7 +259,7 @@ const DashboardNew = () => {
           <div className="mb-6 lg:mb-0">
             <div className="flex items-center">
               <Avatar className="h-12 w-12 mr-4 border-2 border-white">
-                <AvatarImage src={user.profileImage} />
+                <AvatarImage src="/assets/indian-avatar.png" />
                 <AvatarFallback className="bg-blue-700">{user.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div>

@@ -236,6 +236,7 @@ const ProfilePage: React.FC = () => {
                     transition={{ type: "spring", stiffness: 300 }}
                   >
                     <Avatar className="w-32 h-32 border-4 border-white shadow-lg">
+                      <AvatarImage src="/assets/indian-avatar.png" alt={userProfile.name} />
                       <AvatarFallback className="text-4xl bg-gradient-to-br from-primary to-blue-700 text-white">
                         {userProfile.name.split(' ').map(n => n[0]).join('')}
                       </AvatarFallback>
